@@ -59,7 +59,7 @@
 
 *   **Chef de Projet :** BARHROUJ Saad (saad.barhrouj@etu.uae.ac.ma)
 *   **Responsable Backend :** kaoutar.iabakriman@etu.uae.ac.ma
-*   **Développeuse Frontend (Backend Team) :** elabida.rajae@etu.uae.ac.ma
+*   **Développeuse Backend :** elabida.rajae@etu.uae.ac.ma
 *   **Responsable Frontend :** elhauari.imohamed@etu.uae.ac.ma
 *   **Développeuse Frontend :** fatimazahraederaoui04@gmail.com
 *   **Responsable Tests :** mohamed.elattaoui@etu.uae.ac.ma
