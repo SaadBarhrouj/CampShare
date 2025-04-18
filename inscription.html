@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - CampShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Animations pour transitions entre étapes */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .fade-out {
+            animation: fadeOut 0.3s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        /* Fix pour les boutons qui montrent une bordure indésirable au clic */
+        button:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(45, 95, 43, 0.5);
+        }
+        
+        /* Ajustement des champs input */
+        input::placeholder {
+            padding-left: 0;
+        }
+        
+        /* Style personnalisé pour les liens en bas */
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .footer-link:hover {
+            background-color: rgba(45, 95, 43, 0.1);
+        }
+        
+        .dark .footer-link:hover {
+            background-color: rgba(79, 121, 66, 0.2);
+        }
+        
+        /* Corrige l'apparence au clic/focus */
+       
+        
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 transition-all duration-300">
+        <!-- Logo -->
+        <div class="flex justify-center mb-6">
+            <div class="flex items-center">
+                <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+            </div>
+        </div>
+        
+        <!-- Title -->
+        <h2 class="text-center text-2xl font-bold mb-4 text-gray-800 dark:text-white">Créer votre compte CampShare</h2>
+        
+        <!-- Identity Verification Notice -->
+        <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500 dark:text-blue-400"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700 dark:text-blue-300">
+                        Pour garantir la sécurité de notre communauté et faciliter vos transactions, nous demandons une vérification d'identité lors de la création de votre compte. Ces informations sont sécurisées et ne seront utilisées que pour valider votre identité conformément à notre politique de confidentialité.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <!-- Step Indicators -->
+            <div class="flex justify-between mb-2">
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <div id="step-1-indicator" class="flex items-center justify-center w-7 h-7 rounded-full bg-forest dark:bg-meadow text-white text-sm font-medium">
+                            1
+                        </div>
+                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300 hidden sm:inline">Informations</span>
+                    </div>
+                    <div class="w-12 h-1 mx-2 bg-gray-200 dark:bg-gray-700 sm:w-24"></div>
+                    <div class="flex items-center">
+                        <div id="step-2-indicator" class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium">
+                            2
+                        </div>
+                        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">Identité</span>
+                    </div>
+                    <div class="w-12 h-1 mx-2 bg-gray-200 dark:bg-gray-700 sm:w-24"></div>
+                    <div class="flex items-center">
+                        <div id="step-3-indicator" class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium">
+                            3
+                        </div>
+                        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">Accords</span>
+                    </div>
+                </div>
+                <span class="text-sm text-gray-500 dark:text-gray-400"><span id="progress-percentage">33</span>% complété</span>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4">
+                <div id="progress-bar" class="bg-forest dark:bg-meadow h-2.5 rounded-full transition-all duration-500 ease-in-out" style="width: 33%"></div>
+            </div>
+            
+            <!-- Current Step Title -->
+            <div id="current-step-title" class="text-sm font-medium text-forest dark:text-meadow">
+                Étape 1 : Informations personnelles
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registration-form" class="space-y-8">
+            <!-- Personal Information Section -->
+            <section id="step-1" class="step-section">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+                    <i class="fas fa-user-circle mr-2 text-forest dark:text-meadow"></i>
+                    Informations personnelles
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- First Name Field -->
+                    <div>
+                        <label for="first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
+                        <input type="text" id="first-name" name="first-name" required 
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                            placeholder="Prénom">
+                    </div>
+                    
+                    <!-- Last Name Field -->
+                    <div>
+                        <label for="last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom</label>
+                        <input type="text" id="last-name" name="last-name" required 
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                            placeholder="Nom">
+                    </div>
+                    
+                    <!-- Phone Number Field -->
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Numéro de téléphone</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-phone text-gray-400"></i>
+                            </div>
+                            <input type="tel" id="phone" name="phone" required 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                                placeholder="+33 6 XX XX XX XX">
+                        </div>
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input type="email" id="email" name="email" required 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                                placeholder="votre@email.com">
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input type="password" id="password" name="password" required 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                                placeholder="Minimum 8 caractères">
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            8 caractères minimum, incluant lettres, chiffres et caractères spéciaux
+                        </p>
+                    </div>
+                    
+                    <!-- Confirm Password Field -->
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmer le mot de passe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input type="password" id="confirm-password" name="confirm-password" required 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                                placeholder="Confirmez votre mot de passe">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button type="button" id="next-to-step-2" class="flex items-center justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-forest hover:bg-opacity-90 dark:bg-meadow dark:hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow transition duration-150">
+                        Suivant
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Identity Verification Section -->
+            <section id="step-2" class="step-section hidden">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+                    <i class="fas fa-id-card mr-2 text-forest dark:text-meadow"></i>
+                    Vérification d'identité
+                </h3>
+                
+                <div class="space-y-6">
+                    <!-- ID Number Field -->
+                    <div>
+                        <label for="cin" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Numéro de CIN</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-id-badge text-gray-400"></i>
+                            </div>
+                            <input type="text" id="cin" name="cin" required 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
+                                placeholder="Ex: AB123456">
+                        </div>
+                    </div>
+                    
+                    <!-- ID Front Photo Field -->
+                    <div>
+                        <label for="cin-front" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo CIN (Recto)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md hover:border-forest dark:hover:border-meadow transition-colors duration-200">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-id-card text-4xl text-gray-400 dark:text-gray-500 mb-2"></i>
+                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                    <label for="cin-front" class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-md font-medium text-forest dark:text-meadow hover:text-opacity-80 dark:hover:text-opacity-80 focus-within:outline-none">
+                                        <span>Télécharger un fichier</span>
+                                        <input id="cin-front" name="cin-front" type="file" accept="image/*" class="sr-only" required>
+                                    </label>
+                                    <p class="pl-1">ou glisser-déposer</p>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    PNG, JPG, JPEG jusqu'à 5MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ID Back Photo Field -->
+                    <div>
+                        <label for="cin-back" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo CIN (Verso)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md hover:border-forest dark:hover:border-meadow transition-colors duration-200">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-id-card text-4xl text-gray-400 dark:text-gray-500 mb-2"></i>
+                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                    <label for="cin-back" class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-md font-medium text-forest dark:text-meadow hover:text-opacity-80 dark:hover:text-opacity-80 focus-within:outline-none">
+                                        <span>Télécharger un fichier</span>
+                                        <input id="cin-back" name="cin-back" type="file" accept="image/*" class="sr-only" required>
+                                    </label>
+                                    <p class="pl-1">ou glisser-déposer</p>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    PNG, JPG, JPEG jusqu'à 5MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button type="button" id="back-to-step-1" class="flex items-center justify-center py-3 px-6 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow transition duration-150">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Précédent
+                    </button>
+                    <button type="button" id="next-to-step-3" class="flex items-center justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-forest hover:bg-opacity-90 dark:bg-meadow dark:hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow transition duration-150">
+                        Suivant
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Terms and Agreements Section -->
+            <section id="step-3" class="step-section hidden">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+                    <i class="fas fa-file-contract mr-2 text-forest dark:text-meadow"></i>
+                    Accords et contrats
+                </h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="terms" name="terms" type="checkbox" required
+                                class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="terms" class="font-medium text-gray-700 dark:text-gray-300">
+                                J'ai lu et j'accepte les <a href="link-cgu-client.html" class="text-forest dark:text-meadow underline" target="_blank">Conditions Générales d'Utilisation Client</a> et la <a href="link-confid.html" class="text-forest dark:text-meadow underline" target="_blank">Politique de Confidentialité</a>.
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="contract" name="contract" type="checkbox" required
+                                class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="contract" class="font-medium text-gray-700 dark:text-gray-300">
+                                Je confirme avoir pris connaissance et accepter les termes du <a href="link-contrat-client.html" class="text-forest dark:text-meadow underline" target="_blank">Contrat de Service Client</a> régissant la location via CampShare.
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="newsletter" name="newsletter" type="checkbox"
+                                class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="newsletter" class="font-medium text-gray-700 dark:text-gray-300">
+                                J'accepte de recevoir la newsletter et les offres de CampShare (facultatif).
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button type="button" id="back-to-step-2" class="flex items-center justify-center py-3 px-6 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow transition duration-150">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Précédent
+                    </button>
+                    <button type="submit" id="register-btn"
+                        class="flex items-center justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sunlight hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sunlight transition duration-150">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Créer mon compte
+                    </button>
+                </div>
+            </section>
+        </form>
+        
+        <!-- Login and Home Links with improved styling -->
+        <div class="mt-10 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <a href="connexion.html" class="footer-link text-forest dark:text-meadow hover:text-opacity-90 dark:hover:text-opacity-90">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Déjà un compte ? Connectez-vous
+            </a>
+            <a href="index.html" class="footer-link text-gray-600 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">
+                <i class="fas fa-home mr-2"></i>
+                Retour à l'accueil
+            </a>
+        </div>
+    </div>
+
+    <!-- Script for multi-step form navigation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const steps = document.querySelectorAll('.step-section');
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const currentStepTitle = document.getElementById('current-step-title');
+            const stepIndicators = [
+                document.getElementById('step-1-indicator'),
+                document.getElementById('step-2-indicator'),
+                document.getElementById('step-3-indicator')
+            ];
+            
+            let currentStep = 1;
+            const totalSteps = steps.length;
+            
+            // Step titles
+            const stepTitles = [
+                'Étape 1 : Informations personnelles',
+                'Étape 2 : Vérification d\'identité',
+                'Étape 3 : Accords et contrats'
+            ];
+            
+            // Update progress function
+            function updateProgress(step) {
+                const percent = Math.round((step / totalSteps) * 100);
+                progressBar.style.width = `${percent}%`;
+                progressPercentage.textContent = percent;
+                currentStepTitle.textContent = stepTitles[step - 1];
+                
+                // Update step indicators
+                for (let i = 0; i < stepIndicators.length; i++) {
+                    if (i + 1 < step) {
+                        // Completed steps
+                        stepIndicators[i].innerHTML = '<i class="fas fa-check"></i>';
+                        stepIndicators[i].classList.remove('bg-gray-300', 'dark:bg-gray-600', 'text-gray-700', 'dark:text-gray-300');
+                        stepIndicators[i].classList.add('bg-forest', 'dark:bg-meadow', 'text-white');
+                    } else if (i + 1 === step) {
+                        // Current step
+                        stepIndicators[i].textContent = i + 1;
+                        stepIndicators[i].classList.remove('bg-gray-300', 'dark:bg-gray-600', 'text-gray-700', 'dark:text-gray-300');
+                        stepIndicators[i].classList.add('bg-forest', 'dark:bg-meadow', 'text-white');
+                    } else {
+                        // Future steps
+                        stepIndicators[i].textContent = i + 1;
+                        stepIndicators[i].classList.remove('bg-forest', 'dark:bg-meadow', 'text-white');
+                        stepIndicators[i].classList.add('bg-gray-300', 'dark:bg-gray-600', 'text-gray-700', 'dark:text-gray-300');
+                    }
+                }
+            }
+            
+            // Navigate to step function
+            function goToStep(step) {
+                if (step < 1 || step > totalSteps) return;
+                
+                // Hide all steps
+                steps.forEach((stepEl, idx) => {
+                    if (idx + 1 === currentStep) {
+                        // Animate current step out
+                        stepEl.classList.add('fade-out');
+                        setTimeout(() => {
+                            stepEl.classList.add('hidden');
+                            stepEl.classList.remove('fade-out');
+                        }, 300);
+                    } else {
+                        stepEl.classList.add('hidden');
+                    }
+                });
+                
+                // Show target step with animation
+                setTimeout(() => {
+                    steps[step - 1].classList.remove('hidden');
+                    steps[step - 1].classList.add('fade-in');
+                    setTimeout(() => {
+                        steps[step - 1].classList.remove('fade-in');
+                    }, 400);
+                    
+                    // Update current step
+                    currentStep = step;
+                    updateProgress(currentStep);
+                }, 300);
+            }
+            
+            // Validate current step function (simple example)
+            function validateStep(step) {
+                // In a real application, you would add proper validation here
+                let valid = true;
+                const errorMessages = [];
+                
+                if (step === 1) {
+                    // First step validation
+                    const requiredFields = [
+                        { id: 'first-name', name: 'Prénom' },
+                        { id: 'last-name', name: 'Nom' },
+                        { id: 'phone', name: 'Numéro de téléphone' },
+                        { id: 'email', name: 'Email' },
+                        { id: 'password', name: 'Mot de passe' },
+                        { id: 'confirm-password', name: 'Confirmation du mot de passe' }
+                    ];
+                    
+                    requiredFields.forEach(field => {
+                        const input = document.getElementById(field.id);
+                        if (!input.value.trim()) {
+                            input.classList.add('border-red-500');
+                            input.classList.remove('border-gray-300', 'dark:border-gray-600');
+                            errorMessages.push(`Le champ ${field.name} est requis`);
+                            valid = false;
+                        } else {
+                            input.classList.remove('border-red-500');
+                            input.classList.add('border-gray-300', 'dark:border-gray-600');
+                        }
+                    });
+                    
+                    // Password match validation
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+                    if (password && confirmPassword && password !== confirmPassword) {
+                        document.getElementById('confirm-password').classList.add('border-red-500');
+                        document.getElementById('confirm-password').classList.remove('border-gray-300', 'dark:border-gray-600');
+                        errorMessages.push('Les mots de passe ne correspondent pas');
+                        valid = false;
+                    }
+                } else if (step === 2) {
+                    // Second step validation
+                    const cinField = document.getElementById('cin');
+                    const cinFrontField = document.getElementById('cin-front');
+                    const cinBackField = document.getElementById('cin-back');
+                    
+                    if (!cinField.value.trim()) {
+                        cinField.classList.add('border-red-500');
+                        cinField.classList.remove('border-gray-300', 'dark:border-gray-600');
+                        errorMessages.push('Le numéro de CIN est requis');
+                        valid = false;
+                    } else {
+                        cinField.classList.remove('border-red-500');
+                        cinField.classList.add('border-gray-300', 'dark:border-gray-600');
+                    }
+                    
+                    // Simple file check (in a real app, you'd also validate file types, sizes, etc.)
+                    if (!cinFrontField.files || cinFrontField.files.length === 0) {
+                        const fileContainer = cinFrontField.closest('div.mt-1');
+                        fileContainer.classList.add('border-red-500');
+                        fileContainer.classList.remove('border-gray-300', 'dark:border-gray-600');
+                        errorMessages.push('La photo CIN (recto) est requise');
+                        valid = false;
+                    } else {
+                        const fileContainer = cinFrontField.closest('div.mt-1');
+                        fileContainer.classList.remove('border-red-500');
+                        fileContainer.classList.add('border-gray-300', 'dark:border-gray-600');
+                    }
+                    
+                    if (!cinBackField.files || cinBackField.files.length === 0) {
+                        const fileContainer = cinBackField.closest('div.mt-1');
+                        fileContainer.classList.add('border-red-500');
+                        fileContainer.classList.remove('border-gray-300', 'dark:border-gray-600');
+                        errorMessages.push('La photo CIN (verso) est requise');
+                        valid = false;
+                    } else {
+                        const fileContainer = cinBackField.closest('div.mt-1');
+                        fileContainer.classList.remove('border-red-500');
+                        fileContainer.classList.add('border-gray-300', 'dark:border-gray-600');
+                    }
+                }
+                
+                if (!valid && errorMessages.length > 0) {
+                    // Optionally display the error message
+                    // For this demo we'll use a simple alert, but in production you would 
+                    // use a more elegant notification system
+                    console.error('Erreurs de validation:', errorMessages);
+                }
+                
+                return valid;
+            }
+            
+            // Next button handlers
+            document.getElementById('next-to-step-2').addEventListener('click', function() {
+                if (validateStep(1)) {
+                    goToStep(2);
+                }
+            });
+            
+            document.getElementById('next-to-step-3').addEventListener('click', function() {
+                if (validateStep(2)) {
+                    goToStep(3);
+                }
+            });
+            
+            // Back button handlers
+            document.getElementById('back-to-step-1').addEventListener('click', function() {
+                goToStep(1);
+            });
+            
+            document.getElementById('back-to-step-2').addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            // Initialize first step
+            updateProgress(currentStep);
+            
+            // Form submission 
+            document.getElementById('registration-form').addEventListener('submit', function(e) {
+                // In a real app, you'd validate the entire form here
+                // If final validation fails, prevent submission
+                
+                // For this demo, just show loading state
+                e.preventDefault();
+                
+                // Change button state to loading
+                const button = document.getElementById('register-btn');
+                const originalText = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Traitement en cours...';
+                
+                // Simulate processing (would be an actual form submission in production)
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    alert('Ce formulaire est une démo. En production, il soumettrait les données à un serveur sécurisé.');
+                }, 2000);
+            });
+            
+            // File input preview script
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    const fileWrapper = this.closest('div.mt-1');
+                    const fileNameEl = fileWrapper.querySelector('label span');
+                    
+                    if (this.files.length > 0) {
+                        fileNameEl.textContent = this.files[0].name;
+                        
+                        // Add a selected state to the container
+                        fileWrapper.classList.add('border-forest', 'dark:border-meadow');
+                        fileWrapper.classList.remove('border-dashed', 'border-red-500');
+                    } else {
+                        fileNameEl.textContent = 'Télécharger un fichier';
+                        fileWrapper.classList.remove('border-forest', 'dark:border-meadow');
+                        fileWrapper.classList.add('border-dashed');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
