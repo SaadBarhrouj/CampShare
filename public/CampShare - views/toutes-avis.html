@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tous les avis - Fatima Benali | CampShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Navigation hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Explorer le matériel - ligne jaune corrigée */
+        .active-nav-link {
+            position: relative;
+        }
+        
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFAA33;
+        }
+        
+        /* Input styles */
+        .custom-input {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .custom-input:focus {
+            box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+        }
+        
+        /* Star rating styles */
+        .star-rating {
+            display: inline-flex;
+        }
+        
+        .star-rating input {
+            display: none;
+        }
+        
+        .star-rating label {
+            cursor: pointer;
+            width: 1.5rem;
+            font-size: 1.5rem;
+            color: #ddd;
+            transition: all 0.2s ease;
+        }
+        
+        .star-rating label:before {
+            content: '\f005';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+        
+        .star-rating input:checked ~ label {
+            color: #FFAA33;
+        }
+        
+        .star-rating:hover label {
+            color: #FFAA33;
+        }
+        
+        .star-rating label:hover ~ label {
+            color: #ddd;
+        }
+        
+        /* Custom filter styles */
+        .filter-button.active {
+            background-color: #2D5F2B;
+            color: white;
+        }
+        
+        .dark .filter-button.active {
+            background-color: #4F7942;
+            color: white;
+        }
+        
+        /* Animation for equipment cards */
+        .review-card {
+            transition: all 0.3s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Logo -->
+                    <a href="index.html" class="flex items-center">
+                        <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
+                    <a href="annonces.html" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+                    <a href="#devenir-partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    
+                    <div class="flex items-center space-x-4 ml-4">
+                        <a href="connexion.html" class="px-4 py-2 font-medium rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Connexion</a>
+                        <a href="inscription.html" class="px-4 py-2 font-medium rounded-md bg-sunlight hover:bg-amber-600 text-white shadow-md transition duration-300">Inscription</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
+                <a href="annonces.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
+                <a href="#devenir-partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Devenir Partenaire</a>
+                <div class="mt-4 flex flex-col space-y-3 px-3">
+                    <a href="connexion.html" class="px-4 py-2 font-medium rounded-md text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition duration-300">Connexion</a>
+                    <a href="inscription.html" class="px-4 py-2 font-medium rounded-md text-center bg-sunlight hover:bg-amber-600 text-white transition duration-300">Inscription</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16 bg-white dark:bg-gray-900">
+        <!-- Partner Profile Header -->
+        <section class="bg-gray-50 dark:bg-gray-800 py-8 border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <!-- Profile Image -->
+                    <div class="relative mb-6 md:mb-0 md:mr-8">
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
+                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                                 alt="Fatima Benali" 
+                                 class="w-full h-full object-cover" />
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center border-2 border-white dark:border-gray-700">
+                            <i class="fas fa-check text-xs md:text-base"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Info -->
+                    <div class="flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                            <div>
+                                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white flex items-center">
+                                    Fatima Benali
+                                    <span class="ml-3 text-xs font-medium px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md">
+                                        Membre depuis 2021
+                                    </span>
+                                </h1>
+                                <div class="mt-2 flex items-center text-gray-600 dark:text-gray-300">
+                                    <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                                    <span>Rabat, Maroc</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 sm:mt-0">
+                                <a href="profil-partenaire.html" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md shadow-sm transition-colors">
+                                    <i class="fas fa-user mr-2"></i>
+                                    Voir profil complet
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics -->
+                        <div class="flex flex-wrap gap-4 mt-4">
+                            <div class="flex flex-col items-center">
+                                <div class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">4.8</div>
+                                <div class="flex text-amber-400 mt-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">(42 avis)</div>
+                            </div>
+                            
+                            <div class="flex flex-col items-center">
+                                <div class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">86</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Locations réalisées</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- All Reviews Section -->
+        <section class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Tous les avis sur Fatima (42)</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Découvrez ce que les utilisateurs disent de ce partenaire</p>
+                    </div>
+                    
+                    <div class="mt-4 md:mt-0">
+                        <button id="write-review-button" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md shadow-sm transition-colors">
+                            <i class="fas fa-star mr-2"></i>
+                            Évaluer ce partenaire
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Review Stats -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6 mb-8">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <div class="flex flex-col items-center mr-8 mb-6 md:mb-0">
+                            <div class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">4.8</div>
+                            <div class="flex text-amber-400 text-xl mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">42 avis</div>
+                        </div>
+                        
+                        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">5 étoiles</div>
+                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">75%</div>
+                                </div>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">4 étoiles</div>
+                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">20%</div>
+                                </div>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">3 étoiles</div>
+                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 5%"></div>
+                                    </div>
+                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">5%</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">2 étoiles</div>
+                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">0%</div>
+                                </div>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">1 étoile</div>
+                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Form (Hidden by default) -->
+                <div id="review-form" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Évaluer ce partenaire</h3>
+                    
+                    <form id="submit-review-form">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Votre note globale</label>
+                            <div class="star-rating text-2xl">
+                                <input type="radio" id="star5" name="rating" value="5" />
+                                <label for="star5" title="5 étoiles"></label>
+                                <input type="radio" id="star4" name="rating" value="4" />
+                                <label for="star4" title="4 étoiles"></label>
+                                <input type="radio" id="star3" name="rating" value="3" />
+                                <label for="star3" title="3 étoiles"></label>
+                                <input type="radio" id="star2" name="rating" value="2" />
+                                <label for="star2" title="2 étoiles"></label>
+                                <input type="radio" id="star1" name="rating" value="1" />
+                                <label for="star1" title="1 étoile"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="rented-equipment" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Équipement(s) loué(s)</label>
+                            <select id="rented-equipment" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                <option value="">Sélectionnez l'équipement loué</option>
+                                <option value="pack-camping">Pack Camping Complet 2p</option>
+                                <option value="sacs-couchage">Sacs de Couchage Ultra Confort</option>
+                                <option value="matelas">Matelas Gonflable Double</option>
+                                <option value="tente">Tente Légère 2 Personnes</option>
+                                <option value="autres">Autre équipement</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="review-title" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Titre de votre avis</label>
+                            <input type="text" id="review-title" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base" placeholder="Résumez votre expérience avec ce partenaire">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="review-comment" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Votre commentaire</label>
+                            <textarea id="review-comment" rows="4" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base" placeholder="Partagez votre expérience avec ce partenaire..."></textarea>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="button" id="cancel-review" class="mr-4 px-4 py-2 font-medium rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                Annuler
+                            </button>
+                            <button type="submit" class="px-4 py-2 font-medium rounded-md bg-forest hover:bg-green-700 text-white shadow-md transition-colors">
+                                Publier l'avis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+                    <!-- Star filter -->
+                    <div class="flex flex-wrap gap-2">
+                        <button class="filter-button active px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="all">
+                            Tous les avis
+                        </button>
+                        <button class="filter-button px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="5">
+                            <i class="fas fa-star text-amber-400 mr-1"></i> 5
+                        </button>
+                        <button class="filter-button px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="4">
+                            <i class="fas fa-star text-amber-400 mr-1"></i> 4
+                        </button>
+                        <button class="filter-button px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="3">
+                            <i class="fas fa-star text-amber-400 mr-1"></i> 3
+                        </button>
+                        <button class="filter-button px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="2">
+                            <i class="fas fa-star text-amber-400 mr-1"></i> 2
+                        </button>
+                        <button class="filter-button px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-filter="1">
+                            <i class="fas fa-star text-amber-400 mr-1"></i> 1
+                        </button>
+                    </div>
+                    
+                    <!-- Sort dropdown -->
+                    <div class="relative">
+                        <button id="sort-button" class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
+                            <i class="fas fa-sort mr-2"></i>
+                            <span>Trier par: Plus récents</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        
+                        <!-- Sort Dropdown -->
+                        <div id="sort-dropdown" class="hidden absolute right-0 mt-1 w-56 bg-white dark:bg-gray-700 rounded-md shadow-lg z-40 border border-gray-200 dark:border-gray-600">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="recent">Plus récents</a>
+                                <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="older">Plus anciens</a>
+                                <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="highest">Notes les plus hautes</a>
+                                <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="lowest">Notes les plus basses</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review List -->
+                <div class="space-y-4">
+                    <!-- Review Item 1 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-08-15" data-equipment="Pack Camping Complet 2p">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profile-ahmed.html">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Ahmed Kaddour" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profile-ahmed.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Ahmed Kaddour</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">15 août 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Pack Camping Complet 2p
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Partenaire exemplaire, service impeccable!</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Fatima a été extrêmement professionnelle du début à la fin. Elle a répondu à toutes mes questions en moins d'une heure, m'a donné d'excellents conseils pour mon séjour au lac, et a été très flexible pour la remise et le retour du matériel. Tout était parfaitement propre et en excellent état, exactement comme sur les photos. Je recommande vivement Fatima comme partenaire CampShare!
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 2 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-08-02" data-equipment="Sacs de Couchage Ultra Confort">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profile-leila.html">
+                                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Leila Mansouri" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profile-leila.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Leila Mansouri</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">2 août 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Sacs de Couchage Ultra Confort
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Une partenaire fiable et attentionnée</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Expérience parfaite avec Fatima! Elle est très organisée et ponctuelle. Les sacs de couchage étaient propres et très confortables comme promis. Fatima nous a même envoyé un message pendant notre séjour pour s'assurer que tout se passait bien. C'est une partenaire exceptionnelle qui prend soin de son matériel et de ses clients. Nous avons campé à Ifrane où les nuits sont fraîches, mais grâce à elle, nous avons dormi au chaud.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 3 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="4" data-date="2023-07-20" data-equipment="Matelas Gonflable Double">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profile-karim.html">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Karim Benchekroun" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profile-karim.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Karim Benchekroun</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">20 juillet 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Matelas Gonflable Double
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Transaction facile, partenaire très professionnelle</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Fatima a été très ponctuelle pour la remise et la récupération du matériel. Le matelas était de bonne qualité et n'a pas du tout dégonflé durant notre séjour de 3 jours. La pompe fournie était efficace et rapide. J'ai vraiment apprécié ses conseils sur les meilleures zones de camping dans la région. Une légère confusion sur l'heure de rendez-vous, mais sinon tout était parfait. Je n'hésiterais pas à relouer auprès de Fatima.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 4 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-07-15" data-equipment="Tente Légère 2 Personnes">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Sofia Tazi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Sofia Tazi</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">15 juillet 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Tente Légère 2 Personnes
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Excellent équipement et service client impeccable</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                La tente était en parfait état et très facile à monter, même pour moi qui n'ai pas beaucoup d'expérience en camping. Fatima m'a montré comment l'installer correctement et m'a même envoyé une vidéo YouTube en complément. L'équipement était léger comme promis, ce qui était idéal pour notre randonnée dans le Haut Atlas. Je recommande vivement ce partenaire pour son professionnalisme et la qualité de son matériel.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 5 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-07-08" data-equipment="Pack Camping Complet 2p">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Youssef Alami" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Youssef Alami</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">8 juillet 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Pack Camping Complet 2p
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Une expérience de camping réussie grâce à Fatima</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Le pack camping était vraiment complet et de très bonne qualité. Nous avons pu profiter d'un weekend au lac Aguelmam Aziza dans de parfaites conditions. Fatima a été d'une aide précieuse avec ses conseils sur la région et l'installation du matériel. Son expertise en camping est évidente, et elle a pris le temps de nous expliquer chaque élément du pack. Sa flexibilité sur les heures de prise et de retour a été très appréciée.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 6 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="4" data-date="2023-07-01" data-equipment="Matelas Gonflable Double">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Nadia Berrada" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Nadia Berrada</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">1 juillet 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Matelas Gonflable Double
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Très bonne expérience malgré un petit problème</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Le matelas était confortable et la pompe fournie fonctionnait parfaitement. Fatima a été très réactive quand nous avons eu un petit problème avec la valve du matelas, elle nous a immédiatement expliqué comment la réparer. Le seul bémol est que le matelas était un peu plus petit que ce que nous imaginions, mais cela reste un détail. Dans l'ensemble, une très bonne expérience et un service client exceptionnel.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 7 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-06-25" data-equipment="Sacs de Couchage Ultra Confort">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Hassan Ouazzani" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Hassan Ouazzani</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">25 juin 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Sacs de Couchage Ultra Confort
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Vraiment ultra confort comme promis !</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Ces sacs de couchage sont vraiment à la hauteur de leur nom - ultra confortables ! Nous avons campé dans les montagnes où la température descend considérablement la nuit, et nous étions parfaitement au chaud. Fatima est une partenaire très fiable et honnête qui ne promet que ce qu'elle peut offrir. Le matériel était impeccablement propre et bien entretenu. Je recommanderai ses services à tous mes amis amateurs de camping.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 8 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="3" data-date="2023-06-18" data-equipment="Tente Légère 2 Personnes">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Omar El Fassi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Omar El Fassi</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">18 juin 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Tente Légère 2 Personnes
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Bon équipement mais problème de coordination</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                La tente elle-même était de bonne qualité et légère comme décrite. Cependant, nous avons eu un problème de coordination pour la récupération. Fatima a eu un contretemps et est arrivée avec plus d'une heure de retard, ce qui a retardé notre départ. Elle s'est excusée et a été très cordiale, mais cela a affecté nos plans. Je comprends que des imprévus peuvent arriver, mais la ponctualité est importante quand on prévoit une excursion.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 9 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="5" data-date="2023-06-10" data-equipment="Pack Camping Complet 2p">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Amina Chakir" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Amina Chakir</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">10 juin 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Pack Camping Complet 2p
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Le meilleur pack camping disponible à Rabat</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Après avoir essayé plusieurs partenaires sur CampShare, je peux affirmer que Fatima offre le meilleur service. Son pack camping est complet, propre et en excellent état. Elle a même ajouté des petits extras comme une lampe frontale et des bâtons de randonnée quand elle a su que nous allions en montagne. Son professionnalisme et sa gentillesse font toute la différence. Je n'hésiterai pas à revenir vers elle pour mes prochaines aventures.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Item 10 -->
+                    <div class="review-card bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6" data-rating="4" data-date="2023-06-05" data-equipment="Tente Légère 2 Personnes">
+                        <div class="flex justify-between items-start">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <a href="profil-partenaire.html">
+                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Mehdi Idrissi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="profil-partenaire.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Mehdi Idrissi</a>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex text-amber-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">5 juin 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Tente Légère 2 Personnes
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Bonne tente mais manque de sardines</h5>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                La tente était de très bonne qualité et vraiment légère comme promis. Fatima a été très professionnelle et disponible. Le seul problème que nous avons rencontré est que deux sardines manquaient, ce qui était un peu gênant car nous étions dans une zone venteuse. Heureusement, Fatima nous a conseillé d'utiliser des pierres comme alternative, ce qui a fonctionné. Malgré ce petit désagrément, je recommande ses services pour la qualité générale de l'équipement et son excellent service client.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="flex justify-center mt-10">
+                    <nav class="flex items-center">
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center mx-1 rounded-md bg-forest text-white">1</a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center mx-1 rounded-md bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">2</a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center mx-1 rounded-md bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">3</a>
+                        <span class="w-10 h-10 flex items-center justify-center mx-1 text-gray-500 dark:text-gray-400">...</span>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center mx-1 rounded-md bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">5</a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <!-- Column 1: Company Info -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <span class="text-white text-2xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-400">by ParentCo</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 max-w-md">
+                        CampShare est un service de ParentCo qui permet aux particuliers de louer du matériel de camping entre eux, pour des aventures plus accessibles et éco-responsables.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Links 1 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">CampShare</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Comment ça marche</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Explorer le matériel</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Devenir Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Guide du camping</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Destinations populaires</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3: Links 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Assistance</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Centre d'aide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">FAQ</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Contactez-nous</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Signaler un problème</a></li>
+                        <li><a href="#reclamation" class="text-white font-medium hover:text-sunlight transition duration-150">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Réclamations
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4: Links 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">À propos de ParentCo</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Client</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-600 pt-8 mt-8">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-400">
+                            © 2023 ParentCo. Tous droits réservés. CampShare est un service de ParentCo.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/flags/4x3/ma.svg" alt="Drapeau marocain" class="h-5 w-auto" />
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Français</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">العربية</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Sticky navbar effect on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+        
+        // Sort dropdown toggle
+        const sortButton = document.getElementById('sort-button');
+        const sortDropdown = document.getElementById('sort-dropdown');
+        
+        sortButton?.addEventListener('click', () => {
+            sortDropdown.classList.toggle('hidden');
+        });
+        
+        // Hide sort dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (sortButton && !sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
+                sortDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Review form toggle
+        const writeReviewButton = document.getElementById('write-review-button');
+        const reviewForm = document.getElementById('review-form');
+        const cancelReviewButton = document.getElementById('cancel-review');
+        
+        writeReviewButton?.addEventListener('click', () => {
+            reviewForm.classList.remove('hidden');
+            writeReviewButton.classList.add('hidden');
+        });
+        
+        cancelReviewButton?.addEventListener('click', () => {
+            reviewForm.classList.add('hidden');
+            writeReviewButton.classList.remove('hidden');
+        });
+        
+        // Submit review form
+        const submitReviewForm = document.getElementById('submit-review-form');
+        
+        submitReviewForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Here you would typically send data to the server
+            // For now, just show success message and hide form
+            
+            alert('Merci pour votre avis! Il sera publié après vérification.');
+            reviewForm.classList.add('hidden');
+            writeReviewButton.classList.remove('hidden');
+        });
+        
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const reviewCards = document.querySelectorAll('.review-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active class
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                
+                reviewCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const rating = card.getAttribute('data-rating');
+                        if (rating === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Sort reviews
+        const sortLinks = document.querySelectorAll('#sort-dropdown a');
+        
+        sortLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const sortType = link.getAttribute('data-sort');
+                const sortText = link.textContent;
+                
+                // Update button text
+                document.querySelector('#sort-button span').textContent = `Trier par: ${sortText}`;
+                
+                // Hide dropdown
+                sortDropdown.classList.add('hidden');
+                
+                // Sort the reviews
+                const reviewList = document.querySelector('.space-y-4');
+                const reviewArray = Array.from(reviewCards);
+                
+                reviewArray.sort((a, b) => {
+                    if (sortType === 'recent') {
+                        return new Date(b.getAttribute('data-date')) - new Date(a.getAttribute('data-date'));
+                    } else if (sortType === 'older') {
+                        return new Date(a.getAttribute('data-date')) - new Date(b.getAttribute('data-date'));
+                    } else if (sortType === 'highest') {
+                        return parseInt(b.getAttribute('data-rating')) - parseInt(a.getAttribute('data-rating'));
+                    } else if (sortType === 'lowest') {
+                        return parseInt(a.getAttribute('data-rating')) - parseInt(b.getAttribute('data-rating'));
+                    }
+                });
+                
+                // Remove current reviews
+                reviewCards.forEach(card => card.remove());
+                
+                // Add sorted reviews
+                reviewArray.forEach(card => {
+                    reviewList.appendChild(card);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

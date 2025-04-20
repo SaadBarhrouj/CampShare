@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+   // database/seeders/DatabaseSeeder.php
+// database/seeders/DatabaseSeeder.php
+public function run(): void
+{
+    $this->call([
+        UserSeeder::class,       // Doit être exécuté en premier
+        CategorieSeeder::class,  // Avant ObjetSeeder
+        ObjetSeeder::class,
+        ImageSeeder::class,
+        AnnonceSeeder::class,
+        ReservationSeeder::class,
+        EvaluationSeeder::class,
+        NotificationSeeder::class,
+        ReclamationSeeder::class // Doit être exécuté en dernier
+    ]);
+}
+}

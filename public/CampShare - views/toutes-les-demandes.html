@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demandes de Réservation - CampShare | Louez du matériel de camping entre particuliers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Navigation hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Active link style */
+        .active-nav-link {
+            position: relative;
+        }
+        
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFAA33;
+        }
+        
+        /* Input styles */
+        .custom-input {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .custom-input:focus {
+            box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+        }
+        
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        .toggle-switch input:checked + .slider {
+            background-color: #2D5F2B;
+        }
+        
+        .dark .toggle-switch input:checked + .slider {
+            background-color: #4F7942;
+        }
+        
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Sidebar active */
+        .sidebar-link.active {
+            background-color: rgba(45, 95, 43, 0.1);
+            color: #2D5F2B;
+            border-left: 4px solid #2D5F2B;
+        }
+        
+        .dark .sidebar-link.active {
+            background-color: rgba(79, 121, 66, 0.2);
+            color: #4F7942;
+            border-left: 4px solid #4F7942;
+        }
+        
+        /* Equipment card hover effect */
+        .equipment-card {
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Chat styles */
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        
+        .chat-message.outgoing {
+            justify-content: flex-end;
+        }
+        
+        .chat-bubble {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        
+        .chat-message.incoming .chat-bubble {
+            background-color: #f3f4f6;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .dark .chat-message.incoming .chat-bubble {
+            background-color: #374151;
+        }
+        
+        .chat-message.outgoing .chat-bubble {
+            background-color: #2D5F2B;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .dark .chat-message.outgoing .chat-bubble {
+            background-color: #4F7942;
+        }
+
+        /* Request status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Filter chip styles */
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active {
+            background-color: #2D5F2B;
+            color: white;
+        }
+
+        .dark .filter-chip.active {
+            background-color: #4F7942;
+        }
+
+        .filter-chip:not(.active) {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dark .filter-chip:not(.active) {
+            background-color: #374151;
+            color: #e5e7eb;
+            border: 1px solid #4b5563;
+        }
+
+        .filter-chip:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+
+        .dark .filter-chip:hover:not(.active) {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Logo -->
+                    <a href="index.html" class="flex items-center">
+                        <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
+                    <a href="annonces.html" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+                    <a href="#devenir-partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    
+                    <!-- User menu -->
+                    <div class="relative ml-4">
+                        <div class="flex items-center space-x-4">
+                            <!-- Notifications -->
+                            <div class="relative">
+                                <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-badge">3</span>
+                                </button>
+                                
+                                <!-- Notifications dropdown -->
+                                <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
+                                    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
+                                            <a href="#" class="text-sm text-forest dark:text-meadow hover:underline">Marquer tout comme lu</a>
+                                        </div>
+                                    </div>
+                                    <div class="max-h-96 overflow-y-auto">
+                                        <!-- Notification items -->
+                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                            <div class="flex">
+                                                <div class="flex-shrink-0 mr-3">
+                                                    <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-500 dark:text-blue-300">
+                                                        <i class="fas fa-shopping-bag"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvelle demande de location</p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Mehdi souhaite louer votre "Pack Camping Complet 2p"</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 23 minutes</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                            <div class="flex">
+                                                <div class="flex-shrink-0 mr-3">
+                                                    <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center text-green-500 dark:text-green-300">
+                                                        <i class="fas fa-money-bill-wave"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Paiement reçu</p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Leila a payé 900 MAD pour "Pack Camping Complet 2p"</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 1 heure</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                            <div class="flex">
+                                                <div class="flex-shrink-0 mr-3">
+                                                    <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-800 flex items-center justify-center text-amber-500 dark:text-amber-300">
+                                                        <i class="fas fa-star"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvel avis reçu</p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Ahmed vous a laissé un avis 5 étoiles</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 3 heures</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                            <div class="flex">
+                                                <div class="flex-shrink-0 mr-3">
+                                                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center text-indigo-500 dark:text-indigo-300">
+                                                        <i class="fas fa-bullhorn"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Promotion disponible</p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Augmentez votre visibilité avec notre offre spéciale</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 1 jour</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
+                                        <a href="#all-notifications" class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- User profile menu -->
+                            <div class="relative">
+                                <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                    <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                                         alt="Fatima Benali" 
+                                         class="h-8 w-8 rounded-full object-cover" />
+                                    <span class="font-medium text-gray-800 dark:text-gray-200">Fatima</span>
+                                    <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                                </button>
+                                
+                                <!-- User dropdown menu -->
+                                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
+                                    <div class="py-1">
+                                        <a href="#profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                                        </a>
+                                        <a href="#account-settings" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
+                                        </a>
+                                        <a href="#public-profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <i class="fas fa-eye mr-2 opacity-70"></i> Voir mon profil public
+                                        </a>
+                                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
+                                        <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
+                <a href="annonces.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
+                <a href="#devenir-partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Devenir Partenaire</a>
+            </div>
+            
+            <!-- Mobile profile menu -->
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
+                <div class="flex items-center px-5">
+                    <div class="flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                             alt="Fatima Benali" 
+                             class="h-10 w-10 rounded-full" />
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium text-gray-800 dark:text-white">Fatima Benali</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">fatima.benali@example.com</div>
+                    </div>
+                    <div class="ml-auto flex items-center space-x-4">
+                        <button class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-envelope text-lg"></i>
+                            <span class="notification-badge">2</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a href="#profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                        <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                    </a>
+                    <a href="#account-settings" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                        <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
+                    </a>
+                    <a href="#public-profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                        <i class="fas fa-eye mr-2 opacity-70"></i> Voir mon profil public
+                    </a>
+                    <a href="#logout" class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard container -->
+    <div class="flex flex-col md:flex-row pt-16">
+        <!-- Sidebar (hidden on mobile) -->
+        <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
+            <div class="p-5">
+                <div class="mb-6 px-3 flex flex-col items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                             alt="Fatima Benali" 
+                             class="w-24 h-24 rounded-full border-4 border-forest dark:border-meadow object-cover" />
+                        <div class="absolute bottom-1 right-1 bg-green-500 p-1 rounded-full border-2 border-white dark:border-gray-800">
+                            <i class="fas fa-check text-white text-xs"></i>
+                        </div>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-4">Fatima Benali</h2>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
+                    <div class="flex items-center mt-2">
+                        <div class="flex text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">4.8</span>
+                    </div>
+                </div>
+                
+                <nav class="mt-6 space-y-1">
+                    <a href="index.html" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+                        Tableau de bord
+                    </a>
+                    <a href="#equipment" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-campground w-5 mr-3"></i>
+                        Mes équipements
+                    </a>
+                    <a href="#rental-requests" class="sidebar-link active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
+                        <i class="fas fa-clipboard-list w-5 mr-3"></i>
+                        Demandes de location
+                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </a>
+                    <a href="#current-rentals" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-exchange-alt w-5 mr-3"></i>
+                        Locations en cours
+                        <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                    </a>
+                    <a href="#my-reservations" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-shopping-cart w-5 mr-3"></i>
+                        Mes réservations
+                        <span class="ml-auto bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                    </a>
+                 
+                    <a href="#reviews" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-star w-5 mr-3"></i>
+                        Avis reçus
+                    </a>
+                    <a href="#calendar" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-calendar-alt w-5 mr-3"></i>
+                        Calendrier
+                    </a>
+                    <a href="#analytics" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-chart-line w-5 mr-3"></i>
+                        Statistiques
+                    </a>
+                    <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-cog w-5 mr-3"></i>
+                        Paramètres
+                    </a>
+                    <a href="#help" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-question-circle w-5 mr-3"></i>
+                        Aide & Support
+                    </a>
+                </nav>
+                
+                <div class="mt-8 px-4 py-5 bg-forest dark:bg-meadow bg-opacity-10 dark:bg-opacity-10 rounded-lg">
+                    <h3 class="text-forest dark:text-meadow font-medium mb-2">Augmentez votre visibilité</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Rendez vos annonces plus visibles avec notre pack premium.</p>
+                    <a href="#premium" class="inline-flex items-center px-3 py-1.5 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white text-sm rounded-md transition-colors">
+                        En savoir plus
+                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Mobile sidebar toggle -->
+        <div id="mobile-sidebar-overlay" class="md:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 hidden"></div>
+        
+        <div class="md:hidden fixed bottom-4 right-4 z-50">
+            <button id="mobile-sidebar-toggle" class="w-14 h-14 rounded-full bg-forest text-white shadow-lg flex items-center justify-center">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <div id="mobile-sidebar" class="md:hidden fixed inset-y-0 left-0 transform -translate-x-full w-64 bg-white dark:bg-gray-800 shadow-xl z-50 transition-transform duration-300">
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Mon compte</h2>
+                    <button id="close-mobile-sidebar" class="text-gray-600 dark:text-gray-400 focus:outline-none">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-6 px-3 flex flex-col items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                             alt="Fatima Benali" 
+                             class="w-20 h-20 rounded-full border-4 border-forest dark:border-meadow object-cover" />
+                        <div class="absolute bottom-1 right-1 bg-green-500 p-1 rounded-full border-2 border-white dark:border-gray-800">
+                            <i class="fas fa-check text-white text-xs"></i>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">Fatima Benali</h2>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
+                    <div class="flex items-center mt-1">
+                        <div class="flex text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">4.8</span>
+                    </div>
+                </div>
+                
+                <nav class="mt-6 space-y-1">
+                    <a href="index.html" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+                        Tableau de bord
+                    </a>
+                    <a href="#equipment" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-campground w-5 mr-3"></i>
+                        Mes équipements
+                    </a>
+                    <a href="#rental-requests" class="sidebar-link active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
+                        <i class="fas fa-clipboard-list w-5 mr-3"></i>
+                        Demandes de location
+                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </a>
+                    <a href="#current-rentals" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-exchange-alt w-5 mr-3"></i>
+                        Locations en cours
+                        <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                    </a>
+                    <a href="#my-reservations" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-shopping-cart w-5 mr-3"></i>
+                        Mes réservations
+                        <span class="ml-auto bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                    </a>
+                
+                    <a href="#reviews" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-star w-5 mr-3"></i>
+                        Avis reçus
+                    </a>
+                    <a href="#calendar" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-calendar-alt w-5 mr-3"></i>
+                        Calendrier
+                    </a>
+                    <a href="#analytics" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-chart-line w-5 mr-3"></i>
+                        Statistiques
+                    </a>
+                    <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-cog w-5 mr-3"></i>
+                        Paramètres
+                    </a>
+                    <a href="#help" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-question-circle w-5 mr-3"></i>
+                        Aide & Support
+                    </a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+            <div class="py-8 px-4 md:px-8">
+                <!-- Page header -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Demandes de Réservation</h1>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez toutes vos demandes de location entrantes.</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex space-x-3">
+                        <a href="index.html" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Retour au tableau de bord
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Filters and search -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-2 md:mb-0">Filtrer les demandes</h2>
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="px-4 py-2 pr-10 w-full md:w-64 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-base custom-input">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap">
+                        <div class="filter-chip active">
+                            <span>Toutes</span>
+                            <span class="ml-2 bg-white dark:bg-gray-700 text-forest dark:text-meadow rounded-full px-2 py-0.5 text-xs">12</span>
+                        </div>
+                        <div class="filter-chip">
+                            <span>En attente</span>
+                            <span class="ml-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full px-2 py-0.5 text-xs">3</span>
+                        </div>
+                        <div class="filter-chip">
+                            <span>Acceptées</span>
+                            <span class="ml-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full px-2 py-0.5 text-xs">4</span>
+                        </div>
+                        <div class="filter-chip">
+                            <span>Refusées</span>
+                            <span class="ml-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full px-2 py-0.5 text-xs">2</span>
+                        </div>
+                        <div class="filter-chip">
+                            <span>Annulées</span>
+                            <span class="ml-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full px-2 py-0.5 text-xs">1</span>
+                        </div>
+                        <div class="filter-chip">
+                            <span>Terminées</span>
+                            <span class="ml-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full px-2 py-0.5 text-xs">2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                        <div class="flex items-center">
+                            <label for="date-filter" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Date:</label>
+                            <select id="date-filter" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-sm custom-input">
+                                <option value="all">Toutes les dates</option>
+                                <option value="this-month">Ce mois-ci</option>
+                                <option value="last-month">Mois dernier</option>
+                                <option value="last-3-months">3 derniers mois</option>
+                                <option value="custom">Personnalisé</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <label for="equipment-filter" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Équipement:</label>
+                            <select id="equipment-filter" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-sm custom-input">
+                                <option value="all">Tous les équipements</option>
+                                <option value="pack-camping">Pack Camping Complet 2p</option>
+                                <option value="tente-legere">Tente Légère 2 Personnes</option>
+                                <option value="sacs-couchage">Sacs de Couchage Ultra Confort</option>
+                                <option value="matelas">Matelas Gonflable Double</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <label for="sort-by" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Trier par:</label>
+                            <select id="sort-by" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-sm custom-input">
+                                <option value="date-desc">Date (plus récent)</option>
+                                <option value="date-asc">Date (plus ancien)</option>
+                                <option value="price-desc">Prix (décroissant)</option>
+                                <option value="price-asc">Prix (croissant)</option>
+                                <option value="duration-desc">Durée (la plus longue)</option>
+                                <option value="duration-asc">Durée (la plus courte)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rental requests list -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                        <h2 class="font-bold text-xl text-gray-900 dark:text-white">Liste des demandes</h2>
+                        <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 text-xs font-medium rounded-full">
+                            12 demandes au total
+                        </span>
+                    </div>
+
+                    <!-- Request items -->
+                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Request 1 -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Mehdi Idrissi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Mehdi Idrissi</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Mehdi I.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.8</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Pack Camping Complet 2p</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">10 - 15 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(5 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">2,250 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(450 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+                                        <i class="fas fa-clock mr-1"></i> En attente
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Demandé il y a 23 min</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
+                                            Accepter
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
+                                            Refuser
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 2 -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Leila Mansouri" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Leila Mansouri</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.7 <span class="text-gray-500 dark:text-gray-400">(9)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Leila M.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.7</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Tente Légère 2 Personnes</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">20 - 24 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(4 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">720 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(180 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+                                        <i class="fas fa-clock mr-1"></i> En attente
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Demandé il y a 1h 10min</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
+                                            Accepter
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
+                                            Refuser
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 3 -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Youssef Alami" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Youssef Alami</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.9 <span class="text-gray-500 dark:text-gray-400">(21)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Youssef A.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.9</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Sacs de Couchage Ultra Confort</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">15 - 18 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(3 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">450 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(150 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+                                        <i class="fas fa-clock mr-1"></i> En attente
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Demandé il y a 5h 27min</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
+                                            Accepter
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
+                                            Refuser
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 4 (Accepted) -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Karim Hakimi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Karim Hakimi</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.6 <span class="text-gray-500 dark:text-gray-400">(7)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Karim H.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.6</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Matelas Gonflable Double</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">1 - 5 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(4 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">480 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(120 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">
+                                        <i class="fas fa-check mr-1"></i> Acceptée
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Accepté il y a 1 jour</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full lg:w-auto">
+                                            <i class="fas fa-eye mr-2"></i> Détails
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 5 (Accepted) -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Nadia Toumi" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Nadia Toumi</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.9 <span class="text-gray-500 dark:text-gray-400">(15)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Nadia T.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.9</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Pack Camping Complet 2p</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">3 - 8 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(5 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">2,250 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(450 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">
+                                        <i class="fas fa-check mr-1"></i> Acceptée
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Accepté il y a 2 jours</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full lg:w-auto">
+                                            <i class="fas fa-eye mr-2"></i> Détails
+                                        </button>
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 6 (Rejected) -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Omar Ziani" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Omar Ziani</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>4.5 <span class="text-gray-500 dark:text-gray-400">(3)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Omar Z.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Tente Légère 2 Personnes</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">5 - 10 Août 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(5 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">900 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(180 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
+                                        <i class="fas fa-times mr-1"></i> Refusée
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Refusé il y a 3 jours</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full lg:w-auto">
+                                            <i class="fas fa-eye mr-2"></i> Détails
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request 7 (Completed) -->
+                        <div class="px-6 py-4">
+                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                    <div class="flex items-center lg:w-16">
+                                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                             alt="Ahmed Kaddour" 
+                                             class="w-12 h-12 rounded-full object-cover" />
+                                        <div class="lg:hidden ml-3">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">Ahmed Kaddour</h3>
+                                            <div class="flex items-center text-sm">
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span>5.0 <span class="text-gray-500 dark:text-gray-400">(12)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden lg:block mt-2">
+                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">Ahmed K.</h3>
+                                        <div class="flex items-center justify-center text-xs mt-1">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span>5.0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                            <span class="truncate">Pack Camping Complet 2p</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">25 - 31 Juillet 2023</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(6 jours)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">2,700 MAD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">(450 MAD/jour)</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
+                                    <div class="status-badge bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
+                                        <i class="fas fa-check-circle mr-1"></i> Terminée
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Terminé il y a 5 jours</p>
+                                    <div class="flex space-x-2 w-full lg:w-auto">
+                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full lg:w-auto">
+                                            <i class="fas fa-eye mr-2"></i> Détails
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 flex items-center justify-between">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            Affichage de <span class="font-medium text-gray-900 dark:text-white">1-7</span> sur <span class="font-medium text-gray-900 dark:text-white">12</span> demandes
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 bg-forest dark:bg-meadow text-white text-sm rounded-md transition-colors">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                2
+                            </button>
+                            <button class="px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Message Modal (hidden by default) -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                         alt="Mehdi Idrissi" 
+                         class="w-10 h-10 rounded-full object-cover mr-3" />
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Mehdi Idrissi</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Pack Camping Complet 2p</p>
+                    </div>
+                </div>
+                <button id="close-message-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto flex-grow">
+                <div class="chat-container">
+                    <!-- Message thread -->
+                    <div class="chat-message incoming">
+                        <div class="chat-bubble">
+                            <p class="text-gray-800 dark:text-gray-200">Bonjour ! Je suis intéressé par votre Pack Camping Complet 2p pour un séjour au lac Lalla Takerkoust du 10 au 15 août. Est-ce qu'il est disponible durant cette période ?</p>
+                            <p class="text-xs text-gray-500 mt-1">11:42 AM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-message outgoing">
+                        <div class="chat-bubble">
+                            <p class="text-white">Bonjour Mehdi, oui le pack est disponible pour ces dates ! Avez-vous besoin d'informations supplémentaires sur le contenu du pack ?</p>
+                            <p class="text-xs text-gray-300 mt-1">11:48 AM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-message incoming">
+                        <div class="chat-bubble">
+                            <p class="text-gray-800 dark:text-gray-200">Super ! Est-ce que le pack inclut des assiettes et des couverts ? Nous serons 2 personnes.</p>
+                            <p class="text-xs text-gray-500 mt-1">11:53 AM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-message outgoing">
+                        <div class="chat-bubble">
+                            <p class="text-white">Oui, le pack comprend 2 sets d'assiettes, bols, couverts et tasses en plastique réutilisable. Il y a aussi une petite casserole, une poêle et une bouilloire.</p>
+                            <p class="text-xs text-gray-300 mt-1">11:57 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <form id="message-form" class="flex items-end">
+                    <div class="flex-grow">
+                        <textarea id="message-input" placeholder="Tapez votre message..." class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-base resize-none custom-input" rows="3"></textarea>
+                    </div>
+                    <div class="ml-3 flex flex-col space-y-2">
+                        <button type="button" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button type="submit" class="p-2 bg-forest hover:bg-green-700 text-white rounded-md shadow-sm transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // User dropdown toggle
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userDropdown = document.getElementById('user-dropdown');
+        
+        userMenuButton?.addEventListener('click', () => {
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        // Notifications dropdown toggle
+        const notificationsButton = document.getElementById('notifications-button');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        
+        notificationsButton?.addEventListener('click', () => {
+            notificationsDropdown.classList.toggle('hidden');
+        });
+        
+        // Hide dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            // User dropdown
+            if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+            
+            // Notifications dropdown
+            if (notificationsButton && !notificationsButton.contains(e.target) && notificationsDropdown && !notificationsDropdown.contains(e.target)) {
+                notificationsDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Mobile sidebar toggle
+        const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        
+        mobileSidebarToggle?.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('-translate-x-full');
+            mobileSidebarOverlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        });
+        
+        closeMobileSidebar?.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileSidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        mobileSidebarOverlay?.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileSidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Filter chips
+        const filterChips = document.querySelectorAll('.filter-chip');
+        
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // If already active, stay active
+                if (chip.classList.contains('active')) {
+                    return;
+                }
+                
+                // Remove active class from all chips
+                filterChips.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked chip
+                chip.classList.add('active');
+            });
+        });
+        
+        // Message modal
+        const messageButtons = document.querySelectorAll('button .fas.fa-comment-alt');
+        const messageModal = document.getElementById('message-modal');
+        const closeMessageModal = document.getElementById('close-message-modal');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        
+        messageButtons.forEach(button => {
+            button.parentElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                messageModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                // Scroll to bottom of chat
+                const chatContainer = document.querySelector('.chat-container');
+                if (chatContainer) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                // Focus input
+                messageInput?.focus();
+            });
+        });
+        
+        closeMessageModal?.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Close modal when clicking outside
+        messageModal?.addEventListener('click', (e) => {
+            if (e.target === messageModal) {
+                messageModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+        
+        // Handle message form submission
+        messageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+            if (message) {
+                // Create and append new message
+                const chatContainer = document.querySelector('.chat-container');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'chat-message outgoing';
+                
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+                
+                newMessage.innerHTML = `
+                    <div class="chat-bubble">
+                        <p class="text-white">${message}</p>
+                        <p class="text-xs text-gray-300 mt-1">${timeString}</p>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(newMessage);
+                messageInput.value = '';
+                
+                // Scroll to bottom of chat
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>

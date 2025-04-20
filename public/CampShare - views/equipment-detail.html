@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack Camping Complet 2p - CampShare | Louez du matériel de camping entre particuliers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Navigation hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active-nav-link {
+            position: relative;
+        }
+        
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFAA33;
+        }
+        
+        /* Input styles */
+        .custom-input {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .custom-input:focus {
+            box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+        }
+        
+        /* Star rating styles */
+        .star-rating {
+            display: inline-flex;
+        }
+        
+        .star-rating input {
+            display: none;
+        }
+        
+        .star-rating label {
+            cursor: pointer;
+            width: 1.5rem;
+            font-size: 1.5rem;
+            color: #ddd;
+            transition: all 0.2s ease;
+        }
+        
+        .star-rating label:before {
+            content: '\f005';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+        
+        .star-rating input:checked ~ label {
+            color: #FFAA33;
+        }
+        
+        .star-rating:hover label {
+            color: #FFAA33;
+        }
+        
+        .star-rating label:hover ~ label {
+            color: #ddd;
+        }
+        
+        /* Tab styles */
+        .tab-active {
+            color: #2D5F2B;
+            border-bottom: 2px solid #FFAA33;
+        }
+        
+        .dark .tab-active {
+            color: #FFAA33;
+        }
+        
+        .thumbnail {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .thumbnail:hover {
+            opacity: 0.8;
+        }
+        
+        .thumbnail.active {
+            border: 2px solid #FFAA33;
+        }
+        
+        /* Date picker styles */
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23555" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>') no-repeat;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .dark input[type="date"]::-webkit-calendar-picker-indicator {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ccc" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>') no-repeat;
+        }
+    </style>
+
+</head>
+
+
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Logo -->
+                    <a href="index.html" class="flex items-center">
+                        <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
+                    <a href="annonces.html" class="nav-link active-nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+                    <a href="#devenir-partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    
+                    <div class="flex items-center space-x-4 ml-4">
+                        <a href="connexion.html" class="px-4 py-2 font-medium rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Connexion</a>
+                        <a href="inscription.html" class="px-4 py-2 font-medium rounded-md bg-sunlight hover:bg-amber-600 text-white shadow-md transition duration-300">Inscription</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
+                <a href="annonces.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
+                <a href="#devenir-partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Devenir Partenaire</a>
+                <div class="mt-4 flex flex-col space-y-3 px-3">
+                    <a href="connexion.html" class="px-4 py-2 font-medium rounded-md text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition duration-300">Connexion</a>
+                    <a href="inscription.html" class="px-4 py-2 font-medium rounded-md text-center bg-sunlight hover:bg-amber-600 text-white transition duration-300">Inscription</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16 bg-white dark:bg-gray-900">
+        <!-- Breadcrumb -->
+        <div class="bg-gray-50 dark:bg-gray-800 py-2 border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex text-sm">
+                    <a href="index.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">Accueil</a>
+                    <span class="mx-2 text-gray-400">/</span>
+                    <a href="annonces.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">Explorer le matériel</a>
+                    <span class="mx-2 text-gray-400">/</span>
+                    <a href="profil-partenaire-public.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">Fatima Benali</a>
+                    <span class="mx-2 text-gray-400">/</span>
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Pack Camping Complet 2p</span>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Equipment Detail -->
+        <section class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Image Gallery -->
+                    <div class="w-full lg:w-7/12">
+                        <div class="relative h-96 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                            <img id="mainImage" src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
+                                 alt="Pack Camping Complet 2p" 
+                                 class="w-full h-full object-contain" />
+                        </div>
+                        
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="thumbnail active h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
+                                <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+                                     alt="Thumbnail 1" 
+                                     class="w-full h-full object-cover" />
+                            </div>
+                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
+                                <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+                                     alt="Thumbnail 2" 
+                                     class="w-full h-full object-cover" />
+                            </div>
+                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
+                                <img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+                                     alt="Thumbnail 3" 
+                                     class="w-full h-full object-cover" />
+                            </div>
+                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1546811740-23e671faf31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
+                                <img src="https://images.unsplash.com/photo-1546811740-23e671faf31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+                                     alt="Thumbnail 4" 
+                                     class="w-full h-full object-cover" />
+                            </div>
+                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1598443037135-f5eeb3ebf5af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
+                                <img src="https://images.unsplash.com/photo-1546811740-23e671faf31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+                                     alt="Thumbnail 5" 
+                                     class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Equipment Details -->
+                    <div class="w-full lg:w-5/12">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Pack Camping Complet 2p</h1>
+                                    <p class="text-gray-500 dark:text-gray-400">MSR - Excellent état</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-amber-400 mr-1"></i>
+                                    <span class="font-medium">4.8</span>
+                                    <span class="text-gray-500 dark:text-gray-400 ml-1">(18 avis)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-200 dark:border-gray-700 py-4 mb-4">
+                                <div class="flex items-center mb-2">
+                                    <div class="h-8 w-8 rounded-full bg-forest text-white flex items-center justify-center mr-3">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div>
+                                        <a href="profile-fatima.html" class="font-medium text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Fatima Benali</a>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Membre depuis 2021</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-3">
+                                    <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                                    <span>15 Rue Mohammed V, Rabat</span>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-200 dark:border-gray-700 py-4 mb-4">
+                                <h2 class="font-bold text-gray-900 dark:text-white mb-3">Prix</h2>
+                                <div class="flex items-baseline">
+                                    <span class="text-3xl font-bold text-gray-900 dark:text-white">450 MAD</span>
+                                    <span class="text-gray-600 dark:text-gray-300 ml-2">/jour</span>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                                        <i class="fas fa-info-circle mr-1 text-forest dark:text-meadow"></i>
+                                        Caution : 1500 MAD (remboursée au retour du matériel en bon état)
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-200 dark:border-gray-700 py-4 mb-4">
+                                <h2 class="font-bold text-gray-900 dark:text-white mb-3">Disponibilité</h2>
+                                <p class="text-gray-600 dark:text-gray-300 mb-3">
+                                    <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                                    Disponible du 1 août au 1 octobre 2023
+                                </p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="pickup-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date de retrait</label>
+                                        <input type="date" id="pickup-date" min="2023-08-01" max="2023-09-28" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                    </div>
+                                    <div>
+                                        <label for="return-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date de retour</label>
+                                        <input type="date" id="return-date" min="2023-08-02" max="2023-10-01" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                    </div>
+                                </div>
+                                
+                                <div id="price-calculation" class="hidden mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600 dark:text-gray-300">450 MAD × <span id="days-count">3</span> jours</span>
+                                        <span class="text-gray-900 dark:text-white font-medium" id="subtotal">1350 MAD</span>
+                                    </div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600 dark:text-gray-300">Frais de service CampShare (5%)</span>
+                                        <span class="text-gray-900 dark:text-white font-medium" id="service-fee">67.50 MAD</span>
+                                    </div>
+                                    <div class="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-600 mt-2">
+                                        <span class="text-gray-900 dark:text-white font-medium">Total</span>
+                                        <span class="text-gray-900 dark:text-white font-bold" id="total-price">1417.50 MAD</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="reservation-button" class="w-full py-3 bg-sunlight hover:bg-amber-600 text-white font-medium rounded-md shadow-md transition-colors">
+                                Réserver maintenant
+                            </button>
+                            
+                            <div class="mt-4 flex justify-between">
+                                <button class="flex items-center text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-meadow">
+                                    <i class="far fa-heart mr-2"></i>
+                                    Ajouter aux favoris
+                                </button>
+                                <button class="flex items-center text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-meadow">
+                                    <i class="fas fa-share-alt mr-2"></i>
+                                    Partager
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200 dark:border-gray-700 mt-10">
+                    <div class="flex overflow-x-auto scrollbar-hide space-x-8">
+                        <button id="tab-details" class="tab-active px-1 py-4 font-medium text-lg whitespace-nowrap">
+                            Description
+                        </button>
+                        <button id="tab-specs" class="px-1 py-4 font-medium text-lg text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                            Caractéristiques
+                        </button>
+                        <button id="tab-reviews" class="px-1 py-4 font-medium text-lg text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                            Avis (18)
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Description Section -->
+                <section id="details-section" class="py-6">
+                    <div class="prose max-w-none prose-forest dark:prose-invert dark:text-gray-300">
+                        <h2>Pack Camping Complet pour 2 personnes</h2>
+                        
+                        <p>Ce pack complet offre tout le nécessaire pour une expérience de camping confortable et sans souci. Idéal pour les couples ou amis qui souhaitent s'évader en pleine nature sans le tracas d'acheter tout l'équipement.</p>
+                        
+                        <p>Le pack inclut une tente de qualité supérieure MSR Hubba Hubba NX 2 personnes, ultra-légère et facile à monter en moins de 5 minutes. Les deux sacs de couchage Therm-a-Rest sont parfaits pour des températures entre 5°C et 20°C, offrant un excellent confort pour les nuits fraîches.</p>
+                        
+                        <p>Les matelas autogonflants inclus assurent une bonne isolation du sol et un confort optimal pour un sommeil réparateur. Le réchaud compact MSR PocketRocket 2 vous permettra de préparer facilement vos repas et votre café du matin.</p>
+                        
+                        <h3>Conseils d'utilisation</h3>
+                        
+                        <ul>
+                            <li>La tente est imperméable mais pensez à toujours installer le double-toit fourni en cas de pluie.</li>
+                            <li>Le réchaud fonctionne avec des cartouches de gaz standards (non fournies, disponibles dans tous les magasins de sport).</li>
+                            <li>Les sacs de couchage peuvent se zipper ensemble pour former un grand sac double.</li>
+                            <li>Tout le matériel est nettoyé, désinfecté et vérifié après chaque location.</li>
+                        </ul>
+                        
+                        <h3>Entretien et retour</h3>
+                        
+                        <p>Merci de retourner le matériel propre et sec. Si la tente est humide lors du retour, veuillez me le signaler pour que je puisse la faire sécher correctement. En cas de problème ou de dommage, merci de me le signaler immédiatement.</p>
+                        
+                        <p>Je suis à votre disposition pour toute question sur l'utilisation du matériel et peux vous donner des conseils sur les meilleurs spots de camping dans la région de Rabat et ses environs.</p>
+                    </div>
+                </section>
+                
+                <!-- Specifications Section -->
+                <section id="specs-section" class="py-6 hidden">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Caractéristiques techniques</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Tente MSR Hubba Hubba NX 2P</h3>
+                                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Capacité : 2 personnes</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Poids : 1,72 kg</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Dimensions montée : 213 × 127 × 100 cm (L×l×h)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Tissu : 20D ripstop nylon, imperméabilité 1200mm</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Armature : DAC Featherlite NFL aluminium</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Sacs de couchage Therm-a-Rest</h3>
+                                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Type : Momie, compatible avec températures 5°C à 20°C</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Matériau extérieur : Nylon ripstop 20D</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Rembourrage : Synthétique, Therm-a-Rest eraLoft</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Poids : 850g par sac</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Matelas autogonflants</h3>
+                                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Dimensions : 183 × 51 × 3,8 cm (L×l×h)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>R-Value : 3.4 (bon isolant thermique)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Poids : 680g par matelas</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Réchaud MSR PocketRocket 2</h3>
+                                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Type : Réchaud à gaz compact</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Poids : 73g</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Temps d'ébullition : 3,5 min pour 1L d'eau</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>Combustible : Cartouche de gaz (non fournie)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Accessoires inclus</h3>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>2 oreillers de camping compressibles</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>1 casserole et 1 poêle légères</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>2 sets d'ustensiles (fourchette, cuillère, couteau)</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>1 filtre à eau portable (capacité 2L)</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>2 mugs en aluminium avec couvercle isolant</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>1 lanterne LED rechargeable</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>1 trousse de premiers secours basique</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-forest text-xs mr-2"></i>
+                                    <span>1 sac de rangement imperméable</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Reviews Section -->
+                <section id="reviews-section" class="py-6 hidden">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2 md:mb-0">Avis sur cet équipement</h2>
+                            
+                            <button id="write-review-button" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md shadow-sm transition-colors">
+                                <i class="fas fa-star mr-2"></i>
+                                Évaluer cet équipement
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row items-start">
+                            <div class="md:w-48 flex flex-col items-center mb-4 md:mb-0">
+                                <div class="text-5xl font-bold text-gray-900 dark:text-white">4.8</div>
+                                <div class="flex text-amber-400 text-xl mt-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Basé sur 18 avis</div>
+                            </div>
+                            
+                            <div class="flex-1 ml-0 md:ml-6">
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">5 étoiles</div>
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: 82%"></div>
+                                        </div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">82%</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">4 étoiles</div>
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: 15%"></div>
+                                        </div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">15%</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">3 étoiles</div>
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: 3%"></div>
+                                        </div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">3%</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">2 étoiles</div>
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">0%</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">1 étoile</div>
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">0%</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Qualité</div>
+                                        <div class="text-lg font-bold text-forest dark:text-meadow">4.9/5</div>
+                                    </div>
+                                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Confort</div>
+                                        <div class="text-lg font-bold text-forest dark:text-meadow">4.7/5</div>
+                                    </div>
+                                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Rapport Q/P</div>
+                                        <div class="text-lg font-bold text-forest dark:text-meadow">4.6/5</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Form (Hidden by default) -->
+                    <div id="review-form" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Évaluer cet équipement</h3>
+                        
+                        <form id="submit-review-form">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Note globale</label>
+                                <div class="star-rating text-2xl">
+                                    <input type="radio" id="star5" name="rating" value="5" />
+                                    <label for="star5" title="5 étoiles"></label>
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label for="star4" title="4 étoiles"></label>
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label for="star3" title="3 étoiles"></label>
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label for="star2" title="2 étoiles"></label>
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label for="star1" title="1 étoile"></label>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Qualité</label>
+                                    <select class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                        <option value="5">Excellent</option>
+                                        <option value="4">Très bien</option>
+                                        <option value="3">Bien</option>
+                                        <option value="2">Moyen</option>
+                                        <option value="1">Insatisfaisant</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Confort</label>
+                                    <select class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                        <option value="5">Excellent</option>
+                                        <option value="4">Très bien</option>
+                                        <option value="3">Bien</option>
+                                        <option value="2">Moyen</option>
+                                        <option value="1">Insatisfaisant</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Rapport qualité/prix</label>
+                                    <select class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                                        <option value="5">Excellent</option>
+                                        <option value="4">Très bien</option>
+                                        <option value="3">Bien</option>
+                                        <option value="2">Moyen</option>
+                                        <option value="1">Insatisfaisant</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="review-title" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Titre de votre avis</label>
+                                <input type="text" id="review-title" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base" placeholder="Résumez votre expérience en quelques mots">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="review-comment" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Votre commentaire</label>
+                                <textarea id="review-comment" rows="4" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base" placeholder="Partagez les détails de votre expérience avec cet équipement..."></textarea>
+                            </div>
+                            
+                            <div class="flex justify-end">
+                                <button type="button" id="cancel-review" class="mr-4 px-4 py-2 font-medium rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    Annuler
+                                </button>
+                                <button type="submit" class="px-4 py-2 font-medium rounded-md bg-forest hover:bg-green-700 text-white shadow-md transition-colors">
+                                    Publier l'avis
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Review List -->
+                    <div class="space-y-6">
+                        <!-- Review Item 1 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="flex">
+                                    <div class="mr-4">
+                                        <a href="profile-ahmed.html">
+                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Ahmed Kaddour" 
+                                                 class="w-12 h-12 rounded-full object-cover" />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="profile-ahmed.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Ahmed Kaddour</a>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <div class="flex text-amber-400">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <span class="text-gray-500 dark:text-gray-400 text-sm">15 août 2023</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Parfait pour notre weekend au lac!</h5>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Équipement complet et de très grande qualité. La tente est vraiment facile à monter et résiste bien au vent. Les matelas sont suffisamment épais pour bien nous isoler du sol et les sacs de couchage sont très chauds. Le réchaud est puissant et pratique. Tout était parfaitement propre et en excellent état comme décrit. Une location qui vaut largement son prix!
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Review Item 2 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="flex">
+                                    <div class="mr-4">
+                                        <a href="profile-sofia.html">
+                                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Sofia El Alami" 
+                                                 class="w-12 h-12 rounded-full object-cover" />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="profile-sofia.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Sofia El Alami</a>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <div class="flex text-amber-400">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <span class="text-gray-500 dark:text-gray-400 text-sm">2 août 2023</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Excellent rapport qualité-prix!</h5>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    J'ai été impressionnée par la qualité de ce pack camping. La tente MSR est ultra légère mais très solide, nous avons eu de la pluie et pas une goutte à l'intérieur. Les sacs de couchage sont confortables même à basse température. Tous les accessoires sont bien pensés et utiles. Le matériel est clairement haut de gamme et parfaitement entretenu. Je recommande vivement!
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Review Item 3 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="flex">
+                                    <div class="mr-4">
+                                        <a href="profile-omar.html">
+                                            <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Omar Tazi" 
+                                                 class="w-12 h-12 rounded-full object-cover" />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="profile-omar.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">Omar Tazi</a>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <div class="flex text-amber-400">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <span class="text-gray-500 dark:text-gray-400 text-sm">25 juillet 2023</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Très pratique mais réchaud capricieux</h5>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Pack complet avec tout le nécessaire pour un séjour confortable. La tente est spacieuse pour 2 personnes et les sacs de couchage de bonne qualité. Seul petit bémol: le réchaud que nous avons trouvé un peu capricieux à l'allumage. À part ce détail, tout était parfait et nous avons passé un excellent weekend. La lanterne LED fournie a été particulièrement appréciée!
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Load More Button -->
+                        <div class="flex justify-center mt-8">
+                            <button class="px-6 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Voir plus d'avis (15)
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- Similar Equipment Section -->
+        <section class="py-8 bg-gray-50 dark:bg-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Équipements similaires</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Similar Item 1 -->
+                    <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                        <a href="#similar-1">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Tente légère" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Tente Légère 2 Personnes</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Coleman - Excellent état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.6 <span class="text-gray-500 dark:text-gray-400">(8)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>Rabat</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">180 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Similar Item 2 -->
+                    <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                        <a href="#similar-2">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1520100504277-3c63ebf5c2c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Sacs de couchage ultra confort" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Sacs de Couchage Ultra Confort</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Therm-a-Rest - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.7 <span class="text-gray-500 dark:text-gray-400">(12)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>Rabat</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">150 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Similar Item 3 -->
+                    <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                        <a href="#similar-3">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Matelas gonflable" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Matelas Gonflable Double</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Intex - Neuf</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.9 <span class="text-gray-500 dark:text-gray-400">(6)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>Rabat</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">120 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Similar Item 4 -->
+                    <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                        <a href="#similar-4">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1563299796-17596ed6b017?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Pack de randonnée" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Pack de Randonnée Complet</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">North Face - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.8 <span class="text-gray-500 dark:text-gray-400">(9)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>Casablanca</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">380 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <!-- Column 1: Company Info -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <span class="text-white text-2xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-400">by ParentCo</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 max-w-md">
+                        CampShare est un service de ParentCo qui permet aux particuliers de louer du matériel de camping entre eux, pour des aventures plus accessibles et éco-responsables.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Links 1 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">CampShare</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Comment ça marche</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Explorer le matériel</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Devenir Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Guide du camping</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Destinations populaires</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3: Links 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Assistance</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Centre d'aide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">FAQ</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Contactez-nous</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Signaler un problème</a></li>
+                        <li><a href="#reclamation" class="text-white font-medium hover:text-sunlight transition duration-150">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Réclamations
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4: Links 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">À propos de ParentCo</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Client</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-600 pt-8 mt-8">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-400">
+                            © 2023 ParentCo. Tous droits réservés. CampShare est un service de ParentCo.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/flags/4x3/ma.svg" alt="Drapeau marocain" class="h-5 w-auto" />
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Français</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">العربية</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Sticky navbar effect on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+        
+        // Image gallery
+        function changeImage(thumbnail, imgSrc) {
+            // Update main image
+            document.getElementById('mainImage').src = imgSrc;
+            
+            // Update active thumbnail
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            thumbnail.classList.add('active');
+        }
+        
+        // Tabs switching
+        const tabDetails = document.getElementById('tab-details');
+        const tabSpecs = document.getElementById('tab-specs');
+        const tabReviews = document.getElementById('tab-reviews');
+        
+        const detailsSection = document.getElementById('details-section');
+        const specsSection = document.getElementById('specs-section');
+        const reviewsSection = document.getElementById('reviews-section');
+        
+        tabDetails.addEventListener('click', () => {
+            // Update tab styles
+            tabDetails.classList.add('tab-active');
+            tabDetails.classList.remove('text-gray-500', 'dark:text-gray-400');
+            tabSpecs.classList.remove('tab-active');
+            tabSpecs.classList.add('text-gray-500', 'dark:text-gray-400');
+            tabReviews.classList.remove('tab-active');
+            tabReviews.classList.add('text-gray-500', 'dark:text-gray-400');
+            
+            // Show/hide sections
+            detailsSection.classList.remove('hidden');
+            specsSection.classList.add('hidden');
+            reviewsSection.classList.add('hidden');
+        });
+        
+        tabSpecs.addEventListener('click', () => {
+            // Update tab styles
+            tabSpecs.classList.add('tab-active');
+            tabSpecs.classList.remove('text-gray-500', 'dark:text-gray-400');
+            tabDetails.classList.remove('tab-active');
+            tabDetails.classList.add('text-gray-500', 'dark:text-gray-400');
+            tabReviews.classList.remove('tab-active');
+            tabReviews.classList.add('text-gray-500', 'dark:text-gray-400');
+            
+            // Show/hide sections
+            specsSection.classList.remove('hidden');
+            detailsSection.classList.add('hidden');
+            reviewsSection.classList.add('hidden');
+        });
+        
+        tabReviews.addEventListener('click', () => {
+            // Update tab styles
+            tabReviews.classList.add('tab-active');
+            tabReviews.classList.remove('text-gray-500', 'dark:text-gray-400');
+            tabDetails.classList.remove('tab-active');
+            tabDetails.classList.add('text-gray-500', 'dark:text-gray-400');
+            tabSpecs.classList.remove('tab-active');
+            tabSpecs.classList.add('text-gray-500', 'dark:text-gray-400');
+            
+            // Show/hide sections
+            reviewsSection.classList.remove('hidden');
+            detailsSection.classList.add('hidden');
+            specsSection.classList.add('hidden');
+        });
+        
+        // Review form toggle
+        const writeReviewButton = document.getElementById('write-review-button');
+        const reviewForm = document.getElementById('review-form');
+        const cancelReviewButton = document.getElementById('cancel-review');
+        
+        if (writeReviewButton && reviewForm && cancelReviewButton) {
+            writeReviewButton.addEventListener('click', () => {
+                reviewForm.classList.remove('hidden');
+                writeReviewButton.classList.add('hidden');
+            });
+            
+            cancelReviewButton.addEventListener('click', () => {
+                reviewForm.classList.add('hidden');
+                writeReviewButton.classList.remove('hidden');
+            });
+        }
+        
+        // Reservation date calculation
+        const pickupDate = document.getElementById('pickup-date');
+        const returnDate = document.getElementById('return-date');
+        const priceCalculation = document.getElementById('price-calculation');
+        const daysCount = document.getElementById('days-count');
+        const subtotal = document.getElementById('subtotal');
+        const serviceFee = document.getElementById('service-fee');
+        const totalPrice = document.getElementById('total-price');
+        
+        if (pickupDate && returnDate) {
+            // Set today as minimum date
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedToday = `${yyyy}-${mm}-${dd}`;
+            
+            pickupDate.min = formattedToday;
+            
+            // Calculate dates and price when dates are selected
+            function calculatePrice() {
+                if (pickupDate.value && returnDate.value) {
+                    const start = new Date(pickupDate.value);
+                    const end = new Date(returnDate.value);
+                    const diffTime = Math.abs(end - start);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays > 0) {
+                        const dailyRate = 450; // MAD
+                        const daysTotal = diffDays;
+                        const subTotal = dailyRate * daysTotal;
+                        const feeAmount = subTotal * 0.05; // 5% service fee
+                        const total = subTotal + feeAmount;
+                        
+                        daysCount.textContent = daysTotal;
+                        subtotal.textContent = `${subTotal.toFixed(2)} MAD`;
+                        serviceFee.textContent = `${feeAmount.toFixed(2)} MAD`;
+                        totalPrice.textContent = `${total.toFixed(2)} MAD`;
+                        
+                        priceCalculation.classList.remove('hidden');
+                    }
+                }
+            }
+            
+            pickupDate.addEventListener('change', () => {
+                // Set return date minimum to day after pickup
+                if (pickupDate.value) {
+                    const nextDay = new Date(pickupDate.value);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    const yyyy = nextDay.getFullYear();
+                    const mm = String(nextDay.getMonth() + 1).padStart(2, '0');
+                    const dd = String(nextDay.getDate()).padStart(2, '0');
+                    returnDate.min = `${yyyy}-${mm}-${dd}`;
+                    
+                    // Clear return date if it's before new minimum
+                    if (returnDate.value && new Date(returnDate.value) < new Date(returnDate.min)) {
+                        returnDate.value = '';
+                    }
+                }
+                
+                calculatePrice();
+            });
+            
+            returnDate.addEventListener('change', calculatePrice);
+        }
+        
+        // Reservation button
+        const reservationButton = document.getElementById('reservation-button');
+        
+        if (reservationButton) {
+            reservationButton.addEventListener('click', () => {
+                if (!pickupDate.value || !returnDate.value) {
+                    alert('Veuillez sélectionner les dates de retrait et de retour avant de réserver.');
+                    return;
+                }
+                
+                alert('Votre demande de réservation a été envoyée au partenaire. Vous serez notifié dès que la réservation sera confirmée.');
+            });
+        }
+    </script>
+</body>
+</html>
