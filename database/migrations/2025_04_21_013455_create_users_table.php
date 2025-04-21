@@ -13,14 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('prenom');
+            $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['client', 'proprietaire', 'admin'])->default('client');
-            $table->string('cin_recto')->nullable(); // Stocker le chemin du fichier
+            $table->string('phone_number');
+            $table->string('address');
+            $table->enum('role', ['client', 'partner', 'admin'])->default('client');
+            $table->string('avatar_url')->nullable(); 
+            $table->string('cin_recto')->nullable(); 
             $table->string('cin_verso')->nullable();
+            $table->decimal('avg_rating', 2, 1)->default(5);
+            $table->integer('review_count')->default(0);
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->foreignId('city_id')->constrained();
             $table->timestamps();
+            
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reclamations', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->text('contenu');
-            $table->string('statut');
-            $table->date('date_creation');
-            $table->foreignId('utilisateur_id')->constrained('users');
-            $table->foreignId('reservation_id')->constrained();
+            $table->foreignId('partner_id')->constrained('users');
+            $table->decimal('amount', 8, 2);
+            $table->date('payment_date');
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->foreignId('listing_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reclamations');
+        Schema::dropIfExists('payments');
     }
 };

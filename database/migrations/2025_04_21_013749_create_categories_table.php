@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluations', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->integer('note');
-            $table->text('commentaire');
-            $table->date('date');
-            $table->foreignId('objet_id')->constrained();
-            $table->foreignId('evaluateur_id')->constrained('users');
-            $table->foreignId('evalue_id')->constrained('users');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluations');
+        Schema::dropIfExists('categories');
     }
 };

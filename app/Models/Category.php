@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Category extends Model
 {
     //
 
     use HasFactory;
 
-    protected $fillable = ['listing_id', 'url'];
+    protected $fillable = ['name'];
 
-    public function listing()
+    public function listings()
     {
-        return $this->belongsTo(Listing::class);
+        return $this->hasMany(Listing::class);
     }
 }

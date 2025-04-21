@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->enum('status', ['pending', 'confirmed', 'ongoing', 'canceled', 'completed'])->default('pending');
+            $table->boolean('delivery_option')->default(false);
             $table->foreignId('client_id')->constrained('users');
-            $table->foreignId('annonce_id')->constrained();
-            $table->date('date_debut');
-            $table->date('date_fin');
-            $table->string('statut');
+            $table->foreignId('partner_id')->constrained('users');
+            $table->foreignId('listing_id')->constrained();
             $table->timestamps();
         });
     }
