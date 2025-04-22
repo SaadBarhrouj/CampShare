@@ -627,14 +627,15 @@
 <div class="flex-1">
     <form action="{{ route('admin.clients') }}" method="GET">
         <div class="relative">
-            <input 
-                type="text" 
-                name="search" 
-                id="client-search" 
-                placeholder="Rechercher un client par nom, email..." 
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm"
-                value="{{ request('search') }}"
-            >
+            <!-- Recherchez cette partie dans votre code -->
+<input 
+    type="text" 
+    name="search" 
+    id="client-search" 
+    placeholder="Rechercher un client par nom, email ou ville..." 
+    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm"
+    value="{{ request('search') }}"
+>
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
             </div>
@@ -656,39 +657,47 @@
                             </div>
                         </div>
                         
-                        <!-- Sort filter -->
                         <div class="relative inline-block text-left" id="sort-filter-container">
-                            <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Trier par: Récents</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="recent">Plus récents</div>
-                                <div class="option" data-value="oldest">Plus anciens</div>
-                                <div class="option" data-value="name-asc">Nom (A-Z)</div>
-                                <div class="option" data-value="name-desc">Nom (Z-A)</div>
-                                <div class="option" data-value="reservation-count">Nombre de réservations</div>
-                                
-                            </div>
-                        </div>
-                        
-                        <!-- City filter -->
-                        <div class="relative inline-block text-left" id="city-filter-container">
-                            <button id="city-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Ville: Toutes</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="city-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="all">Toutes les villes</div>
-                                <div class="option" data-value="casablanca">Casablanca</div>
-                                <div class="option" data-value="rabat">Rabat</div>
-                                <div class="option" data-value="marrakech">Marrakech</div>
-                                <div class="option" data-value="agadir">Agadir</div>
-                                <div class="option" data-value="tanger">Tanger</div>
-                                <div class="option" data-value="fes">Fès</div>
-                                <div class="option" data-value="other">Autres</div>
-                            </div>
-                        </div>
+    <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
+        <span>
+            @switch(request('sort', 'recent'))
+                @case('recent') Trier par: Récents @break
+                @case('oldest') Trier par: Anciens @break
+                @case('name-asc') Trier par: Nom (A-Z) @break
+                @case('name-desc') Trier par: Nom (Z-A) @break
+                @case('reservation-count') Trier par: Réservations @break
+                @default Trier par: Récents
+            @endswitch
+        </span>
+        <i class="fas fa-chevron-down ml-2"></i>
+    </button>
+    
+    <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden w-full">
+        <div class="flex flex-col">
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'recent']) }}" 
+               class="option {{ request('sort', 'recent') == 'recent' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus récents
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}" 
+               class="option {{ request('sort') == 'oldest' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus anciens
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-asc']) }}" 
+               class="option {{ request('sort') == 'name-asc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (A-Z)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-desc']) }}" 
+               class="option {{ request('sort') == 'name-desc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (Z-A)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'reservation-count']) }}" 
+               class="option {{ request('sort') == 'reservation-count' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nombre de réservations
+            </a>
+        </div>
+    </div>
+</div>
+                       
                     </div>
                     
                     <!-- Advanced filters (collapsible) -->
@@ -1502,10 +1511,8 @@
                 sortFilterDropdown.classList.add('hidden');
             }
             
-            // City filter dropdown
-            if (cityFilterButton && !cityFilterButton.contains(e.target) && !cityFilterDropdown.contains(e.target)) {
-                cityFilterDropdown.classList.add('hidden');
-            }
+           
+            
         });
         
         // Mobile sidebar toggle
@@ -1550,14 +1557,15 @@
         const statusFilterDropdown = document.getElementById('status-filter-dropdown');
         const sortFilterButton = document.getElementById('sort-filter-button');
         const sortFilterDropdown = document.getElementById('sort-filter-dropdown');
-        const cityFilterButton = document.getElementById('city-filter-button');
-        const cityFilterDropdown = document.getElementById('city-filter-dropdown');
+       
+        
         
         // Status filter
         statusFilterButton?.addEventListener('click', () => {
             statusFilterDropdown.classList.toggle('hidden');
             sortFilterDropdown.classList.add('hidden');
-            cityFilterDropdown.classList.add('hidden');
+         
+            
         });
         
         // Status filter options
@@ -1575,7 +1583,8 @@
         sortFilterButton?.addEventListener('click', () => {
             sortFilterDropdown.classList.toggle('hidden');
             statusFilterDropdown.classList.add('hidden');
-            cityFilterDropdown.classList.add('hidden');
+           
+            
         });
         
         // Sort filter options
@@ -1589,23 +1598,9 @@
             });
         });
         
-        // City filter
-        cityFilterButton?.addEventListener('click', () => {
-            cityFilterDropdown.classList.toggle('hidden');
-            statusFilterDropdown.classList.add('hidden');
-            sortFilterDropdown.classList.add('hidden');
-        });
         
-        // City filter options
-        const cityOptions = cityFilterDropdown?.querySelectorAll('.option');
-        cityOptions?.forEach(option => {
-            option.addEventListener('click', () => {
-                cityOptions.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
-                cityFilterButton.querySelector('span').textContent = `Ville: ${option.textContent}`;
-                cityFilterDropdown.classList.add('hidden');
-            });
-        });
+     
+        
         
         // Advanced filters toggle
         const advancedFiltersToggle = document.getElementById('advanced-filters-toggle');
@@ -1698,6 +1693,7 @@
             }
         });
         // Recherche dynamique
+// Recherche dynamique
 const searchInput = document.getElementById('client-search');
 const searchForm = searchInput.closest('form');
 
@@ -1713,12 +1709,17 @@ searchInput.addEventListener('input', function(e) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const newTable = doc.querySelector('table');
-                document.querySelector('table').replaceWith(newTable);
+                if (newTable) {
+                    document.querySelector('table').replaceWith(newTable);
+                }
                 
                 // Mettez à jour la pagination si nécessaire
                 const newPagination = doc.querySelector('.flex.items-center.justify-between.border-t');
                 if (newPagination) {
-                    document.querySelector('.flex.items-center.justify-between.border-t').replaceWith(newPagination);
+                    const oldPagination = document.querySelector('.flex.items-center.justify-between.border-t');
+                    if (oldPagination) {
+                        oldPagination.replaceWith(newPagination);
+                    }
                 }
             });
     }
