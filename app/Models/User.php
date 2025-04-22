@@ -42,6 +42,11 @@ class User extends Model
         return $this->hasMany(Reservation::class, 'client_id');
     }
 
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
     public function partnerReservations()
     {
         return $this->hasMany(Reservation::class, 'partner_id');
@@ -52,8 +57,5 @@ class User extends Model
         return $this->hasMany(Review::class, 'reviewer_id');
     }
 
-    public function receivedReviews()
-    {
-        return $this->hasMany(Review::class, 'reviewee_id');
-    }
+   
 }

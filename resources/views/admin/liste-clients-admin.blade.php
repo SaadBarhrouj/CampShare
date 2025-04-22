@@ -415,7 +415,7 @@
                         <a href="#clients" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
                             <i class="fas fa-user w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
                             Clients
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">242</span>
+                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $stats['total'] }}</span>
                         </a>
                         <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
@@ -548,7 +548,7 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Clients</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">242</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white"> {{ $stats['total'] }}</h3>
                                     <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
                                         <i class="fas fa-arrow-up mr-1"></i>
                                         12.4%
@@ -623,15 +623,24 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-8 p-5">
                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
                         <!-- Search bar -->
-                        <div class="flex-1">
-                            <div class="relative">
-                                <input type="text" id="client-search" placeholder="Rechercher un client par nom, email ou téléphone..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
+                       <!-- Search bar -->
+<div class="flex-1">
+    <form action="{{ route('admin.clients') }}" method="GET">
+        <div class="relative">
+            <input 
+                type="text" 
+                name="search" 
+                id="client-search" 
+                placeholder="Rechercher un client par nom, email..." 
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm"
+                value="{{ request('search') }}"
+            >
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+            </div>
+        </div>
+    </form>
+</div>
                         <!-- Status filter -->
                         <div class="relative inline-block text-left" id="status-filter-container">
                             <button id="status-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
@@ -659,7 +668,7 @@
                                 <div class="option" data-value="name-asc">Nom (A-Z)</div>
                                 <div class="option" data-value="name-desc">Nom (Z-A)</div>
                                 <div class="option" data-value="reservation-count">Nombre de réservations</div>
-                                <div class="option" data-value="spending">Dépenses totales</div>
+                                
                             </div>
                         </div>
                         
@@ -736,13 +745,7 @@
                             </div>
                             
                             <!-- Spending range -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dépenses totales (MAD)</label>
-                                <div class="flex space-x-2">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Min">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Max">
-                                </div>
-                            </div>
+                          
                             
                             <!-- User loyalty -->
                             <div>
@@ -836,6 +839,80 @@
         @endforeach
     </tbody>
 </table>
+<!-- After the table closing tag -->
+</table>
+
+<!-- Pagination -->
+<div class="mt-6 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
+    <div class="flex-1 flex justify-between sm:hidden">
+        @if ($clients->onFirstPage())
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
+                Précédent
+            </span>
+        @else
+            <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                Précédent
+            </a>
+        @endif
+        
+        @if ($clients->hasMorePages())
+            <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                Suivant
+            </a>
+        @else
+            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
+                Suivant
+            </span>
+        @endif
+    </div>
+
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm text-gray-700 dark:text-gray-400">
+                Affichage de <span class="font-medium">{{ $clients->firstItem() }}</span> à <span class="font-medium">{{ $clients->lastItem() }}</span> sur <span class="font-medium">{{ $clients->total() }}</span> clients
+            </p>
+        </div>
+
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                {{-- Previous Page Link --}}
+                @if ($clients->onFirstPage())
+                    <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </span>
+                @else
+                    <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                @endif
+
+                {{-- Pagination Elements --}}
+                @foreach ($clients->getUrlRange(1, $clients->lastPage()) as $page => $url)
+                    @if ($page == $clients->currentPage())
+                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                {{-- Next Page Link --}}
+                @if ($clients->hasMorePages())
+                    <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                @else
+                    <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                @endif
+            </nav>
+        </div>
+    </div>
+</div>
             </div>
         </main>
     </div>
@@ -923,10 +1000,7 @@
                                     <span class="text-gray-600 dark:text-gray-400">Réservations:</span>
                                     <span class="font-medium text-gray-900 dark:text-white">5 (2 actives, 3 terminées)</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Dépenses totales:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">2 450 MAD</span>
-                                </div>
+                              
                                 <div class="flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">Avis laissés:</span>
                                     <span class="font-medium text-gray-900 dark:text-white">3 (moyenne: 4.2★)</span>
@@ -1623,6 +1697,32 @@
                 document.body.classList.remove('overflow-hidden');
             }
         });
+        // Recherche dynamique
+const searchInput = document.getElementById('client-search');
+const searchForm = searchInput.closest('form');
+
+searchInput.addEventListener('input', function(e) {
+    // Option 1: Soumission automatique du formulaire
+    // searchForm.submit();
+    
+    // Option 2: Recherche AJAX (plus avancée)
+    if (this.value.length > 2 || this.value.length === 0) {
+        fetch(`${searchForm.action}?search=${this.value}`)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.querySelector('table');
+                document.querySelector('table').replaceWith(newTable);
+                
+                // Mettez à jour la pagination si nécessaire
+                const newPagination = doc.querySelector('.flex.items-center.justify-between.border-t');
+                if (newPagination) {
+                    document.querySelector('.flex.items-center.justify-between.border-t').replaceWith(newPagination);
+                }
+            });
+    }
+});
     </script>
 </body>
 </html>
