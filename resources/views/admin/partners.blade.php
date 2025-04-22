@@ -638,23 +638,50 @@
                         </div>
                         
                         <!-- Sort filter -->
-                        <div class="relative inline-block text-left" id="sort-filter-container">
-                            <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Trier par: Récents</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="recent">Plus récents</div>
-                                <div class="option" data-value="oldest">Plus anciens</div>
-                                <div class="option" data-value="name-asc">Nom (A-Z)</div>
-                                <div class="option" data-value="name-desc">Nom (Z-A)</div>
-                                <div class="option" data-value="equipment-count">Nombre d'équipements</div>
-                                <div class="option" data-value="reservation-count">Nombre de réservations</div>
-                                <div class="option" data-value="revenue">Revenus générés</div>
-                            </div>
-                        </div>
+                       
+
+<!-- Sort filter -->
+<div class="relative inline-block text-left" id="sort-filter-container">
+    <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
+        <span>Trier par: 
+            @switch($sort)
+                @case('oldest') Plus anciens @break
+                @case('name-asc') Nom (A-Z) @break
+                @case('name-desc') Nom (Z-A) @break
+                @case('equipment-count') Nombre d'équipements @break
+                @case('reservation-count') Nombre de réservations @break
+                @default Plus récents
+            @endswitch
+        </span>
+        <i class="fas fa-chevron-down ml-2"></i>
+    </button>
+    <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden w-full">
+        <div class="flex flex-col">
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'recent']) }}" 
+               class="option {{ request('sort', 'recent') == 'recent' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus récents
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}" 
+               class="option {{ request('sort') == 'oldest' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus anciens
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-asc']) }}" 
+               class="option {{ request('sort') == 'name-asc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (A-Z)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-desc']) }}" 
+               class="option {{ request('sort') == 'name-desc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (Z-A)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'reservation-count']) }}" 
+               class="option {{ request('sort') == 'reservation-count' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nombre de réservations
+            </a>
+        </div>
+    </div>
+</div>
                         
-                        <!-- City filter -->
+                    
                        
                         </div>
                     </div>
@@ -743,560 +770,150 @@
                 </div>
                 
                 <!-- Partners table -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                        <h2 class="font-bold text-lg text-gray-900 dark:text-white">Liste des partenaires</h2>
+<!-- Partners table -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
+   
+                    <div class="overflow-x-auto">
+        <table class="w-full admin-table">
+            <thead>
+                <tr>
+                    <th class="w-12">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
+                        </label>
+                    </th>
+                    <th>Partenaire</th>
+                    <th>Contact</th>
+                    <th>Localisation</th>
+                    <th>Statistiques</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($partners as $partner)
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
+                        </label>
+                    </td>
+                    <td>
                         <div class="flex items-center">
-                            <span class="text-sm text-gray-600 dark:text-gray-400 mr-4">86 partenaires au total</span>
-                            <div class="relative">
-                                <select class="pl-3 pr-8 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none">
-                                    <option value="10">10 par page</option>
-                                    <option value="25">25 par page</option>
-                                    <option value="50">50 par page</option>
-                                    <option value="100">100 par page</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                    <i class="fas fa-chevron-down text-xs"></i>
+                            <img src="{{ $partner->profile_image ? asset('storage/' . $partner->profile_image) : 'https://ui-avatars.com/api/?name=' . urlencode($partner->username) . '&background=random' }}" 
+                                 alt="{{ $partner->username }}" 
+                                 class="w-10 h-10 rounded-full object-cover mr-3" />
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ $partner->username }}</p>
+                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
+                                    @php
+                                        $avgRating = $partner->receivedReviews->avg('rating') ?? 0;
+                                        $fullStars = floor($avgRating);
+                                        $hasHalfStar = $avgRating - $fullStars >= 0.5;
+                                    @endphp
+                                    
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $fullStars)
+                                            <i class="fas fa-star text-xs"></i>
+                                        @elseif($i == $fullStars + 1 && $hasHalfStar)
+                                            <i class="fas fa-star-half-alt text-xs"></i>
+                                        @else
+                                            <i class="far fa-star text-xs"></i>
+                                        @endif
+                                    @endfor
+                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">{{ number_format($avgRating, 1) }}</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full admin-table">
-                            <thead>
-                                <tr>
-                                    <th class="w-12">
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </th>
-                                    <th>Partenaire</th>
-                                    <th>Contact</th>
-                                    <th>Localisation</th>
-                                    <th>Statistiques</th>
-                                    <th>Inscription</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Partner row 1 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Omar Tazi" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Omar Tazi</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star-half-alt text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">4.8</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">omar.tazi@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 12 34 56 78</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Marrakech</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">8</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">32</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">5</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">04/01/2022</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 30 min
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Signalé</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Partner row 2 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Fatima Benali" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Fatima Benali</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">5.0</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">fatima.benali@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 98 76 54 32</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Casablanca</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">5</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">25</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">3</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">12/03/2022</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 5 heures
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Partner row 3 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1548544149-4835e62ee5b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Salma Benani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Salma Benani</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star-half-alt text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">4.7</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">salma.benani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 65 43 21 09</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Agadir</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">3</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">14</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">8</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">05/04/2022</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 2 jours
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Partner row 4 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1605462863863-10d9e47e15ee?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Mohammed Ziani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Mohammed Ziani</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">3.0</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">mohammed.ziani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 54 32 10 98</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Rabat</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">4</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">9</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">2</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">15/05/2022</p>
-                                        <p class="text-red-600 dark:text-red-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            Dernière activité il y a 15 jours
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Suspendu</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40" title="Réactiver le compte">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Partner row 5 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1566753323558-f4e0952af115?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Karim Lamrani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Karim Lamrani</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">4.2</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">karim.lamrani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 87 65 43 21</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Tanger</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">7</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">28</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">0</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">22/02/2022</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 8 heures
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Partner row 6 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Nadia Amrani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Nadia Amrani</p>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">4.9</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">nadia.amrani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 10 98 76 54</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Marrakech</p>
-                                    </td>
-                                    <td>
-                                        <div class="space-y-1 text-sm">
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">6</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">38</span>
-                                            </p>
-                                            <p class="flex justify-between">
-                                                <span class="text-gray-600 dark:text-gray-400">Réservations faites:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">5</span>
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">10/12/2021</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 1 jour
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
-                                                <i class="fas fa-campground"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    </td>
+                    <td>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->email }}</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->phone }}</p>
+                    </td>
+                    <td>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->city->name ?? 'Non spécifié' }}</p>
+                    </td>
+                    <td>
+                        <div class="space-y-1 text-sm">
+                            <p class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">{{ $partner->equipments_count }}</span>
+                            </p>
+                            <p class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">{{ $partner->partner_reservations_count }}</span>
+                            </p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            
+                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les équipements">
+                                <i class="fas fa-campground"></i>
+                            </button>
+                            <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
+                                <i class="fas fa-calendar-alt"></i>
+                            </button>
+                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            @if($partner->is_active)
+                                <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            @else
+                                <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40" title="Réactiver le compte">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
                     
                     <!-- Pagination -->
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">
-                            Affichage de <span class="font-medium">1-6</span> sur <span class="font-medium">86</span> partenaires
-                        </div>
-                        
-                        <div class="flex items-center justify-center space-x-2">
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md bg-admin-primary text-white font-medium">
-                                1
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                2
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                3
-                            </button>
-                            
-                            <span class="text-gray-500">...</span>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                15
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">
+            Affichage de <span class="font-medium">{{ $partners->firstItem() }}-{{ $partners->lastItem() }}</span> sur <span class="font-medium">{{ $partners->total() }}</span> partenaires
+        </div>
+        
+        <div class="flex items-center justify-center space-x-2">
+            @if($partners->onFirstPage())
+                <span class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+            @else
+                <a href="{{ $partners->previousPageUrl() }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            @endif
+            
+            @foreach($partners->getUrlRange(1, $partners->lastPage()) as $page => $url)
+                @if($page == $partners->currentPage())
+                    <span class="px-3 py-1 rounded-md bg-admin-primary text-white font-medium">
+                        {{ $page }}
+                    </span>
+                @else
+                    <a href="{{ $url }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        {{ $page }}
+                    </a>
+                @endif
+            @endforeach
+            
+            @if($partners->hasMorePages())
+                <a href="{{ $partners->nextPageUrl() }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            @else
+                <span class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            @endif
+        </div>
     </div>
-    
+</div>  
     <!-- Partner Detail Modal (hidden by default) -->
     <div id="partner-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] flex flex-col">
@@ -1780,6 +1397,7 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
                 
             });
         });
+        
     </script>
 </body>
 </html>

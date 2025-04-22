@@ -834,9 +834,7 @@
                 @endif
             </td>
             <td class="px-6 py-4 flex space-x-2">
-                <button class="text-blue-600 hover:text-blue-800" title="Voir détails">
-                    <i class="fas fa-eye"></i>
-                </button>
+               
                 <button class="text-purple-600 hover:text-purple-800" title="Voir réservations">
                     <i class="fas fa-calendar-alt"></i>
                 </button>

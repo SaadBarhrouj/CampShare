@@ -56,6 +56,14 @@ class User extends Model
     {
         return $this->hasMany(Review::class, 'reviewer_id');
     }
+// Dans app/Models/User.php
+
+
+public function equipments()
+{
+    return $this->hasMany(Listing::class, 'partner_id'); // Use the correct column name
+}
+
 
    
 }
