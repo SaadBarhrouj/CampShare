@@ -614,13 +614,21 @@
                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
                         <!-- Search bar -->
                         <div class="flex-1">
-                            <div class="relative">
-                                <input type="text" id="partner-search" placeholder="Rechercher un partenaire par nom, email ou téléphone..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
-                                </div>
-                            </div>
-                        </div>
+                        <form action="{{ route('admin.partners') }}" method="GET">
+    <div class="relative">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Rechercher par nom, email ou ville..." 
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm"
+            value="{{ request('search') }}"
+        >
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+            </div>
+        </div>
+    </form>
+</div>
                         
                         <!-- Status filter -->
                         <div class="relative inline-block text-left" id="status-filter-container">
@@ -827,7 +835,7 @@
                     </td>
                     <td>
                         <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->email }}</p>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->phone }}</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->phone_number }}</p>
                     </td>
                     <td>
                         <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->city->name ?? 'Non spécifié' }}</p>
@@ -1246,7 +1254,54 @@
             mobileSidebarOverlay.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
         });
-        
+        document.addEventListener('DOMContentLoaded', function() {
+    // 1. Soumission automatique du formulaire après 500ms sans frappe
+    const searchInput = document.querySelector('input[name="search"]');
+    const searchForm = document.querySelector('form');
+    
+    let searchTimeout;
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            searchForm.submit();
+        }, 500); // Délai ajustable
+    });
+
+    // 2. Réinitialisation améliorée
+    const resetBtn = document.querySelector('a[href="{{ route('admin.partners') }}"]');
+    resetBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        searchInput.value = '';
+        searchForm.submit();
+    });
+
+    // 3. Suggestions de recherche (optionnel - nécessite une route API)
+    if (searchInput) {
+        new Awesomplete(searchInput, {
+            minChars: 2,
+            autoFirst: true,
+            list: [], // Rempli dynamiquement via AJAX
+            filter: function(text, input) {
+                return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+            },
+            replace: function(text) {
+                this.input.value = text;
+            }
+        });
+
+        searchInput.addEventListener('input', function() {
+            if (this.value.length < 2) return;
+            
+            fetch(`/api/partners/suggest?q=${encodeURIComponent(this.value)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const awesomplete = Awesomplete.$[this];
+                    awesomplete.list = data;
+                    awesomplete.evaluate();
+                });
+        });
+    }
+});
         mobileSidebarOverlay?.addEventListener('click', () => {
             mobileSidebar.classList.add('-translate-x-full');
             mobileSidebarOverlay.classList.add('hidden');
@@ -1323,7 +1378,19 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
                 sortFilterDropdown.classList.add('hidden');
             });
         });
-        
+        document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[name="search"]');
+    const searchForm = document.querySelector('form');
+    
+    let searchTimeout;
+    
+    searchInput?.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            searchForm.submit();
+        }, 500); // Soumet après 500ms d'inactivité
+    });
+});
         // City filter
         cityFilterButton?.addEventListener('click', () => {
             cityFilterDropdown.classList.toggle('hidden');

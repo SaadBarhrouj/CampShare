@@ -81,14 +81,15 @@ class AdminController extends Controller
         ]);
     
         // Filtre de recherche
-        if ($request->has('search')) {
-            $searchTerm = $request->input('search');
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('username', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('email', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('phone', 'LIKE', "%{$searchTerm}%")
-                  ->orWhereHas('city', function($q) use ($searchTerm) {
-                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  // Retirez cette ligne si la colonne phone n'existe pas
+                  //->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhereHas('city', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
                   });
             });
         }
@@ -116,7 +117,17 @@ class AdminController extends Controller
             'equipment_count' => \App\Models\Listing::count(),
             'revenue' => \App\Models\Payment::sum('amount')
         ];
-    
+    // Nouveau : Recherche combinée (nom, email, ville)
+    if ($request->has('search')) {
+        $searchTerm = $request->input('search');
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('username', 'LIKE', "%{$searchTerm}%") // Nom
+              ->orWhere('email', 'LIKE', "%{$searchTerm}%")  // Email
+              ->orWhereHas('city', function($q) use ($searchTerm) {
+                  $q->where('name', 'LIKE', "%{$searchTerm}%"); // Ville
+              });
+        });
+    }
         return view('admin.partners', compact('partners', 'stats', 'sort','request'));
     }
 
