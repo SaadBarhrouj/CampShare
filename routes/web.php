@@ -10,4 +10,4 @@ Route::get('/', function () {
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/clients', [AdminController::class, 'clients'])->name('admin.clients');
-});
+    Route::get('/partners', [AdminController::class, 'partners'])->name('admin.partners'); });

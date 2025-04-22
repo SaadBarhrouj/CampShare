@@ -407,11 +407,11 @@
                             Utilisateurs
                             <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">328</span>
                         </a>
-                        <a href="#partners" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
-                            <i class="fas fa-handshake w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
-                            Partenaires
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
-                        </a>
+                        <a href="{{ route('admin.partners') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Partenaires
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
+</a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Équipements
@@ -655,21 +655,7 @@
                         </div>
                         
                         <!-- City filter -->
-                        <div class="relative inline-block text-left" id="city-filter-container">
-                            <button id="city-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Ville: Toutes</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="city-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="all">Toutes les villes</div>
-                                <div class="option" data-value="casablanca">Casablanca</div>
-                                <div class="option" data-value="rabat">Rabat</div>
-                                <div class="option" data-value="marrakech">Marrakech</div>
-                                <div class="option" data-value="agadir">Agadir</div>
-                                <div class="option" data-value="tanger">Tanger</div>
-                                <div class="option" data-value="fes">Fès</div>
-                                <div class="option" data-value="other">Autres</div>
-                            </div>
+                       
                         </div>
                     </div>
                     
@@ -1649,7 +1635,21 @@
             mobileSidebarOverlay.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
         });
+        // Supprimez l'ancien gestionnaire d'événements pour les liens de la sidebar
+// Et remplacez par ceci :
+document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // Enlevez la gestion de la classe active
+        sidebarLinks.forEach(el => el.classList.remove('active'));
+        this.classList.add('active');
         
+        // Si c'est un lien interne, ne pas empêcher le comportement par défaut
+        if (this.getAttribute('href').startsWith('#')) {
+            e.preventDefault();
+            // Gestion des ancres ici si nécessaire
+        }
+    });
+});
         // Sidebar link active state
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
         

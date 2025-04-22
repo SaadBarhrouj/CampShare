@@ -394,11 +394,11 @@
     Clients
     <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $clients->count() }}</span>
 </a>
-                        <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Partenaires
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
-                        </a>
+<a href="{{ route('admin.partners') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Partenaires
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
+</a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Équipements
@@ -511,11 +511,11 @@
     <span>Clients</span>
     <span class="ml-auto bg-blue-100 text-blue-800 rounded-full px-2">{{ $clientsCount }}</span>
 </div>
-                        <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Partenaires
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
-                        </a>
+<a href="{{ route('admin.partners') }}" id="partners-link" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"id="partners-link">
+    <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Partenaires
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount ?? 0 }}</span>
+</a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Équipements
@@ -1740,126 +1740,158 @@
 
     <script>
         // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+
+mobileMenuButton?.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+});
+
+// User dropdown toggle
+const userMenuButton = document.getElementById('user-menu-button');
+const userDropdown = document.getElementById('user-dropdown');
+
+userMenuButton?.addEventListener('click', () => {
+    userDropdown.classList.toggle('hidden');
+});
+
+// Hide dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    // User dropdown
+    if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
+        userDropdown.classList.add('hidden');
+    }
+});
+
+
+// Mobile sidebar toggle
+const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+const mobileSidebar = document.getElementById('mobile-sidebar');
+const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
+const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+
+mobileSidebarToggle?.addEventListener('click', () => {
+    mobileSidebar.classList.toggle('-translate-x-full');
+    mobileSidebarOverlay.classList.toggle('hidden');
+    document.body.classList.toggle('overflow-hidden');
+});
+
+closeMobileSidebar?.addEventListener('click', () => {
+    mobileSidebar.classList.add('-translate-x-full');
+    mobileSidebarOverlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+mobileSidebarOverlay?.addEventListener('click', () => {
+    mobileSidebar.classList.add('-translate-x-full');
+    mobileSidebarOverlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+// Supprimez l'ancien gestionnaire d'événements pour les liens de la sidebar
+// Et remplacez par ceci :
+document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // Enlevez la gestion de la classe active
+        sidebarLinks.forEach(el => el.classList.remove('active'));
+        this.classList.add('active');
         
-        mobileMenuButton?.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // User dropdown toggle
-        const userMenuButton = document.getElementById('user-menu-button');
-        const userDropdown = document.getElementById('user-dropdown');
-        
-        userMenuButton?.addEventListener('click', () => {
-            userDropdown.classList.toggle('hidden');
-        });
-        
-        // Hide dropdowns when clicking outside
-        document.addEventListener('click', (e) => {
-            // User dropdown
-            if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
-                userDropdown.classList.add('hidden');
-            }
-        });
-        
-        // Mobile sidebar toggle
-        const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
-        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
-        
-        mobileSidebarToggle?.addEventListener('click', () => {
-            mobileSidebar.classList.toggle('-translate-x-full');
-            mobileSidebarOverlay.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden');
-        });
-        
-        closeMobileSidebar?.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-            mobileSidebarOverlay.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
-        
-        mobileSidebarOverlay?.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-            mobileSidebarOverlay.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
-        
-        // Sidebar link active state
-        const sidebarLinks = document.querySelectorAll('.sidebar-link');
-        
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                // Remove active class from all links
-                sidebarLinks.forEach(el => el.classList.remove('active'));
-                
-                // Add active class to clicked link
-                link.classList.add('active');
-            });
-        });
-        
-        // Tab switching
-        const adminTabs = document.querySelectorAll('.admin-tab');
-        
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs
-                adminTabs.forEach(el => el.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                tab.classList.add('active');
-                
-                // Here you would normally also update the visible content
-                // For this demo, we're not implementing full tab functionality
-            });
-        });
-        
-        // Maintenance mode toggle
-        const maintenanceMode = document.getElementById('maintenance-mode');
-        
-        maintenanceMode?.addEventListener('change', () => {
-            if (maintenanceMode.checked) {
-                alert('Cette action activerait le mode maintenance sur un système réel');
-            } else {
-                alert('Cette action désactiverait le mode maintenance sur un système réel');
-            }
-        });
-        
-        // User detail modal
-        const userButtons = document.querySelectorAll('button .fas.fa-eye');
-        const userDetailModal = document.getElementById('user-detail-modal');
-        const closeUserModal = document.getElementById('close-user-modal');
-        const cancelUserDetails = document.getElementById('cancel-user-details');
-        
-        userButtons.forEach(button => {
-            button.parentElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                userDetailModal.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden');
-            });
-        });
-        
-        closeUserModal?.addEventListener('click', () => {
-            userDetailModal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
-        
-        cancelUserDetails?.addEventListener('click', () => {
-            userDetailModal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
-        
-        // Close modal when clicking outside
-        userDetailModal?.addEventListener('click', (e) => {
-            if (e.target === userDetailModal) {
-                userDetailModal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }
-        });
-        document.getElementById('clients-link').addEventListener('click', function() {
+        // Si c'est un lien interne, ne pas empêcher le comportement par défaut
+        if (this.getAttribute('href').startsWith('#')) {
+            e.preventDefault();
+            // Gestion des ancres ici si nécessaire
+        }
+    });
+});
+
+// Sidebar link active state (Improved)
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+// Remove initial active state (Important: Only if you want no link active on initial load)
+sidebarLinks.forEach(el => el.classList.remove('active')); 
+
+// Handle Clients link click
+document.getElementById('clients-link')?.addEventListener('click', function(e) {
+    e.preventDefault();
     window.location.href = '{{ route("admin.clients") }}';
+});
+
+// Handle Partners link click
+document.getElementById('partners-link')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = '{{ route("admin.partners") }}';
+});
+
+// Generic sidebar link click handling (for all other links)
+sidebarLinks.forEach(link => {
+    if (!link.id || (link.id !== 'clients-link' && link.id !== 'partners-link')) {
+        link.addEventListener('click', () => {
+            sidebarLinks.forEach(el => el.classList.remove('active'));
+            link.classList.add('active');
+        });
+    }
+});
+
+
+
+// Tab switching
+const adminTabs = document.querySelectorAll('.admin-tab');
+
+adminTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        adminTabs.forEach(el => el.classList.remove('active'));
+
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Here you would normally also update the visible content
+        // For this demo, we're not implementing full tab functionality
+    });
+});
+
+
+// Maintenance mode toggle
+const maintenanceMode = document.getElementById('maintenance-mode');
+
+maintenanceMode?.addEventListener('change', () => {
+    // In a real system, you would send an AJAX request to update the server
+    if (maintenanceMode.checked) {
+        alert('Maintenance mode enabled (simulated)');
+    } else {
+        alert('Maintenance mode disabled (simulated)');
+    }
+});
+
+// User detail modal
+const userButtons = document.querySelectorAll('button .fas.fa-eye'); // Select eye icons within buttons
+const userDetailModal = document.getElementById('user-detail-modal');
+const closeUserModal = document.getElementById('close-user-modal');
+const cancelUserDetails = document.getElementById('cancel-user-details');
+
+userButtons.forEach(button => {
+    button.parentElement.addEventListener('click', (e) => { // Attach listener to the parent <button>
+        e.preventDefault(); // Prevent any default button action if needed
+        userDetailModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden'); // Prevent background scrolling
+    });
+});
+
+closeUserModal?.addEventListener('click', () => {
+    userDetailModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+cancelUserDetails?.addEventListener('click', () => {
+    userDetailModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+
+userDetailModal?.addEventListener('click', (e) => {
+    if (e.target === userDetailModal) {
+        userDetailModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 });
     </script>
 </body>
