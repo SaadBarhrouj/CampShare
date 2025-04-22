@@ -392,12 +392,12 @@
                         <a href="{{ route('admin.clients') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
     <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
     Clients
-    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $clients->count() }}</span>
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $clientsCount}}</span>
 </a>
 <a href="{{ route('admin.partners') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
     <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
     Partenaires
-    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount }}</span>
 </a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
@@ -623,14 +623,14 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Utilisateurs</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">328</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $clientsCount + $partnersCount }}</h3>
+                                <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
                                         <i class="fas fa-arrow-up mr-1"></i>
                                         12.8%
                                     </span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    242 clients, 86 partenaires
+                                    {{$clientsCount }} clients, {{$partnersCount}} partenaires
                                 </p>
                             </div>
                         </div>
@@ -843,716 +843,82 @@
                 </div>
                 
                 <!-- Users table -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                        <h2 class="font-bold text-lg text-gray-900 dark:text-white">Utilisateurs récents</h2>
-                        <div class="flex items-center">
-                            <div class="relative mr-2">
-                                <input type="text" placeholder="Rechercher un utilisateur..." class="pl-8 pr-4 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400 dark:text-gray-500 text-xs"></i>
-                                </div>
-                            </div>
-                            <a href="#all-users" class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir tous</a>
-                        </div>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Utilisateur</th>
-                                    <th>Type</th>
-                                    <th>Inscrit le</th>
-                                    <th>Activité</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- User row 1 -->
-                                <tr>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Leila Mansouri" 
-                                                 class="w-8 h-8 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Leila Mansouri</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">leila.mansouri@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Client</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">01/08/2023</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-green-600 dark:text-green-400 text-sm">Il y a 25 min</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-2">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- User row 2 -->
-                                <tr>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Youssef Alami" 
-                                                 class="w-8 h-8 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Youssef Alami</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">youssef.alami@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Client</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">01/08/2023</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-green-600 dark:text-green-400 text-sm">Il y a 2 heures</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-2">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- User row 3 -->
-                                <tr>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Omar Tazi" 
-                                                 class="w-8 h-8 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Omar Tazi</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">omar.tazi@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Partenaire</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">31/07/2023</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-green-600 dark:text-green-400 text-sm">Il y a 30 min</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Signalé</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-2">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- User row 4 -->
-                                <tr>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Fatima Benali" 
-                                                 class="w-8 h-8 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Fatima Benali</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">fatima.benali@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Partenaire</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">30/07/2023</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-green-600 dark:text-green-400 text-sm">Il y a 5 heures</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-2">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- User row 5 -->
-                                <tr>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Mehdi Idrissi" 
-                                                 class="w-8 h-8 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Mehdi Idrissi</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">mehdi.idrissi@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Client</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">30/07/2023</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm">Il y a 2 jours</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Suspendu</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-2">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                        <div class="text-sm text-gray-600 dark:text-gray-400">
-                            Affichage de <span class="font-medium">1-5</span> sur <span class="font-medium">328</span> utilisateurs
-                        </div>
-                        
-                        <div class="flex items-center space-x-2">
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md bg-admin-primary text-white font-medium">
-                                1
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                2
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                3
-                            </button>
-                            
-                            <span class="text-gray-500">...</span>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                33
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Recent equipment and reservations -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <!-- Recent equipment -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                            <h2 class="font-bold text-lg text-gray-900 dark:text-white">Équipements récents</h2>
-                            <a href="#all-equipment" class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir tous</a>
-                        </div>
-                        
-                        <div class="overflow-y-auto max-h-[400px]">
-                            <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                                <!-- Equipment 1 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0 mr-4">
-                                            <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                                 alt="Pack Camping Complet 2p" 
-                                                 class="w-16 h-16 rounded-md object-cover" />
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between mb-1">
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Pack Camping Complet 2p</h3>
-                                                <span class="badge badge-success">Actif</span>
-                                            </div>
-                                            
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Partenaire:</span> Omar Tazi
-                                            </p>
-                                            
-                                            <div class="mt-2 flex justify-between items-center">
-                                                <p class="text-admin-primary dark:text-admin-secondary font-semibold">
-                                                    450 MAD/jour
-                                                </p>
-                                                
-                                                <div class="flex space-x-2">
-                                                    <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40">
-                                                        <i class="fas fa-pause"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Equipment 2 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0 mr-4">
-                                            <img src="https://images.unsplash.com/photo-1520100504277-3c63ebf5c2c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                                 alt="Sacs de Couchage Ultra Confort" 
-                                                 class="w-16 h-16 rounded-md object-cover" />
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between mb-1">
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Sacs de Couchage Ultra Confort</h3>
-                                                <span class="badge badge-success">Actif</span>
-                                            </div>
-                                            
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Partenaire:</span> Fatima Benali
-                                            </p>
-                                            
-                                            <div class="mt-2 flex justify-between items-center">
-                                                <p class="text-admin-primary dark:text-admin-secondary font-semibold">
-                                                    150 MAD/jour
-                                                </p>
-                                                
-                                                <div class="flex space-x-2">
-                                                    <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40">
-                                                        <i class="fas fa-pause"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Equipment 3 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0 mr-4">
-                                            <img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                                 alt="Matelas Gonflable Double" 
-                                                 class="w-16 h-16 rounded-md object-cover" />
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between mb-1">
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Matelas Gonflable Double</h3>
-                                                <span class="badge badge-warning">En révision</span>
-                                            </div>
-                                            
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Partenaire:</span> Salma Benani
-                                            </p>
-                                            
-                                            <div class="mt-2 flex justify-between items-center">
-                                                <p class="text-admin-primary dark:text-admin-secondary font-semibold">
-                                                    120 MAD/jour
-                                                </p>
-                                                
-                                                <div class="flex space-x-2">
-                                                    <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Equipment 4 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0 mr-4">
-                                            <img src="https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                                 alt="Grande Tente 6 Personnes" 
-                                                 class="w-16 h-16 rounded-md object-cover" />
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between mb-1">
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Grande Tente 6 Personnes</h3>
-                                                <span class="badge badge-success">Actif</span>
-                                            </div>
-                                            
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Partenaire:</span> Omar Tazi
-                                            </p>
-                                            
-                                            <div class="mt-2 flex justify-between items-center">
-                                                <p class="text-admin-primary dark:text-admin-secondary font-semibold">
-                                                    250 MAD/jour
-                                                </p>
-                                                
-                                                <div class="flex space-x-2">
-                                                    <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40">
-                                                        <i class="fas fa-pause"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent reservations -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                            <h2 class="font-bold text-lg text-gray-900 dark:text-white">Réservations récentes</h2>
-                            <a href="#all-reservations" class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir toutes</a>
-                        </div>
-                        
-                        <div class="overflow-y-auto max-h-[400px]">
-                            <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                                <!-- Reservation 1 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-medium text-gray-900 dark:text-white">Grande Tente 6 Personnes</h3>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Client:</span> Leila Mansouri
-                                            </p>
-                                        </div>
-                                        <span class="badge badge-success">Confirmée</span>
-                                    </div>
-                                    
-                                    <div class="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded p-2 flex justify-between text-sm">
-                                        <div>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Dates:</span> 5 - 10 Août 2023
-                                            </p>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Total:</span> 1 250 MAD
-                                            </p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Partenaire:</span> Omar Tazi
-                                            </p>
-                                            <p class="text-green-600 dark:text-green-400">
-                                                <span class="font-medium">Commission:</span> 187,50 MAD
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-2 flex space-x-2">
-                                        <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Reservation 2 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-medium text-gray-900 dark:text-white">Réchaud Camping + Kit Cuisine</h3>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Client:</span> Leila Mansouri
-                                            </p>
-                                        </div>
-                                        <span class="badge badge-warning">En attente</span>
-                                    </div>
-                                    
-                                    <div class="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded p-2 flex justify-between text-sm">
-                                        <div>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Dates:</span> 15 - 18 Août 2023
-                                            </p>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Total:</span> 450 MAD
-                                            </p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Partenaire:</span> Salma Benani
-                                            </p>
-                                            <p class="text-green-600 dark:text-green-400">
-                                                <span class="font-medium">Commission:</span> 67,50 MAD
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-2 flex space-x-2">
-                                        <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Reservation 3 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-medium text-gray-900 dark:text-white">Pack Camping Complet 2p</h3>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Client:</span> Youssef Alami
-                                            </p>
-                                        </div>
-                                        <span class="badge badge-danger">Annulée</span>
-                                    </div>
-                                    
-                                    <div class="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded p-2 flex justify-between text-sm">
-                                        <div>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Dates:</span> 1 - 5 Août 2023
-                                            </p>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Total:</span> 1 800 MAD (remboursé)
-                                            </p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Partenaire:</span> Omar Tazi
-                                            </p>
-                                            <p class="text-red-600 dark:text-red-400">
-                                                <span class="font-medium">Motif:</span> Conflit de planning
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-2 flex space-x-2">
-                                        <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Reservation 4 -->
-                                <div class="px-6 py-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-medium text-gray-900 dark:text-white">Sacs de Couchage Ultra Confort</h3>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                <span class="font-medium">Client:</span> Ahmed Kaddour
-                                            </p>
-                                        </div>
-                                        <span class="badge badge-info">Terminée</span>
-                                    </div>
-                                    
-                                    <div class="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded p-2 flex justify-between text-sm">
-                                        <div>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Dates:</span> 20 - 25 Juil. 2023
-                                            </p>
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Total:</span> 750 MAD
-                                            </p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium">Partenaire:</span> Fatima Benali
-                                            </p>
-                                            <p class="text-green-600 dark:text-green-400">
-                                                <span class="font-medium">Commission:</span> 112,50 MAD
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-2 flex space-x-2">
-                                        <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Reviews moderation -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                        <h2 class="font-bold text-lg text-gray-900 dark:text-white">Avis récents à modérer</h2>
-                        <a href="#all-reviews" class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir tous les avis</a>
-                    </div>
-                    
-                    <div class="overflow-y-auto max-h-[500px]">
-                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <!-- Review 1 (negative) -->
-                            <div class="px-6 py-4">
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                             alt="Fatima Benali" 
-                                             class="w-10 h-10 rounded-full object-cover" />
-                                    </div>
-                                    
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <div>
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Fatima Benali</h3>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <i class="far fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">1.0</span>
-                                                </div>
-                                            </div>
-                                            <span class="badge badge-danger">À examiner</span>
-                                        </div>
-                                        
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">
-                                            <span class="font-medium">Avis sur:</span> Tente 4 Personnes Deluxe (Partenaire: Mohammed Ziani)
-                                        </p>
-                                        
-                                        <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded text-sm">
-                                            <p class="text-gray-700 dark:text-gray-300">
-                                                Équipement en très mauvais état! La tente était déchirée à plusieurs endroits et sentait très mauvais. Le partenaire a refusé de nous rembourser. Pire expérience de location, à éviter absolument!
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="mt-3 flex space-x-2">
-                                            <button class="px-3 py-1.5 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm rounded-md hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors">
-                                                Approuver
-                                            </button>
-                                            <button class="px-3 py-1.5 bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-sm rounded-md hover:bg-amber-200 dark:hover:bg-amber-900/40 transition-colors">
-                                                Modifier
-                                            </button>
-                                            <button class="px-3 py-1.5 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-md hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">
-                                                Rejeter
-                                            </button>
-                                            <button class="px-3 py-1.5 bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-sm rounded-md hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors ml-auto">
-                                                Enquêter
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Review 2 (positive) -->
-                            <div class="px-6 py-4">
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                             alt="Ahmed Kaddour" 
-                                             class="w-10 h-10 rounded-full object-cover" />
-                                    </div>
-                                    
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <div>
-                                                <h3 class="font-medium text-gray-900 dark:text-white">Ahmed Kaddour</h3>
-                                                <div class="flex items-center text-amber-400 dark:text-amber-400">
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <i class="fas fa-star text-xs"></i>
-                                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">5.0</span>
-                                                </div>
-                                            </div>
-                                            <span class="badge badge-info">Nouveau</span>
-                                        </div>
-                                        
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">
-                                            <span class="font-medium">Avis sur:</span> Sacs de Couchage Ultra Confort (Partenaire: Fatima Benali)
-                                        </p>
-                                        
-                                        <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded text-sm">
-                                            <p class="text-gray-700 dark:text-gray-300">
-                                                Excellente expérience ! Les sacs de couchage étaient super confortables et très propres. Fatima est très professionnelle et a répondu à toutes mes questions rapidement. Je recommande vivement !
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="mt-3 flex space-x-2">
-                                            <button class="px-3 py-1.5 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm rounded-md hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors">
-                                                Approuver
-                                            </button>
-                                            <button class="px-3 py-1.5 bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-sm rounded-md hover:bg-amber-200 dark:hover:bg-amber-900/40 transition-colors">
-                                                Modifier
-                                            </button>
-                                            <button class="px-3 py-1.5 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-md hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">
-                                                Rejeter
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <!-- Users table -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+        <h2 class="font-bold text-lg text-gray-900 dark:text-white">Utilisateurs récents</h2>
+        <div class="flex items-center">
+            <div class="relative mr-2">
+                <input type="text" placeholder="Rechercher un utilisateur..." class="pl-8 pr-4 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400 dark:text-gray-500 text-xs"></i>
                 </div>
             </div>
+            <a href="#all-users" class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir tous</a>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full admin-table">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Type</th>
+                    <th>Inscrit le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($recentUsers as $user)
+                <tr>
+                    <td class="flex items-center py-4">
+                        <img src="{{ $user->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode($user->username).'&color=7F9CF5&background=EBF4FF' }}" 
+                             alt="{{ $user->username }}" 
+                             class="w-10 h-10 rounded-full object-cover mr-3" />
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ $user->username }}</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $user->email }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        @if($user->role === 'client')
+                            <span class="badge badge-info">Client</span>
+                        @else
+                            <span class="badge badge-success">Partenaire</span>
+                        @endif
+                    </td>
+                    <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                    
+                    <td>
+                        <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+            Affichage de <span class="font-medium">1-{{ $recentUsers->count() }}</span> sur <span class="font-medium">{{ $totalUsers }}</span> utilisateurs
+        </div>
+        
+        <div class="flex items-center space-x-2">
+            <a href="{{ route('admin.clients') }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                Voir tous les clients
+            </a>
+            <a href="{{ route('admin.partners') }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                Voir tous les partenaires
+            </a>
+        </div>
+    </div>
+</div>
         </main>
     </div>
     

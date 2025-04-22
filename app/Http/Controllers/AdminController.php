@@ -9,13 +9,22 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        // Compter directement sans charger tous les modèles (plus efficace)
         $clientsCount = User::where('role', 'client')->count();
-        $clients = User::where('role', 'client')
-                      ->with('city')
-                      ->get();
         $partnersCount = User::where('role', 'partner')->count();
-
-        return view('admin.dashboard', compact('clients', 'clientsCount','partnersCount'));
+    
+        // Récupérer les utilisateurs récents (clients et partenaires)
+        $recentUsers = User::whereIn('role', ['client', 'partner'])
+                          ->latest()
+                          ->take(5) // Limiter à 5 utilisateurs récents
+                          ->get();
+    
+        return view('admin.dashboard', [
+            'clientsCount' => $clientsCount,
+            'partnersCount' => $partnersCount,
+            'recentUsers' => $recentUsers,
+            'totalUsers' => $clientsCount + $partnersCount
+        ]);
     }
 
     public function clients(Request $request)
@@ -64,7 +73,7 @@ class AdminController extends Controller
         $stats = [
             'total' => User::where('role', 'client')->count(),
             'reservations' => \App\Models\Reservation::count(),
-            'spending' => \App\Models\Payment::sum('amount')
+            
         ];
         
         return view('admin.liste-clients-admin', compact('clients', 'stats'));
@@ -108,7 +117,7 @@ class AdminController extends Controller
         $sort = $request->input('sort', 'recent');
         $sortOption = $sortOptions[$sort] ?? $sortOptions['recent'];
         $query->orderBy($sortOption[0], $sortOption[1]);
-    
+        
         $partners = $query->paginate(10);
     
         // Statistiques

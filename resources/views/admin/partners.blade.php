@@ -398,19 +398,18 @@
                 <div class="mb-6 px-3">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Menu Principal</h5>
                     <nav class="space-y-1">
-                        <a href="admin-dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                         </a>
-                        <a href="#users" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Utilisateurs
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">328</span>
+                        <a href="{{ route('admin.clients') }}" class="sidebar-link  flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
+                            <i class="fas fa-user w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
+                            Clients
                         </a>
-                        <a href="{{ route('admin.partners') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="{{ route('admin.partners') }}" class="sidebar-link  active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
     <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
     Partenaires
-    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $stats['total'] }}</span>
 </a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
@@ -538,7 +537,7 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Partenaires</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">86</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total'] }}</h3>
                                     <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
                                         <i class="fas fa-arrow-up mr-1"></i>
                                         8.6%
