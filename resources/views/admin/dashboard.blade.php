@@ -389,11 +389,11 @@
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
                             Tableau de bord
                         </a>
-                        <a href="#users" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Clients
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">328</span>
-                        </a>
+                        <a href="{{ route('admin.clients') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Clients
+    <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $clients->count() }}</span>
+</a>
                         <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
@@ -505,11 +505,12 @@
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
                             Tableau de bord
                         </a>
-                        <a href="#users" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Clients
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">328</span>
-                        </a>
+                       <!-- Dans la section MENU PRINCIPAL -->
+                       <div class="sidebar-link flex items-center px-3 py-2.5" id="clients-link">
+    <i class="fas fa-users w-5 mr-3"></i>
+    <span>Clients</span>
+    <span class="ml-auto bg-blue-100 text-blue-800 rounded-full px-2">{{ $clientsCount }}</span>
+</div>
                         <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
@@ -1857,6 +1858,9 @@
                 document.body.classList.remove('overflow-hidden');
             }
         });
+        document.getElementById('clients-link').addEventListener('click', function() {
+    window.location.href = '{{ route("admin.clients") }}';
+});
     </script>
 </body>
 </html>
