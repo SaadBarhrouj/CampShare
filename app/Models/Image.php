@@ -11,7 +11,7 @@ class Image extends Model
 
     use HasFactory;
 
-    protected $fillable = ['listing_id', 'url'];
+    protected $fillable = ['listing_id', 'url', 'is_main'];
 
     public function listing()
     {

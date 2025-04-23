@@ -14,7 +14,8 @@ class Listing extends Model
     protected $fillable = [
         'partner_id', 'city_id', 'title', 'description', 'price_per_day',
         'status', 'is_premium', 'premium_start_date', 'premium_end_date',
-        'category_id', 'delivery_option'
+        'category_id', 'delivery_option', 'brand', 'condition', 'capacity',
+        'available_from', 'available_until', 'is_highlighted'
     ];
 
     public function partner()
@@ -37,23 +38,13 @@ class Listing extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function availabilities()
-    {
-        return $this->hasMany(Availability::class);
-    }
-
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
-
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    public function payments()
+    public function reservations()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Reservation::class);
     }
 }
