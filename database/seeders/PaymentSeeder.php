@@ -15,6 +15,6 @@ class PaymentSeeder extends Seeder
     {
         //
 
-        Payment::factory()->count(10)->create();
+        Payment::factory()->count(45)->create();
     }
 }

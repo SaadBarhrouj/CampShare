@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('listing_id')->constrained();
+            $table->foreignId('listing_id')->constrained()->unique();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

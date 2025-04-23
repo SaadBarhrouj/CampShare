@@ -15,6 +15,6 @@ class NotificationSeeder extends Seeder
     {
         //
 
-        Notification::factory()->count(30)->create();
+        Notification::factory()->count(100)->create();
     }
 }
