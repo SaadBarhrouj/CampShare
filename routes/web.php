@@ -34,6 +34,40 @@ Route::prefix('admin')->group(function () {
 
 
 
-
-
-
+    
+    
+    // Registration Routes
+    Route::get('/register', [RegistrationController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegistrationController::class, 'register']);
+    
+    // Login Routes
+    Route::middleware(['auth'])->get('/download-contract', [ContractController::class, 'downloadContract'])->name('download.contract');
+    
+    // Routes for Admin
+    Route::get('/admin', function () {
+        return view('admin'); 
+    })->name('admin.dashboard');
+    
+    // Routes for Partenaire (Proprietaire)
+    Route::get('/partenaire', function () {
+        return view('partenaire');
+    })->name('partenaire.dashboard');
+    
+    use App\Http\Controllers\AgreementController;
+    
+    Route::get('/agreement/pdf', [AgreementController::class, 'generateAgreement'])->name('agreement.pdf');
+    
+    // Login Routes
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    
+    // Annonces Route
+    Route::get('/auth/annonces', function () {
+        return view('auth.annonces');
+    })->middleware('auth')->name('annonces');
+    
+    // Dashboard Route
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware('auth')->name('dashboard');
+    
