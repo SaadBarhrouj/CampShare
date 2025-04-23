@@ -6,6 +6,10 @@ use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AdminController;
 
+use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContractController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,4 +30,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/clients', [AdminController::class, 'clients'])->name('admin.clients');
     Route::get('/partners', [AdminController::class, 'partners'])->name('admin.partners'); });
+
+
+
+
+
+
 
