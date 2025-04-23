@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class User extends Model
 {
@@ -37,15 +40,13 @@ class User extends Model
         return $this->hasMany(Payment::class, 'partner_id');
     }
 
+
     public function clientReservations()
     {
         return $this->hasMany(Reservation::class, 'client_id');
     }
 
-    public function receivedReviews()
-    {
-        return $this->hasMany(Review::class, 'reviewee_id');
-    }
+
 
     public function partnerReservations()
     {
@@ -56,12 +57,17 @@ class User extends Model
     {
         return $this->hasMany(Review::class, 'reviewer_id');
     }
-// Dans app/Models/User.php
+
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
 
 
 public function equipments()
 {
-    return $this->hasMany(Listing::class, 'partner_id'); // Use the correct column name
+    return $this->hasMany(Listing::class, 'partner_id');
 }
 
 
