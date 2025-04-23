@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\ClientModel;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Review;
 use App\Models\User;
@@ -19,7 +20,7 @@ use App\Models\User;
 class ClientController extends Controller
 {
     function ShowHomeClient () {
-        $user = User::where('email', 'rajae@gmail.com')->first();
+        $user = Auth::user();
         $totalReservations = ClientModel::totalReservationsByEmail($user->email);
         $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
         $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);

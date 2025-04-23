@@ -14,7 +14,7 @@ use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\PartenaireModel;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Review;
 
@@ -23,7 +23,7 @@ class PartenaireController extends Controller
 {
     public function ShowHomePartenaire()
 {
-    $user = User::where('email', 'maronakram@gmail.com')->first();
+    $user = Auth::user();
 
     $sumPayment = PartenaireModel::getMonthlyPaymentsSumPartenaire($user->email);
     $NumberReservation = PartenaireModel::getNumberReservation($user->email);
