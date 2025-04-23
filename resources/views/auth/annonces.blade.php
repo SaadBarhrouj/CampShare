@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annonces - CampShare | Louez du matériel de camping entre particuliers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Navigation hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active-nav-link {
+            position: relative;
+        }
+        
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFAA33;
+        }
+        
+        /* Input styles */
+        .custom-input {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .custom-input:focus {
+            box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+        }
+        
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 170, 51, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 170, 51, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 170, 51, 0);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Logo -->
+                    <div class="flex items-center">
+                        <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
+                    <a href="#explorer" class="active-nav-link text-forest dark:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+                    <a href="#devenir-partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    
+                    <div class="flex items-center space-x-4 ml-4">
+                        <a href="connexion.html" class="px-4 py-2 font-medium rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Connexion</a>
+                        <a href="inscription.html" class="px-4 py-2 font-medium rounded-md bg-sunlight hover:bg-amber-600 text-white shadow-md transition duration-300">Inscription</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
+                <a href="#explorer" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700">Explorer le matériel</a>
+                <a href="#devenir-partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Devenir Partenaire</a>
+                <div class="mt-4 flex flex-col space-y-3 px-3">
+                    <a href="#" class="px-4 py-2 font-medium rounded-md text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition duration-300">Connexion</a>
+                    <a href="#" class="px-4 py-2 font-medium rounded-md text-center bg-sunlight hover:bg-amber-600 text-white transition duration-300">Inscription</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="pt-24 pb-10 bg-gray-50 dark:bg-gray-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Découvrir le matériel de camping</h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300">
+                    Trouvez le matériel idéal pour votre prochaine aventure en plein air.
+                </p>
+            </div>
+
+
+@if(session('success'))
+<div class="p-3 bg-green-100 border border-green-400 text-green-700 rounded-md flex items-center justify-between">
+    <div><i class="fas fa-check-circle mr-2"></i>{{ session('success') }}</div>
+    <button onclick="this.parentElement.remove()" class="text-green-600 hover:text-green-800"><i class="fas fa-times"></i></button>
+</div>
+@endif
+
+@auth
+<div class="pt-4 text-center">
+    <a href="{{ route('download.contract') }}" class="text-green-700 dark:text-green-400 hover:underline">
+        <i class="fas fa-download mr-1"></i>Télécharger mon contrat
+    </a>
+</div>
+@endauth
+
+            <!-- Search and Filter Summary -->
+            <div class="mt-6 flex flex-wrap items-center gap-2">
+                <div class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-full shadow-sm text-sm">
+                    <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                    <span>Casablanca, Maroc</span>
+                </div>
+                <div class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-full shadow-sm text-sm">
+                    <i class="far fa-calendar-alt text-gray-400 mr-2"></i>
+                    <span>15 - 22 août 2023</span>
+                </div>
+                <button class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-full shadow-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-sliders-h text-gray-500 mr-2"></i>
+                    <span>Filtres</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="bg-white dark:bg-gray-900 transition-all duration-300">
+        <!-- Filter Panel -->
+        <div class="border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-16 bg-white dark:bg-gray-800 z-40 transition-all duration-300">
+            <div class="max-w-7xl mx-auto">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="py-4 flex flex-wrap items-center justify-between gap-4">
+                        <!-- Category Filter Pills -->
+                        <div class="flex items-center space-x-3 overflow-x-auto pb-2 scrollbar-hide">
+                            <button class="whitespace-nowrap px-4 py-2 bg-sunlight bg-opacity-10 text-sunlight rounded-full font-medium border border-sunlight hover:bg-opacity-20 transition-all">
+                                Tous les articles
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Tentes
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Sacs de couchage
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Matelas
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Cuisine
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Mobilier
+                            </button>
+                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Éclairage
+                            </button>
+                        </div>
+                        
+                        <!-- Sort and Map View Options -->
+                        <div class="flex space-x-4">
+                            <div class="relative">
+                                <button id="sort-button" class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
+                                    <i class="fas fa-sort mr-2"></i>
+                                    <span>Trier: Prix croissant</span>
+                                    <i class="fas fa-chevron-down ml-2"></i>
+                                </button>
+                                
+                                <!-- Sort Dropdown -->
+                                <div id="sort-dropdown" class="hidden absolute right-0 mt-1 w-56 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Prix croissant</a>
+                                        <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Prix décroissant</a>
+                                        <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Mieux notés</a>
+                                        <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Plus récents</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
+                                <i class="fas fa-map-marked-alt mr-2"></i>
+                                <span>Voir la carte</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Advanced Filters Panel (hidden by default) -->
+        <div id="advanced-filters" class="hidden bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Price Range -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prix (MAD)</label>
+                        <div class="flex items-center space-x-4">
+                            <input type="number" placeholder="Min" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                            <span class="text-gray-500">-</span>
+                            <input type="number" placeholder="Max" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                        </div>
+                    </div>
+                    
+                    <!-- Brands -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Marques</label>
+                        <select class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base">
+                            <option value="">Toutes les marques</option>
+                            <option value="quechua">Quechua</option>
+                            <option value="coleman">Coleman</option>
+                            <option value="vaude">Vaude</option>
+                            <option value="msr">MSR</option>
+                            <option value="therm-a-rest">Therm-a-Rest</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Condition -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">État</label>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input id="condition-new" type="checkbox" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-forest focus:ring-forest">
+                                <label for="condition-new" class="ml-2 text-sm text-gray-700 dark:text-gray-300">Neuf</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="condition-excellent" type="checkbox" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-forest focus:ring-forest">
+                                <label for="condition-excellent" class="ml-2 text-sm text-gray-700 dark:text-gray-300">Excellent</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="condition-good" type="checkbox" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-forest focus:ring-forest">
+                                <label for="condition-good" class="ml-2 text-sm text-gray-700 dark:text-gray-300">Bon</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rating -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Évaluation minimum</label>
+                        <div class="flex items-center">
+                            <div class="flex space-x-1 text-amber-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">et plus</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-end space-x-4">
+                    <button class="px-4 py-2 font-medium rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        Réinitialiser les filtres
+                    </button>
+                    <button class="px-4 py-2 font-medium rounded-md bg-forest hover:bg-green-700 text-white shadow-md transition-colors">
+                        Appliquer les filtres
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Premium Listings Section -->
+        <section class="py-8 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-800 dark:to-gray-800 border-b border-amber-100 dark:border-gray-700 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                            <i class="fas fa-crown text-sunlight mr-2"></i>
+                            Annonces Premium
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-300">Équipements mis en avant par nos partenaires de confiance</p>
+                    </div>
+                    
+                    <a href="#" class="text-forest dark:text-sunlight font-medium hover:underline">
+                        Tout voir <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Premium Listing 1 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1 relative">
+                        <div class="absolute top-4 left-4 z-10 bg-sunlight text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
+                            <i class="fas fa-crown mr-1"></i> 
+                            PREMIUM
+                        </div>
+                        <a href="#">
+                            <div class="relative h-52">
+                                <img src="https://images.unsplash.com/photo-1571687949921-1306bfb24b72?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Tente 4 places premium" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-lg">Tente Familiale Deluxe 4p</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Quechua - Neuve</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.9 <span class="text-gray-500 dark:text-gray-400">(28)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/mohammed-alami" class="hover:text-forest dark:hover:text-sunlight">Mohammed Alami</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>42 Boulevard Hassan II, Casablanca</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 10 août au 30 sept.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-xl text-gray-900 dark:text-white">290 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Premium Listing 2 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1 relative">
+                        <div class="absolute top-4 left-4 z-10 bg-sunlight text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
+                            <i class="fas fa-crown mr-1"></i> 
+                            PREMIUM
+                        </div>
+                        <a href="#">
+                            <div class="relative h-52">
+                                <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Pack Camping Complet" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-lg">Pack Camping Complet 2p</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">MSR - Excellent état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.8 <span class="text-gray-500 dark:text-gray-400">(42)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/fatima-benali" class="hover:text-forest dark:hover:text-sunlight">Fatima Benali</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>15 Rue Mohammed V, Rabat</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 1 août au 1 oct.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-xl text-gray-900 dark:text-white">450 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Premium Listing 3 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1 relative">
+                        <div class="absolute top-4 left-4 z-10 bg-sunlight text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
+                            <i class="fas fa-crown mr-1"></i> 
+                            PREMIUM
+                        </div>
+                        <a href="#">
+                            <div class="relative h-52">
+                                <img src="https://images.unsplash.com/photo-1571687949921-1306bfb24b72?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Sacs de couchage ultra confort" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-lg">Sacs de Couchage Ultra Confort</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Therm-a-Rest - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.7 <span class="text-gray-500 dark:text-gray-400">(19)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/youssef-tazi" class="hover:text-forest dark:hover:text-sunlight">Youssef Tazi</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>8 Avenue de l'Atlas, Marrakech</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 5 août au 15 sept.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-xl text-gray-900 dark:text-white">150 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Regular Listings Section -->
+        <section class="py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Équipements disponibles (324)</h2>
+                    <p class="text-gray-600 dark:text-gray-300">Pour vos dates : 15 - 22 août 2023</p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Regular Listing 1 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Tente 2 places" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Tente Légère 2 Personnes</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Coleman - Excellent état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.5 <span class="text-gray-500 dark:text-gray-400">(12)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">Karim Ouazzani</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>27 Rue Al Machmach, Tanger</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 1 août au 15 sept.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">180 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Regular Listing 2 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Matelas gonflable" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Matelas Gonflable Double</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Intex - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.3 <span class="text-gray-500 dark:text-gray-400">(8)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/samira-bennani" class="hover:text-forest dark:hover:text-sunlight">Samira Bennani</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>63 Rue Allal El Fassi, Agadir</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 10 août au 10 oct.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">100 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Regular Listing 3 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1501455073054-d749f7b6e138?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Réchaud de camping" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Réchaud + Set Cuisine</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Primus - Neuf</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.7 <span class="text-gray-500 dark:text-gray-400">(21)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/mehdi-elharrak" class="hover:text-forest dark:hover:text-sunlight">Mehdi El Harrak</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>19 Boulevard Zerktouni, Fès</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 5 août au 20 sept.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">140 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Regular Listing 4 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Chaises pliantes" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Duo Chaises Pliantes</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Decathlon - Excellent état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.2 <span class="text-gray-500 dark:text-gray-400">(7)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/nadia-selaoui" class="hover:text-forest dark:hover:text-sunlight">Nadia Selaoui</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>7 Rue Larbi Ben M'hidi, Meknès</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 1 août au 30 sept.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">80 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Additional Listings (5-8) -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1598435521013-1785193f78ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Lampe de camping" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Lampe LED Rechargeable</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Black Diamond - Neuve</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.6 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/rachid-kaddour" class="hover:text-forest dark:hover:text-sunlight">Rachid Kaddour</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>21 Rue Mohammed El Beqqal, Casablanca</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 15 juillet au 15 oct.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">60 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1547683905-f686c993aae5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Sac à dos randonnée" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Sac à Dos Randonnée 50L</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Osprey - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.4 <span class="text-gray-500 dark:text-gray-400">(9)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/omar-chraibi" class="hover:text-forest dark:hover:text-sunlight">Omar Chraibi</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>37 Avenue Hassan II, Tétouan</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 1 août au 15 nov.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">120 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1524097259596-99815fa08ae1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Glacière électrique" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Glacière Électrique 24L</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Campingaz - Excellent état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.5 <span class="text-gray-500 dark:text-gray-400">(17)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/amina-fassi" class="hover:text-forest dark:hover:text-sunlight">Amina Fassi</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>52 Boulevard Moulay Youssef, El Jadida</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 20 juillet au 20 oct.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">160 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1">
+                        <a href="#">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1588559420572-95e28fbd4ade?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                     alt="Table pliante" 
+                                     class="w-full h-full object-cover" />
+                                <div class="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-md text-gray-700 dark:text-gray-200">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">Table Pliante Portable</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Lafuma - Bon état</p>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        <span>4.3 <span class="text-gray-500 dark:text-gray-400">(11)</span></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-user mr-1 text-gray-400"></i>
+                                    <a href="/profile/hamid-berrada" class="hover:text-forest dark:hover:text-sunlight">Hamid Berrada</a>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                    <span>11 Rue Ibn Sina, Essaouira</span>
+                                </div>
+                                
+                                <div class="text-sm mb-3">
+                                    <span class="text-gray-600 dark:text-gray-300">Disponible du 5 août au 5 oct.</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-lg text-gray-900 dark:text-white">90 MAD</span>
+                                        <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors shadow-sm">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex items-center space-x-2">
+                        <a href="#" class="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="px-4 py-2 rounded-md bg-forest text-white">1</a>
+                        <a href="#" class="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">2</a>
+                        <a href="#" class="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">3</a>
+                        <span class="px-2 text-gray-600 dark:text-gray-300">...</span>
+                        <a href="#" class="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">14</a>
+                        <a href="#" class="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <!-- Column 1: Company Info -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <span class="text-white text-2xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-400">by ParentCo</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 max-w-md">
+                        CampShare est un service de ParentCo qui permet aux particuliers de louer du matériel de camping entre eux, pour des aventures plus accessibles et éco-responsables.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150">
+                            <i class="fab fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Links 1 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">CampShare</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Comment ça marche</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Explorer le matériel</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Devenir Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Guide du camping</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Destinations populaires</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3: Links 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Assistance</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Centre d'aide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">FAQ</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Contactez-nous</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Signaler un problème</a></li>
+                        <li><a href="#reclamation" class="text-white font-medium hover:text-sunlight transition duration-150">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Réclamations
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4: Links 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">À propos de ParentCo</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Client</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Conditions Générales Partenaire</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-150">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="reclamation" class="my-8 p-5 bg-gray-700 dark:bg-gray-800 rounded-lg border-l-4 border-sunlight">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-4 md:mb-0 md:mr-6">
+                        <h3 class="font-bold text-xl mb-2 flex items-center">
+                            <i class="fas fa-headset text-sunlight mr-2"></i>
+                            Service Réclamations
+                        </h3>
+                        <p class="text-gray-300">Un problème avec votre location ou votre compte ? Notre équipe est à votre disposition pour traiter votre réclamation dans les meilleurs délais.</p>
+                    </div>
+                    <a href="/reclamations" class="pulse-button inline-flex items-center justify-center px-6 py-3 bg-sunlight hover:bg-amber-600 text-white font-medium rounded-md shadow-md transition duration-300 whitespace-nowrap">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Déposer une réclamation
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-600 pt-8 mt-8">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-400">
+                            © 2023 ParentCo. Tous droits réservés. CampShare est un service de ParentCo.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/flags/4x3/ma.svg" alt="Drapeau marocain" class="h-5 w-auto" />
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Français</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">العربية</a>
+                        <span class="text-gray-600">|</span>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Sticky navbar effect on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+        
+        // Toggle advanced filters
+        const filtersButton = document.querySelector('button:has(.fa-sliders-h)');
+        const advancedFilters = document.getElementById('advanced-filters');
+        
+        filtersButton?.addEventListener('click', () => {
+            advancedFilters.classList.toggle('hidden');
+        });
+        
+        // Sort dropdown toggle
+        const sortButton = document.getElementById('sort-button');
+        const sortDropdown = document.getElementById('sort-dropdown');
+        
+        sortButton?.addEventListener('click', () => {
+            sortDropdown.classList.toggle('hidden');
+        });
+        
+        // Hide sort dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (sortButton && !sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
+                sortDropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
