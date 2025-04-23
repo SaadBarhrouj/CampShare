@@ -433,10 +433,7 @@
                             <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Finances
                         </a>
-                        <a href="#reports-gen" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Rapports
-                        </a>
+
                     </nav>
                 </div>
                 
@@ -451,10 +448,6 @@
                             <i class="fas fa-user-shield w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Administrateurs
                             <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
-                        </a>
-                        <a href="#system-logs" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-history w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Logs système
                         </a>
                     </nav>
                 </div>
@@ -695,9 +688,7 @@
                                         22.3%
                                     </span>
                                 </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    Commission moyenne 15.3%
-                                </p>
+                               
                             </div>
                         </div>
                     </div>
@@ -834,7 +825,6 @@
                     <div class="border-b border-gray-200 dark:border-gray-700">
                         <div class="flex overflow-x-auto">
                             <button class="admin-tab active">Utilisateurs récents</button>
-                            <button class="admin-tab">Partenaires</button>
                             <button class="admin-tab">Équipements récents</button>
                             <button class="admin-tab">Dernières réservations</button>
                             <button class="admin-tab">Derniers avis</button>
@@ -893,9 +883,7 @@
                         <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                    
                     </td>
                 </tr>
                 @endforeach

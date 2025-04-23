@@ -445,10 +445,7 @@
                             <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Finances
                         </a>
-                        <a href="#reports-gen" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Rapports
-                        </a>
+
                     </nav>
                 </div>
                 
@@ -464,10 +461,7 @@
                             Administrateurs
                             <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
                         </a>
-                        <a href="#system-logs" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-history w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Logs système
-                        </a>
+
                     </nav>
                 </div>
                 
@@ -519,10 +513,7 @@
                             <i class="fas fa-download mr-2"></i>
                             Exporter
                         </a>
-                        <a href="#add-partner" class="inline-flex items-center px-4 py-2 bg-admin-primary hover:bg-admin-dark text-white rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-plus mr-2"></i>
-                            Ajouter un partenaire
-                        </a>
+                       
                     </div>
                 </div>
                 
@@ -639,8 +630,7 @@
                                 <div class="option active" data-value="all">Tous les statuts</div>
                                 <div class="option" data-value="active">Actifs</div>
                                 <div class="option" data-value="inactive">Inactifs</div>
-                                <div class="option" data-value="suspended">Suspendus</div>
-                                <div class="option" data-value="pending">En attente de vérification</div>
+                         
                             </div>
                         </div>
                         
@@ -731,28 +721,8 @@
                                     <option value="1">1 étoile et plus</option>
                                 </select>
                             </div>
-                            
-                            <!-- Signal flags -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Signalements</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                                    <option value="">Tous</option>
-                                    <option value="no_signals">Sans signalements</option>
-                                    <option value="has_signals">Avec signalements</option>
-                                    <option value="multiple_signals">Signalements multiples</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Verification status -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Statut de vérification</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                                    <option value="">Tous</option>
-                                    <option value="verified">Vérifié</option>
-                                    <option value="not_verified">Non vérifié</option>
-                                    <option value="pending">En attente</option>
-                                </select>
-                            </div>
+
+          
                             
                             <!-- Revenue range -->
                             <div>
@@ -860,18 +830,11 @@
                             <button class="p-1.5 text-xs rounded-md bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40" title="Voir les réservations">
                                 <i class="fas fa-calendar-alt"></i>
                             </button>
-                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            @if($partner->is_active)
+                           
                                 <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
                                     <i class="fas fa-ban"></i>
                                 </button>
-                            @else
-                                <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40" title="Réactiver le compte">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            @endif
+
                         </div>
                     </td>
                 </tr>
