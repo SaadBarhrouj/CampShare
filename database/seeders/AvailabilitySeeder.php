@@ -15,6 +15,6 @@ class AvailabilitySeeder extends Seeder
     {
         //
 
-        Availability::factory()->count(20)->create();
+        Availability::factory()->count(95)->create();
     }
 }

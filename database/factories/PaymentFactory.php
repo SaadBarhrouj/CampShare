@@ -18,12 +18,17 @@ class PaymentFactory extends Factory
      */
     public function definition(): array
     {
+
+        $listing = Listing::inRandomOrder()->first();
+        $partner = User::where('role', 'partner')->inRandomOrder()->first();
+
+
         return [
-            'partner_id' => User::factory(),
+            'partner_id' => $partner,
             'amount' => $this->faker->randomFloat(2, 20, 5000),
             'payment_date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['pending', 'completed', 'failed']),
-            'listing_id' => Listing::factory(),
+            'listing_id' => $listing,
         ];
     }
 }

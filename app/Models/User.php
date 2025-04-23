@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class User extends Authenticatable
 {
@@ -39,10 +42,13 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class, 'partner_id');
     }
 
+
     public function clientReservations()
     {
         return $this->hasMany(Reservation::class, 'client_id');
     }
+
+
 
     public function partnerReservations()
     {
@@ -58,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'reviewee_id');
     }
+
+
+
+public function equipments()
+{
+    return $this->hasMany(Listing::class, 'partner_id');
+}
+
+
+   
 }

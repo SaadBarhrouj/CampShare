@@ -19,15 +19,20 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
+        $listing = Listing::inRandomOrder()->first();
+        $reviewer = User::inRandomOrder()->first();
+        $reviewee = User::inRandomOrder()->first();
+        $reservation = Reservation::inRandomOrder()->first();
+
         return [
-            'reservation_id' => Reservation::factory(),
+            'reservation_id' => $reservation,
             'rating' => $this->faker->numberBetween(1, 5),
-            'comment' => $this->faker->sentence,
+            'comment' => $this->faker->sentences(2, true),
             'is_visible' => $this->faker->boolean,
             'type' => $this->faker->randomElement(['forObject', 'forClient', 'forPartner']),
-            'reviewer_id' => User::factory(),
-            'reviewee_id' => \App\Models\User::factory(),
-            'listing_id' => Listing::factory(),
+            'reviewer_id' => $reviewer,
+            'reviewee_id' => $reviewee,
+            'listing_id' => $listing,
         ];
     }
 }

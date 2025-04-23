@@ -17,8 +17,11 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
+
+        $listing = Listing::inRandomOrder()->first();
+        
         return [
-            'listing_id' => Listing::factory(),
+            'listing_id' => $listing,
             'url' => $this->faker->imageUrl(),
         ];
     }

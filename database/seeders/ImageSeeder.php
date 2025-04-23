@@ -15,6 +15,6 @@ class ImageSeeder extends Seeder
     {
         //
 
-        Image::factory()->count(30)->create();
+        Image::factory()->count(95)->create();
     }
 }

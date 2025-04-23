@@ -1,0 +1,144 @@
+/* Navigation hover effects */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.active-nav-link {
+    position: relative;
+}
+
+.active-nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #FFAA33;
+}
+
+/* Input styles */
+.custom-input {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.custom-input:focus {
+    box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+}
+
+.pulse-button {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 170, 51, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 170, 51, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 170, 51, 0);
+    }
+}
+
+/* _______________________________________________ */
+
+/* Star rating styles */
+.star-rating {
+    display: inline-flex;
+    gap: 0.2rem;
+    flex-direction: row-reverse; 
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    width: 1.5rem;
+    font-size: 1.4rem;
+    color: #ddd;
+    transition: all 0.2s ease;
+}
+
+.star-rating label:before {
+    content: '\f005';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #FFAA33;
+}
+
+.star-rating input:checked ~ label {
+    color: #FFAA33;
+}
+
+.star-rating input {
+    display: none;
+}
+
+/* Tab styles */
+.tab-active {   
+    color: #2D5F2B;
+    border-bottom: 2px solid #FFAA33;
+}
+
+.dark .tab-active {
+    color: #FFAA33;
+}
+
+.thumbnail {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+.thumbnail.active {
+    border: 2px solid #FFAA33;
+}
+
+/* Date picker styles */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23555" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>') no-repeat;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ccc" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>') no-repeat;
+}
+
+/* ___________________________________________ */

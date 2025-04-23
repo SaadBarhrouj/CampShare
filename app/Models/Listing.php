@@ -39,7 +39,7 @@ class Listing extends Model
 
     public function availabilities()
     {
-        return $this->hasMany(Availability::class);
+        return $this->hasOne(Availability::class);
     }
 
     public function reservations()
@@ -55,5 +55,18 @@ class Listing extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function averageRating()
+    {
+        return number_format($this->reviews->avg('rating'), 1);
+    }
+
+    public function fiveStarPercentage($number)
+    {
+        $total = $this->reviews->count();
+        if ($total === 0) return 0;
+        $fiveStars = $this->reviews->where('rating', $number)->count();
+        return round(($fiveStars / $total) * 100, 1);
     }
 }
