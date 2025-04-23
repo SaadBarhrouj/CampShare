@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Availability extends Model
 {
     //
 
     use HasFactory;
 
-    protected $fillable = ['listing_id', 'url'];
+    protected $fillable = ['listing_id', 'start_date', 'end_date'];
 
     public function listing()
     {

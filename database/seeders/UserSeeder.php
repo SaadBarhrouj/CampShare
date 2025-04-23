@@ -2,27 +2,22 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents; // Ligne optionnelle
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\User; // <--- CETTE LIGNE EST MANQUANTE DANS VOTRE FICHIER !
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run(): void // Assurez-vous que la méthode run est bien définie UNE SEULE FOIS comme ceci
+    public function run(): void
     {
-        // Créer 1 admin
-        User::factory()->create([ // PHP sait maintenant ce qu'est "User" grâce à la ligne "use"
-            'email' => 'admin@example.com',
-            'role' => 'admin'
-        ]);
+        //
 
-        // Créer 5 propriétaires
-        User::factory(5)->create(['role' => 'proprietaire']);
-
-        // Créer 15 clients
-        User::factory(15)->create(['role' => 'client']);
+        // Ensure cities are already seeded
+        User::factory()
+            ->count(20)
+            ->create(); // city_id is filled in factory
     }
 }

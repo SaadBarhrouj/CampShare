@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Payment extends Model
 {
     //
 
     use HasFactory;
 
-    protected $fillable = ['listing_id', 'url'];
+    protected $fillable = ['partner_id', 'amount', 'payment_date', 'status', 'listing_id'];
+
+    public function partner()
+    {
+        return $this->belongsTo(User::class, 'partner_id');
+    }
 
     public function listing()
     {

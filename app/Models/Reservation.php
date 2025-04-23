@@ -7,21 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
+    //
+
     use HasFactory;
 
     protected $fillable = [
-        'client_id', 'annonce_id', 'date_debut', 'date_fin', 'statut'
+        'start_date', 'end_date', 'status', 'delivery_option',
+        'client_id', 'partner_id', 'listing_id'
     ];
 
-    // Une réservation appartient à un client (User)
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
     }
 
-    // Une réservation appartient à une annonce
-    public function annonce()
+    public function partner()
     {
-        return $this->belongsTo(Annonce::class);
+        return $this->belongsTo(User::class, 'partner_id');
+    }
+
+    public function listing()
+    {
+        return $this->belongsTo(Listing::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

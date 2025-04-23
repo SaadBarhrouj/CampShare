@@ -7,15 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
+    //
+
     use HasFactory;
 
-    protected $fillable = [
-        'contenu', 'contenu_email', 'envoyee', 'lue', 'utilisateur_id', 'annonce_id', 'reservation_id'
-    ];
+    protected $fillable = ['user_id', 'type', 'message', 'is_read'];
 
-    // Une notification appartient à un utilisateur
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'utilisateur_id');
+        return $this->belongsTo(User::class);
     }
 }

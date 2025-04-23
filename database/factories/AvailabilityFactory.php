@@ -6,9 +6,9 @@ use App\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class ImageFactory extends Factory
+class AvailabilityFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,14 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
+
+        $start = $this->faker->dateTimeBetween('now', '+1 month');
+        $end = $this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +2 weeks');
+
         return [
             'listing_id' => Listing::factory(),
-            'url' => $this->faker->imageUrl(),
+            'start_date' => $start,
+            'end_date' => $end,
         ];
     }
 }

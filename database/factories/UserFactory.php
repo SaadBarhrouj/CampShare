@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -12,36 +11,27 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    // database/factories/UserFactory.php
-public function definition(): array
-{
-    return [
-        'nom' => fake()->lastName(),
-        'prenom' => fake()->firstName(),
-        'email' => fake()->unique()->safeEmail(),
-        'password' => bcrypt('password'), // Mot de passe par défaut
-        'role' => fake()->randomElement(['client', 'proprietaire', 'admin']),
-        'cin_recto' => 'cin/recto_' . fake()->uuid() . '.jpg', // Chemin fictif
-        'cin_verso' => 'cin/verso_' . fake()->uuid() . '.jpg',
-    ];
-}
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function definition(): array
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return [
+            'username' => $this->faker->userName,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => bcrypt('password'), // or use Hash::make()
+            'phone_number' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
+            'role' => $this->faker->randomElement(['client', 'partner', 'admin']),
+            'avatar_url' => $this->faker->imageUrl(),
+            'cin_recto' => $this->faker->imageUrl(),
+            'cin_verso' => $this->faker->imageUrl(),
+            'avg_rating' => $this->faker->randomFloat(1, 1, 5),
+            'review_count' => $this->faker->numberBetween(0, 100),
+            'longitude' => $this->faker->longitude,
+            'latitude' => $this->faker->latitude,
+            'city_id' => City::factory(),
+        ];
     }
 }

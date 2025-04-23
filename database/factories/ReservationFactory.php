@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;    // <--- AJOUTEZ CETTE LIGNE
-use App\Models\Annonce; // <--- AJOUTEZ CETTE LIGNE
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Reservation>
  */
@@ -15,18 +16,20 @@ class ReservationFactory extends Factory
      *
      * @return array<string, mixed>
      */
-   // database/factories/ReservationFactory.php
-public function definition(): array
-{
-    $dateDebut = fake()->dateTimeBetween('-1 week', '+1 week');
-    $dateFin = fake()->dateTimeBetween($dateDebut, '+2 weeks');
+    public function definition(): array
+    {
 
-    return [
-        'client_id' => User::where('role', 'client')->inRandomOrder()->first()->id,
-        'annonce_id' => Annonce::inRandomOrder()->first()->id,
-        'date_debut' => $dateDebut,
-        'date_fin' => $dateFin,
-        'statut' => fake()->randomElement(['confirmée', 'en attente', 'annulée']),
-    ];
-}
+        $start = $this->faker->dateTimeBetween('now', '+1 week');
+        $end = $this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 week');
+
+        return [
+            'start_date' => $start,
+            'end_date' => $end,
+            'status' => $this->faker->randomElement(['pending', 'confirmed', 'ongoing', 'canceled', 'completed']),
+            'delivery_option' => $this->faker->boolean,
+            'client_id' => User::factory(),
+            'partner_id' => \App\Models\User::factory(),
+            'listing_id' => Listing::factory(),
+        ];
+    }
 }

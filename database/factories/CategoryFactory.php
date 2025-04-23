@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
  */
-class ImageFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +17,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'listing_id' => Listing::factory(),
-            'url' => $this->faker->imageUrl(),
+            'name' => $this->faker->word,
         ];
     }
 }

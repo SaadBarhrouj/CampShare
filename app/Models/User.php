@@ -2,40 +2,63 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-class User extends Authenticatable
+
+class User extends Model
 {
+    //
+
     use HasFactory;
 
     protected $fillable = [
-        'nom', 'prenom', 'email', 'password', 'role', 'cin_recto', 'cin_verso'
+        'username', 'email', 'password', 'phone_number', 'address', 'role',
+        'avatar_url', 'cin_recto', 'cin_verso', 'avg_rating', 'review_count',
+        'longitude', 'latitude', 'city_id'
     ];
 
-    // Un utilisateur peut posséder plusieurs objets
-    public function objets()
+    public function city()
     {
-        return $this->hasMany(Objet::class, 'proprietaire_id');
+        return $this->belongsTo(City::class);
     }
 
-    // Un utilisateur peut avoir plusieurs réservations
-    public function reservations()
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class, 'partner_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'partner_id');
+    }
+
+    public function clientReservations()
     {
         return $this->hasMany(Reservation::class, 'client_id');
     }
 
-    // Un utilisateur peut recevoir plusieurs notifications
-    public function notifications()
+    public function partnerReservations()
     {
-        return $this->hasMany(Notification::class, 'utilisateur_id');
+        return $this->hasMany(Reservation::class, 'partner_id');
     }
 
-    // Un utilisateur peut avoir plusieurs réclamations
-    public function reclamations()
+    public function givenReviews()
     {
-        return $this->hasMany(Reclamation::class, 'utilisateur_id');
+        return $this->hasMany(Review::class, 'reviewer_id');
     }
+
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+   
 }
