@@ -19,8 +19,11 @@ class AvailabilityFactory extends Factory
     public function definition(): array
     {
 
-        $start = Carbon::parse($this->faker->dateTimeBetween('now', '+1 month'));
-        $end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +2 weeks'));
+        //$start = Carbon::parse($this->faker->dateTimeBetween('now', '+1 month'));
+        //$end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +2 weeks'));
+
+        $start = fake()->date();
+        $end = fake()->date();
 
         $listing = Listing::inRandomOrder()->first();
 

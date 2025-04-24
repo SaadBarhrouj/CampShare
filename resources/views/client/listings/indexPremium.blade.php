@@ -43,26 +43,36 @@
                                     Tous prémiums
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'tentes']) }}">
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Tentes']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Tentes
                                 </button>
                             </a>
-                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Sacs de couchage
-                            </button>
-                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Matelas
-                            </button>
-                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Cuisine
-                            </button>
-                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Mobilier
-                            </button>
-                            <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Éclairage
-                            </button>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Sacs de couchage']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Sacs de couchage
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Matelas']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Matelas
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Cuisine']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Cuisine
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Mobilier']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Mobilier
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Mobilier']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Éclairage
+                                </button>
+                            </a>
                         </div>
                         
                         <!-- Sort and Map View Options -->
@@ -156,7 +166,9 @@
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du  au </span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->availabilities?->first()?->start_date ?? '2025-02-04' }}
+                                            au
+                                            {{ $premiumListing->availabilities?->first()?->end_date ?? '2025-02-28' }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">

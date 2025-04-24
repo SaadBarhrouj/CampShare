@@ -43,32 +43,32 @@
                                     Tous les articles
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Tentes']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Tentes
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Sacs de couchage']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Sacs de couchage
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Matelas']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Matelas
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Cuisine']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Cuisine
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Mobilier']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Mobilier
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'autem']) }}">
+                            <a href="{{ route('client.listings.index', ['category' => 'Mobilier']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Éclairage
                                 </button>
@@ -170,7 +170,11 @@
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du  au </span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->availabilities?->first()?->start_date ?? '2025-02-04' }}
+                                            au
+                                            {{ $premiumListing->availabilities?->first()?->end_date ?? '2025-02-28' }}
+                                            
+                                            </span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -249,7 +253,9 @@
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du  au </span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->availabilities?->first()?->start_date ?? '2025-02-04' }}
+                                            au
+                                            {{ $listing->availabilities?->first()?->end_date ?? '2025-02-28' }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">

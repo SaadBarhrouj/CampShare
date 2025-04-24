@@ -121,7 +121,9 @@
                                 <h2 class="font-bold text-gray-900 dark:text-white mb-3">Disponibilité</h2>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3">
                                     <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                                    Disponible du {{-- $listing->availabilities->first()->start_date --}} au {{-- $listing->availabilities->first()->end_date --}}
+                                    Disponible du {{ $listing->availabilities?->first()?->start_date ?? '2025-02-04' }}
+                                    au
+                                    {{ $listing->availabilities?->first()?->end_date ?? '2025-02-28' }}
                                 </p>
                             </div>
                             <div class="border-t border-gray-200 dark:border-gray-700 py-4 mb-4">

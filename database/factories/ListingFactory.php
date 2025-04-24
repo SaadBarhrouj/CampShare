@@ -21,8 +21,11 @@ class ListingFactory extends Factory
     public function definition(): array
     {
 
-        $start = Carbon::parse($this->faker->dateTimeBetween('-1 month', 'now'));
-        $end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 month'));
+        //$start = Carbon::parse($this->faker->dateTimeBetween('-1 month', 'now'));
+        //$end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 month'));
+
+        $start = fake()->date();
+        $end = fake()->date();
 
         $city = City::inRandomOrder()->first();
         $category = Category::inRandomOrder()->first();

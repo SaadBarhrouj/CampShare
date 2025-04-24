@@ -20,8 +20,11 @@ class ReservationFactory extends Factory
     public function definition(): array
     {
 
-        $start = Carbon::parse($this->faker->dateTimeBetween('now', '+1 week'));
-        $end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 week'));
+        //$start = Carbon::parse($this->faker->dateTimeBetween('now', '+1 week'));
+        //$end = Carbon::parse($this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 week'));
+
+        $start = fake()->date();
+        $end = fake()->date();
         
         $partner = User::where('role', 'partner')->inRandomOrder()->first();
         $client = User::where('role', 'client')->inRandomOrder()->first();
