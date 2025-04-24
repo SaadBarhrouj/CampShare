@@ -20,7 +20,7 @@ class AgreementController extends Controller
             ]
         ];
 
-        $pdf = Pdf::loadView('pdf.agreement', $data);
+        //$pdf = Pdf::loadView('pdf.agreement', $data);
 
         return $pdf->download('contrat_location.pdf');
     }

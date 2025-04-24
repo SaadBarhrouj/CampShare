@@ -24,22 +24,22 @@ class AuthController extends Controller
         $user = Auth::user();
 
         
-        $pdf = Pdf::loadView('contracts.contract', [
-            'user' => $user,
-            'date' => now()->format('d/m/Y'),
-        ]);
+        //$pdf = Pdf::loadView('contracts.contract', [
+        //    'user' => $user,
+        //    'date' => now()->format('d/m/Y'),
+        //]);
 
-        $filename = 'contract_' . $user->id . '.pdf';
-        $path = 'contracts/' . $filename;
+        //$filename = 'contract_' . $user->id . '.pdf';
+        //$path = 'contracts/' . $filename;
 
        
-        Storage::disk('public')->makeDirectory('contracts');
+        //Storage::disk('public')->makeDirectory('contracts');
         
    
-        Storage::disk('public')->put($path, $pdf->output());
+        //Storage::disk('public')->put($path, $pdf->output());
 
       
-        $user->contract = $path;
+        //$user->contract = $path;
         $user->save();
 
         session()->flash('success', 'Contrat PDF généré avec succès.');
@@ -47,10 +47,10 @@ class AuthController extends Controller
      
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'proprietaire') {
-            return redirect()->route('partenaire.dashboard');
+        } elseif ($user->role === 'partner') {
+            return redirect()->route('HomePartenaie');
         } else {
-            return redirect()->route('annonces');
+            return redirect()->route('client.listings.index');
         }
     }
 

@@ -65,7 +65,7 @@ class RegistrationController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('annonces')->with('success', 'Votre compte a été créé avec succès!');
+        return redirect()->route('client.listings.index')->with('success', 'Votre compte a été créé avec succès!');
 
     } catch (\Exception $e) {
         DB::rollBack();
@@ -84,26 +84,26 @@ class RegistrationController extends Controller
     {
         try {
             Storage::disk('public')->makeDirectory('contracts');
-
-            // Génération du PDF à partir de la vue Blade contract.blade.php
+/*
+             Génération du PDF à partir de la vue Blade contract.blade.php
             $pdf = Pdf::loadView('contracts.contract', [
                 'user' => $user,
                 'date' => now()->format('d/m/Y')
             ]);
 
-            // Nom du fichier du contrat
+             Nom du fichier du contrat
             $filename = 'contract_'.$user->id.'_'.now()->format('YmdHis').'.pdf';
             $contractPath = 'contracts/'.$filename;
 
-            // Sauvegarde du fichier PDF dans le stockage public
+             Sauvegarde du fichier PDF dans le stockage public
             Storage::disk('public')->put($contractPath, $pdf->output());
 
-            // Mise à jour de la base de données avec le chemin du contrat généré
+             Mise à jour de la base de données avec le chemin du contrat généré
             $user->update([
                 'contract_path' => $contractPath
             ]);
 
-            return $contractPath;
+            return $contractPath;*/
 
         } catch (\Exception $e) {
             Log::error("Erreur génération contrat: ".$e->getMessage());
@@ -116,7 +116,7 @@ class RegistrationController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || !$user->contract_path) {
+        /*if (!$user || !$user->contract_path) {
             abort(403, 'Contrat non disponible.');
         }
 
@@ -126,6 +126,6 @@ class RegistrationController extends Controller
             abort(404, 'Fichier contrat introuvable');
         }
 
-        return response()->download($fullPath, 'Contrat_CampShare_'.$user->id.'.pdf');
+        return response()->download($fullPath, 'Contrat_CampShare_'.$user->id.'.pdf');*/
     }
 }

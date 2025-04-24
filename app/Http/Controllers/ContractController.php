@@ -30,10 +30,10 @@ class ContractController extends Controller
      */
     protected function generatePartnerContract($user)
     {
-        $pdf = Pdf::loadView('contracts.partner_contract', [
-            'user' => $user,
-            'date' => now()->format('d/m/Y'),
-        ]);
+        //$pdf = Pdf::loadView('contracts.partner_contract', [
+        //    'user' => $user,
+        //    'date' => now()->format('d/m/Y'),
+        //]);
 
         $filename = 'Contrat_Partenaire_' . $user->id . '.pdf';
 
@@ -45,10 +45,10 @@ class ContractController extends Controller
      */
     protected function generateStandardContract($user)
     {
-        $pdf = Pdf::loadView('contracts.contract', [
-            'user' => $user,
-            'date' => now()->format('d/m/Y'),
-        ]);
+        //$pdf = Pdf::loadView('contracts.contract', [
+        //    'user' => $user,
+        //    'date' => now()->format('d/m/Y'),
+        //]);
 
         $filename = 'Contrat_CampShare_' . $user->id . '.pdf';
 

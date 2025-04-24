@@ -44,9 +44,9 @@ Route::prefix('admin')->group(function () {
     Route::middleware(['auth'])->get('/download-contract', [ContractController::class, 'downloadContract'])->name('download.contract');
     
     // Routes for Admin
-    Route::get('/admin', function () {
-        return view('admin'); 
-    })->name('admin.dashboard');
+    //Route::get('/admin', function () {
+    //    return view('admin'); 
+    //})->name('admin.dashboard');
     
     // Routes for Partenaire (Proprietaire)
     Route::get('/partenaire', function () {
