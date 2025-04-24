@@ -78,6 +78,7 @@ class PartenaireModel extends Model
                 'R.start_date',
                 'R.end_date',
                 'R.created_at',
+                'R.id',
                 DB::raw('DATEDIFF(R.end_date, R.start_date) * L.price_per_day AS montant_total'),
                 DB::raw('DATEDIFF(R.end_date, R.start_date)  AS number_days')
 
@@ -156,6 +157,39 @@ class PartenaireModel extends Model
             )
             ->where('U.email', $email)
             ->get(); 
+    }
+    public static function getLocationsEncours($email)
+    {
+        return DB::table('users as U')
+        ->join('reservations as R', 'R.partner_id', '=', 'U.id')
+        ->join('listings as L', 'L.id', '=', 'R.listing_id')
+        ->join('users as C', 'C.id', '=', 'R.client_id')
+        ->select(
+            'C.username',
+            'L.title',
+            'R.start_date',
+            'R.end_date',
+            'C.avatar_url',
+            'R.created_at',
+            'L.price_per_day',
+            DB::raw('DATEDIFF(R.end_date, R.start_date) * L.price_per_day AS montant_total'),
+
+            DB::raw('DATEDIFF(R.end_date, R.start_date) AS number_days')
+
+        )
+        ->where('U.email', $email)
+        ->where ('R.status','ongoing')
+        ->get();
+    }
+    public static function getNumberLocationsEncours($email)
+    {
+        return DB::table('users as U')
+        ->join('reservations as R', 'R.partner_id', '=', 'U.id')
+        ->join('listings as L', 'L.id', '=', 'R.listing_id')
+        ->join('users as C', 'C.id', '=', 'R.client_id')
+        ->where('U.email', $email)
+        ->where ('R.status','ongoing')
+        ->count('R.id');
     }
 
 

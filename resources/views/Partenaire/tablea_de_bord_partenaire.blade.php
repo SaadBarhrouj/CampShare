@@ -458,10 +458,10 @@
                         Demandes de location
                         <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberPendingReservation}}</span>
                     </a>
-                    <a href="#current-rentals" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="#current-rentals" data-target="LocationsEncours" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-exchange-alt w-5 mr-3"></i>
                         Locations en cours
-                        <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                        <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberLocationsEncours}}</span>
                     </a>
                     <a href="#my-reservations" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-shopping-cart w-5 mr-3"></i>
@@ -595,6 +595,9 @@
         </div>
         <div id="AllMyEquipement" class="component hidden">
             @include ('Partenaire.Components.toutes-les-equipement');
+        </div>
+        <div id="LocationsEncours" class="component hidden">
+            @include ('Partenaire.Components.Reservation-En-cours');
         </div>
 
 </body>

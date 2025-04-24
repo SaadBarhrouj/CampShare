@@ -52,6 +52,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/partenaire', function () {
         return view('partenaire');
     })->name('partenaire.dashboard');
+
+    Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
+
     
     use App\Http\Controllers\AgreementController;
     

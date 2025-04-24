@@ -37,6 +37,10 @@ class PartenaireController extends Controller
     $AllEquipement = PartenaireModel::getPartenerEquipement($user->email);
     $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
     $NumberOfPartenaireEquipement = PartenaireModel::getNumberOfPartenaireEquipement($user->email);
+    $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
+    $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+
+
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
         'sumPayment',
@@ -50,7 +54,9 @@ class PartenaireController extends Controller
         'AllReservationForPartner',
         'AllEquipement',
         'NumberPendingReservation',
-        'NumberOfPartenaireEquipement'
+        'NumberOfPartenaireEquipement',
+        'LocationsEncours',
+        'NumberLocationsEncours'
 
     ));
 }
@@ -114,6 +120,21 @@ public function filter(Request $request)
         'success' => true,
         'demandes' => $demandes, // This will return the raw data (e.g., collection of User models)
     ]);
+}
+
+public function handleAction(Request $request)
+{
+    $reservation = Reservation::findOrFail($request->reservation_id);
+
+    if ($request->action === 'accept') {
+        $reservation->status = 'confirmed';
+    } elseif ($request->action === 'refuse') {
+        $reservation->status = 'canceled';
+    }
+
+    $reservation->save();
+
+    return back()->with('success', 'Action effectuée avec succès.');
 }
     
 
