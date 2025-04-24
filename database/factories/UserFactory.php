@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'phone_number' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
             'role' => $this->faker->randomElement(['client', 'partner', 'admin']),
-            'avatar_url' => $this->faker->imageUrl(),
+            'avatar_url' => 'http://127.0.0.1:8000/images/p1.jpg',
             'cin_recto' => $this->faker->imageUrl(),
             'cin_verso' => $this->faker->imageUrl(),
             'avg_rating' => $this->faker->randomFloat(1, 1, 5),

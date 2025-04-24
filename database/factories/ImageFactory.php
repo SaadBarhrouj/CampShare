@@ -22,7 +22,12 @@ class ImageFactory extends Factory
         
         return [
             'listing_id' => $listing,
-            'url' => $this->faker->imageUrl(),
+            'url' => collect([
+    'http://127.0.0.1:8000/images/1.jpg',
+    'http://127.0.0.1:8000/images/2.jpg',
+    'http://127.0.0.1:8000/images/listing-1.jpg',
+])->random(),
+
         ];
     }
 }
