@@ -17,9 +17,9 @@ class ListingController extends Controller
         $sort = $request->query('sort', 'latest'); // default sorting
     
         $query = Listing::query();
-        $premiumQuery = Listing::where('is_premium', true); // default base
+        $premiumQuery = Listing::where('is_premium', true); 
     
-        // Apply category filter to both queries if present
+        // Apply category filter to both queries
         if ($request->has('category')) {
             $query->whereHas('category', function ($q) use ($request) {
                 $q->where('name', $request->category);
@@ -54,7 +54,7 @@ class ListingController extends Controller
         $listings = $query->simplePaginate(9)->appends($request->query());
         $premiumListings = $premiumQuery->take(3)->get();
     
-        $listingsCount = $query->toBase()->getCountForPagination();
+        $listingsCount = $query->count();
         $premiumListingsCount = $premiumQuery->count();
     
         return view('client.listings.index', compact(
@@ -70,7 +70,7 @@ class ListingController extends Controller
 
     public function indexPremium(Request $request)
     {
-        $sort = $request->query('sort', 'latest'); // default sort: latest
+        $sort = $request->query('sort', 'latest'); // default sort
 
         $query = Listing::where('is_premium', true);
 
@@ -99,7 +99,7 @@ class ListingController extends Controller
         }
 
         $premiumListingsCount = $query->count();
-        $premiumListings = $query->simplePaginate(9);
+        $premiumListings = $query->simplePaginate(9)->appends($request->query());
 
         return view('client.listings.indexPremium', compact('premiumListings', 'premiumListingsCount', 'sort'));
     }
@@ -107,8 +107,8 @@ class ListingController extends Controller
 
     public function indexAll(Request $request)
     {
-        $sort = $request->query('sort', 'latest'); // default sort: latest
-
+        $sort = $request->query('sort', 'latest'); // default sort
+        
         $query = Listing::query();
 
         // Apply category filter if present
@@ -136,7 +136,7 @@ class ListingController extends Controller
         }
 
         $listingsCount = $query->count();
-        $listings = $query->simplePaginate(9);
+        $listings = $query->simplePaginate(9)->appends($request->query());
 
         return view('client.listings.indexAll', compact('listings', 'listingsCount', 'sort'));
     }

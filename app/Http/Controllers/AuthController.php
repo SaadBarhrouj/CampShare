@@ -9,54 +9,39 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class AuthController extends Controller
 {
+
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->only('email', 'password');
+    {
+        $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials, $request->filled('remember-me'))) {
-        $request->session()->regenerate();
+        if (Auth::attempt($credentials, $request->filled('remember-me'))) {
 
-        $user = Auth::user();
+            $request->session()->regenerate();
 
-        
-        //$pdf = Pdf::loadView('contracts.contract', [
-        //    'user' => $user,
-        //    'date' => now()->format('d/m/Y'),
-        //]);
+            $user = Auth::user();
+            $user->save();
 
-        //$filename = 'contract_' . $user->id . '.pdf';
-        //$path = 'contracts/' . $filename;
+            session()->flash('success', 'Contrat PDF généré avec succès.');
 
-       
-        //Storage::disk('public')->makeDirectory('contracts');
-        
-   
-        //Storage::disk('public')->put($path, $pdf->output());
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'partner') {
+                return redirect()->route('HomePartenaie');
+            } else {
+                return redirect()->route('client.listings.index');
+            }
 
-      
-        //$user->contract = $path;
-        $user->save();
-
-        session()->flash('success', 'Contrat PDF généré avec succès.');
-
-     
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'partner') {
-            return redirect()->route('HomePartenaie');
-        } else {
-            return redirect()->route('client.listings.index');
         }
-    }
+        
+        return back()->withErrors([
+            'email' => 'Email ou mot de passe incorrect.',
+        ]);
 
-    return back()->withErrors([
-        'email' => 'Email ou mot de passe incorrect.',
-    ]);
-}
+    }
 
 }

@@ -316,7 +316,7 @@
             <div class="ml-3 text-sm">
                 <label for="contract" class="font-medium text-gray-700 dark:text-gray-300">
                     Je valide le
-                    <button type="button" @click="window.location.href='{{ route('agreement.pdf') }}'"
+                    <button type="button"
                      class="text-forest dark:text-meadow underline hover:no-underline ml-1">
                       Contrat de Location
                      </button>
@@ -602,13 +602,6 @@
                 button.disabled = true;
                 button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Création en cours...';
                 
-                // In a real app, the form would submit here
-                // For demo purposes, we'll simulate a delay
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                    alert('Fonctionnalité de démonstration. En production, le formulaire serait soumis.');
-                }, 2000);
             }
         });
         
