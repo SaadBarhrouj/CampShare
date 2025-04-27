@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Listing;
+use App\Models\Item;
 use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
-        $listing = Listing::inRandomOrder()->first();
+        $item = Item::inRandomOrder()->first();
         $reviewer = User::inRandomOrder()->first();
         $reviewee = User::inRandomOrder()->first();
         $reservation = Reservation::inRandomOrder()->first();
@@ -32,7 +32,7 @@ class ReviewFactory extends Factory
             'type' => $this->faker->randomElement(['forObject', 'forClient', 'forPartner']),
             'reviewer_id' => $reviewer,
             'reviewee_id' => $reviewee,
-            'listing_id' => $listing,
+            'item_id' => $item,
         ];
     }
 }

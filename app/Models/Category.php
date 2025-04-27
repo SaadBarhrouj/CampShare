@@ -13,8 +13,8 @@ class Category extends Model
 
     protected $fillable = ['name'];
 
-    public function listings()
+    public function items()
     {
-        return $this->hasMany(Listing::class);
+        return $this->hasMany(Item::class);
     }
 }

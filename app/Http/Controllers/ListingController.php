@@ -21,24 +21,24 @@ class ListingController extends Controller
     
         // Apply category filter to both queries
         if ($request->has('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('name', $request->category);
+            $query->whereHas('item.category', function ($q) use ($request) {
+                $q->where('item.name', $request->category);
             });
     
             $premiumQuery->whereHas('category', function ($q) use ($request) {
-                $q->where('name', $request->category);
+                $q->where('item.name', $request->category);
             });
         }
     
         // Sorting logic
         switch ($sort) {
             case 'price_asc':
-                $query->orderBy('price_per_day', 'asc');
-                $premiumQuery->orderBy('price_per_day', 'asc');
+                $query->orderBy('item.price_per_day', 'asc');
+                $premiumQuery->orderBy('item.price_per_day', 'asc');
                 break;
             case 'price_desc':
-                $query->orderBy('price_per_day', 'desc');
-                $premiumQuery->orderBy('price_per_day', 'desc');
+                $query->orderBy('item.price_per_day', 'desc');
+                $premiumQuery->orderBy('item.price_per_day', 'desc');
                 break;
             case 'oldest':
                 $query->orderBy('created_at', 'asc');

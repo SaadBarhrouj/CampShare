@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('partner_id')->constrained('users');
-            $table->decimal('amount', 8, 2);
-            $table->date('payment_date');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
-            $table->foreignId('listing_id')->constrained();
+            $table->string('title');
+            $table->text('description');
+            $table->decimal('price_per_day', 8, 2);
+            $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('items');
     }
 };

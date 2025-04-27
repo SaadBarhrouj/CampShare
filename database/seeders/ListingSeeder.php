@@ -16,7 +16,7 @@ class ListingSeeder extends Seeder
         //
 
         Listing::factory()
-            ->count(95)
+            ->count(100)
             ->create();
     }
 }

@@ -17,9 +17,8 @@ class User extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'username', 'email', 'password', 'phone_number', 'address', 'role',
-        'avatar_url', 'cin_recto', 'cin_verso', 'avg_rating', 'review_count',
-        'longitude', 'latitude', 'city_id'
+        'first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'role',
+        'avatar_url', 'cin_recto', 'cin_verso', 'is_subscriber', 'is_active', 'city_id'
     ];
 
     public function city()
@@ -32,23 +31,15 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
-    public function listings()
+    public function items()
     {
-        return $this->hasMany(Listing::class, 'partner_id');
+        return $this->hasMany(Item::class, 'item_id');
     }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class, 'partner_id');
-    }
-
 
     public function clientReservations()
     {
         return $this->hasMany(Reservation::class, 'client_id');
     }
-
-
 
     public function partnerReservations()
     {
@@ -64,13 +55,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'reviewee_id');
     }
-
-
-
-public function equipments()
-{
-    return $this->hasMany(Listing::class, 'partner_id');
-}
 
 
    

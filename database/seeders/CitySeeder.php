@@ -15,6 +15,6 @@ class CitySeeder extends Seeder
     {
         //
 
-        City::factory()->count(10)->create();
+        City::factory()->count(25)->create();
     }
 }
