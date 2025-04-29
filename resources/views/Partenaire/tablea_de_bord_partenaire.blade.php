@@ -2,6 +2,7 @@
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord Partenaire - CampShare | Louez du matériel de camping entre particuliers</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -463,13 +464,9 @@
                         Locations en cours
                         <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberLocationsEncours}}</span>
                     </a>
-                    <a href="#my-reservations" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-shopping-cart w-5 mr-3"></i>
-                        Mes réservations
-                        <span class="ml-auto bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
-                    </a>
+                    
                  
-                    <a href="#reviews" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="#reviews" data-target="AvisRecu" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-star w-5 mr-3"></i>
                         Avis reçus
                     </a>
@@ -477,10 +474,7 @@
                         <i class="fas fa-calendar-alt w-5 mr-3"></i>
                         Calendrier
                     </a>
-                    <a href="#analytics" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-chart-line w-5 mr-3"></i>
-                        Statistiques
-                    </a>
+                   
                     <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Paramètres
@@ -599,6 +593,10 @@
         <div id="LocationsEncours" class="component hidden">
             @include ('Partenaire.Components.Reservation-En-cours');
         </div>
+        <div id="AvisRecu" class="component hidden">
+            @include ('Partenaire.Components.avis-recus');
+        </div>
+
 
 </body>
 <script>
@@ -618,4 +616,5 @@
     });
   });
 </script>
+
 </html>

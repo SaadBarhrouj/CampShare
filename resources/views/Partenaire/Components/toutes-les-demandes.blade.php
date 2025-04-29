@@ -115,7 +115,7 @@
                     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                         <h2 class="font-bold text-xl text-gray-900 dark:text-white">Liste des demandes</h2>
                         <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 text-xs font-medium rounded-full">
-                           {{$NumberReservation}} demandes au total
+                           {{$NumberReservationCompleted}} demandes au total
                         </span>
                     </div>
 
@@ -125,29 +125,33 @@
                             @foreach($AllReservationForPartner as $Reservation)
                                 <div class="px-6 py-4">
                                     <div class="flex flex-col lg:flex-row lg:items-start">
-                                        <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
-                                            <div class="flex items-center lg:w-16">
-                                                <img src="{{$Reservation->avatar_url}}"
-                                                    alt="Mehdi Idrissi" 
-                                                    class="w-12 h-12 rounded-full object-cover" />
-                                                <div class="lg:hidden ml-3">
+
+
+                                        <div class="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4 lg:mb-0">
+                                            <div>
+                                            <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+    
+                                                <div class="flex items-center lg:w-16">
+                                                    <img src="{{$Reservation->avatar_url}}"
+                                                        alt="Mehdi Idrissi" 
+                                                        class="w-12 h-12 rounded-full object-cover" />
+                                                    <div class="lg:hidden ml-1">
+                                                        <h3 class="font-medium text-gray-900 dark:text-white">{{$Reservation->username}}</h3>
+                                                        <div class="flex text-sm">
+                                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                            <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="hidden lg:block mt-2">
                                                     <h3 class="font-medium text-gray-900 dark:text-white">{{$Reservation->username}}</h3>
-                                                    <div class="flex items-center text-sm">
+                                                    <div class="flex items-center justify-center text-xs mt-1">
                                                         <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                        <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                        <span>4.8</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="hidden lg:block mt-2">
-                                                <h3 class="font-medium text-gray-900 dark:text-white text-center">{{$Reservation->username}}</h3>
-                                                <div class="flex items-center justify-center text-xs mt-1">
-                                                    <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                    <span>4.8</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                            </div>     
                                             <div>
                                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
                                                 <p class="font-medium text-gray-900 dark:text-white flex items-center">
@@ -247,6 +251,7 @@
 
 
     <script>
+        alert('hhh')
 
 function sendFilterRequest() {
     var formData = new FormData(document.getElementById('filters-form'));  // Get all the form data
@@ -413,3 +418,7 @@ document.getElementById('filters-form').addEventListener('click', function(event
    
     
 </script>
+
+
+
+

@@ -48,7 +48,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Locations réalisées</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$NumberReservation}}</h3>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$NumberReservationCompleted}}</h3>
                                 <p class="text-blue-600 dark:text-blue-400 text-sm flex items-center mt-1">
                                     
                                 </p>
@@ -79,7 +79,7 @@
                                 <i class="fas fa-campground text-purple-600 dark:text-purple-400"></i>
                             </div>
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Équipements actifs</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Listings actifs</p>
                                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$TotalListingActive}} / {{$TotalListing}}</h3>
                                 <p class="text-purple-600 dark:text-purple-400 text-sm flex items-center mt-1">
                                 </p>

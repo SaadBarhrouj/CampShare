@@ -27,6 +27,8 @@ Route::get('/listings', [ListingController::class, 'index'])->name('client.listi
 Route::get('/Partenaire', [PartenaireController::class, 'ShowHomePartenaire'])->name('HomePartenaie');
 Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
 Route::post('/demandes/filter', [PartenaireController::class, 'filter'])->name('demandes.filter');
+Route::post('/demandes/EnCours', [PartenaireController::class, 'filterLocationEnCours'])->name('demandes.filter.Encours');
+
 
 
 

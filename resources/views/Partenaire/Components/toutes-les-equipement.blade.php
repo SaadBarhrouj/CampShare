@@ -101,29 +101,32 @@
                     @foreach($AllEquipement as $Equipement)
                             <div class="px-6 py-4">
                             <div class="flex flex-col lg:flex-row lg:items-start">
-                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
-                                    <div class="flex items-center lg:w-16">
-                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                             alt="Mehdi Idrissi" 
-                                             class="w-12 h-12 rounded-full object-cover" />
-                                        <div class="lg:hidden ml-3">
-                                            <h3 class="font-medium text-gray-900 dark:text-white">{{$Equipement->title}}</h3>
-                                            <div class="flex items-center text-sm">
+                               
+
+                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4 lg:mb-0">
+                                    <div>
+                                        <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                            <div class="flex items-center lg:w-16">
+                                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                    alt="Mehdi Idrissi" 
+                                                    class="w-12 h-12 rounded-full object-cover" />
+                                                <div class="lg:hidden ml-3">
+                                                    <h3 class="font-medium text-gray-900 dark:text-white">{{$Equipement->title}}</h3>
+                                                    <div class="flex  text-sm">
+                                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                        <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="hidden lg:block mt-2">
+                                            <h3 class="font-medium text-gray-900 dark:text-white ">{{$Equipement->title}}</h3>
+                                            <div class="flex items-center  text-xs mt-1">
                                                 <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                <span>4.8</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="hidden lg:block mt-2">
-                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">{{$Equipement->title}}</h3>
-                                        <div class="flex items-center justify-center text-xs mt-1">
-                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>4.8</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                    </div>   
                                     <div>
                                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">category</p>
                                         <p class="font-medium text-gray-900 dark:text-white flex items-center">
@@ -140,40 +143,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col items-start lg:items-end lg:ml-1 space-y-1">
-                                    <div class="status-badge bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
-                                        <i class="fas fa-clock mr-1"></i> {{$Equipement->status}}
-                                    </div>
-                                    
-                                    @if($Equipement->status = "inactive")
-                                    <div class="flex space-x-2 w-full lg:w-auto">
-                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
-                                            Archiver
-                                        </button>
-                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
-                                            Modify
-                                        </button>
-                                    </div>
-                                    @elseif($Equipement->status = "active")
-                                    <div class="flex space-x-2 w-full lg:w-auto">
-                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
-                                            Archiver
-                                        </button>
-                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
-                                            Modify
-                                        </button>
-                                    </div>
-                                    @elseif($Equipement->status = "archived")
-                                    <div class="flex space-x-2 w-full lg:w-auto">
-                                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
-                                            désarchiver
-                                        </button>
-                                        <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
-                                            Modify
-                                        </button>
-                                    </div>
-                                    @endif
-                                </div>
+                                
                             </div>
                             </div>
                         @endforeach

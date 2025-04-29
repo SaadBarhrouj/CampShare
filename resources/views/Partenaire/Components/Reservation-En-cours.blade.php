@@ -39,7 +39,7 @@
                 </div>
 
                 <!-- Filters and search -->
-                <form  id="filters-form1" >
+                <form  id="formulaire1-filters" >
                 @csrf
 
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
@@ -61,23 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap gap-2">
-                            @php
-                                $statuses = ['all' => 'all', 'Pending' => 'Pending', 'confirmed' => 'confirmed', 'ongoing' => 'ongoing', 'canceled' => 'canceled', 'completed' => 'completed'];
-                            @endphp
 
-                            @foreach($statuses as $key => $label)
-                                <button 
-                                    type="button"
-                                    name="status"
-                                    value="{{ $key }}"
-                                    class="filter-chip {{ request('status', 'all') === $key ? 'active' : '' }}"
-                                >
-                                    <span>{{ $label }}</span>
-                                </button>
-                            @endforeach
-                        </div>
-                        <input type="hidden" name="status" id="selected-status" value="{{ request('status', 'all') }}">
 
                         <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div class="flex items-center">
@@ -114,13 +98,13 @@
                     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                         <h2 class="font-bold text-xl text-gray-900 dark:text-white">Liste des demandes</h2>
                         <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 text-xs font-medium rounded-full">
-                           {{$NumberLocationsEncours}} Réservation En cours
+                           {{$NumberLocationsEncours}} Réservation En coursjj
                         </span>
                     </div>
 
                     <!-- Request items -->
                     <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <div id="reservations">
+                        <div id="reservations1">
                             @foreach($LocationsEncours as $Reservation)
                                 <div class="px-6 py-4">
                                     <div class="flex flex-col lg:flex-row lg:items-start">
@@ -198,6 +182,134 @@
             </div>
         </main>
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - script running');
+    
+    function FilterRequest1() {
+        console.log('FilterRequest1 called');
+        
+        // Verify form exists
+        const form = document.getElementById('formulaire1-filters');
+        if (!form) {
+            console.error('Form not found!');
+            return;
+        }
+        
+        // Verify CSRF token exists
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfToken) {
+            console.error('CSRF token meta tag not found!');
+            return;
+        }
+        
+        var formData = new FormData(form);
+        
+        
+        // Log form data for debugging
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        
+        fetch('{{ route("demandes.filter.Encours") }}', {  
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken.content
+            },
+            body: formData  
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Response data:", data);
+            
+            if (data.success) {
+                const container = document.getElementById("reservations1");
+                if (!container) {
+                    console.error('Reservations container not found!');
+                    return;
+                }
+                
+                container.innerHTML = "";
+                
+                if (data.demandes && data.demandes.length > 0) {
+                    data.demandes.forEach(reservation => {
+                        container.innerHTML += `
+                        <div class="px-6 py-4">
+                                        <div class="flex flex-col lg:flex-row lg:items-start">
+                                            <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                                <div class="flex items-center lg:w-16">
+                                                    <img src="${reservation.avatar_url}"
+                                                        alt="Mehdi Idrissi" 
+                                                        class="w-12 h-12 rounded-full object-cover" />
+                                                    <div class="lg:hidden ml-3">
+                                                        <h3 class="font-medium text-gray-900 dark:text-white">${reservation.username}</h3>
+                                                        <div class="flex items-center text-sm">
+                                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                            <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="hidden lg:block mt-2">
+                                                    <h3 class="font-medium text-gray-900 dark:text-white text-center">${reservation.username}</h3>
+                                                    <div class="flex items-center justify-center text-xs mt-1">
+                                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                        <span>4.8</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                                    <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                                        <span class="truncate">${reservation.title}</span>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                                    <p class="font-medium text-gray-900 dark:text-white">${reservation.start_date} - ${reservation.end_date}</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.number_days})</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                                    <p class="font-medium text-gray-900 dark:text-white">${reservation.montant_total} MAD</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.price_per_day }MAD/jour)</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>`;
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // You might want to show an error message to users here
+        });
+    }
+
+    // Event listeners
+    const form = document.getElementById('formulaire1-filters');
+    if (form) {
+        form.addEventListener('change', FilterRequest1);
+        form.addEventListener('input', FilterRequest1);
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            FilterRequest1();
+        });
+        
+        // Initial load
+    } else {
+        console.error('Form element with ID "formulaire1-filters" not found!');
+    }
+});
+</script>
 
 
 

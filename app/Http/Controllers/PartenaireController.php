@@ -15,6 +15,10 @@ use App\Models\Reservation;
 use App\Models\PartenaireModel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
+
 
 use App\Models\Review;
 
@@ -25,13 +29,14 @@ class PartenaireController extends Controller
 {
     $user = Auth::user();
 
-    $sumPayment = PartenaireModel::getMonthlyPaymentsSumPartenaire($user->email);
-    $NumberReservation = PartenaireModel::getNumberReservation($user->email);
-    $AverageRating = PartenaireModel::getAverageRating($user->email);
-    $TotalAvis = PartenaireModel::getNumberRating($user->email);
+    $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
+    $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
+    $AverageRating = PartenaireModel::getAverageRatingPartner($user->email);
+    $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
     $TotalListing = PartenaireModel::countListingsByEmail($user->email);
-    $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
     $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
+
+    $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
     $RecentListing = PartenaireModel::getRecentPartnerListingsWithImagesByEmail($user->email);
     $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
     $AllEquipement = PartenaireModel::getPartenerEquipement($user->email);
@@ -39,12 +44,14 @@ class PartenaireController extends Controller
     $NumberOfPartenaireEquipement = PartenaireModel::getNumberOfPartenaireEquipement($user->email);
     $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
     $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+    $LesAvis= PartenaireModel::getAvis($user->email);
+
 
 
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
         'sumPayment',
-        'NumberReservation',
+        'NumberReservationCompleted',
         'AverageRating',
         'TotalAvis',
         'TotalListing',
@@ -56,7 +63,8 @@ class PartenaireController extends Controller
         'NumberPendingReservation',
         'NumberOfPartenaireEquipement',
         'LocationsEncours',
-        'NumberLocationsEncours'
+        'NumberLocationsEncours',
+        'LesAvis'
 
     ));
 }
@@ -67,9 +75,9 @@ public function filter(Request $request)
     // Start the query on the Users table
     $demandes = User::query();
 
-    // Join the Reservations table with the appropriate condition
     $demandes = $demandes->join('Reservations', 'Reservations.partner_id', '=', 'users.id')
         ->join('Listings', 'Reservations.listing_id', '=', 'Listings.id')
+        ->join('items', 'items.id', '=', 'Listings.item_id')
         ->join('users as Client', 'Reservations.client_id', '=', 'Client.id');
 
     $email = $request->input('email');
@@ -100,25 +108,99 @@ public function filter(Request $request)
     }
     if ($request->has('sort')) {
         if ($request->input('sort') == 'date-desc') {
-            $demandes = $demandes->orderByDesc('reservations.created_at');
+            $demandes = $demandes->orderByDesc('Reservations.created_at');
         } else {
-            $demandes = $demandes->orderBy('reservations.created_at');
+            $demandes = $demandes->orderBy('Reservations.created_at');
         }
     }
     if ($request->has('search')) {
         $searchTerm = $request->input('search');
-        $demandes = $demandes->where('Listings.title', 'like', '%' . $searchTerm . '%');
+        $demandes = $demandes->where('items.title', 'like', '%' . $searchTerm . '%');
     }
-    
-
-
-
-
-
+    $demandes = $demandes->select(
+        'Client.avatar_url',
+        'Client.username',
+        'items.title',
+        'items.price_per_day',
+        'Reservations.status',
+        'Reservations.start_date',
+        'Reservations.end_date',
+        'Reservations.created_at',
+        'Reservations.id',
+        DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) * items.price_per_day AS montant_total'),
+        DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) AS number_days')
+    );
     $demandes = $demandes->get();
+    Log::info('Demandes: ', $demandes->toArray());
+
     return response()->json([
         'success' => true,
-        'demandes' => $demandes, // This will return the raw data (e.g., collection of User models)
+        'demandes' => $demandes, 
+    ]);
+}
+
+
+public function filterLocationEnCours(Request $request)
+{
+    
+    $demandes = User::query();
+    $demandes = $demandes->join('Reservations', 'Reservations.partner_id', '=', 'users.id')
+        ->join('Listings', 'Reservations.listing_id', '=', 'Listings.id')
+        ->join('items', 'items.id', '=', 'Listings.item_id')
+        ->join('users as Client', 'Reservations.client_id', '=', 'Client.id');
+
+    $email = $request->input('email');
+    $demandes = $demandes->where('users.email', $email);
+    $demandes = $demandes->where('Reservations.status', "ongoing");
+
+    if ($request->has('date')) {
+        $today = Carbon::today();
+
+        if ($request->input('date') == 'this-month') {
+            $start = Carbon::now()->startOfMonth();
+            $end = Carbon::now()->endOfMonth();
+            $demandes = $demandes->whereBetween('Reservations.created_at', [$start, $end]);
+
+        } elseif ($request->input('date') == 'last-month') {
+            $start = Carbon::now()->subMonth()->startOfMonth();
+            $end = Carbon::now()->subMonth()->endOfMonth();
+            $demandes = $demandes->whereBetween('Reservations.created_at', [$start, $end]);
+
+        } elseif ($request->input('date') == 'last-3-months') {
+            $start = Carbon::now()->subMonths(3)->startOfMonth();
+            $end = Carbon::now()->endOfMonth();
+            $demandes = $demandes->whereBetween('Reservations.created_at', [$start, $end]);
+        }
+    }
+    if ($request->has('sort')) {
+        if ($request->input('sort') == 'date-desc') {
+            $demandes = $demandes->orderByDesc('Reservations.created_at');
+        } else {
+            $demandes = $demandes->orderBy('Reservations.created_at');
+        }
+    }
+    if ($request->has('search')) {
+        $searchTerm = $request->input('search');
+        $demandes = $demandes->where('items.title', 'like', '%' . $searchTerm . '%');
+    }
+    $demandes = $demandes->select(
+        'Client.avatar_url',
+        'Client.username',
+        'items.title',
+        'items.price_per_day',
+        'Reservations.status',
+        'Reservations.start_date',
+        'Reservations.end_date',
+        'Reservations.created_at',
+        'Reservations.id',
+        DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) * items.price_per_day AS montant_total'),
+        DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) AS number_days')
+    );
+    $demandes = $demandes->get();
+
+    return response()->json([
+        'success' => true,
+        'demandes' => $demandes, 
     ]);
 }
 
