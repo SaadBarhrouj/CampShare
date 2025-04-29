@@ -218,6 +218,79 @@ public function handleAction(Request $request)
 
     return back()->with('success', 'Action effectuée avec succès.');
 }
+
+public function Avisfilter(Request $request)
+{
+    $reviews = Review::query()
+        ->join('users as reviewer', 'reviewer.id', '=', 'reviews.reviewer_id')
+        ->join('users as reviewee', 'reviewee.id', '=', 'reviews.reviewee_id')
+
+        ->leftJoin('items', function($join) {
+            $join->on('items.id', '=', 'reviews.reviewee_id')
+                 ->where('reviews.type', '=', 'forObject');
+        });
+
+    // Filter by email (assuming you want reviews for this partner)
+    $email = $request->input('email');
+    $reviews = $reviews->where('reviewee.email', $email);
+
+    // Filter by type
+    if ($request->has('type') && $request->input('type') !== 'all') {
+        $reviews = $reviews->where('reviews.type', $request->input('type'));
+    }
+
+    // Date filters
+    if ($request->has('date')) {
+        $today = Carbon::today();
+
+        switch ($request->input('date')) {
+            case 'this-month':
+                $reviews = $reviews->whereBetween('reviews.created_at', [
+                    Carbon::now()->startOfMonth(),
+                    Carbon::now()->endOfMonth()
+                ]);
+                break;
+                
+            case 'last-month':
+                $reviews = $reviews->whereBetween('reviews.created_at', [
+                    Carbon::now()->subMonth()->startOfMonth(),
+                    Carbon::now()->subMonth()->endOfMonth()
+                ]);
+                break;
+                
+            case 'last-3-months':
+                $reviews = $reviews->whereBetween('reviews.created_at', [
+                    Carbon::now()->subMonths(3)->startOfMonth(),
+                    Carbon::now()->endOfMonth()
+                ]);
+                break;
+        }
+    }
+
+    // Sorting
+    if ($request->has('sort')) {
+        $reviews = $request->input('sort') == 'date-desc'
+            ? $reviews->orderByDesc('reviews.created_at')
+            : $reviews->orderBy('reviews.created_at');
+    }
+
+    // Select fields
+    $reviews = $reviews->select([
+        'reviewer.avatar_url',
+        'reviewer.username',
+        'reviews.comment',
+        'reviews.rating',
+        'reviews.created_at',
+        DB::raw('CASE WHEN reviews.type = "forObject" THEN items.title ELSE NULL END as object_title')
+    ]);
+
+    $results = $reviews->get();
+
+    return response()->json([
+        'success' => true,
+        'Avis' => $results,
+    ]);
+}
     
 
     

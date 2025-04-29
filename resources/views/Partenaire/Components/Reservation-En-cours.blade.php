@@ -183,116 +183,116 @@
         </main>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded - script running');
-    
-    function FilterRequest1() {
-        console.log('FilterRequest1 called');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded - script running');
         
-        // Verify form exists
-        const form = document.getElementById('formulaire1-filters');
-        if (!form) {
-            console.error('Form not found!');
-            return;
-        }
-        
-        // Verify CSRF token exists
-        const csrfToken = document.querySelector('meta[name="csrf-token"]');
-        if (!csrfToken) {
-            console.error('CSRF token meta tag not found!');
-            return;
-        }
-        
-        var formData = new FormData(form);
-        
-        
-        // Log form data for debugging
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-        
-        fetch('{{ route("demandes.filter.Encours") }}', {  
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken.content
-            },
-            body: formData  
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Response data:", data);
+        function FilterRequest1() {
+            console.log('FilterRequest1 called');
             
-            if (data.success) {
-                const container = document.getElementById("reservations1");
-                if (!container) {
-                    console.error('Reservations container not found!');
-                    return;
+            // Verify form exists
+            const form = document.getElementById('formulaire1-filters');
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+            
+            // Verify CSRF token exists
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error('CSRF token meta tag not found!');
+                return;
+            }
+            
+            var formData = new FormData(form);
+            
+            
+            // Log form data for debugging
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            
+            fetch('{{ route("demandes.filter.Encours") }}', {  
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken.content
+                },
+                body: formData  
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Response data:", data);
                 
-                container.innerHTML = "";
-                
-                if (data.demandes && data.demandes.length > 0) {
-                    data.demandes.forEach(reservation => {
-                        container.innerHTML += `
-                        <div class="px-6 py-4">
-                                        <div class="flex flex-col lg:flex-row lg:items-start">
-                                            <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
-                                                <div class="flex items-center lg:w-16">
-                                                    <img src="${reservation.avatar_url}"
-                                                        alt="Mehdi Idrissi" 
-                                                        class="w-12 h-12 rounded-full object-cover" />
-                                                    <div class="lg:hidden ml-3">
-                                                        <h3 class="font-medium text-gray-900 dark:text-white">${reservation.username}</h3>
-                                                        <div class="flex items-center text-sm">
+                if (data.success) {
+                    const container = document.getElementById("reservations1");
+                    if (!container) {
+                        console.error('Reservations container not found!');
+                        return;
+                    }
+                    
+                    container.innerHTML = "";
+                    
+                    if (data.demandes && data.demandes.length > 0) {
+                        data.demandes.forEach(reservation => {
+                            container.innerHTML += `
+                            <div class="px-6 py-4">
+                                            <div class="flex flex-col lg:flex-row lg:items-start">
+                                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                                    <div class="flex items-center lg:w-16">
+                                                        <img src="${reservation.avatar_url}"
+                                                            alt="Mehdi Idrissi" 
+                                                            class="w-12 h-12 rounded-full object-cover" />
+                                                        <div class="lg:hidden ml-3">
+                                                            <h3 class="font-medium text-gray-900 dark:text-white">${reservation.username}</h3>
+                                                            <div class="flex items-center text-sm">
+                                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hidden lg:block mt-2">
+                                                        <h3 class="font-medium text-gray-900 dark:text-white text-center">${reservation.username}</h3>
+                                                        <div class="flex items-center justify-center text-xs mt-1">
                                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                            <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
+                                                            <span>4.8</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="hidden lg:block mt-2">
-                                                    <h3 class="font-medium text-gray-900 dark:text-white text-center">${reservation.username}</h3>
-                                                    <div class="flex items-center justify-center text-xs mt-1">
-                                                        <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                        <span>4.8</span>
+
+                                                <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
+                                                    <div>
+                                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
+                                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
+                                                            <span class="truncate">${reservation.title}</span>
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                                        <p class="font-medium text-gray-900 dark:text-white">${reservation.start_date} - ${reservation.end_date}</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.number_days})</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
+                                                        <p class="font-medium text-gray-900 dark:text-white">${reservation.montant_total} MAD</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.price_per_day }MAD/jour)</p>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 lg:mb-0">
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Équipement</p>
-                                                    <p class="font-medium text-gray-900 dark:text-white flex items-center">
-                                                        <span class="truncate">${reservation.title}</span>
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
-                                                    <p class="font-medium text-gray-900 dark:text-white">${reservation.start_date} - ${reservation.end_date}</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.number_days})</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
-                                                    <p class="font-medium text-gray-900 dark:text-white">${reservation.montant_total} MAD</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.price_per_day }MAD/jour)</p>
-                                                </div>
                                             </div>
-
-                                        </div>
-                                    </div>`;
-                    });
+                                        </div>`;
+                        });
+                    }
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // You might want to show an error message to users here
-        });
-    }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // You might want to show an error message to users here
+            });
+        }
 
     // Event listeners
     const form = document.getElementById('formulaire1-filters');

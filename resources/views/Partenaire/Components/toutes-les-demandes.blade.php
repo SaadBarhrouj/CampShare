@@ -251,7 +251,6 @@
 
 
     <script>
-        alert('hhh')
 
 function sendFilterRequest() {
     var formData = new FormData(document.getElementById('filters-form'));  // Get all the form data

@@ -39,20 +39,13 @@
                 </div>
 
                 <!-- Filters and search -->
-                <form  id="filters-form1" >
+                <form  id="filtersFormulaireAvis" >
                 @csrf
 
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-2 md:mb-0">Filtrer les demandes</h2>
                             <div class="relative">
-                                <input 
-                                    type="text" 
-                                    name="search"
-                                    value="{{ request('search') }}"
-                                    placeholder="Rechercher..." 
-                                    class="px-4 py-2 pr-10 w-full md:w-64 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow text-base custom-input"
-                                >
                                 <input type="hidden" id="partner-email" name="email" value="{{ $user->email }}">
 
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -62,22 +55,21 @@
                         </div>
 
                         <div class="flex flex-wrap gap-4">
-                            @php
-                                $statuses = ['all' => 'all', 'ForPartenaire' => 'For Partenaire', 'ForItem' => 'For Item'];
-                            @endphp
+                        @php
+                            $statuses = ['all' => 'Tous', 'forObject' => 'Pour Équipement', 'forPartner' => 'Pour Partenaire'];
+                        @endphp
 
-                            @foreach($statuses as $key => $label)
-                                <button 
-                                    type="button"
-                                    name="status"
-                                    value="{{ $key }}"
-                                    class="filter-chip {{ request('status', 'all') === $key ? 'active' : '' }}"
-                                >
-                                    <span>{{ $label }}</span>
-                                </button>
-                            @endforeach
-                        </div>
-                        <input type="hidden" name="status" id="selected-status" value="{{ request('status', 'all') }}">
+                        @foreach($statuses as $key => $label)
+                            <button 
+                                type="button"
+                                value="{{ $key }}"
+                                class="filter-chip {{ request('type', 'all') === $key ? 'active' : '' }}"
+                            >
+                                <span>{{ $label }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                    <input type="hidden" name="type" id="selected-status" value="{{ request('type', 'all') }}">
 
                         <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div class="flex items-center">
@@ -120,7 +112,7 @@
 
                     <!-- Request items -->
                     <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <div id="reservations">
+                        <div id="Avis">
                             @foreach($LesAvis as $Avis)
                                 <div class="px-6 py-4">
                                     <div class="flex flex-col lg:flex-row lg:items-start">
@@ -211,6 +203,152 @@
             </div>
         </main>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded - script running');
+        
+        function FilterRequest1() {
+            console.log('filtersFormulaireAvis called');
+            
+            const form = document.getElementById('filtersFormulaireAvis');
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+            const selectedStatus = document.getElementById('selected-status').value;
+            form.querySelector('[name="type"]').value = selectedStatus;
+            
+            // Verify CSRF token exists
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error('CSRF token meta tag not found!');
+                return;
+            }
+            
+            var formData = new FormData(form);
+            
+            
+            // Log form data for debugging
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            
+            fetch('{{ route("Avis.filter") }}', {  
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken.content
+                },
+                body: formData  
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.log(response);
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Response data:", data);
+                
+                if (data.success) {
+                    const container = document.getElementById("Avis");
+                    if (!container) {
+                        console.error('Avis container not found!');
+                        return;
+                    }
+                    
+                    container.innerHTML = "";
+                    
+                    if (data.Avis && data.Avis.length > 0) {
+                        data.Avis.forEach(avi => {
+                            const rating = avi.rating;
+                            const fullStars = Math.floor(rating);
+                            const hasHalfStar = rating - fullStars >= 0.5;
+                            
+                            let starsHtml = '';
+                            for (let i = 0; i < fullStars; i++) {
+                                starsHtml += '<i class="fas fa-star"></i>';
+                            }
+                            if (hasHalfStar) {
+                                starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                            }
+                            
+                            container.innerHTML += `
+                            <div class="px-6 py-4">
+                                <div class="flex flex-col lg:flex-row lg:items-start">
+                                    <div class="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-3 mb-4 lg:mb-0">
+                                        <div>
+                                            <div class="flex-shrink-0 items-center content-center mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                                <div class="flex items-center content-center w-12">
+                                                    <img src="${avi.avatar_url}"
+                                                        alt="${avi.username}" 
+                                                        class="w-12 h-12 rounded-full object-cover" />
+                                                </div>
+                                                <div class="lg:block mt-2">
+                                                    <h3 class="font-medium text-gray-900 dark:text-white">${avi.username}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Rating</p>
+                                            <div class="flex text-amber-400">
+                                                ${starsHtml}
+                                                <span class="ml-1 text-gray-600 dark:text-gray-300 text-sm">${rating.toFixed(1)}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Commentaire</p>
+                                            <p class="font-medium text-gray-900 dark:text-white">${avi.comment || 'No comment'}</p>
+                                        </div>
+                                        <div>
+                                            ${avi.object_title ? `
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Pour Equipement</p>
+                                                <p class="font-medium text-gray-900 dark:text-white">${avi.object_title}</p>
+                                            ` : `
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Pour partenaire</p>
+                                            `}
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Date</p>
+                                            <p class="font-medium text-gray-900 dark:text-white">${new Date(avi.created_at).toLocaleDateString()}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+    const form = document.getElementById('filtersFormulaireAvis');
+    if (form) {
+        form.addEventListener('change', FilterRequest1);
+        form.addEventListener('input', FilterRequest1);
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            FilterRequest1();
+        });
+        document.querySelectorAll('.filter-chip').forEach(button => {
+            button.addEventListener('click', function() {
+            document.getElementById('selected-status').value = this.value;
+            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+            FilterRequest1();
+        });
+});
+        
+        // Initial load
+    } else {
+        console.error('Form element with ID "formulaire1-filters" not found!');
+    }
+});
+
+</script>
+
 
 
 

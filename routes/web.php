@@ -28,6 +28,8 @@ Route::get('/Partenaire', [PartenaireController::class, 'ShowHomePartenaire'])->
 Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
 Route::post('/demandes/filter', [PartenaireController::class, 'filter'])->name('demandes.filter');
 Route::post('/demandes/EnCours', [PartenaireController::class, 'filterLocationEnCours'])->name('demandes.filter.Encours');
+Route::post('/Avis/filter', [PartenaireController::class, 'Avisfilter'])->name('Avis.filter');
+
 
 
 
