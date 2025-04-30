@@ -35,7 +35,11 @@ Route::post('/Avis/filter', [PartenaireController::class, 'Avisfilter'])->name('
 
 
 // Client Routes
+//Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
+Route::get('/client/reservations/filter', [ClientController::class, 'ShowHomeClient'])->name('profile');
+Route::post('/profile', [ClientController::class, 'update'])->name('profile.update');
 Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
+Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cancel'])->name('client.reservations.cancel');
 
 
 

@@ -47,26 +47,28 @@ class ClientModel extends Model
         return DB::table('users')
             ->leftJoin('reservations', 'users.id', '=', 'reservations.client_id')
             ->leftJoin('listings', 'reservations.listing_id', '=', 'listings.id')
+            ->leftJoin('items', 'listings.item_id', '=', 'items.id') 
             ->leftJoin('payments', function($join) {
                 $join->on('payments.listing_id', '=', 'listings.id')
                      ->where('payments.status', '=', 'completed');
             })
-            ->leftJoin('users as partener', 'listings.partner_id', '=', 'partener.id')
-            ->leftJoin('images', 'listings.id', '=', 'images.listing_id')
-    
+            ->leftJoin('users as partner', 'items.partner_id', '=', 'partner.id')
+            ->leftJoin('images', 'items.id', '=', 'images.item_id') 
+            
             ->where('users.email', $email)
             ->limit(2)
             ->select(
-                'partener.username AS partener_username',
-                'partener.avatar_url AS partener_img',
-                'partener.avg_rating as partener_avg_rating',
+                'reservations.id',
+                'partner.username AS partner_username',
+                'partner.avatar_url AS partner_img',
+                'partner.avg_rating as partner_avg_rating',
                 DB::raw('MIN(images.url) AS image_url'),
                 'reservations.start_date',
                 'reservations.end_date',
                 'reservations.status',
-                'listings.title AS listing_title',
+                'items.title AS listing_title', 
                 DB::raw('COALESCE(SUM(payments.amount), 0) AS montant_paye'),
-                'listings.description'
+                'items.description' 
             )
             ->groupBy(
                 'users.id',
@@ -77,41 +79,48 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'listings.id',
-                'listings.title',
-                'listings.description',
-                'partener.username',
-                'partener.avg_rating',
-                'partener_img'
+                'items.id', 
+                'items.title',
+                'items.description',
+                'partner.username',
+                'partner.avg_rating',
+                'partner_img'
             )
             ->orderBy('users.id')
             ->orderBy('reservations.start_date')
             ->get();
     }
-    
-    public static function getAllReservationDetailsByEmail($email)
+   
+    public static function getAllReservationDetailsByEmail($email, $status = null)
     {
-        return DB::table('users')
+        $query = DB::table('users')
             ->leftJoin('reservations', 'users.id', '=', 'reservations.client_id')
             ->leftJoin('listings', 'reservations.listing_id', '=', 'listings.id')
+            ->leftJoin('items', 'listings.item_id', '=', 'items.id')
             ->leftJoin('payments', function($join) {
                 $join->on('payments.listing_id', '=', 'listings.id')
-                     ->where('payments.status', '=', 'completed');
+                    ->where('payments.status', '=', 'completed');
             })
-            ->leftJoin('users as partener', 'listings.partner_id', '=', 'partener.id')
-            ->leftJoin('images', 'listings.id', '=', 'images.listing_id')
-    
-            ->where('users.email', $email)
-            ->select(
-                'partener.username AS partener_username',
-                'partener.avatar_url AS partener_img',
-                'partener.avg_rating as partener_avg_rating',
+            ->leftJoin('users as partner', 'items.partner_id', '=', 'partner.id')
+            ->leftJoin('images', 'items.id', '=', 'images.item_id')
+            ->where('users.email', $email);
+
+        if ($status && $status !== 'all') {
+            $query->where('reservations.status', $status);
+        }
+
+        return $query->select(
+                'reservations.id',
+                'partner.username AS partner_username',
+                'partner.avatar_url AS partner_img',
+                'partner.avg_rating as partner_avg_rating',
                 DB::raw('MIN(images.url) AS image_url'),
                 'reservations.start_date',
                 'reservations.end_date',
                 'reservations.status',
-                'listings.title AS listing_title',
+                'items.title AS listing_title',
                 DB::raw('COALESCE(SUM(payments.amount), 0) AS montant_paye'),
-                'listings.description'
+                'items.description'
             )
             ->groupBy(
                 'users.id',
@@ -122,32 +131,33 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'listings.id',
-                'listings.title',
-                'listings.description',
-                'partener.username',
-                'partener.avg_rating',
-                'partener_img'
-            )
+                'items.id', 
+                'items.title',
+                'items.description',
+                'partner.username',
+                'partner.avg_rating',
+                'partner_img'        )
             ->orderBy('users.id')
             ->orderBy('reservations.start_date')
             ->get();
     }
-    
+
+
     public static function getClientReviewsWithTargets($email)
     {
         return DB::table('users as u')
             ->join('reservations as r', 'u.id', '=', 'r.client_id')
             ->join('reviews as rv', 'rv.reservation_id', '=', 'r.id')
             ->join('listings as l', 'r.listing_id', '=', 'l.id')
-            ->leftJoin('users as p', 'l.partner_id', '=', 'p.id')
+            ->join('items as i', 'l.item_id', '=', 'i.id') 
+            ->leftJoin('users as p', 'i.partner_id', '=', 'p.id') 
             ->leftJoin(DB::raw('(
-                SELECT listing_id, MIN(url) as image_url
+                SELECT item_id, MIN(url) as image_url
                 FROM images
-                GROUP BY listing_id
-            ) as img'), 'l.id', '=', 'img.listing_id')
+                GROUP BY item_id
+            ) as img'), 'i.id', '=', 'img.item_id') 
             ->where('u.email', $email)
-            ->where('rv.type', '!=', 'forClient') 
-
+            ->where('rv.type', '!=', 'forClient')
             ->orderByDesc('rv.created_at')
             ->select(
                 'rv.comment',
@@ -155,7 +165,7 @@ class ClientModel extends Model
                 'rv.created_at',
                 'rv.type',
                 DB::raw("CASE 
-                            WHEN rv.type = 'forObject' THEN l.title 
+                            WHEN rv.type = 'forObject' THEN i.title 
                             WHEN rv.type = 'forPartner' THEN p.username 
                             ELSE NULL 
                         END AS cible_commentaire"),
@@ -165,36 +175,42 @@ class ClientModel extends Model
                             ELSE NULL 
                         END AS image_cible")
             )
-            
             ->get();
     }
     
     
-    
-
     public static function getSimilarListingsByCategory($email)
     {
         return DB::table('users as u')
             ->join('reservations as r', 'u.id', '=', 'r.client_id')
             ->join('listings as l', 'r.listing_id', '=', 'l.id')
+            ->join('items as li', 'l.item_id', '=', 'li.id') 
             ->join('cities as i', 'l.city_id', '=', 'i.id')
-            ->join('categories as c', 'l.category_id', '=', 'c.id')
-            ->join('listings as ls', function ($join) {
-                $join->on('ls.category_id', '=', 'c.id')
-                    ->whereRaw('ls.id != l.id');
+            ->join('categories as c', 'li.category_id', '=', 'c.id') 
+            ->join('items as similar_items', function($join) {
+                $join->on('similar_items.category_id', '=', 'c.id')
+                    ->whereRaw('similar_items.id != li.id'); 
             })
-            ->leftJoin('images', 'ls.id', '=', 'images.listing_id') // fixed alias
-    
+            ->join('listings as ls', 'similar_items.id', '=', 'ls.item_id') 
+            ->leftJoin('images', 'similar_items.id', '=', 'images.item_id') 
+            
             ->where('u.email', $email)
+            ->where('ls.status', 'active') 
             ->limit(3)
             ->select(
                 DB::raw('MIN(images.url) AS image_url'),
-                'ls.price_per_day',
+                'similar_items.price_per_day', 
                 'c.name as category_name',
-                'ls.title as listing_title',
+                'similar_items.title as listing_title',
                 'i.name as city_name'
             )
-            ->groupBy('ls.id', 'ls.price_per_day', 'c.name', 'ls.title', 'i.name')
+            ->groupBy(
+                'ls.id', 
+                'similar_items.price_per_day', 
+                'c.name', 
+                'similar_items.title', 
+                'i.name'
+            )
             ->get();
     }
     
@@ -203,42 +219,70 @@ class ClientModel extends Model
         return DB::table('users as u')
             ->join('reservations as r', 'u.id', '=', 'r.client_id')
             ->join('listings as l', 'r.listing_id', '=', 'l.id')
+            ->join('items as li', 'l.item_id', '=', 'li.id')
             ->join('cities as i', 'l.city_id', '=', 'i.id')
-            ->join('categories as c', 'l.category_id', '=', 'c.id')
-            ->join('listings as ls', function ($join) {
-                $join->on('ls.category_id', '=', 'c.id')
-                    ->whereRaw('ls.id != l.id');
+            ->join('categories as c', 'li.category_id', '=', 'c.id') 
+            ->join('items as similar_items', function($join) {
+                $join->on('similar_items.category_id', '=', 'c.id')
+                    ->whereRaw('similar_items.id != li.id'); 
             })
-            ->leftJoin('images', 'ls.id', '=', 'images.listing_id') // fixed alias
-    
+            ->join('listings as ls', 'similar_items.id', '=', 'ls.item_id') 
+            ->leftJoin('images', 'similar_items.id', '=', 'images.item_id') 
+            
             ->where('u.email', $email)
+            ->where('ls.status', 'active') 
             ->select(
                 DB::raw('MIN(images.url) AS image_url'),
-                'ls.price_per_day',
+                'similar_items.price_per_day', 
                 'c.name as category_name',
-                'ls.title as listing_title',
+                'similar_items.title as listing_title', 
                 'i.name as city_name'
             )
-            ->groupBy('ls.id', 'ls.price_per_day', 'c.name', 'ls.title', 'i.name')
+            ->groupBy(
+                'ls.id', 
+                'similar_items.price_per_day', 
+                'c.name', 
+                'similar_items.title', 
+                'i.name'
+            )
             ->get();
     }
 
     public static function getClientProfile($email)
     {
-        return DB::table('users')
-            ->where('email', $email)
-            ->where('role', 'client')
-            ->select(
-                'username',
-                'email',
-                'phone_number',
-                'address',
-                'avatar_url',
-                'avg_rating',
-                'review_count',
-                'created_at'
-            )
-            ->first();
+       
+        return DB::table('users as u')
+        ->leftJoin('reviews as r', function($join) {
+            $join->on('r.reviewee_id', '=', 'u.id')
+                ->where('r.type', 'forClient');
+        })
+        ->where('u.email', $email)
+        ->where('u.role', 'client')
+        ->select(
+            'u.first_name',
+            'u.last_name',
+            'u.username',
+            'u.email',
+            'u.phone_number',
+            'u.address',
+            'u.avatar_url',
+            'u.avg_rating',
+            'u.created_at',
+            DB::raw('COUNT(r.id) as review_count')
+        )
+        ->groupBy(
+            'u.id',
+            'u.first_name',
+            'u.last_name',
+            'u.username',
+            'u.email',
+            'u.phone_number',
+            'u.address',
+            'u.avatar_url',
+            'u.avg_rating',
+            'u.created_at'
+        )
+        ->first();
     }
 
 

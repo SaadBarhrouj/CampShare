@@ -84,14 +84,14 @@
                     
                     <div class="p-4">
                         <div class="flex items-start mb-4">
-                            <img src="{{ $res->partener_img}}" 
+                            <img src="{{ $res->partner_img}}" 
                                  alt="image" 
                                  class="w-8 h-8 rounded-full object-cover mr-3" />
                             <div>
-                                <p class="font-medium text-gray-900 dark:text-white">{{$res->partener_username}}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{$res->partner_username}}</p>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-star text-amber-400 mr-1"></i>
-                                    <span>{{$res->partener_avg_rating}} </span>
+                                    <span>{{$res->partner_avg_rating}} </span>
                                 </div>
                             </div>
                         </div>
@@ -109,15 +109,15 @@
                         </div>
                         
                         <div class="flex items-center space-x-2">
-                            <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
-                                <i class="fas fa-calendar-alt mr-2"></i> Modifier
-                            </button>
-                            <button class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
-                                <i class="fas fa-times mr-2"></i> Annuler
-                            </button>
-                            <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
-                                <i class="fas fa-comment-alt"></i>
-                            </button>
+                            @if($res->status === 'pending')
+                                <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
+                                    <i class="fas fa-calendar-alt mr-2"></i> Modifier
+                                </button>
+                                <button onclick="cancelReservation({{ $res->id }})"
+                                        class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
+                                    <i class="fas fa-times mr-2"></i> Annuler
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -360,4 +360,31 @@
             }
         });
     });
+</script>
+<script>
+    function cancelReservation(reservationId) {
+    if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+        fetch(`/client/reservations/cancel/${reservationId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Recharger les réservations
+                document.getElementById('statusFilter').dispatchEvent(new Event('change'));
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue');
+        });
+    }
+}
 </script>
