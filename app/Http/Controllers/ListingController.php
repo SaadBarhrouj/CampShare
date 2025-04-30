@@ -29,6 +29,68 @@ class ListingController extends Controller
                 $q->where('item.name', $request->category);
             });
         }
+
+        // Apply price filter if min or max price is set
+        if ($request->has('price_range')) {
+            $priceRange = $request->price_range;
+            $query->whereHas('item', function($q) use ($priceRange) {
+                switch($priceRange) {
+                    case '0-50':
+                        $q->where('price_per_day', '>=', 0)
+                          ->where('price_per_day', '<=', 50);
+                        break;
+                    case '50-100':
+                        $q->where('price_per_day', '>', 50)
+                          ->where('price_per_day', '<=', 100);
+                        break;
+                    case '100-200':
+                        $q->where('price_per_day', '>', 100)
+                          ->where('price_per_day', '<=', 200);
+                        break;
+                    case '200+':
+                        $q->where('price_per_day', '>', 200);
+                        break;
+                }
+            });
+
+            $premiumQuery->whereHas('item', function($q) use ($priceRange) {
+                switch($priceRange) {
+                    case '0-50':
+                        $q->where('price_per_day', '>=', 0)
+                          ->where('price_per_day', '<=', 50);
+                        break;
+                    case '50-100':
+                        $q->where('price_per_day', '>', 50)
+                          ->where('price_per_day', '<=', 100);
+                        break;
+                    case '100-200':
+                        $q->where('price_per_day', '>', 100)
+                          ->where('price_per_day', '<=', 200);
+                        break;
+                    case '200+':
+                        $q->where('price_per_day', '>', 200);
+                        break;
+                }
+            });
+        } else if ($request->has('min_price') || $request->has('max_price')) {
+            $query->whereHas('item', function($q) use ($request) {
+                if ($request->has('min_price')) {
+                    $q->where('price_per_day', '>=', $request->min_price);
+                }
+                if ($request->has('max_price')) {
+                    $q->where('price_per_day', '<=', $request->max_price);
+                }
+            });
+
+            $premiumQuery->whereHas('item', function($q) use ($request) {
+                if ($request->has('min_price')) {
+                    $q->where('price_per_day', '>=', $request->min_price);
+                }
+                if ($request->has('max_price')) {
+                    $q->where('price_per_day', '<=', $request->max_price);
+                }
+            });
+        }
     
         // Sorting logic
         switch ($sort) {
@@ -81,6 +143,18 @@ class ListingController extends Controller
             });
         }
 
+        // Apply price filter if min or max price is set
+        if ($request->has('min_price') || $request->has('max_price')) {
+            $query->whereHas('item', function($q) use ($request) {
+                if ($request->has('min_price')) {
+                    $q->where('price_per_day', '>=', $request->min_price);
+                }
+                if ($request->has('max_price')) {
+                    $q->where('price_per_day', '<=', $request->max_price);
+                }
+            });
+        }
+
         // Apply sorting
         switch ($sort) {
             case 'price_asc':
@@ -115,6 +189,18 @@ class ListingController extends Controller
         if ($request->has('category')) {
             $query->whereHas('category', function ($q) use ($request) {
                 $q->where('name', $request->category);
+            });
+        }
+
+        // Apply price filter if min or max price is set
+        if ($request->has('min_price') || $request->has('max_price')) {
+            $query->whereHas('item', function($q) use ($request) {
+                if ($request->has('min_price')) {
+                    $q->where('price_per_day', '>=', $request->min_price);
+                }
+                if ($request->has('max_price')) {
+                    $q->where('price_per_day', '<=', $request->max_price);
+                }
             });
         }
 

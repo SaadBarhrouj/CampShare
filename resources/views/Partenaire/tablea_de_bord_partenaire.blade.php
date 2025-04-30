@@ -376,7 +376,7 @@
                              class="h-10 w-10 rounded-full" />
                     </div>
                     <div class="ml-3">
-                        <div class="text-base font-medium text-gray-800 dark:text-white">{{ $user->username }}</div>
+                        <div class="text-base font-medium text-gray-900 dark:text-white">{{ $user->username }}</div>
                         <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $user->username }}</div>
                     </div>
                     <div class="ml-auto flex items-center space-x-4">
@@ -454,6 +454,10 @@
                         <i class="fas fa-campground w-5 mr-3"></i>
                         Mes équipements
                     </a>
+                    <a href="{{ route('partenaire.mes-annonces') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-bullhorn w-5 mr-3"></i>
+                        Mes annonces
+                    </a>
                     <a href="#rental-requests" data-target="AllMyReservation" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-clipboard-list w-5 mr-3"></i>
                         Demandes de location
@@ -510,14 +514,14 @@
                 
                 <div class="mb-6 px-3 flex flex-col items-center">
                     <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                             alt="Fatima Benali" 
+                        <img src="{{$user->avatar_url}}"  
+                             alt=src="{{$user->username}}"  
                              class="w-20 h-20 rounded-full border-4 border-forest dark:border-meadow object-cover" />
                         <div class="absolute bottom-1 right-1 bg-green-500 p-1 rounded-full border-2 border-white dark:border-gray-800">
                             <i class="fas fa-check text-white text-xs"></i>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">{{$user->usename}}</h2>
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">{{$user->username}}</h2>
                     <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
                     <div class="flex items-center mt-1">
                         <div class="flex text-amber-400">
@@ -539,6 +543,10 @@
                     <a href="#equipment" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-campground w-5 mr-3"></i>
                         Mes équipements
+                    </a>
+                    <a href="{{ route('partenaire.mes-annonces') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-bullhorn w-5 mr-3"></i>
+                        Mes annonces
                     </a>
                     <a href="#rental-requests" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-clipboard-list w-5 mr-3"></i>
@@ -607,6 +615,9 @@
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const targetId = link.getAttribute("data-target");
+      
+      // Ne rien faire si data-target n'est pas défini (cas du lien "Mes annonces")
+      if (!targetId) return;
 
       components.forEach(comp => {
         comp.classList.add("hidden");
