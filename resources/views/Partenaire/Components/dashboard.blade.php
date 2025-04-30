@@ -221,29 +221,14 @@
                                                 <span class="font-medium text-gray-900 dark:text-white">{{$Reservation->montant_total}} MAD ({{$Reservation->number_days}} jours)</span>
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2">
-                                        <div class="flex space-x-2">
-                                            <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
-                                                @csrf
-                                                <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
-                                                <input type="hidden" name="action" value="accept">
-                                                <button type="submit" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md w-full">
-                                                    Accepter
-                                                </button>
-                                            </form>
-
-                                            <!-- Refuse Button -->
-                                            <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
-                                                @csrf
-                                                <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
-                                                <input type="hidden" name="action" value="refuse">
-                                                <button type="submit" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
-                                                    Refuser
-                                                </button>
-                                            </form>
-                                        </div>
-                                            
-                                        </div>
+                                        <div class="flex items-center space-x-2">
+    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1">
+        Accepter
+    </button>
+    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
+        Refuser
+    </button>
+</div>
                                     </div>
                                 </div>
                             </div>

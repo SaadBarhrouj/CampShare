@@ -159,17 +159,39 @@ class PartenaireModel extends Model
     }
     public static function getPartenerEquipement($email)
     {
-        return DB::table('users as U')
+        $items = DB::table('users as U')
             ->join('items as i','i.partner_id','=','U.id')
             ->join('categories as C', 'C.id', '=', 'i.category_id')
+            ->leftJoin('images as img', 'img.item_id', '=', 'i.id')
+            ->leftJoin('reviews as R', function($join) {
+                $join->on('R.reviewee_id', '=', 'i.id')
+                    ->where('R.type', '=', 'forObject')
+                    ->where('R.is_visible', '=', true);
+            })
             ->select(
+                'i.id',
                 'i.title',
                 'i.description',
                 'i.price_per_day',
-                'C.*'
+                'i.category_id',
+                'C.name as category_name',
+                DB::raw('GROUP_CONCAT(DISTINCT img.url) as image_urls'),
+                DB::raw('AVG(R.rating) as avg_rating'),
+                DB::raw('COUNT(DISTINCT R.id) as review_count')
             )
             ->where('U.email', $email)
-            ->get(); 
+            ->groupBy('i.id', 'i.title', 'i.description', 'i.price_per_day', 'i.category_id', 'C.name')
+            ->get();
+
+        return $items->map(function($item) {
+            $imageUrls = $item->image_urls ? explode(',', $item->image_urls) : [];
+            $item->images = collect($imageUrls)->map(function($url) {
+                return (object)['url' => $url];
+            });
+            $item->avg_rating = $item->avg_rating ?? 0;
+            $item->review_count = $item->review_count ?? 0;
+            return $item;
+        });
     }
     public static function getLocationsEncours($email)
     {

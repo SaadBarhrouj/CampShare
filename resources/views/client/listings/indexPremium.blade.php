@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/styles.css', 'resources/js/script.js'])
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="{{ asset('js/filters.js') }}"></script>
     
 </head>
 
@@ -43,10 +44,10 @@
                                     Tous prémiums
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Tentes']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Tentes
-                                </button>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Tentes']) }}"
+                                data-selected-category="Tentes"
+                                class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                Tentes
                             </a>
                             <a href="{{ route('client.listings.indexPremium', ['category' => 'Sacs de couchage']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
@@ -75,10 +76,37 @@
                             </a>
                         </div>
                         
+                        <!-- Price Filter -->
+                        <div class="flex items-center space-x-3">
+                            <a href="#" data-price-range="0-50"
+                               class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '0-50' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                0-50 MAD
+                            </a>
+                            <a href="#" data-price-range="50-100"
+                               class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '50-100' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                50-100 MAD
+                            </a>
+                            <a href="#" data-price-range="100-200"
+                               class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '100-200' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                100-200 MAD
+                            </a>
+                            <a href="#" data-price-range="200+"
+                               class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '200+' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                200+ MAD
+                            </a>
+                            @if(request('price_range'))
+                                <a href="#" class="reset-price-filter whitespace-nowrap px-4 py-2 bg-red-500 text-white rounded-full font-medium hover:bg-red-600 transition-all">
+                                    <i class="fas fa-times mr-1"></i> Réinitialiser
+                                </a>
+                            @endif
+                        </div>
+                        
                         <!-- Sort and Map View Options -->
                         <div class="flex space-x-4">
                             <div class="relative">
-                                <button id="sort-button" class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all w-46">
+                                <button id="sort-button" 
+                                    data-current-sort="{{ $sort }}"
+                                    class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all w-46">
                                     <i class="fas fa-sort mr-2"></i>
                                         @php
                                             $sortLabels = [
