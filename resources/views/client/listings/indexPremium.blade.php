@@ -54,11 +54,6 @@
                                     Sacs de couchage
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Matelas']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Matelas
-                                </button>
-                            </a>
                             <a href="{{ route('client.listings.indexPremium', ['category' => 'Cuisine']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Cuisine
@@ -72,6 +67,11 @@
                             <a href="{{ route('client.listings.indexPremium', ['category' => 'Mobilier']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Éclairage
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Autre']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Autre
                                 </button>
                             </a>
                         </div>
@@ -174,34 +174,32 @@
                                 <div class="p-4">
                                     <div class="flex justify-between items-start mb-2">
                                         <div>
-                                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">{{ $premiumListing->title }}</h3>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $premiumListing->category->name }}</p>
+                                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">{{ $premiumListing->item->title }}</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $premiumListing->item->category->name }}</p>
                                         </div>
-                                        <div class="flex items-center text-sm">
+                                        <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>{{ $premiumListing->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->reviews->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->count() }})</span></span>
                                         </div>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-user mr-1 text-gray-400"></i>
-                                        <a href="/profile/mohammed-alami" class="hover:text-forest dark:hover:text-sunlight">{{ $premiumListing->partner->username }}</a>
+                                        <a href="/profile/mohammed-alami" class="hover:text-forest dark:hover:text-sunlight">{{ $premiumListing->item->partner->username }}</a>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                                        <span>{{ $premiumListing->partner->address }}</span>
+                                        <span>{{ $premiumListing->city->name }}, Maroc.</span>
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->availabilities?->first()?->start_date ?? '2025-02-04' }}
-                                            au
-                                            {{ $premiumListing->availabilities?->first()?->end_date ?? '2025-02-28' }}</span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->start_date }} au {{ $premiumListing->end_date }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <span class="font-bold text-xl text-gray-900 dark:text-white">{{ $premiumListing->price_per_day }} MAD</span>
+                                            <span class="font-bold text-xl text-gray-900 dark:text-white">{{ $premiumListing->item->price_per_day }} MAD</span>
                                             <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                                         </div>
                                         <a href="{{ route('client.listings.show', $premiumListing->id) }}" class="inline-block">

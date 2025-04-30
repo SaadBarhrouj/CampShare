@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->hasMany(Item::class, 'item_id');
+        return $this->hasMany(Item::class, 'partner_id');
     }
 
     public function clientReservations()
@@ -54,6 +54,54 @@ class User extends Authenticatable
     public function receivedReviews()
     {
         return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function averageRatingClient()
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forClient');
+
+        return number_format($visibleReviews->avg('rating'), 1);
+    }
+
+    public function fiveStarPercentageClient($number)
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forClient');
+
+        $total = $visibleReviews->count();
+
+        if ($total === 0) return 0;
+
+        $fiveStars = $visibleReviews->where('rating', $number)->count();
+
+        return round(($fiveStars / $total) * 100, 1);
+    }
+
+    public function averageRatingPartner()
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forPartner');
+
+        return number_format($visibleReviews->avg('rating'), 1);
+    }
+
+    public function fiveStarPercentagePartner($number)
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forPartner');
+
+        $total = $visibleReviews->count();
+
+        if ($total === 0) return 0;
+
+        $fiveStars = $visibleReviews->where('rating', $number)->count();
+
+        return round(($fiveStars / $total) * 100, 1);
     }
 
 

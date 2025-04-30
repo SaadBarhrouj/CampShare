@@ -28,7 +28,7 @@ class ReviewFactory extends Factory
             'reservation_id' => $reservation,
             'rating' => $this->faker->numberBetween(1, 5),
             'comment' => $this->faker->sentences(2, true),
-            'is_visible' => $this->faker->boolean,
+            'is_visible' => $this->faker->numberBetween(1, 100) <= 90,
             'type' => $this->faker->randomElement(['forObject', 'forClient', 'forPartner']),
             'reviewer_id' => $reviewer,
             'reviewee_id' => $reviewee,

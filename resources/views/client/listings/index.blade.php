@@ -54,11 +54,6 @@
                                     Sacs de couchage
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.index', ['category' => 'Matelas']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Matelas
-                                </button>
-                            </a>
                             <a href="{{ route('client.listings.index', ['category' => 'Cuisine']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Cuisine
@@ -72,6 +67,11 @@
                             <a href="{{ route('client.listings.index', ['category' => 'Mobilier']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Éclairage
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.index', ['category' => 'Autre']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Autre
                                 </button>
                             </a>
                         </div>
@@ -183,7 +183,7 @@
                                         </div>
                                         <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->where('is_visible', true)->count() }})</span></span>
                                         </div>
                                     </div>
                                     
@@ -194,11 +194,11 @@
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                                        <span>{{ $premiumListing->item->partner->address }}</span>
+                                        <span>{{ $premiumListing->city->name }}, Maroc</span>
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du au </span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->start_date }} au {{ $premiumListing->end_date }} </span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -262,7 +262,7 @@
                                         </div>
                                         <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->where('is_visible', true)->count() }})</span></span>
                                         </div>
                                     </div>
                                     
@@ -273,11 +273,11 @@
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                                        <span>{{ $listing->item->partner->address }}</span>
+                                        <span>{{ $listing->city->name }}, Maroc</span>
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du au</span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->start_date }} au {{ $listing->end_date }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">

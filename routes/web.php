@@ -1,16 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ListingController;
-use App\Http\Controllers\PartenaireController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\AdminController;
-
-use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\ImageFixController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ListingController;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PartenaireController;
+use App\Http\Controllers\Auth\RegistrationController;
 
 // Index Page
 Route::get('/', function () {
@@ -88,3 +89,7 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 ////////////////////////////////////////////////
 Route::get('/showAllNotifications', [NotificationController::class, 'showAllNotifications'])->name('showAllNotifications');
+
+// Profiles Routes
+Route::get('/profile/client/{user}', [ProfileController::class, 'indexClientProfile'])->name('client.profile.index');
+Route::get('/profile/partner/{user}', [ProfileController::class, 'indexPartnerProfile'])->name('partner.profile.index');

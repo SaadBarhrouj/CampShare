@@ -16,17 +16,17 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sorting
     
-        $query = Listing::query();
-        $premiumQuery = Listing::where('is_premium', true); 
+        $query = Listing::with('item.category'); // eager load
+        $premiumQuery = Listing::where('is_premium', true)->with('item.category');
     
-        // Apply category filter to both queries
+        // Filter by category name
         if ($request->has('category')) {
             $query->whereHas('item.category', function ($q) use ($request) {
-                $q->where('item.name', $request->category);
+                $q->where('name', $request->category);
             });
-    
-            $premiumQuery->whereHas('category', function ($q) use ($request) {
-                $q->where('item.name', $request->category);
+
+            $premiumQuery->whereHas('item.category', function ($q) use ($request) {
+                $q->where('name', $request->category);
             });
         }
 
@@ -95,12 +95,21 @@ class ListingController extends Controller
         // Sorting logic
         switch ($sort) {
             case 'price_asc':
-                $query->orderBy('item.price_per_day', 'asc');
-                $premiumQuery->orderBy('item.price_per_day', 'asc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                      ->orderBy('items.price_per_day', 'asc')
+                      ->select('listings.*');
+                $premiumQuery->join('items', 'listings.item_id', '=', 'items.id')
+                             ->orderBy('items.price_per_day', 'asc')
+                             ->select('listings.*');
                 break;
+    
             case 'price_desc':
-                $query->orderBy('item.price_per_day', 'desc');
-                $premiumQuery->orderBy('item.price_per_day', 'desc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                      ->orderBy('items.price_per_day', 'desc')
+                      ->select('listings.*');
+                $premiumQuery->join('items', 'listings.item_id', '=', 'items.id')
+                             ->orderBy('items.price_per_day', 'desc')
+                             ->select('listings.*');
                 break;
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
@@ -134,11 +143,11 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
 
-        $query = Listing::where('is_premium', true);
+        $query = Listing::where('is_premium', true)->with('item.category');
 
         // Apply category filter if present
         if ($request->has('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
+            $query->whereHas('item.category', function ($q) use ($request) {
                 $q->where('name', $request->category);
             });
         }
@@ -158,10 +167,14 @@ class ListingController extends Controller
         // Apply sorting
         switch ($sort) {
             case 'price_asc':
-                $query->orderBy('price_per_day', 'asc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'asc')
+                    ->select('listings.*');
                 break;
             case 'price_desc':
-                $query->orderBy('price_per_day', 'desc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'desc')
+                    ->select('listings.*');
                 break;
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
@@ -175,7 +188,11 @@ class ListingController extends Controller
         $premiumListingsCount = $query->count();
         $premiumListings = $query->simplePaginate(9)->appends($request->query());
 
-        return view('client.listings.indexPremium', compact('premiumListings', 'premiumListingsCount', 'sort'));
+        return view('client.listings.indexPremium', compact(
+            'premiumListings',
+            'premiumListingsCount',
+            'sort'
+        ));
     }
 
 
@@ -183,11 +200,11 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
         
-        $query = Listing::query();
+        $query = Listing::with('item.category');
 
         // Apply category filter if present
         if ($request->has('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
+            $query->whereHas('item.category', function ($q) use ($request) {
                 $q->where('name', $request->category);
             });
         }
@@ -207,10 +224,14 @@ class ListingController extends Controller
         // Apply sorting
         switch ($sort) {
             case 'price_asc':
-                $query->orderBy('price_per_day', 'asc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'asc')
+                    ->select('listings.*');
                 break;
             case 'price_desc':
-                $query->orderBy('price_per_day', 'desc');
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'desc')
+                    ->select('listings.*');
                 break;
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
@@ -249,7 +270,7 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        $reviews = $listing->reviews()->latest()->get();
+        $reviews = $listing->item->reviews()->where('is_visible', true)->latest()->get();
         return view('client.listings.show', compact('listing', 'reviews'));
     }
 
