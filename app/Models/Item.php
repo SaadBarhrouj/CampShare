@@ -38,6 +38,7 @@ class Item extends Model
     public function averageRating()
     {
         $visibleReviews = $this->reviews->where('is_visible', true);
+
         return number_format($visibleReviews->avg('rating'), 1);
     }
 
@@ -45,9 +46,13 @@ class Item extends Model
     {
         $visibleReviews = $this->reviews->where('is_visible', true);
         $total = $visibleReviews->count();
+
         if ($total === 0) return 0;
+
         $fiveStars = $visibleReviews->where('rating', $number)->count();
+        
         return round(($fiveStars / $total) * 100, 1);
     }
+
 
 }

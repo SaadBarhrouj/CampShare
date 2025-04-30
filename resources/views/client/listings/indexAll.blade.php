@@ -53,11 +53,6 @@
                                     Sacs de couchage
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.indexAll', ['category' => 'Matelas']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Matelas
-                                </button>
-                            </a>
                             <a href="{{ route('client.listings.indexAll', ['category' => 'Cuisine']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Cuisine
@@ -71,6 +66,11 @@
                             <a href="{{ route('client.listings.indexAll', ['category' => 'Mobilier']) }}">
                                 <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                     Éclairage
+                                </button>
+                            </a>
+                            <a href="{{ route('client.listings.indexAll', ['category' => 'Autre']) }}">
+                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    Autre
                                 </button>
                             </a>
                         </div>
@@ -131,7 +131,7 @@
                     @forelse ($listings as $listing)
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1 relative">
                             <div class="absolute top-4 left-4 z-10 bg-forest text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
-                                {{ $listing->category->name }}
+                                {{ $listing->item->category->name }}
                             </div>
                             <a href="{{ route('client.listings.show', $listing->id) }}">
                                 <div class="relative h-48">
@@ -142,34 +142,32 @@
                                 <div class="p-4">
                                     <div class="flex justify-between items-start mb-2">
                                         <div>
-                                            <h3 class="font-bold text-gray-900 dark:text-white">{{ $listing->title }}</h3>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $listing->category->name }}</p>
+                                            <h3 class="font-bold text-gray-900 dark:text-white">{{ $listing->item->title }}</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $listing->item->category->name }}</p>
                                         </div>
-                                        <div class="flex items-center text-sm">
+                                        <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>{{ $listing->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->reviews->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->count() }})</span></span>
                                         </div>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-user mr-1 text-gray-400"></i>
-                                        <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->partner->username }}</a>
+                                        <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                                        <span>{{ $listing->partner->address }}</span>
+                                        <span>{{ $listing->city->name }}, Maroc</span>
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->availabilities?->first()?->start_date ?? '2025-02-04' }}
-                                            au
-                                            {{ $listing->availabilities?->first()?->end_date ?? '2025-02-28' }}</span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->start_date }} au {{ $listing->start_date }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <span class="font-bold text-lg text-gray-900 dark:text-white">{{ $listing->price_per_day }} MAD</span>
+                                            <span class="font-bold text-lg text-gray-900 dark:text-white">{{ $listing->item->price_per_day }} MAD</span>
                                             <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                                         </div>
                                         <a href="{{ route('client.listings.show', $listing->id) }}" class="inline-block">

@@ -171,19 +171,19 @@ if (reservationButton) {
 
 // load comments 
 
-let visible = 2;
+let visible = 3;
 const reviews = document.querySelectorAll('.review-item');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const loadLessBtn = document.getElementById('loadLessBtn');
 
-// Show initial 2 reviews
+// Show initial 3 reviews
 reviews.forEach((review, index) => {
     if (index >= visible) review.classList.add('hidden');
 });
 
 if(loadMoreBtn) loadMoreBtn.addEventListener('click', () => {
     let shown = 0;
-    for (let i = visible; i < reviews.length && shown < 2; i++) {
+    for (let i = visible; i < reviews.length && shown < 3; i++) {
         reviews[i].classList.remove('hidden');
         shown++;
     }
@@ -197,7 +197,7 @@ if(loadMoreBtn) loadMoreBtn.addEventListener('click', () => {
 });
 
 if(loadLessBtn) loadLessBtn.addEventListener('click', () => {
-    visible = 2;
+    visible = 3;
     reviews.forEach((review, index) => {
         if (index >= visible) review.classList.add('hidden');
     });
@@ -208,7 +208,7 @@ if(loadLessBtn) loadLessBtn.addEventListener('click', () => {
 });
 
 // Initial toggle state
-if (reviews.length <= 2) {
+if (reviews.length <= 3) {
     if(loadMoreBtn) loadMoreBtn.style.display = 'none';
     if(loadLessBtn)loadLessBtn.style.display = 'none';
 } else {
@@ -235,4 +235,17 @@ document.addEventListener('click', (e) => {
     if (sortButton && !sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
         sortDropdown.classList.add('hidden');
     }
+});
+
+
+
+// Submit review form
+const submitReviewForm = document.getElementById('submit-review-form');
+        
+submitReviewForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    alert('Merci pour votre avis! Il sera publié après vérification.');
+    reviewForm.classList.add('hidden');
+    writeReviewButton.classList.remove('hidden');
 });
