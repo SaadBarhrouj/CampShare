@@ -42,7 +42,9 @@ class PartenaireController extends Controller
     $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
     $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
     $LesAvis= PartenaireModel::getAvis($user->email);
-    $categories = Category::all(); // Ajout des catégories
+    $categories = Category::all();
+    $notifications = (new NotificationController)->getNotifUser($user->id);
+    $totalNotification = (new NotificationController)->totalNotification($user->id);
 
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
@@ -61,7 +63,9 @@ class PartenaireController extends Controller
         'LocationsEncours',
         'NumberLocationsEncours',
         'LesAvis',
-        'categories' // Ajout des catégories dans le compact
+        'categories' ,
+        'notifications',
+        'totalNotification'// Ajout des catégories dans le compact
     ));
 }
 

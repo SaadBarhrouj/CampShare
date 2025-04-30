@@ -31,5 +31,35 @@ class Listing extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+    protected static function booted()
+    {
+        static::created(function ($listing) {
+            $subscribers = User::where('is_subscriber', 1)->get();
 
+            foreach ($subscribers as $user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'message' => 'A new listing has been added: ' . $listing->item->title,
+                    'listing_id' => $listing->id,
+                    'type' => 'added_listing',
+                    'is_read'=>0,
+                ]);
+            }
+        });
+        static::updated(function ($listing) {
+            $subscribers = User::where('is_subscriber', 1)->get();
+
+            foreach ($subscribers as $user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'message' => 'A listing has been updated: ' . $listing->item->title,
+                    'listing_id' => $listing->id,
+                    'type' => 'updated_listing',
+                    'is_read'=>0,
+
+                ]);
+            }
+        });
+    }
+    
 }

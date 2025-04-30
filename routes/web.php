@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\ImageFixController;
+use App\Http\Controllers\NotificationController;
 
 // Index Page
 Route::get('/', function () {
@@ -85,3 +86,5 @@ Route::post('/register', [RegistrationController::class, 'register']);
 // Login Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+////////////////////////////////////////////////
+Route::get('/showAllNotifications', [NotificationController::class, 'showAllNotifications'])->name('showAllNotifications');

@@ -252,7 +252,7 @@
                                         </div>
                                     </div>
                                     <div class="max-h-96 overflow-y-auto">
-                                        <!-- Notification items -->
+                                        @foreach($notifications as $notification)
                                         <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
                                             <div class="flex">
                                                 <div class="flex-shrink-0 mr-3">
@@ -262,55 +262,15 @@
                                                 </div>
                                                 <div>
                                                     <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvelle demande de location</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Mehdi souhaite louer votre "Pack Camping Complet 2p"</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 23 minutes</p>
-                                                </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ $notification->message }}</p>
+                                                    {{-- <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 23 minutes</p> --}}                                                </div>
                                             </div>
                                         </a>
-                                        
-                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <div class="flex">
-                                                <div class="flex-shrink-0 mr-3">
-                                                    <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center text-green-500 dark:text-green-300">
-                                                        <i class="fas fa-money-bill-wave"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Paiement reçu</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Leila a payé 900 MAD pour "Pack Camping Complet 2p"</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 1 heure</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        
-                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <div class="flex">
-                                                <div class="flex-shrink-0 mr-3">
-                                                    <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-800 flex items-center justify-center text-amber-500 dark:text-amber-300">
-                                                        <i class="fas fa-star"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvel avis reçu</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Ahmed vous a laissé un avis 5 étoiles</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 3 heures</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        
-                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <div class="flex">
-                                                <div class="flex-shrink-0 mr-3">
-                                                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center text-indigo-500 dark:text-indigo-300">
-                                                        <i class="fas fa-bullhorn"></i>
-                                                    </div>
-                                                </div>
+                                        @endforeach
 
-                                            </div>
-                                        </a>
                                     </div>
                                     <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                        <a href="#all-notifications" class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                        <a href={{ route('showAllNotifications') }} class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
                                     </div>
                                 </div>
                             </div>
