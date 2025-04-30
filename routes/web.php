@@ -16,7 +16,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 // Index Page
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
 
 // Listings Client Routes
 Route::get('/listings/all', [ListingController::class, 'indexAll'])->name('client.listings.indexAll');

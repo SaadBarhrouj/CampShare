@@ -283,3 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Redirect to new URL without price filter
             window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+
+        });
+    }
+});

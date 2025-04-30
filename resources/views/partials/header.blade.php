@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex-shrink-0 flex items-center">
                 <!-- Logo -->
-                <a href="index.html" class="flex items-center">
+                <a href="{{ route('index') }}" class="flex items-center">
                     <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
                     <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
                 </a>
