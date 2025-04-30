@@ -571,7 +571,7 @@
     </div>
     
     <!-- Equipment Settings Modal (hidden by default) -->
-    <div id="equipment-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="equipment-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full mx-4">
             <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white">Paramètres de l'équipement</h3>
@@ -675,7 +675,7 @@
     </div>
 
     <!-- Message Modal (hidden by default) -->
-    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div class="flex items-center">
