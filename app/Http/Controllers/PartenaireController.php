@@ -620,10 +620,9 @@ public function deleteAllEquipements()
                 'items.description', 
                 'items.price_per_day',
                 'cities.name as city_name',
-                DB::raw('GROUP_CONCAT(DISTINCT images.url) as image_urls')
+                'images.url as image_urls',
             )
-            ->where('items.partner_id', $user->id)
-            ->groupBy('listings.id');
+            ->where('items.partner_id', $user->id);
         
         // Appliquer les filtres
         if ($status !== 'all') {
