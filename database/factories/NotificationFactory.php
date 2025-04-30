@@ -22,7 +22,7 @@ class NotificationFactory extends Factory
 
         return [
             'user_id' => $user,
-            'type' => $this->faker->randomElement(['reservation', 'review', 'reminder', 'system']),
+            'type' => $this->faker->randomElement(['review_object', 'review_client', 'review_partner', 'updated_listing', 'added_listing']),
             'message' => $this->faker->sentence,
             'is_read' => $this->faker->boolean,
         ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -16,7 +17,7 @@ class AdminController extends Controller
         // Récupérer les utilisateurs récents (clients et partenaires)
         $recentUsers = User::whereIn('role', ['client', 'partner'])
                           ->latest()
-                          ->take(5) // Limiter à 5 utilisateurs récents
+                          ->take(400) // Limiter à 5 utilisateurs récents
                           ->get();
     
         return view('admin.dashboard', [
@@ -26,6 +27,57 @@ class AdminController extends Controller
             'totalUsers' => $clientsCount + $partnersCount
         ]);
     }
+
+    public function updateUserDetails($userId, Request $request)
+    {
+        // Valider les données
+        $request->validate([
+            'is_active' => 'required|boolean',
+            'admin_notes' => 'nullable|string'
+        ]);
+    
+        // Mettre à jour l'utilisateur
+        DB::table('users')
+            ->where('id', $userId)
+            ->update([
+                'is_active' => $request->is_active,
+                'admin_notes' => $request->admin_notes,
+                'updated_at' => now()
+            ]);
+    
+        return response()->json(['success' => true]);
+    }
+
+    public function getUserDetails($userId)
+    {
+
+        $user = DB::table('users')
+            ->leftJoin('cities', 'users.city_id', '=', 'cities.id')
+            ->select('users.*', 'cities.name as city_name')
+            ->where('users.id', $userId)
+            ->first();
+    
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    
+        $reservations = DB::table('reservations')
+            ->join('listings', 'reservations.listing_id', '=', 'listings.id')
+            ->where('reservations.client_id', $userId)
+            ->select(
+                'reservations.*',
+                'listings.title as listing_title',
+                'listings.description as listing_description'
+            )
+            ->orderBy('reservations.created_at', 'desc')
+            ->get();
+    
+        return response()->json([
+            'user' => $user,
+            'reservations' => $reservations
+        ]);
+    }
+
 
     public function clients(Request $request)
     {

@@ -9,123 +9,128 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Password;
 
 class RegistrationController extends Controller
 {
+    /**
+     * Affiche le formulaire d'inscription
+     */
     public function showRegistrationForm()
     {
-        $cities = City::all();
+        $cities = City::orderBy('name')->get();
         return view('auth.register', compact('cities'));
     }
 
+    /**
+     * Traite l'inscription de l'utilisateur
+     */
     public function register(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'username'     => 'required|string|max:255',
-        'address'     => 'required|string|max:255',
-        'phone_number' => 'required|string|max:20',
-        'email'        => 'required|string|email|max:255|unique:users',
-        'password'     => 'required|string|min:8|confirmed',
-        'cin_recto'    => 'required|image|mimes:jpeg,png,jpg|max:5120',
-        'cin_verso'    => 'required|image|mimes:jpeg,png,jpg|max:5120',
-        'city_id'      => 'required|exists:cities,id',
-    ]);
-
-    if ($validator->fails()) {
-        return redirect()->back()
-            ->withErrors($validator)
-            ->withInput($request->except('password', 'password_confirmation'));
-    }
-
-    DB::beginTransaction();
-
-    try {
-        // Upload CIN images
-        $cinRectoPath = $request->file('cin_recto')->store('cin_images', 'public');
-        $cinVersoPath = $request->file('cin_verso')->store('cin_images', 'public');
-
-        // Création de l'utilisateur
-        $user = User::create([
-            'username'     => $request->input('username'),
-            'address'     => $request->input('address'),
-            'phone_number' => $request->input('phone_number'),
-            'email'        => $request->input('email'),
-            'password'     => Hash::make($request->input('password')),
-            'cin_recto'    => $cinRectoPath,
-            'cin_verso'    => $cinVersoPath,
-            'role'         => 'client',
-            'city_id'      => $request->input('city_id'),
+    {
+        // Validation des données
+        $validator = Validator::make($request->all(), [
+            'username'      => 'required|string|max:255|unique:users',
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'address'       => 'required|string|max:255',
+            'phone_number'  => 'required|string|max:20|regex:/^\+?[0-9\s\-]+$/',
+            'email'         => 'required|string|email|max:255|unique:users',
+            'password'      => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+            ],
+            'image'         => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'cin_recto'     => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'cin_verso'     => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'city_id'       => 'required|exists:cities,id',
+            'terms'         => 'required|accepted',
+            'contract'      => 'required|accepted',
+        ], [
+            'phone_number.regex' => 'Le numéro de téléphone doit être valide',
+            'terms.required'     => 'Vous devez accepter les CGU',
+            'contract.required'  => 'Vous devez accepter le contrat',
         ]);
 
-        DB::commit();
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput($request->except('password', 'password_confirmation'));
+        }
 
-        Auth::login($user);
+        DB::beginTransaction();
 
-        return redirect()->route('client.listings.index')->with('success', 'Votre compte a été créé avec succès!');
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-
-        // Nettoyage des fichiers
-        Storage::disk('public')->delete([$cinRectoPath ?? '', $cinVersoPath ?? '']);
-
-        Log::error("Erreur inscription: " . $e->getMessage());
-        return back()->with('error', 'Erreur lors de l’inscription. Veuillez réessayer.')->withInput();
-    }
-}
-
-
-    // Fonction pour générer un contrat PDF pour l'utilisateur
-    protected function generateUserContract(User $user)
-    {
         try {
-            Storage::disk('public')->makeDirectory('contracts');
-/*
-             Génération du PDF à partir de la vue Blade contract.blade.php
-            $pdf = Pdf::loadView('contracts.contract', [
-                'user' => $user,
-                'date' => now()->format('d/m/Y')
+            // Stockage des fichiers
+            $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
+            $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'cin_images');
+            $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'cin_images');
+
+            // Création de l'utilisateur
+            $user = User::create([
+                'username'      => $request->username,
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'address'       => $request->address,
+                'phone_number'  => $request->phone_number,
+                'email'         => $request->email,
+                'password'      => Hash::make($request->password),
+                'avatar_url'    => $imagePath,
+                'cin_recto'     => $cinRectoPath,
+                'cin_verso'     => $cinVersoPath,
+                'role'          => $request->has('role') ? 'partner' : 'client',
+                'is_subscribed' => $request->has('is_subscribed') ? 1 : 0,
+                'city_id'       => $request->city_id,
+                'newsletter'    => $request->has('newsletter'),
             ]);
 
-             Nom du fichier du contrat
-            $filename = 'contract_'.$user->id.'_'.now()->format('YmdHis').'.pdf';
-            $contractPath = 'contracts/'.$filename;
+            DB::commit();
 
-             Sauvegarde du fichier PDF dans le stockage public
-            Storage::disk('public')->put($contractPath, $pdf->output());
+            Auth::login($user);
 
-             Mise à jour de la base de données avec le chemin du contrat généré
-            $user->update([
-                'contract_path' => $contractPath
-            ]);
-
-            return $contractPath;*/
+            return redirect()->route('client.listings.index')
+                ->with('success', 'Votre compte a été créé avec succès!');
 
         } catch (\Exception $e) {
-            Log::error("Erreur génération contrat: ".$e->getMessage());
-            throw $e;
+            DB::rollBack();
+
+            $this->cleanupUploads([$imagePath ?? null, $cinRectoPath ?? null, $cinVersoPath ?? null]);
+
+            Log::error("Erreur lors de l'inscription: " . $e->getMessage());
+
+            return back()
+                ->with('error', 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.')
+                ->withInput();
         }
     }
 
-    // Fonction pour télécharger le contrat
-    public function downloadContract()
+    /**
+     * Stocke un fichier uploadé
+     */
+    protected function storeUploadedFile($file, string $directory): string
     {
-        $user = Auth::user();
-
-        /*if (!$user || !$user->contract_path) {
-            abort(403, 'Contrat non disponible.');
+        if (!$file || !$file->isValid()) {
+            throw new \Exception("Fichier invalide");
         }
 
-        $fullPath = storage_path('app/public/'.$user->contract_path);
+        return $file->store($directory, 'public');
+    }
 
-        if (!file_exists($fullPath)) {
-            abort(404, 'Fichier contrat introuvable');
+    /**
+     * Supprime les fichiers en cas d'erreur
+     */
+    protected function cleanupUploads(array $paths): void
+    {
+        foreach ($paths as $path) {
+            if ($path && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
         }
-
-        return response()->download($fullPath, 'Contrat_CampShare_'.$user->id.'.pdf');*/
     }
 }

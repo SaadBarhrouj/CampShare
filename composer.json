@@ -13,5 +13,15 @@
             "email": "maronakram@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "laravel/framework": "^12.10",
+        "barryvdh/laravel-dompdf": "^3.1",
+        "laravel/pail": "^1.2",
+        "fakerphp/faker": "^1.24"
+    },
+    "require-dev": {
+        "nunomaduro/collision": "^8.8",
+        "laravel/sail": "^1.41",
+        "laravel/tinker": "^2.10"
+    }
 }

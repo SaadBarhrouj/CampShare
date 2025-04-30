@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampShare - ParentCo</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/styles.css', 'resources/js/script.js'])
 
@@ -146,6 +146,8 @@
                                     <img src="https://images.unsplash.com/photo-1571687949921-1306bfb24b72?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
                                         alt="Tente 4 places premium" 
                                         class="w-full h-full object-cover" />
+
+                                        
                                 </div>
                                 <div class="p-4">
                                     <div class="flex justify-between items-start mb-2">
@@ -281,5 +283,155 @@
 
     @include('partials.footer')
 
+<!-- Modal pour changer l'image de profil -->
+<div id="avatar-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="relative mx-auto p-6 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl">
+        <div class="text-center">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Modifier l'image de profil
+            </h3>
+            <div class="mt-4 px-6 py-4">
+                <p class="text-sm text-gray-500 dark:text-gray-300 mb-6">
+                    Changer la photo de profil pour <span class="font-semibold">@{{ username }}</span>
+                </p>
+
+                <form id="avatar-form" method="POST" action="{{ route('profile.update-avatar') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-6 flex justify-center">
+                        <input type="file" name="avatar" id="avatar-input" class="hidden" accept="image/*">
+                        <label for="avatar-input" class="cursor-pointer inline-flex items-center justify-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full shadow-md transition">
+                            Sélectionner une image
+                        </label>
+                    </div>
+                    <div class="preview-container mb-6 hidden">
+                        <img id="avatar-preview" class="mx-auto h-32 w-32 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600" src="" alt="Aperçu">
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                        <button type="button" id="cancel-btn" class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-full transition">
+                            Annuler
+                        </button>
+                        <button type="submit" id="save-btn" class="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-full transition disabled:opacity-50" disabled>
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Éléments du modal
+    const modal = document.getElementById('avatar-modal');
+    if (!modal) return; // Si le modal n'existe pas, on ne fait rien
+    
+    const avatarForm = document.getElementById('avatar-form');
+    const avatarInput = document.getElementById('avatar-input');
+    const previewContainer = document.querySelector('.preview-container');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    
+    // Vérifier que tous les éléments existent avant de continuer
+    if (!avatarForm || !avatarInput || !previewContainer || !avatarPreview || !saveBtn || !cancelBtn) {
+        return;
+    }
+    
+    // Ouvre le modal quand on clique sur l'avatar (si les éléments existent)
+    const avatarElements = document.querySelectorAll('.avatar-clickable');
+    if (avatarElements.length > 0) {
+        avatarElements.forEach(avatar => {
+            avatar.addEventListener('click', function() {
+                const username = this.dataset.username;
+                const modalText = modal.querySelector('p');
+                if (modalText) {
+                    modalText.textContent = `Changer la photo de profil pour ${username}`;
+                }
+                modal.classList.remove('hidden');
+            });
+        });
+    }
+    
+    // Ferme le modal
+    cancelBtn.addEventListener('click', function() {
+        modal.classList.add('hidden');
+        resetForm();
+    });
+    
+    // Gestion de la sélection d'image
+    avatarInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                avatarPreview.src = event.target.result;
+                previewContainer.classList.remove('hidden');
+                saveBtn.disabled = false;
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Soumission du formulaire
+    avatarForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        
+        if (!csrfToken) {
+            console.error('CSRF token not found');
+            return;
+        }
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken.content
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Met à jour toutes les images d'avatar sur la page
+                const avatarImages = document.querySelectorAll('.user-avatar');
+                if (avatarImages.length > 0) {
+                    avatarImages.forEach(img => {
+                        img.src = data.avatar_url + '?' + new Date().getTime(); // Cache busting
+                    });
+                }
+                modal.classList.add('hidden');
+                resetForm();
+                // Afficher un message de succès
+                alert('Avatar mis à jour avec succès!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue lors de la mise à jour de l\'avatar.');
+        });
+    });
+    
+    function resetForm() {
+        avatarForm.reset();
+        previewContainer.classList.add('hidden');
+        saveBtn.disabled = true;
+    }
+});
+</script>
+
+
 </html>

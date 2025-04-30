@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Listing;
+use App\Models\Item;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class ListingSeeder extends Seeder
+class ItemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,8 @@ class ListingSeeder extends Seeder
     {
         //
 
-        Listing::factory()
-            ->count(100)
+        Item::factory()
+            ->count(150)
             ->create();
     }
 }
