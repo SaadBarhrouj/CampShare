@@ -13,7 +13,7 @@ class Review extends Model
 
     protected $fillable = [
         'reservation_id', 'rating', 'comment', 'is_visible', 'type',
-        'reviewer_id', 'reviewee_id', 'listing_id'
+        'reviewer_id', 'reviewee_id', 'item_id'
     ];
 
     public function reservation()
@@ -31,8 +31,8 @@ class Review extends Model
         return $this->belongsTo(User::class, 'reviewee_id');
     }
 
-    public function listing()
+    public function item()
     {
-        return $this->belongsTo(Listing::class);
+        return $this->belongsTo(Item::class);
     }
 }

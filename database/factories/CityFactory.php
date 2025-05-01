@@ -16,8 +16,36 @@ class CityFactory extends Factory
      */
     public function definition(): array
     {
+        $moroccanCities = [
+            'Casablanca',
+            'Rabat',
+            'Marrakech',
+            'Fès',
+            'Tanger',
+            'Agadir',
+            'Meknès',
+            'Oujda',
+            'Kénitra',
+            'Tétouan',
+            'Safi',
+            'Mohammédia',
+            'El Jadida',
+            'Béni Mellal',
+            'Nador',
+            'Taza',
+            'Khémisset',
+            'Larache',
+            'Ksar El Kebir',
+            'Guelmim',
+            'Berrechid',
+            'Errachidia',
+            'Taroudant',
+            'Settat',
+            'Al Hoceïma'
+        ];
+        
         return [
-            'name' => $this->faker->city,
+            'name' => $this->faker->unique()->randomElement($moroccanCities),
         ];
     }
 }

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->boolean('is_visible')->default(false);
             $table->enum('type', ['forObject', 'forClient', 'forPartner']);
             $table->foreignId('reviewer_id')->constrained('users');
-            $table->foreignId('reviewee_id')->constrained('users');
-            $table->foreignId('listing_id')->constrained();
+            $table->foreignId('reviewee_id')->constrained('users')->nullable();
+            $table->foreignId('item_id')->constrained()->nullable();
             $table->timestamps();
         });
     }

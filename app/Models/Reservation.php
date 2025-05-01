@@ -35,4 +35,36 @@ class Reservation extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+
+
+
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'delivery_option' => 'boolean',
+    ];
+
+
+ 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+
+    public function objectReview(): HasOne
+    {
+        return $this->hasOne(Review::class)->where('type', 'forObject');
+    }
+
+
+    public function scopeConfirmedOrOngoing($query)
+    {
+
+
+        return $query->whereIn('status', ['confirmed', 'ongoing']);
+    }
+
 }

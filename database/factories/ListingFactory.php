@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\City;
+use App\Models\Item;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,21 +22,22 @@ class ListingFactory extends Factory
     public function definition(): array
     {
 
-        $start = $this->faker->dateTimeBetween('-1 month', 'now');
-        $end = $this->faker->dateTimeBetween($start, $start->format('Y-m-d H:i:s').' +1 month');
+        $item = Item::inRandomOrder()->first();
+        $city = City::inRandomOrder()->first();
 
         return [
-            'partner_id' => User::factory(),
-            'city_id' => City::factory(),
-            'title' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph,
-            'price_per_day' => $this->faker->randomFloat(2, 10, 1000),
-            'status' => $this->faker->randomElement(['active', 'archived', 'inactive']),
-            'is_premium' => $this->faker->boolean,
-            'premium_start_date' => $start,
-            'premium_end_date' => $end,
-            'category_id' => Category::factory(),
+            'item_id' => $item, 
+            'status' => $this->faker->randomElement(['active', 'archived']), 
+            'start_date' => fake()->date(),
+            'end_date' => fake()->date(),
+            'city_id' => $city,
+            'longitude' => $this->faker->longitude,
+            'latitude' => $this->faker->latitude,
             'delivery_option' => $this->faker->boolean,
+            'is_premium' => $this->faker->boolean,
+            'premium_type' => $this->faker->randomElement(['7 jours', '15 jours', '30 jours']), 
+            'premium_start_date' => fake()->date(),
+            
         ];
     }
 }

@@ -408,19 +408,18 @@
                 <div class="mb-6 px-3">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Menu Principal</h5>
                     <nav class="space-y-1">
-                        <a href="admin-dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                         </a>
-                        <a href="#clients" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
+                        <a href="{{ route('admin.clients') }}" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
                             <i class="fas fa-user w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
                             Clients
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">242</span>
+                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $stats['total'] }}</span>
                         </a>
-                        <a href="#partners" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href={{ route('admin.partners') }} class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">86</span>
                         </a>
                         <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
@@ -456,10 +455,7 @@
                             <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Finances
                         </a>
-                        <a href="#reports-gen" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Rapports
-                        </a>
+
                     </nav>
                 </div>
                 
@@ -475,10 +471,7 @@
                             Administrateurs
                             <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
                         </a>
-                        <a href="#system-logs" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-history w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Logs système
-                        </a>
+
                     </nav>
                 </div>
                 
@@ -530,15 +523,12 @@
                             <i class="fas fa-download mr-2"></i>
                             Exporter
                         </a>
-                        <a href="#add-client" class="inline-flex items-center px-4 py-2 bg-admin-primary hover:bg-admin-dark text-white rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-plus mr-2"></i>
-                            Ajouter un client
-                        </a>
+                      
                     </div>
                 </div>
                 
                 <!-- Stats cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-8">
                     <!-- Stats card 1 - Total Clients -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
@@ -548,7 +538,7 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Clients</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">242</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white"> {{ $stats['total'] }}</h3>
                                     <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
                                         <i class="fas fa-arrow-up mr-1"></i>
                                         12.4%
@@ -600,38 +590,32 @@
                         </div>
                     </div>
                     
-                    <!-- Stats card 4 - Spending -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-amber-100 dark:bg-amber-900/30 mr-4">
-                                <i class="fas fa-money-bill-wave text-amber-600 dark:text-amber-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Dépenses totales</p>
-                                <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">73.2K MAD</h3>
-                                </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    302 MAD/client en moyenne
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 <!-- Filters and search -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-8 p-5">
                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
                         <!-- Search bar -->
-                        <div class="flex-1">
-                            <div class="relative">
-                                <input type="text" id="client-search" placeholder="Rechercher un client par nom, email ou téléphone..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
+                       <!-- Search bar -->
+<div class="flex-1">
+    <form action="{{ route('admin.clients') }}" method="GET">
+        <div class="relative">
+            <!-- Recherchez cette partie dans votre code -->
+<input 
+    type="text" 
+    name="search" 
+    id="client-search" 
+    placeholder="Rechercher un client par nom, email ou ville..." 
+    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm"
+    value="{{ request('search') }}"
+>
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+            </div>
+        </div>
+    </form>
+</div>
                         <!-- Status filter -->
                         <div class="relative inline-block text-left" id="status-filter-container">
                             <button id="status-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
@@ -642,44 +626,50 @@
                                 <div class="option active" data-value="all">Tous les statuts</div>
                                 <div class="option" data-value="active">Actifs</div>
                                 <div class="option" data-value="inactive">Inactifs</div>
-                                <div class="option" data-value="suspended">Suspendus</div>
-                                <div class="option" data-value="new">Nouveaux (< 30j)</div>
                             </div>
                         </div>
                         
-                        <!-- Sort filter -->
                         <div class="relative inline-block text-left" id="sort-filter-container">
-                            <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Trier par: Récents</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="recent">Plus récents</div>
-                                <div class="option" data-value="oldest">Plus anciens</div>
-                                <div class="option" data-value="name-asc">Nom (A-Z)</div>
-                                <div class="option" data-value="name-desc">Nom (Z-A)</div>
-                                <div class="option" data-value="reservation-count">Nombre de réservations</div>
-                                <div class="option" data-value="spending">Dépenses totales</div>
-                            </div>
-                        </div>
-                        
-                        <!-- City filter -->
-                        <div class="relative inline-block text-left" id="city-filter-container">
-                            <button id="city-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-                                <span>Ville: Toutes</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="city-filter-dropdown" class="filter-dropdown right-0 hidden">
-                                <div class="option active" data-value="all">Toutes les villes</div>
-                                <div class="option" data-value="casablanca">Casablanca</div>
-                                <div class="option" data-value="rabat">Rabat</div>
-                                <div class="option" data-value="marrakech">Marrakech</div>
-                                <div class="option" data-value="agadir">Agadir</div>
-                                <div class="option" data-value="tanger">Tanger</div>
-                                <div class="option" data-value="fes">Fès</div>
-                                <div class="option" data-value="other">Autres</div>
-                            </div>
-                        </div>
+    <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
+        <span>
+            @switch(request('sort', 'recent'))
+                @case('recent') Trier par: Récents @break
+                @case('oldest') Trier par: Anciens @break
+                @case('name-asc') Trier par: Nom (A-Z) @break
+                @case('name-desc') Trier par: Nom (Z-A) @break
+                @case('reservation-count') Trier par: Réservations @break
+                @default Trier par: Récents
+            @endswitch
+        </span>
+        <i class="fas fa-chevron-down ml-2"></i>
+    </button>
+    
+    <div id="sort-filter-dropdown" class="filter-dropdown right-0 hidden w-full">
+        <div class="flex flex-col">
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'recent']) }}" 
+               class="option {{ request('sort', 'recent') == 'recent' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus récents
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}" 
+               class="option {{ request('sort') == 'oldest' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Plus anciens
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-asc']) }}" 
+               class="option {{ request('sort') == 'name-asc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (A-Z)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'name-desc']) }}" 
+               class="option {{ request('sort') == 'name-desc' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nom (Z-A)
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['sort' => 'reservation-count']) }}" 
+               class="option {{ request('sort') == 'reservation-count' ? 'active' : '' }} block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Nombre de réservations
+            </a>
+        </div>
+    </div>
+</div>
+                       
                     </div>
                     
                     <!-- Advanced filters (collapsible) -->
@@ -721,39 +711,7 @@
                                     <option value="accessoires">Accessoires divers</option>
                                 </select>
                             </div>
-                            
-                            <!-- Recent activity -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Activité récente</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                                    <option value="">Tous</option>
-                                    <option value="24h">Actif dans les 24h</option>
-                                    <option value="7d">Actif dans les 7 jours</option>
-                                    <option value="30d">Actif dans les 30 jours</option>
-                                    <option value="inactive_30d">Inactif depuis 30+ jours</option>
-                                    <option value="inactive_90d">Inactif depuis 90+ jours</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Spending range -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dépenses totales (MAD)</label>
-                                <div class="flex space-x-2">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Min">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Max">
-                                </div>
-                            </div>
-                            
-                            <!-- User loyalty -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fidélité</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                                    <option value="">Tous les clients</option>
-                                    <option value="new">Nouveaux (1ère réservation)</option>
-                                    <option value="returning">Clients réguliers (2-5 réservations)</option>
-                                    <option value="loyal">Clients fidèles (6+ réservations)</option>
-                                </select>
-                            </div>
+                        
                         </div>
                         
                         <!-- Filter action buttons -->
@@ -769,509 +727,145 @@
                 </div>
                 
                 <!-- Clients table -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                        <h2 class="font-bold text-lg text-gray-900 dark:text-white">Liste des clients</h2>
-                        <div class="flex items-center">
-                            <span class="text-sm text-gray-600 dark:text-gray-400 mr-4">242 clients au total</span>
-                            <div class="relative">
-                                <select class="pl-3 pr-8 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none">
-                                    <option value="10">10 par page</option>
-                                    <option value="25">25 par page</option>
-                                    <option value="50">50 par page</option>
-                                    <option value="100">100 par page</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                    <i class="fas fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
+                <table class="min-w-full">
+    <thead class="bg-gray-50">
+        <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Téléphone</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ville</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Réservations</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avis</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Note</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+        @foreach($clients as $client)
+        <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4">{{ $client->username }}</td>
+            <td class="px-6 py-4">{{ $client->email }}</td>
+            <td class="px-6 py-4">
+                @if($client->phone_number)
+                    <span class="px-2 py-1 text-sm bg-gray-100 text-gray-800 rounded-full">
+                        {{ $client->phone_number }}
+                    </span>
+                @else
+                    <span class="text-gray-400">Non spécifié</span>
+                @endif
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-sm rounded-full {{ $client->city ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                    {{ $client->city ? $client->city->name : 'Non spécifié' }}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-sm bg-purple-100 text-purple-800 rounded-full">
+                    {{ $client->client_reservations_count }}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
+                    {{ $client->received_reviews_count }}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                @if($client->avg_rating)
+                    <div class="flex items-center">
+                        <span class="mr-1">{{ number_format($client->avg_rating, 1) }}</span>
+                        <i class="fas fa-star text-yellow-400"></i>
                     </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full admin-table">
-                            <thead>
-                                <tr>
-                                    <th class="w-12">
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </th>
-                                    <th>Client</th>
-                                    <th>Contact</th>
-                                    <th>Localisation</th>
-                                    <th>Réservations</th>
-                                    <th>Dépenses</th>
-                                    <th>Inscription</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Client row 1 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Leila Mansouri" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Leila Mansouri</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-32567</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">leila.mansouri@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 12 34 56 78</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Casablanca</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">5</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(2 actives)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 01/08/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">2 450 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 68%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">68%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">01/05/2023</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 25 min
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Client row 2 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Yousef Alami" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Yousef Alami</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-32142</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">yousef.alami@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 98 76 54 32</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Marrakech</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">3</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(1 active)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 15/07/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">1 750 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 48%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">48%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">10/03/2023</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 2 heures
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Client row 3 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Ahmed Kaddour" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Ahmed Kaddour</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-29876</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">ahmed.kaddour@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 65 43 21 09</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Agadir</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">8</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(0 actives)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 25/07/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">4 980 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 92%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">92%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">15/12/2022</p>
-                                        <p class="text-green-600 dark:text-green-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            En ligne il y a 1 jour
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-purple">VIP</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Client row 4 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Mehdi Idrissi" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Mehdi Idrissi</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-31254</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">mehdi.idrissi@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 54 32 10 98</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Rabat</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">2</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(0 actives)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 10/06/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">850 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 21%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">21%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">05/03/2023</p>
-                                        <p class="text-red-500 dark:text-red-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            Dernière activité il y a 15 jours
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Suspendu</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40" title="Réactiver le compte">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Client row 5 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Nadia Amrani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Nadia Amrani</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-32688</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">nadia.amrani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 87 65 43 21</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Tanger</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">1</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(1 active)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 29/07/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">320 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 8%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">8%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">28/07/2023</p>
-                                        <p class="text-xs text-purple-500 dark:text-purple-400 font-medium">
-                                            <i class="fas fa-star mr-1 text-xs"></i>
-                                            Nouveau client
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Client row 6 -->
-                                <tr>
-                                    <td>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-admin-primary focus:ring-admin-primary dark:border-gray-600 dark:bg-gray-700">
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <img src="https://images.unsplash.com/photo-1566753323558-f4e0952af115?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
-                                                 alt="Karim Lamrani" 
-                                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">Karim Lamrani</p>
-                                                <div class="flex items-center mt-0.5">
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">ID: CL-28765</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">karim.lamrani@example.com</p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">+212 6 10 98 76 54</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Fès</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center space-x-1">
-                                            <span class="font-medium text-gray-900 dark:text-white text-sm">4</span>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">(0 actives)</span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dernière: 12/06/2023</p>
-                                    </td>
-                                    <td>
-                                        <p class="font-medium text-gray-900 dark:text-white text-sm">1 870 MAD</p>
-                                        <div class="flex items-center mt-1">
-                                            <div class="bg-blue-100 dark:bg-blue-900/30 h-1.5 rounded-full w-full mr-2">
-                                                <div class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full" style="width: 52%"></div>
-                                            </div>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400">52%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">20/10/2022</p>
-                                        <p class="text-orange-500 dark:text-orange-400 text-xs">
-                                            <i class="fas fa-circle mr-1 text-xs"></i>
-                                            Dernière activité il y a 7 jours
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Inactif</span>
-                                    </td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/40" title="Voir les réservations">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="p-1.5 text-xs rounded-md bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40" title="Suspendre le compte">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">
-                            Affichage de <span class="font-medium">1-6</span> sur <span class="font-medium">242</span> clients
-                        </div>
-                        
-                        <div class="flex items-center justify-center space-x-2">
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md bg-admin-primary text-white font-medium">
-                                1
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                2
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                3
-                            </button>
-                            
-                            <span class="text-gray-500">...</span>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                25
-                            </button>
-                            
-                            <button class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                @else
+                    <span class="text-gray-400">-</span>
+                @endif
+            </td>
+            <td class="px-6 py-4 flex space-x-2">
+               
+                <button class="text-purple-600 hover:text-purple-800" title="Voir réservations">
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+                <button class="text-red-600 hover:text-red-800" title="Bloquer">
+                    <i class="fas fa-ban"></i>
+                </button>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+<!-- After the table closing tag -->
+</table>
+
+<!-- Pagination -->
+<div class="mt-6 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
+    <div class="flex-1 flex justify-between sm:hidden">
+        @if ($clients->onFirstPage())
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
+                Précédent
+            </span>
+        @else
+            <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                Précédent
+            </a>
+        @endif
+        
+        @if ($clients->hasMorePages())
+            <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                Suivant
+            </a>
+        @else
+            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
+                Suivant
+            </span>
+        @endif
+    </div>
+
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm text-gray-700 dark:text-gray-400">
+                Affichage de <span class="font-medium">{{ $clients->firstItem() }}</span> à <span class="font-medium">{{ $clients->lastItem() }}</span> sur <span class="font-medium">{{ $clients->total() }}</span> clients
+            </p>
+        </div>
+
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                {{-- Previous Page Link --}}
+                @if ($clients->onFirstPage())
+                    <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </span>
+                @else
+                    <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                @endif
+
+                {{-- Pagination Elements --}}
+                @foreach ($clients->getUrlRange(1, $clients->lastPage()) as $page => $url)
+                    @if ($page == $clients->currentPage())
+                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                {{-- Next Page Link --}}
+                @if ($clients->hasMorePages())
+                    <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                @else
+                    <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                @endif
+            </nav>
+        </div>
+    </div>
+</div>
             </div>
         </main>
     </div>
@@ -1359,10 +953,7 @@
                                     <span class="text-gray-600 dark:text-gray-400">Réservations:</span>
                                     <span class="font-medium text-gray-900 dark:text-white">5 (2 actives, 3 terminées)</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Dépenses totales:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">2 450 MAD</span>
-                                </div>
+                              
                                 <div class="flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">Avis laissés:</span>
                                     <span class="font-medium text-gray-900 dark:text-white">3 (moyenne: 4.2★)</span>
@@ -1864,10 +1455,8 @@
                 sortFilterDropdown.classList.add('hidden');
             }
             
-            // City filter dropdown
-            if (cityFilterButton && !cityFilterButton.contains(e.target) && !cityFilterDropdown.contains(e.target)) {
-                cityFilterDropdown.classList.add('hidden');
-            }
+           
+            
         });
         
         // Mobile sidebar toggle
@@ -1912,14 +1501,15 @@
         const statusFilterDropdown = document.getElementById('status-filter-dropdown');
         const sortFilterButton = document.getElementById('sort-filter-button');
         const sortFilterDropdown = document.getElementById('sort-filter-dropdown');
-        const cityFilterButton = document.getElementById('city-filter-button');
-        const cityFilterDropdown = document.getElementById('city-filter-dropdown');
+       
+        
         
         // Status filter
         statusFilterButton?.addEventListener('click', () => {
             statusFilterDropdown.classList.toggle('hidden');
             sortFilterDropdown.classList.add('hidden');
-            cityFilterDropdown.classList.add('hidden');
+         
+            
         });
         
         // Status filter options
@@ -1937,7 +1527,8 @@
         sortFilterButton?.addEventListener('click', () => {
             sortFilterDropdown.classList.toggle('hidden');
             statusFilterDropdown.classList.add('hidden');
-            cityFilterDropdown.classList.add('hidden');
+           
+            
         });
         
         // Sort filter options
@@ -1951,23 +1542,9 @@
             });
         });
         
-        // City filter
-        cityFilterButton?.addEventListener('click', () => {
-            cityFilterDropdown.classList.toggle('hidden');
-            statusFilterDropdown.classList.add('hidden');
-            sortFilterDropdown.classList.add('hidden');
-        });
         
-        // City filter options
-        const cityOptions = cityFilterDropdown?.querySelectorAll('.option');
-        cityOptions?.forEach(option => {
-            option.addEventListener('click', () => {
-                cityOptions.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
-                cityFilterButton.querySelector('span').textContent = `Ville: ${option.textContent}`;
-                cityFilterDropdown.classList.add('hidden');
-            });
-        });
+     
+        
         
         // Advanced filters toggle
         const advancedFiltersToggle = document.getElementById('advanced-filters-toggle');
@@ -2059,6 +1636,38 @@
                 document.body.classList.remove('overflow-hidden');
             }
         });
+        // Recherche dynamique
+// Recherche dynamique
+const searchInput = document.getElementById('client-search');
+const searchForm = searchInput.closest('form');
+
+searchInput.addEventListener('input', function(e) {
+    // Option 1: Soumission automatique du formulaire
+    // searchForm.submit();
+    
+    // Option 2: Recherche AJAX (plus avancée)
+    if (this.value.length > 2 || this.value.length === 0) {
+        fetch(`${searchForm.action}?search=${this.value}`)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.querySelector('table');
+                if (newTable) {
+                    document.querySelector('table').replaceWith(newTable);
+                }
+                
+                // Mettez à jour la pagination si nécessaire
+                const newPagination = doc.querySelector('.flex.items-center.justify-between.border-t');
+                if (newPagination) {
+                    const oldPagination = document.querySelector('.flex.items-center.justify-between.border-t');
+                    if (oldPagination) {
+                        oldPagination.replaceWith(newPagination);
+                    }
+                }
+            });
+    }
+});
     </script>
 </body>
 </html>

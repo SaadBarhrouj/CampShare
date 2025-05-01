@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Availability;
+use App\Models\Item;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class AvailabilitySeeder extends Seeder
+class ItemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,8 @@ class AvailabilitySeeder extends Seeder
     {
         //
 
-        Availability::factory()->count(20)->create();
+        Item::factory()
+            ->count(150)
+            ->create();
     }
 }

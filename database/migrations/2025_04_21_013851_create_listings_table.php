@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('partner_id')->constrained('users');
+            $table->foreignId('item_id')->constrained();
+            $table->enum('status', ['active', 'archived'])->default('active');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->foreignId('city_id')->constrained();
-            $table->string('title');
-            $table->text('description');
-            $table->decimal('price_per_day', 8, 2);
-            $table->enum('status', ['active', 'archived', 'inactive']);
-            $table->boolean('is_premium')->default(false);
-            $table->date('premium_start_date');
-            $table->date('premium_end_date');
-            $table->foreignId('category_id')->constrained();
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
             $table->boolean('delivery_option')->default(false);
+            $table->boolean('is_premium')->default(false);
+            $table->enum('premium_type', ['7 jours', '15 jours', '30 jours'])->nullable();
+            $table->date('premium_start_date')->nullable();
             $table->timestamps();
         });
     }
