@@ -17,7 +17,7 @@ use App\Models\ClientModel;
 
 use App\Models\Review;
 use App\Models\User;
-
+use Illuminate\Support\Facades\File;
 
 class ClientController extends Controller
 {
@@ -54,15 +54,51 @@ class ClientController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8|max:255', // Make password optional
+            'confirm_password' => 'required_with:password|same:password', // Only required if password exists
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
+        // Handle password update
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+        unset($validated['confirm_password']);
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if it exists
+            if ($user->avatar_url && File::exists(public_path($user->avatar_url))) {
+                File::delete(public_path($user->avatar_url));
+            }
+
+            // Ensure directory exists
+            if (!File::exists(public_path('images'))) {
+                File::makeDirectory(public_path('images'), 0755, true);
+            }
+
+            // Store with original filename in public/images
+            $file = $request->file('avatar');
+            $filename = $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $validated['avatar_url'] = '/images/' . $filename;
+        }
+
+
         $user->update($validated);
         
         return response()->json([
             'success' => true,
-            'user' => $user
+            'user' => $user,
+            'avatar_url' => $user->avatar_url // Return updated avatar URL if changed
         ]);
     }
+
+
+
+    
 
 
 

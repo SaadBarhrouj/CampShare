@@ -26,6 +26,7 @@ class PartenaireController extends Controller
 {
     $user = Auth::user();
 
+
     $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
     $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
     $AverageRating = PartenaireModel::getAverageRatingPartner($user->email);
@@ -45,6 +46,8 @@ class PartenaireController extends Controller
     $categories = Category::all();
     $notifications = (new NotificationController)->getNotifUser($user->id);
     $totalNotification = (new NotificationController)->totalNotification($user->id);
+    $lastAvisPartnerForObjet = PartenaireModel::getLastAvisPartnerForObject($user->email);
+    $profile = PartenaireModel::getPartenaireProfile($user->email); 
 
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
@@ -65,9 +68,14 @@ class PartenaireController extends Controller
         'LesAvis',
         'categories' ,
         'notifications',
-        'totalNotification'// Ajout des catégories dans le compact
+        'totalNotification',
+        'lastAvisPartnerForObjet',
+        'profile'
     ));
 }
+
+
+
 
 public function filter(Request $request)
 {
