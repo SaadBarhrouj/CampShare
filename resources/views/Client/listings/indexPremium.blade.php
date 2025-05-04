@@ -26,6 +26,29 @@
                 <p class="text-lg text-gray-600 dark:text-gray-300">
                     Trouvez le matériel idéal pour votre prochaine aventure en plein air.
                 </p>
+                <div class="rounded-lg pt-4 md:pt-6 transition-all duration-300 md:w-180">
+                    <form action="{{ route('client.listings.indexPremium') }}" method="GET" class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="flex-1">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search text-gray-400"></i>
+                                </div>
+                                <input type="text" id="search" name="search" placeholder="Rechercher des tentes, lampes, boussoles ..." class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3">
+                            </div>
+                        </div>
+                    
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full md:w-auto px-6 py-3 bg-sunlight hover:bg-amber-600 text-white font-medium rounded-md shadow-sm transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-search mr-2"></i>
+                                Rechercher
+                            </button>
+                        </div>
+                    </form>                    
+                </div>
+                @if(request('search'))
+                    <p class="text-xl text-gray-400 mt-6">Résultats pour "<strong>{{ request('search') }}</strong>"</p>
+                @endif
+            </div>
             </div>
             
         </div>
@@ -38,71 +61,77 @@
                 <div class="px-4 sm:px-6 lg:px-8">
                     <div class="py-4 flex flex-wrap items-center justify-between gap-4">
                         <!-- Category Filter Pills -->
-                        <div class="flex items-center space-x-3 overflow-x-auto scrollbar-hide">
+                        <div class="flex items-center space-x-3 overflow-x-auto">
+                            <!-- All Categories Button -->
                             <a href="{{ route('client.listings.indexPremium') }}">
-                                <button class="whitespace-nowrap px-4 py-2 text-sunlight rounded-full font-medium border border-sunlight hover:bg-opacity-20 transition-all">
-                                    Tous prémiums
+                                <button class="whitespace-nowrap px-5 py-2 text-sunlight rounded-full font-medium border border-sunlight hover:bg-opacity-20 transition-all">
+                                    Tous les articles
                                 </button>
                             </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Tentes']) }}"
-                                data-selected-category="Tentes"
-                                class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                Tentes
-                            </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Sacs de couchage']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Sacs de couchage
-                                </button>
-                            </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Cuisine']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Cuisine
-                                </button>
-                            </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Mobilier']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Mobilier
-                                </button>
-                            </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Mobilier']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Éclairage
-                                </button>
-                            </a>
-                            <a href="{{ route('client.listings.indexPremium', ['category' => 'Autre']) }}">
-                                <button class="whitespace-nowrap px-4 py-2 bg-white dark:bg-gray-700 rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
-                                    Autre
-                                </button>
-                            </a>
+
+                            <!-- Dynamic Category Buttons -->
+                            @foreach ($categories as $category)
+                                @php
+                                    $query = request()->query(); 
+                                    $query['category'] = $category->name; 
+                                @endphp
+                                <a href="{{ route('client.listings.indexPremium', $query) }}"
+                                    data-selected-category="{{ $category->name }}"
+                                    class="whitespace-nowrap px-5 py-2 {{ request('category') === $category->name ? 'bg-forest text-white border-forest' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
+                                    {{ $category->name }}
+                                </a>
+                            @endforeach
                         </div>
                         
                         <!-- Price Filter -->
                         <div class="flex items-center space-x-3">
-                            <a href="#" data-price-range="0-50"
+                            <a href="" data-price-range="0-50"
                                class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '0-50' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                 0-50 MAD
                             </a>
-                            <a href="#" data-price-range="50-100"
+                            <a href="" data-price-range="50-100"
                                class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '50-100' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                 50-100 MAD
                             </a>
-                            <a href="#" data-price-range="100-200"
+                            <a href="" data-price-range="100-200"
                                class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '100-200' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                 100-200 MAD
                             </a>
-                            <a href="#" data-price-range="200+"
+                            <a href="" data-price-range="200+"
                                class="whitespace-nowrap px-4 py-2 {{ request('price_range') === '200+' ? 'bg-forest text-white' : 'bg-white dark:bg-gray-700' }} rounded-full font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-all">
                                 200+ MAD
                             </a>
-                            @if(request('price_range'))
-                                <a href="#" class="reset-price-filter whitespace-nowrap px-4 py-2 bg-red-500 text-white rounded-full font-medium hover:bg-red-600 transition-all">
-                                    <i class="fas fa-times mr-1"></i> Réinitialiser
-                                </a>
-                            @endif
                         </div>
                         
                         <!-- Sort and Map View Options -->
                         <div class="flex space-x-4">
+                            
+                            <div class="relative">
+                                <button id="city-filter-button"
+                                    data-current-city="{{ request('city') }}"
+                                    class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all w-46">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>
+                                        {{ request('city') ?? 'Toutes les villes' }}
+                                    </span>
+                                    <i class="fas fa-chevron-down ml-2"></i>
+                                </button>
+                            
+                                <!-- City Dropdown -->
+                                <div id="city-dropdown" class="hidden absolute right-0 mt-1 w-46 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600 max-h-64 overflow-y-auto">
+                                    <div class="py-1">
+                                        <a href="{{ route('client.listings.indexPremium', array_merge(request()->except('city'), ['city' => null])) }}"
+                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Toutes les villes</a>
+                                        @foreach ($cities as $city)
+                                            <a href="{{ route('client.listings.indexPremium', array_merge(request()->except('city'), ['city' => $city->name])) }}"
+                                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                {{ $city->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="relative">
                                 <button id="sort-button" 
                                     data-current-sort="{{ $sort }}"
@@ -126,10 +155,14 @@
                                 <!-- Sort Dropdown -->
                                 <div id="sort-dropdown" class="hidden absolute right-0 mt-1 w-46 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
                                     <div class="py-1">
-                                        <a href="{{ route('client.listings.indexPremium', ['sort' => 'price_asc']) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Prix croissant</a>
-                                        <a href="{{ route('client.listings.indexPremium', ['sort' => 'price_desc']) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Prix décroissant</a>
-                                        <a href="{{ route('client.listings.indexPremium', ['sort' => 'oldest']) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Plus anciens</a>
-                                        <a href="{{ route('client.listings.indexPremium', ['sort' => 'latest']) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Plus récents</a>
+                                        <a href="{{ route('client.listings.indexPremium', array_merge(request()->query(), ['sort' => 'price_asc'])) }}" 
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Prix croissant</a>
+                                        <a href="{{ route('client.listings.indexPremium', array_merge(request()->query(), ['sort' => 'price_desc'])) }}" 
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Prix décroissant</a>
+                                        <a href="{{ route('client.listings.indexPremium', array_merge(request()->query(), ['sort' => 'oldest'])) }}" 
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Plus anciens</a>
+                                        <a href="{{ route('client.listings.indexPremium', array_merge(request()->query(), ['sort' => 'latest'])) }}" 
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Plus récents</a>
                                     </div>
                                 </div>
                             </div>

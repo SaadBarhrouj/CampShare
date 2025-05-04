@@ -76,17 +76,88 @@
         <section class="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-16 z-30">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex overflow-x-auto scrollbar-hide">
-                    <button id="tab-reviews" class="px-4 py-4 font-medium text-lg whitespace-nowrap tab-active">
+                    <button id="tab-equipment1" class="tab-active px-4 py-4 font-medium text-lg whitespace-nowrap">
+                        Équipements disponibles ({{ $listingsCount }})
+                    </button>
+                    <button id="tab-reviews1" class="px-4 py-4 font-medium text-lg text-gray-500 dark:text-gray-400 whitespace-nowrap">
                         Avis ( {{ $user->receivedReviews->where('is_visible', true)->where('type', 'forPartner')->count() }} )
                     </button>
                 </div>
             </div>
         </section>
         
+        <!-- Equipment Section -->
+        <section id="equipment-section1" class="py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Équipements proposés par Fatima</h2>
+                </div>
+                
+                <!-- Equipment Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    @forelse ($listings as $listing)
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transform transition duration-300 hover:shadow-md hover:-translate-y-1 relative">
+                            <div class="absolute top-4 left-4 z-10 bg-forest text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
+                                {{ $listing->item->category->name }}
+                            </div>
+                            <a href="{{ route('client.listings.show', $listing->id) }}">
+                                <div class="relative h-48">
+                                    <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                        alt="Tente 2 places" 
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 class="font-bold text-gray-900 dark:text-white">{{ $listing->item->title }}</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $listing->item->category->name }}</p>
+                                        </div>
+                                        <div class="flex items-center text-sm flex-nowrap">
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
+                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->where('is_visible', true)->count() }})</span></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                        <i class="fas fa-user mr-1 text-gray-400"></i>
+                                        <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
+                                    </div>
+                                    
+                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                        <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                                        <span>{{ $listing->city->name }}, Maroc</span>
+                                    </div>
+                                    
+                                    <div class="text-sm mb-3">
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->start_date }} au {{ $listing->end_date }}</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-lg text-gray-900 dark:text-white">{{ $listing->item->price_per_day }} MAD</span>
+                                            <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                                        </div>
+                                        <a href="{{ route('client.listings.show', $listing->id) }}" class="inline-block">
+                                            <button class="px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md transition-colors shadow-sm">
+                                                Voir détails
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <p class="text-gray-500">Aucun annonce publiée encore.</p>
+                    @endforelse
+                    
+                </div>
+            </div>
+        </section>
         
         
         <!-- Reviews Section -->
-        <section id="reviews-section" class="py-10">
+        <section id="reviews-section1" class="py-10 hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Avis des utilisateurs sur ce partenaire</h2>
@@ -147,6 +218,8 @@
                         </div>
                     </div>
                 </div>
+
+                
                 
                 <!-- Review List -->
                 <div class="space-y-6">

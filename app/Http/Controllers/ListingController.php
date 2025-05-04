@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Listing;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreListingRequest;
 use App\Http\Requests\UpdateListingRequest;
@@ -19,6 +21,26 @@ class ListingController extends Controller
         $query = Listing::with('item.category'); // eager load
         $premiumQuery = Listing::where('is_premium', true)->with('item.category');
     
+        if ($request->filled('search')) {
+            $search = $request->search;
+        
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('item', function ($q2) use ($search) {
+                    $q2->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('city', function ($q2) use ($search) {
+                    $q2->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        
+            $premiumQuery->where(function ($q) use ($search) {
+                $q->whereHas('item', function ($q2) use ($search) {
+                    $q2->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('city', function ($q2) use ($search) {
+                    $q2->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
         // Filter by category name
         if ($request->has('category')) {
             $query->whereHas('item.category', function ($q) use ($request) {
@@ -27,6 +49,30 @@ class ListingController extends Controller
 
             $premiumQuery->whereHas('item.category', function ($q) use ($request) {
                 $q->where('name', $request->category);
+            });
+        }
+
+        if ($request->has('price_range')) {
+            $range = $request->price_range;
+        
+            $query->whereHas('item', function ($q) use ($range) {
+                if ($range === '200+') {
+                    $q->where('price_per_day', '>=', 200);
+                } elseif (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                    $min = (int)$matches[1];
+                    $max = (int)$matches[2];
+                    $q->whereBetween('price_per_day', [$min, $max]);
+                }
+            });
+        
+            $premiumQuery->whereHas('item', function ($q) use ($range) {
+                if ($range === '200+') {
+                    $q->where('price_per_day', '>=', 200);
+                } elseif (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                    $min = (int)$matches[1];
+                    $max = (int)$matches[2];
+                    $q->whereBetween('price_per_day', [$min, $max]);
+                }
             });
         }
 
@@ -91,6 +137,17 @@ class ListingController extends Controller
                 }
             });
         }
+
+        if ($request->has('city')) {
+            $query->whereHas('city', function ($q) use ($request) {
+                $q->where('name', $request->city);
+            });
+        
+            $premiumQuery->whereHas('city', function ($q) use ($request) {
+                $q->where('name', $request->city);
+            });
+        }
+        
     
         // Sorting logic
         switch ($sort) {
@@ -121,19 +178,26 @@ class ListingController extends Controller
                 $premiumQuery->orderBy('created_at', 'desc');
                 break;
         }
+
+        $listingsCount = $query->count();
+        $premiumListingsCount = $premiumQuery->count();
     
         $listings = $query->simplePaginate(9)->appends($request->query());
         $premiumListings = $premiumQuery->take(3)->get();
     
-        $listingsCount = $query->count();
-        $premiumListingsCount = $premiumQuery->count();
+        
+
+        $categories = Category::all();
+        $cities = City::orderBy('name')->get();
     
         return view('client.listings.index', compact(
             'listings', 
             'premiumListings', 
             'listingsCount', 
             'premiumListingsCount', 
-            'sort'
+            'sort',
+            'categories',
+            'cities',
         ));
     }
     
@@ -145,6 +209,18 @@ class ListingController extends Controller
 
         $query = Listing::where('is_premium', true)->with('item.category');
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+        
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('item', function ($q2) use ($search) {
+                    $q2->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('city', function ($q2) use ($search) {
+                    $q2->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
         // Apply category filter if present
         if ($request->has('category')) {
             $query->whereHas('item.category', function ($q) use ($request) {
@@ -163,6 +239,21 @@ class ListingController extends Controller
                 }
             });
         }
+
+        if ($request->has('price_range')) {
+            $range = $request->price_range;
+        
+            $query->whereHas('item', function ($q) use ($range) {
+                if ($range === '200+') {
+                    $q->where('price_per_day', '>=', 200);
+                } elseif (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                    $min = (int)$matches[1];
+                    $max = (int)$matches[2];
+                    $q->whereBetween('price_per_day', [$min, $max]);
+                }
+            });
+        }
+
 
         // Apply sorting
         switch ($sort) {
@@ -185,13 +276,25 @@ class ListingController extends Controller
                 break;
         }
 
+        
+        if ($request->has('city')) {
+            $query->whereHas('city', function ($q) use ($request) {
+                $q->where('name', $request->city);
+            });
+        }
+
         $premiumListingsCount = $query->count();
         $premiumListings = $query->simplePaginate(9)->appends($request->query());
+
+        $categories = Category::all();
+        $cities = City::orderBy('name')->get();
 
         return view('client.listings.indexPremium', compact(
             'premiumListings',
             'premiumListingsCount',
-            'sort'
+            'sort',
+            'categories',
+            'cities',
         ));
     }
 
@@ -202,6 +305,18 @@ class ListingController extends Controller
         
         $query = Listing::with('item.category');
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+        
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('item', function ($q2) use ($search) {
+                    $q2->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('city', function ($q2) use ($search) {
+                    $q2->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
         // Apply category filter if present
         if ($request->has('category')) {
             $query->whereHas('item.category', function ($q) use ($request) {
@@ -217,6 +332,20 @@ class ListingController extends Controller
                 }
                 if ($request->has('max_price')) {
                     $q->where('price_per_day', '<=', $request->max_price);
+                }
+            });
+        }
+
+        if ($request->has('price_range')) {
+            $range = $request->price_range;
+        
+            $query->whereHas('item', function ($q) use ($range) {
+                if ($range === '200+') {
+                    $q->where('price_per_day', '>=', 200);
+                } elseif (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                    $min = (int)$matches[1];
+                    $max = (int)$matches[2];
+                    $q->whereBetween('price_per_day', [$min, $max]);
                 }
             });
         }
@@ -242,10 +371,26 @@ class ListingController extends Controller
                 break;
         }
 
+        
+        if ($request->has('city')) {
+            $query->whereHas('city', function ($q) use ($request) {
+                $q->where('name', $request->city);
+            });
+        }
+
         $listingsCount = $query->count();
         $listings = $query->simplePaginate(9)->appends($request->query());
 
-        return view('client.listings.indexAll', compact('listings', 'listingsCount', 'sort'));
+        $categories = Category::all();
+        $cities = City::orderBy('name')->get();
+
+        return view('client.listings.indexAll', compact(
+            'listings',
+            'listingsCount',
+            'sort',
+            'categories',
+            'cities',
+        ));
     }
 
 

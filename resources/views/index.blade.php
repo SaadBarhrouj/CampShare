@@ -35,44 +35,23 @@
                 
                 <!-- Search Box -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 md:p-6 mb-8 transition-all duration-300">
-                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                    <form action="{{ route('client.listings.index') }}" method="GET" class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                         <div class="flex-1">
-                            <label for="destination" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Destination/Ville</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                    <i class="fas fa-search text-gray-400"></i>
                                 </div>
-                                <input type="text" id="destination" name="destination" placeholder="Où partez-vous ?" class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3">
+                                <input type="text" id="search" name="search" placeholder="Rechercher des tentes, lampes, boussoles ..." class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3">
                             </div>
                         </div>
-                        
-                        <div class="flex-1">
-                            <label for="dates" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dates</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="far fa-calendar-alt text-gray-400"></i>
-                                </div>
-                                <input type="text" id="dates" name="dates" placeholder="Sélectionnez les dates" class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3">
-                            </div>
-                        </div>
-                        
-                        <div class="flex-1">
-                            <label for="keyword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Matériel</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-campground text-gray-400"></i>
-                                </div>
-                                <input type="text" id="keyword" name="keyword" placeholder="Tente, sac de couchage..." class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3">
-                            </div>
-                        </div>
-                        
+                    
                         <div class="flex items-end">
                             <button type="submit" class="w-full md:w-auto px-6 py-3 bg-sunlight hover:bg-amber-600 text-white font-medium rounded-md shadow-md transition duration-300 flex items-center justify-center">
                                 <i class="fas fa-search mr-2"></i>
                                 Rechercher
                             </button>
                         </div>
-                    </div>
+                    </form>                    
                 </div>
             </div>
         </div>

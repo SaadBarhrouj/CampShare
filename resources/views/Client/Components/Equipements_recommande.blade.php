@@ -13,6 +13,11 @@
                 <!-- Recommendation 1 -->
                 @foreach($allSimilarListings as $item1)
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                    @if($item1->is_premium)
+                        <div class="absolute top-2 left-2 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            Premium
+                        </div>
+                     @endif
                     <div class="relative h-48">
                         <img src="{{ $item1->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
@@ -34,13 +39,45 @@
                                 <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                             </div>
                             <div class="flex items-center text-sm">
-                                <i class="fas fa-star text-amber-400 mr-1"></i>
-                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(18)</span></span>
+                                @if($item1->review_count)
+                                    @php
+                                        $rating = $item1->avg_rating;
+                                        $fullStars = floor($rating);
+                                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                    @endphp
+                                    
+                                    <div class="flex items-center">
+                                        <div class="flex text-amber-400 mr-1">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star"></i>
+                                            @endfor
+                                            
+                                            @if ($hasHalfStar)
+                                                <i class="fas fa-star-half-alt"></i>
+                                            @endif
+                                            
+                                            @for ($i = 0; $i < (5 - $fullStars - ($hasHalfStar ? 1 : 0)); $i++)
+                                                <i class="far fa-star"></i>
+                                            @endfor
+                                        </div>
+                                        <span class="text-gray-600 dark:text-gray-400">
+                                            {{ number_format($rating, 1) }}
+                                            @if($item1->review_count)
+                                                <span class="text-xs text-gray-400 ml-1">({{ $item1->review_count }})</span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500">No ratings yet</div>
+                                @endif
                             </div>
                         </div>
                         
                         <div class="text-sm mb-3">
-                            <span class="text-gray-600 dark:text-gray-300">Dispo. du 1 août au 1 oct.</span>
+                            <span class="text-gray-600 dark:text-gray-300">
+                                Dispo. du {{ \Carbon\Carbon::parse($item1->start_date)->format('d M') }} 
+                                au {{ \Carbon\Carbon::parse($item1->end_date)->format('d M') }}
+                            </span>                        
                         </div>
                         
                         <div class="flex items-center justify-between">

@@ -141,6 +141,7 @@ class PartenaireModel extends Model
             ->join('items as i','i.id','=','L.item_id')
             ->join('users as C', 'C.id', '=', 'R.client_id')
             ->select(
+                'R.id',
                 'C.username',
                 'i.title',
                 'R.start_date',
@@ -233,6 +234,7 @@ class PartenaireModel extends Model
             ->join('users as u', 'u.id', '=', 'r.reviewee_id')
             ->join('users as c', 'c.id', '=', 'r.reviewer_id')
             ->where('u.email', $email)
+            ->whereIn('r.type', ['forObject', 'forPartner'])
             ->leftJoin('items as i', function($join) {
                 $join->on('i.id', '=', 'r.reviewee_id')
                      ->where('r.type', '=', 'forObject');  
@@ -243,8 +245,66 @@ class PartenaireModel extends Model
                      DB::raw('CASE WHEN r.type = "forObject" THEN i.title ELSE NULL END as object_title'))  // Conditional logic to fetch title
             ->get();
     }
-    
 
+    public static function getLastAvisPartnerForObject($email){
+        return DB::table('reviews as r')
+        ->join('users as u', 'u.id', '=', 'r.reviewee_id')
+        ->join('users as c', 'c.id', '=', 'r.reviewer_id')
+        ->where('u.email', $email)
+        ->where('r.type','forObject')
+        ->leftJoin('items as i', function($join) {
+            $join->on('i.id', '=', 'r.reviewee_id')
+                 ->where('r.type', '=', 'forObject');  
+        })
+        
+        ->select('r.rating','r.comment','c.username' ,'c.avatar_url',
+                DB::raw('DATE(r.created_at) as created_at'),
+                 DB::raw('CASE WHEN r.type = "forObject" THEN i.title ELSE NULL END as object_title'))
+        ->orderby('created_at', 'desc')
+        ->limit(3)       
+        ->get();
+    }
+
+    public static function getPartenaireProfile($email)
+    {
+        return DB::table('users as u')
+            ->join('reviews as r', 'r.reviewee_id', '=', 'u.id')
+            ->where('u.email', $email)
+            ->select(
+                'u.first_name',
+                'u.last_name',
+                'u.username',
+                'u.email',
+                'u.phone_number',
+                'u.address',
+                'u.avatar_url',
+                'u.created_at',
+                DB::raw("COALESCE(SUM(CASE WHEN r.type = 'forPartner' THEN 1 ELSE 0 END), 0) as review_count"),
+                DB::raw("
+                COALESCE(NULLIF(AVG(CASE WHEN r.type = 'forPartner' THEN r.rating ELSE NULL END), 0), 5)
+                as avg_rating
+            ") 
+            )
+            ->groupBy(
+                'u.id',
+                'u.first_name',
+                'u.last_name',
+                'u.username',
+                'u.email',
+                'u.phone_number',
+                'u.address',
+                'u.avatar_url',
+                'u.created_at'
+            )
+            ->first();
+    }
+
+    public static function updaterole($email)
+    {
+        return DB::table('users')
+        ->where('email', $email)
+        ->update(['role' => 'partner']);
+    }
 
 
 }

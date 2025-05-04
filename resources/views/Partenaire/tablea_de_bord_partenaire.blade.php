@@ -229,9 +229,7 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
-                    <a href="annonces.html" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
-                    <a href="#devenir-partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    <a href="/Client" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Client</a>
                     
                     <!-- User menu -->
                     <div class="relative ml-4">
@@ -288,15 +286,10 @@
                                 <!-- User dropdown menu -->
                                 <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
                                     <div class="py-1">
-                                        <a href="#profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <a href="#profile_partenaire"  data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                         </a>
-                                        <a href="#account-settings" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
-                                        </a>
-                                        <a href="#public-profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <i class="fas fa-eye mr-2 opacity-70"></i> Voir mon profil public
-                                        </a>
+
                                         <div class="border-t border-gray-200 dark:border-gray-700"></div>
                                         <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
@@ -324,7 +317,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
                 <a href="annonces.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
-                <a href="#devenir-partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Devenir Partenaire</a>
+                <a href="/Client" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Espace Client</a>
             </div>
             
             <!-- Mobile profile menu -->
@@ -387,7 +380,7 @@
                     <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
                     <div class="flex items-center mt-2">
                     @php
-                        $rating = $user->avg_rating;  
+                        $rating = $AverageRating;  
                         $fullStars = floor($rating); 
                         $halfStar = $rating - $fullStars !=0
                     @endphp
@@ -401,7 +394,7 @@
                             <i class="fas fa-star-half-alt"></i>
                         @endif
                         </div>
-                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">{{ $user->avg_rating }}</span>
+                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">{{ $AverageRating }}</span>
                     </div>
                 </div>
                 
@@ -434,19 +427,7 @@
                         <i class="fas fa-star w-5 mr-3"></i>
                         Avis reçus
                     </a>
-                    <a href="#calendar" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-calendar-alt w-5 mr-3"></i>
-                        Calendrier
-                    </a>
-                   
-                    <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-cog w-5 mr-3"></i>
-                        Paramètres
-                    </a>
-                    <a href="#help" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-question-circle w-5 mr-3"></i>
-                        Aide & Support
-                    </a>
+
                 </nav>
                 
 
@@ -563,6 +544,9 @@
         </div>
         <div id="AvisRecu" class="component hidden">
             @include ('Partenaire.Components.avis-recus');
+        </div>
+        <div id="profile" class="component hidden">
+            @include ('Partenaire.Components.Profile');
         </div>
 
 

@@ -90,15 +90,39 @@
                             <div>
                                 <p class="font-medium text-gray-900 dark:text-white">{{$res->partner_username}}</p>
                                 <div class="flex items-center text-sm">
-                                    <i class="fas fa-star text-amber-400 mr-1"></i>
-                                    <span>{{$res->partner_avg_rating}} </span>
+                                    @if($res->partner_avg_rating)
+                                        @php
+                                            $rating = $res->partner_avg_rating;
+                                            $fullStars = floor($rating);
+                                            $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                        @endphp
+                                        
+                                        <div class="flex text-amber-400 mr-1">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star"></i>
+                                            @endfor
+                                            
+                                            @if ($hasHalfStar)
+                                                <i class="fas fa-star-half-alt"></i>
+                                            @endif
+                                            
+                                            @for ($i = 0; $i < (5 - $fullStars - ($hasHalfStar ? 1 : 0)); $i++)
+                                                <i class="far fa-star"></i>
+                                            @endfor
+                                        </div>
+                                        <span class="text-gray-600 dark:text-gray-400">
+                                            {{ number_format($rating, 1) }}
+                                        </span>
+                                    @else
+                                        <div class="text-sm text-gray-500">No ratings yet</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                         
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
                             <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600 dark:text-gray-400">Dates:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Date:</span>
                                 <span class="font-medium text-gray-900 dark:text-white">{{$res->start_date}} - {{$res->end_date}}</span>
                             </div>
                             <div class="flex justify-between text-sm mb-1">
@@ -110,9 +134,6 @@
                         
                         <div class="flex items-center space-x-2">
                             @if($res->status === 'pending')
-                                <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
-                                    <i class="fas fa-calendar-alt mr-2"></i> Modifier
-                                </button>
                                 <button onclick="cancelReservation({{ $res->id }})"
                                         class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
                                     <i class="fas fa-times mr-2"></i> Annuler
@@ -143,6 +164,12 @@
                 <!-- Recommendation 1 -->
                 @foreach($similarListings as $item)
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                    @if($item->is_premium)
+                        <div class="absolute top-2 left-2 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            Premium
+                        </div>
+                    @endif
+                
                     <div class="relative h-48">
                         <img src="{{ $item->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
@@ -164,14 +191,43 @@
                                 <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                             </div>
                             <div class="flex items-center text-sm">
-                                <i class="fas fa-star text-amber-400 mr-1"></i>
-                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(18)</span></span>
+                                @if($item->review_count)
+                                    @php
+                                        $rating = $item->avg_rating;
+                                        $fullStars = floor($rating);
+                                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                    @endphp
+                                    
+                                    <div class="flex items-center">
+                                        <div class="flex text-amber-400 mr-1">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star"></i>
+                                            @endfor
+                                            
+                                            @if ($hasHalfStar)
+                                                <i class="fas fa-star-half-alt"></i>
+                                            @endif
+                                            
+                                            @for ($i = 0; $i < (5 - $fullStars - ($hasHalfStar ? 1 : 0)); $i++)
+                                                <i class="far fa-star"></i>
+                                            @endfor
+                                        </div>
+                                        <span class="text-gray-600 dark:text-gray-400">
+                                            {{ number_format($rating, 1) }}
+                                            <span class="text-xs text-gray-400 ml-1">({{ $item->review_count }})</span>
+                                        </span>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500">No ratings yet</div>
+                                @endif
                             </div>
                         </div>
                         
                         <div class="text-sm mb-3">
-                            <span class="text-gray-600 dark:text-gray-300">Dispo. du 1 août au 1 oct.</span>
-                        </div>
+                            <span class="text-gray-600 dark:text-gray-300">
+                                Dispo. du {{ \Carbon\Carbon::parse($item->start_date)->format('d M') }} 
+                                au {{ \Carbon\Carbon::parse($item->end_date)->format('d M') }}
+                            </span>                        </div>
                         
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-600 dark:text-gray-300">
