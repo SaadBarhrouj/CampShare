@@ -11,10 +11,21 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
     public function run(): void
     {
-        //
+        $categories = [
+            'Tentes et Abris',
+            'Sacs de couchage',
+            'Équipement de cuisine',
+            'Mobilier camping',
+            'Éclairage',
+            'Accessoires outdoor'
+        ];
 
-        Category::factory()->count(6)->create();
+        foreach ($categories as $name) {
+            Category::create(['name' => $name]);
+        }
     }
+
 }

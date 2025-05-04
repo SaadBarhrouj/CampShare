@@ -237,6 +237,21 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// Sort dropdown toggle
+const sortButtonCity = document.getElementById('city-filter-button');
+const sortDropdownCity = document.getElementById('city-dropdown');
+
+sortButtonCity?.addEventListener('click', () => {
+    sortDropdownCity.classList.toggle('hidden');
+});
+
+// Hide sort dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (sortButtonCity && !sortButtonCity.contains(e.target) && !sortDropdownCity.contains(e.target)) {
+        sortDropdownCity.classList.add('hidden');
+    }
+});
+
 // Price Range Filter Interactions
 document.addEventListener('DOMContentLoaded', function() {
     // Price range buttons
@@ -286,4 +301,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
     }
+});
+
+
+// Tab switching
+const tabEquipment = document.getElementById('tab-equipment1');
+const tabReviews1 = document.getElementById('tab-reviews1');
+const equipmentSection = document.getElementById('equipment-section1');
+const reviewsSection1 = document.getElementById('reviews-section1');
+
+tabEquipment.addEventListener('click', () => {
+    // Update tab styles
+    tabEquipment.classList.add('tab-active');
+    tabReviews1.classList.remove('tab-active');
+    tabReviews1.classList.add('text-gray-500', 'dark:text-gray-400');
+    
+    // Show/hide sections
+    equipmentSection.classList.remove('hidden');
+    reviewsSection1.classList.add('hidden');
+});
+
+tabReviews1.addEventListener('click', () => {
+    // Update tab styles
+    tabReviews1.classList.add('tab-active');
+    tabReviews1.classList.remove('text-gray-500', 'dark:text-gray-400');
+    tabEquipment.classList.remove('tab-active');
+    
+    // Show/hide sections
+    reviewsSection1.classList.remove('hidden');
+    equipmentSection.classList.add('hidden');
 });
