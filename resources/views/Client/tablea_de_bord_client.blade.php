@@ -229,10 +229,13 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#comment-ca-marche" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Comment ça marche ?</a>
-                    <a href="annonces.html" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
                     <a href="#trouver-equipement" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Trouver du matériel</a>
-                    
+                    @if($user->role =='partner')
+                        <a href="/Partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Partenaire</a>
+                    @elseif($user->role =='client')
+                        <a href="/devenir_partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
+                    @endif
+
                     <!-- User menu -->
                     <div class="relative ml-4">
                         <div class="flex items-center space-x-4">
@@ -252,39 +255,25 @@
                                         </div>
                                     </div>
                                     <div class="max-h-96 overflow-y-auto">
-                                        <!-- Notification items -->
+                                        @foreach($notifications as $notification)
                                         <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
                                             <div class="flex">
                                                 <div class="flex-shrink-0 mr-3">
                                                     <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-500 dark:text-blue-300">
-                                                        <i class="fas fa-calendar-check"></i>
+                                                        <i class="fas fa-shopping-bag"></i>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Réservation confirmée</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">Votre réservation "Grande Tente 6 Personnes" a été confirmée</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 1 heure</p>
-                                                </div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvelle demande de location</p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ $notification->message }}</p>
+                                                    {{-- <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 23 minutes</p> --}}                                                </div>
                                             </div>
                                         </a>
-                                        
-                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <div class="flex">
-                                                <div class="flex-shrink-0 mr-3">
-                                                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center text-indigo-500 dark:text-indigo-300">
-                                                        <i class="fas fa-bullhorn"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Offre spéciale</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">-20% sur votre prochaine location avec le code SUMMER23</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 1 jour</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                                        @endforeach
+
                                     </div>
                                     <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                        <a href="#all-notifications"  class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                        <a href={{ route('showAllNotifications') }} class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
                                     </div>
                                 </div>
                             </div>
@@ -384,23 +373,38 @@
                     </div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-4">{{$user->username}}</h2>
                     <div class="flex items-center mt-2">
-                        @php
-                            $rating = $user->avg_rating;  
-                            $fullStars = floor($rating); 
-                            $halfStar = $rating - $fullStars !=0
-                        @endphp
-    
-                            <div class="flex text-amber-400">
-                            @for ($i = 0; $i < $fullStars; $i++)
-                                <i class="fas fa-star"></i>
-                            @endfor
-        
-                            @if ($halfStar)
-                                <i class="fas fa-star-half-alt"></i>
-                            @endif
+                        @if(isset($note_moyenne) && is_numeric($note_moyenne))
+                            @php
+                                $rating = min(max($note_moyenne, 0), 5); // Ensure rating is between 0-5
+                                $fullStars = floor($rating); 
+                                $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                            @endphp
+                            
+                            <div class="flex text-amber-400 mr-1">
+                                {{-- Full stars --}}
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <i class="fas fa-star text-base"></i>
+                                @endfor
+                                
+                                {{-- Half star --}}
+                                @if ($hasHalfStar)
+                                    <i class="fas fa-star-half-alt text-base"></i>
+                                @endif
+                                
+                                {{-- Empty stars --}}
+                                @for ($i = 0; $i < $emptyStars; $i++)
+                                    <i class="far fa-star text-base"></i>
+                                @endfor
                             </div>
-                            <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">{{ $user->avg_rating }}</span>
-                        </div>
+                            
+                            <span class="text-gray-600 dark:text-gray-300 text-sm ml-1">
+                                {{ number_format($rating, 1) }}
+                            </span>
+                        @else
+                            <span class="text-gray-400 text-sm">Not rated</span>
+                        @endif
+                    </div>
                 </div>
                 
                 
@@ -416,16 +420,13 @@
                     </a>
                     <a href="#reviews" data-target="mes-avis" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-star w-5 mr-3"></i>
-                        Mes avis
+                        Avis reçus
                     </a>
                     <a href="#my-favorites" data-target="allSim" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-heart w-5 mr-3"></i>
                         Équipements recommandés
                     </a>
-                    <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-cog w-5 mr-3"></i>
-                        Paramètres
-                    </a>
+
                    
                 </nav>
                 

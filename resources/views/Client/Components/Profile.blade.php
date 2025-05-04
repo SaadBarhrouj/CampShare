@@ -34,15 +34,42 @@
 
                                 <div class="flex flex-wrap gap-6 mt-6">
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $profile->avg_rating }}</div>
-                                        <div class="flex text-amber-400 mt-1">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
+                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                            <div class="flex items-center mt-2">
+                                                @if(isset($note_moyenne) && is_numeric($note_moyenne))
+                                                    @php
+                                                        $rating = min(max($note_moyenne, 0), 5); // Ensure rating is between 0-5
+                                                        $fullStars = floor($rating); 
+                                                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                                    @endphp
+                                                    
+                                                    <div class="flex text-amber-400 mr-1">
+                                                        {{-- Full stars --}}
+                                                        @for ($i = 0; $i < $fullStars; $i++)
+                                                            <i class="fas fa-star text-base"></i>
+                                                        @endfor
+                                                        
+                                                        {{-- Half star --}}
+                                                        @if ($hasHalfStar)
+                                                            <i class="fas fa-star-half-alt text-base"></i>
+                                                        @endif
+                                                        
+                                                        {{-- Empty stars --}}
+                                                        @for ($i = 0; $i < $emptyStars; $i++)
+                                                            <i class="far fa-star text-base"></i>
+                                                        @endfor
+                                                    </div>
+                                                    
+                                                    <span class="text-gray-600 dark:text-gray-300 text-sm ml-1">
+                                                        {{ number_format($rating, 1) }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-gray-400 text-sm">Not rated</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $profile->review_count }} avis)</div>
+                                       
                                     </div>
 
                                     <div class="flex flex-col items-center">
@@ -87,14 +114,32 @@
                             <div class="flex flex-col md:flex-row items-start md:items-center mb-8">
                                 <div class="relative mb-6 md:mb-0 md:mr-8">
                                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
-                                        <img src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
+                                        <img id="avatarPreview" src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
                                              alt="{{ $profile->username }}" 
                                              class="w-full h-full object-cover" />
                                     </div>
-                                    <div class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700">
-                                        <i class="fas fa-check"></i>
-                                    </div>
+                                    <label for="avatarUpload" class="absolute -bottom-2 -right-2 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700 cursor-pointer hover:bg-blue-600 transition-colors">
+                                        <i class="fas fa-camera"></i>
+                                        <input type="file" id="avatarUpload" name="avatar" accept="image/*" class="hidden">
+                                    </label>
                                 </div>
+                                
+                                <script>
+                                document.getElementById('avatarUpload').addEventListener('change', function(event) {
+                                    const file = event.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        
+                                        reader.onload = function(e) {
+                                            // Update the preview image
+                                            document.getElementById('avatarPreview').src = e.target.result;
+                                                                                        
+                                        };
+                                        
+                                        reader.readAsDataURL(file);
+                                    }
+                                });
+                                </script>
 
                                 <div class="flex-1 space-y-4">
                                     <div>
@@ -109,6 +154,7 @@
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -123,6 +169,17 @@
                                     <input type="text" id="address" name="address" value="{{ $profile->address }}"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
+                                    <div>
+                                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
+                                        <input type="password" id="password" name="password" 
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+
+                                    <div>
+                                        <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
+                                        <input type="password" id="confirm_password" name="confirm_password" 
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
                             </div>
 
                             <div class="flex justify-end space-x-4">
@@ -157,7 +214,19 @@
         }
     }
 
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
+    document.getElementById('avatarUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('avatarPreview').src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Form submission
+document.getElementById('profileForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
@@ -170,21 +239,22 @@
             'Accept': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.success) {
+            // Update all fields including avatar
             document.getElementById('viewUsername').textContent = data.user.username;
             document.getElementById('viewAddress').textContent = data.user.address;
             document.getElementById('viewEmail').textContent = data.user.email;
             document.getElementById('viewPhone').textContent = data.user.phone_number;
             
-            toggleEditMode(false);
+            // Update avatar in view mode
+            const avatarView = document.querySelector('#profileView img');
+            if (data.avatar_url) {
+                avatarView.src = data.avatar_url;
+            }
             
+            toggleEditMode(false);
         } else {
             alert('Error: ' + (data.message || 'Une erreur est survenue'));
         }

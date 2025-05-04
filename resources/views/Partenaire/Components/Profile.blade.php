@@ -8,7 +8,7 @@
                             <div class="relative mb-6 md:mb-0 md:mr-8">
                                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
                                     <img src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
-                                          
+                                         alt="{{ $profile->username }}" 
                                          class="w-full h-full object-cover" />
                                 </div>
                                 <div class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700">
@@ -34,26 +34,51 @@
 
                                 <div class="flex flex-wrap gap-6 mt-6">
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $profile->avg_rating }}</div>
-                                        <div class="flex text-amber-400 mt-1">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
+                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                            <div class="flex items-center mt-2">
+                                                @if(isset($note_moyenne) && is_numeric($note_moyenne))
+                                                    @php
+                                                        $rating = min(max($note_moyenne, 0), 5); // Ensure rating is between 0-5
+                                                        $fullStars = floor($rating); 
+                                                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                                    @endphp
+                                                    
+                                                    <div class="flex text-amber-400 mr-1">
+                                                        {{-- Full stars --}}
+                                                        @for ($i = 0; $i < $fullStars; $i++)
+                                                            <i class="fas fa-star text-base"></i>
+                                                        @endfor
+                                                        
+                                                        {{-- Half star --}}
+                                                        @if ($hasHalfStar)
+                                                            <i class="fas fa-star-half-alt text-base"></i>
+                                                        @endif
+                                                        
+                                                        {{-- Empty stars --}}
+                                                        @for ($i = 0; $i < $emptyStars; $i++)
+                                                            <i class="far fa-star text-base"></i>
+                                                        @endfor
+                                                    </div>
+                                                    
+                                                    <span class="text-gray-600 dark:text-gray-300 text-sm ml-1">
+                                                        {{ number_format($rating, 1) }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-gray-400 text-sm">Not rated</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $profile->review_count }} avis)</div>
+                                       
                                     </div>
 
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white"></div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Locations réalisées</div>
                                     </div>
 
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white"></div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Montant total dépensé</div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>

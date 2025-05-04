@@ -13,6 +13,8 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\PartenaireModel;
+use App\Models\ClientModel;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -24,6 +26,7 @@ class PartenaireController extends Controller
 {
     public function ShowHomePartenaire()
 {
+
     $user = Auth::user();
 
 
@@ -47,7 +50,7 @@ class PartenaireController extends Controller
     $notifications = (new NotificationController)->getNotifUser($user->id);
     $totalNotification = (new NotificationController)->totalNotification($user->id);
     $lastAvisPartnerForObjet = PartenaireModel::getLastAvisPartnerForObject($user->email);
-    $profile = PartenaireModel::getPartenaireProfile($user->email); 
+    $profile = ClientModel::getClientProfile($user->email); 
 
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
@@ -72,6 +75,11 @@ class PartenaireController extends Controller
         'lastAvisPartnerForObjet',
         'profile'
     ));
+}
+public function devenir_partenaire(){
+    $user = Auth::user();
+    PartenaireModel::updaterole($user->email);
+    return redirect()->route('HomePartenaie');
 }
 
 
@@ -146,8 +154,6 @@ public function filter(Request $request)
         'demandes' => $demandes, 
     ]);
 }
-
-
 public function filterLocationEnCours(Request $request)
 {
     

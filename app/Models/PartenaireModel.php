@@ -234,6 +234,7 @@ class PartenaireModel extends Model
             ->join('users as u', 'u.id', '=', 'r.reviewee_id')
             ->join('users as c', 'c.id', '=', 'r.reviewer_id')
             ->where('u.email', $email)
+            ->whereIn('r.type', ['forObject', 'forPartner'])
             ->leftJoin('items as i', function($join) {
                 $join->on('i.id', '=', 'r.reviewee_id')
                      ->where('r.type', '=', 'forObject');  
@@ -296,6 +297,13 @@ class PartenaireModel extends Model
                 'u.created_at'
             )
             ->first();
+    }
+
+    public static function updaterole($email)
+    {
+        return DB::table('users')
+        ->where('email', $email)
+        ->update(['role' => 'partner']);
     }
 
 
