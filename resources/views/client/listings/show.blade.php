@@ -27,9 +27,9 @@
                     <span class="mx-2 text-gray-400">/</span>
                     <a href="annonces.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">Explorer le matériel</a>
                     <span class="mx-2 text-gray-400">/</span>
-                    <a href="profil-partenaire-public.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">{{ $listing->category->name}}</a>
+                    <a href="profil-partenaire-public.html" class="text-gray-500 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">{{ $listing->item->category->name }}</a>
                     <span class="mx-2 text-gray-400">/</span>
-                    <span class="text-gray-700 dark:text-gray-300 font-medium">{{ $listing->title }}</span>
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">{{ $listing->item->title }}</span>
                 </nav>
             </div>
         </div>
@@ -41,37 +41,28 @@
                     <!-- Image Gallery -->
                     <div class="w-full lg:w-7/12">
                         <div class="relative h-96 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                            <img id="mainImage" src="{{ asset('images/listing-1.jpg') }}"
-                                 alt="Pack Camping Complet 2p" 
+                            <img id="mainImage" src="{{ !empty($images) && $images->count() > 0 ? asset('storage/' . $images->first()->url) : asset('images/listing-1.jpg') }}"
+                                 alt="{{ $listing->item->title }}" 
                                  class="w-full h-full object-contain" />
                         </div>
                         
                         <div class="grid grid-cols-5 gap-2">
-                            <div class="thumbnail active h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
-                                <img src="{{ asset('images/listing-1.jpg') }}" 
-                                     alt="Thumbnail 1" 
-                                     class="w-full h-full object-cover" />
-                            </div>
-                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
-                                <img src="{{ asset('images/listing-1.jpg') }}" 
-                                     alt="Thumbnail 2" 
-                                     class="w-full h-full object-cover" />
-                            </div>
-                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
-                                <img src="{{ asset('images/listing-1.jpg') }}"
-                                     alt="Thumbnail 3" 
-                                     class="w-full h-full object-cover" />
-                            </div>
-                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1546811740-23e671faf31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
-                                <img src="{{ asset('images/listing-1.jpg') }}"
-                                     alt="Thumbnail 4" 
-                                     class="w-full h-full object-cover" />
-                            </div>
-                            <div class="thumbnail h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, 'https://images.unsplash.com/photo-1598443037135-f5eeb3ebf5af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')">
-                                <img src="{{ asset('images/listing-1.jpg') }}" 
-                                     alt="Thumbnail 5" 
-                                     class="w-full h-full object-cover" />
-                            </div>
+                            @if(!empty($images) && $images->count() > 0)
+                                @foreach($images as $index => $image)
+                                    <div class="thumbnail {{ $index === 0 ? 'active' : '' }} h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" 
+                                         onclick="changeImage(this, '{{ asset('storage/' . $image->url) }}')">
+                                        <img src="{{ asset('storage/' . $image->url) }}" 
+                                             alt="Thumbnail {{ $index + 1 }}" 
+                                             class="w-full h-full object-cover" />
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="thumbnail active h-20 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden" onclick="changeImage(this, '{{ asset('images/listing-1.jpg') }}')">
+                                    <img src="{{ asset('images/listing-1.jpg') }}" 
+                                         alt="Thumbnail 1" 
+                                         class="w-full h-full object-cover" />
+                                </div>
+                            @endif
                         </div>
                     </div>
                     
@@ -80,13 +71,13 @@
                         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $listing->title }}</h1>
-                                    <p class="text-gray-500 dark:text-gray-400">Catégorie - {{ $listing->category->name }}</p>
+                                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $listing->item->title }}</h1>
+                                    <p class="text-gray-500 dark:text-gray-400">Catégorie - {{ $listing->item->category->name }}</p>
                                 </div>
                                 <div class="flex items-center mt-1.5">
                                     <i class="fas fa-star text-amber-400 mr-1"></i>
-                                    <span class="font-medium">{{ $listing->averageRating() }}</span>
-                                    <span class="text-gray-500 dark:text-gray-400 ml-1 text-nowrap">({{ $listing->reviews->count() }} avis)</span>
+                                    <span class="font-medium">{{ $listing->item->averageRating() }}</span>
+                                    <span class="text-gray-500 dark:text-gray-400 ml-1 text-nowrap">({{ $listing->item->reviews->count() }} avis)</span>
                                 </div>
                             </div>
                             
@@ -96,14 +87,14 @@
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div>
-                                        <a href="profile-fatima.html" class="font-medium text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">{{ $listing->partner->username}}</a>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Membre depuis {{ $listing->partner->created_at->translatedFormat('F Y') }}</p>
+                                        <a href="profile-fatima.html" class="font-medium text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">{{ $listing->item->partner->username }}</a>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Membre depuis {{ $listing->item->partner->created_at->translatedFormat('F Y') }}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-3">
                                     <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                                    <span>{{ $listing->partner->address }}</span>
+                                    <span>{{ $listing->item->partner->address }}</span>
                                 </div>
                             </div>
                             
@@ -180,7 +171,7 @@
                             Description
                         </button>
                         <button id="tab-reviews" class="px-1 py-4 font-medium text-lg text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                            Avis ({{ $listing->reviews->count() }})
+                            Avis ({{ $listing->item->reviews->count() }})
                         </button>
                     </div>
                 </div>
@@ -188,7 +179,7 @@
                 <!-- Description Section -->
                 <section id="details-section" class="py-6">
                     <div class="prose max-w-none prose-forest dark:prose-invert dark:text-gray-300">
-                        <p>{{ $listing->description }}</p>
+                        <p>{{ $listing->item->description }}</p>
                     </div>
                 </section>
                 
@@ -206,13 +197,13 @@
                         
                         <div class="flex flex-col md:flex-row items-start">
                             <div class="md:w-48 flex flex-col items-center mb-4 md:mb-0">
-                                <div class="text-5xl font-bold text-gray-900 dark:text-white">{{ $listing->averageRating() }}</div>
+                                <div class="text-5xl font-bold text-gray-900 dark:text-white">{{ $listing->item->averageRating() }}</div>
 
                                 <div class="flex text-amber-400 text-xl mt-2">
-                                    <x-star-rating :rating="$listing->reviews->avg('rating')" />
+                                    <x-star-rating :rating="$listing->item->reviews->avg('rating')" />
                                 </div>
 
-                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Basé sur {{ $listing->reviews->count() }} avis</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Basé sur {{ $listing->item->reviews->count() }} avis</div>
                             </div>
                             
                             <div class="flex-1 ml-0 md:ml-6">
@@ -220,37 +211,37 @@
                                     <div class="flex items-center">
                                         <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">5 étoiles</div>
                                         <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->fiveStarPercentage(5) }}%"></div>
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->item->fiveStarPercentage(5) }}%"></div>
                                         </div>
-                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->fiveStarPercentage(5) }}%</div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->item->fiveStarPercentage(5) }}%</div>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">4 étoiles</div>
                                         <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->fiveStarPercentage(4) }}%"></div>
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->item->fiveStarPercentage(4) }}%"></div>
                                         </div>
-                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->fiveStarPercentage(4) }}%</div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->item->fiveStarPercentage(4) }}%</div>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">3 étoiles</div>
                                         <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->fiveStarPercentage(3) }}%"></div>
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->item->fiveStarPercentage(3) }}%"></div>
                                         </div>
-                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->fiveStarPercentage(3) }}%</div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->item->fiveStarPercentage(3) }}%</div>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">2 étoiles</div>
                                         <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->fiveStarPercentage(2) }}%"></div>
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->item->fiveStarPercentage(2) }}%"></div>
                                         </div>
-                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->fiveStarPercentage(2) }}%</div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->item->fiveStarPercentage(2) }}%</div>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">1 étoile</div>
                                         <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->fiveStarPercentage(1) }}%"></div>
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $listing->item->fiveStarPercentage(1) }}%"></div>
                                         </div>
-                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->fiveStarPercentage(1) }}%</div>
+                                        <div class="w-10 text-right text-xs text-gray-500 dark:text-gray-400">{{ $listing->item->fiveStarPercentage(1) }}%</div>
                                     </div>
                                 </div>
                                 
@@ -360,7 +351,41 @@
     @include('partials.footer')
 
     <script>
+        function changeImage(thumbnailElement, imageUrl) {
+            // Mettre à jour l'image principale
+            document.getElementById('mainImage').src = imageUrl;
+            
+            // Supprimer la classe active de toutes les vignettes
+            document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+                thumbnail.classList.remove('active');
+            });
+            
+            // Ajouter la classe active à la vignette cliquée
+            thumbnailElement.classList.add('active');
+        }
         
+        // Initialiser les dates de retrait et de retour
+        document.addEventListener('DOMContentLoaded', function() {
+            const reservationButton = document.getElementById('reservation-button');
+            const pickupDateInput = document.getElementById('pickup-date');
+            const returnDateInput = document.getElementById('return-date');
+            const priceCalculation = document.getElementById('price-calculation');
+            
+            if (reservationButton && pickupDateInput && returnDateInput) {
+                reservationButton.addEventListener('click', function() {
+                    // Vérification des dates
+                    if (!pickupDateInput.value || !returnDateInput.value) {
+                        alert('Veuillez sélectionner les dates de retrait et de retour.');
+                        return;
+                    }
+                    
+                    // Afficher le calcul du prix
+                    if (priceCalculation) {
+                        priceCalculation.classList.remove('hidden');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -14,9 +14,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 const mobileMenuButton = document.getElementById('mobile-menu-button');
 const mobileMenu = document.getElementById('mobile-menu');
 
-mobileMenuButton.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-});
+if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+}
 
 // Sticky navbar effect on scroll
 window.addEventListener('scroll', () => {
@@ -170,16 +172,17 @@ if (reservationButton) {
 }
 
 // load comments 
-
 let visible = 2;
 const reviews = document.querySelectorAll('.review-item');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const loadLessBtn = document.getElementById('loadLessBtn');
 
 // Show initial 2 reviews
-reviews.forEach((review, index) => {
-    if (index >= visible) review.classList.add('hidden');
-});
+if (reviews) {
+    reviews.forEach((review, index) => {
+        if (index >= visible) review.classList.add('hidden');
+    });
+}
 
 if(loadMoreBtn) loadMoreBtn.addEventListener('click', () => {
     let shown = 0;
@@ -208,16 +211,13 @@ if(loadLessBtn) loadLessBtn.addEventListener('click', () => {
 });
 
 // Initial toggle state
-if (reviews.length <= 2) {
+if (reviews && reviews.length <= 2) {
     if(loadMoreBtn) loadMoreBtn.style.display = 'none';
-    if(loadLessBtn)loadLessBtn.style.display = 'none';
+    if(loadLessBtn) loadLessBtn.style.display = 'none';
 } else {
-    if(loadMoreBtn)loadMoreBtn.style.display = 'inline-block';
-    if(loadLessBtn)loadLessBtn.style.display = 'none';
+    if(loadMoreBtn) loadMoreBtn.style.display = 'inline-block';
+    if(loadLessBtn) loadLessBtn.style.display = 'none';
 }
-
-
-// 
 
 // Toggle advanced filters
 const filtersButton = document.querySelector('button:has(.fa-sliders-h)');
@@ -226,13 +226,15 @@ const filtersButton = document.querySelector('button:has(.fa-sliders-h)');
 const sortButton = document.getElementById('sort-button');
 const sortDropdown = document.getElementById('sort-dropdown');
 
-sortButton?.addEventListener('click', () => {
-    sortDropdown.classList.toggle('hidden');
-});
+if (sortButton) {
+    sortButton.addEventListener('click', () => {
+        sortDropdown.classList.toggle('hidden');
+    });
+}
 
 // Hide sort dropdown when clicking outside
 document.addEventListener('click', (e) => {
-    if (sortButton && !sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
+    if (sortButton && sortDropdown && !sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
         sortDropdown.classList.add('hidden');
     }
 });
@@ -258,13 +260,13 @@ document.addEventListener('DOMContentLoaded', function() {
     priceRangeButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             // Get current URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            
+
             // Update price_range parameter
             urlParams.set('price_range', this.dataset.priceRange);
-            
+
             // Redirect to new URL with updated parameters
             window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
         });
@@ -274,12 +276,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (resetPriceFilter) {
         resetPriceFilter.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             // Get current URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            
+
             // Remove price_range parameter
             urlParams.delete('price_range');
-            
+
             // Redirect to new URL without price filter
             window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+        });
+    }
+});

@@ -249,8 +249,16 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        $reviews = $listing->reviews()->latest()->get();
-        return view('client.listings.show', compact('listing', 'reviews'));
+        // Charger les relations nécessaires
+        $listing->load(['item.reviews', 'item.images', 'item.category']);
+        
+        // Récupérer les avis
+        $reviews = $listing->item->reviews()->latest()->get();
+        
+        // Récupérer les images
+        $images = $listing->item->images;
+        
+        return view('client.listings.show', compact('listing', 'reviews', 'images'));
     }
 
     /**

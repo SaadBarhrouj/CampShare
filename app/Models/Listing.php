@@ -32,4 +32,8 @@ class Listing extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function reviews()
+    {
+        return $this->item->reviews();
+    }
 }

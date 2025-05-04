@@ -213,6 +213,38 @@
         .dark .chat-message.outgoing .chat-bubble {
             background-color: #4F7942;
         }
+        
+        /* Styles pour les boutons principaux - action buttons */
+        button[type="submit"],
+        a.inline-flex,
+        button.px-4.py-2,
+        button.px-6.py-2,
+        .w-full.md\\:w-auto.px-4.py-2,
+        button.inline-flex {
+            background-color: #2D5F2B !important; /* forest color */
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+        
+        /* Exceptions pour les boutons retour/annuler */
+        button[id^="back-to-step"],
+        button[onclick="toggleEditMode(false)"] {
+            background-color: white !important;
+            color: #374151 !important;
+            border: 1px solid #D1D5DB !important;
+        }
+        
+        /* Hover state for action buttons */
+        button[type="submit"]:hover,
+        a.inline-flex:hover,
+        button.px-4.py-2:hover,
+        button.px-6.py-2:hover,
+        .w-full.md\\:w-auto.px-4.py-2:hover,
+        button.inline-flex:hover {
+            background-color: #215A1A !important; /* darker forest */
+        }
+        
+        /* Dark mode is already handled by existing styles */
     </style>
 </head>
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
@@ -454,7 +486,7 @@
                         <i class="fas fa-campground w-5 mr-3"></i>
                         Mes équipements
                     </a>
-                    <a href="{{ route('partenaire.mes-annonces') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="#annonces" data-target="MesAnnonces" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-bullhorn w-5 mr-3"></i>
                         Mes annonces
                     </a>
@@ -544,7 +576,7 @@
                         <i class="fas fa-campground w-5 mr-3"></i>
                         Mes équipements
                     </a>
-                    <a href="{{ route('partenaire.mes-annonces') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="#annonces" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-bullhorn w-5 mr-3"></i>
                         Mes annonces
                     </a>
@@ -604,6 +636,9 @@
         <div id="AvisRecu" class="component hidden">
             @include ('Partenaire.Components.avis-recus');
         </div>
+        <div id="MesAnnonces" class="component hidden">
+            @include ('Partenaire.Components.mes-annonces');
+        </div>
 
 
 </body>
@@ -616,14 +651,31 @@
       e.preventDefault();
       const targetId = link.getAttribute("data-target");
       
-      // Ne rien faire si data-target n'est pas défini (cas du lien "Mes annonces")
+      // Ne rien faire si data-target n'est pas défini
       if (!targetId) return;
 
+      // Supprimer active class de tous les liens
+      links.forEach(l => l.classList.remove("active"));
+      // Ajouter active class au lien cliqué
+      link.classList.add("active");
+
+      // Cacher tous les composants
       components.forEach(comp => {
         comp.classList.add("hidden");
       });
 
+      // Afficher le composant cible
       document.getElementById(targetId).classList.remove("hidden");
+      
+      // Fermer le menu mobile si ouvert
+      if (window.innerWidth < 768) {
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        if (mobileSidebar && mobileSidebarOverlay) {
+          mobileSidebar.classList.add('transform', '-translate-x-full');
+          mobileSidebarOverlay.classList.add('hidden');
+        }
+      }
     });
   });
 </script>
