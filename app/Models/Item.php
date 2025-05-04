@@ -12,7 +12,11 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'partner_id', 'title', 'description', 'price_per_day', 'category_id',
+        'partner_id',
+        'title',
+        'description',
+        'price_per_day',
+        'category_id',
     ];
 
     public function partner()
@@ -23,6 +27,13 @@ class Item extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    // app/Models/User.php
+    //xxx
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'partner_id');
     }
 
     public function images()
@@ -47,13 +58,15 @@ class Item extends Model
         $visibleReviews = $this->reviews->where('is_visible', true);
         $total = $visibleReviews->count();
 
-        if ($total === 0) return 0;
+        if ($total === 0)
+            return 0;
 
         $fiveStars = $visibleReviews->where('rating', $number)->count();
-        
+
         return round(($fiveStars / $total) * 100, 1);
     }
 
+    // app/Models/Item.php
 
     protected $casts = [
         'price_per_day' => 'decimal:2',
@@ -65,8 +78,13 @@ class Item extends Model
         return $this->hasMany(Listing::class);
     }
 
+    //
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'item_id');
+    }
 
-   
+
     public function allReviews(): HasMany
     {
         return $this->hasMany(Review::class);

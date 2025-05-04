@@ -413,7 +413,7 @@
                             Tableau de bord
                         </a>
                         <a href="{{ route('admin.clients') }}" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
-                            <i class="fas fa-user w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
+                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Clients
                             <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $stats['total'] }}</span>
                         </a>
@@ -435,11 +435,6 @@
                             <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Avis
                             <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
-                        <a href="#reports" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-flag w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Signalements
-                            <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">5</span>
                         </a>
                     </nav>
                 </div>
@@ -475,24 +470,6 @@
                     </nav>
                 </div>
                 
-                <div class="mt-auto px-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center px-2 py-3 mb-2 bg-admin-light/40 dark:bg-admin-dark/40 rounded-lg">
-                        <div class="flex-shrink-0 mr-3">
-                            <i class="fas fa-shield-alt text-admin-primary dark:text-admin-secondary"></i>
-                        </div>
-                        <div class="text-sm">
-                            <p class="font-medium text-admin-primary dark:text-admin-secondary">Mode maintenance</p>
-                            <label class="switch mt-1">
-                                <input type="checkbox" id="maintenance-mode">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 px-2">
-                        <p>Version: <span class="font-medium">2.4.1</span></p>
-                        <p>Dernière mise à jour: <span class="font-medium">01/08/2023</span></p>
-                    </div>
-                </div>
             </div>
         </aside>
         
@@ -517,13 +494,6 @@
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Gestion des Clients</h1>
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Liste de tous les clients de la plateforme</p>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex space-x-3">
-                        <a href="#export-clients" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-download mr-2"></i>
-                            Exporter
-                        </a>
-                      
                     </div>
                 </div>
                 

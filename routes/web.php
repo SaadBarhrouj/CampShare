@@ -14,6 +14,7 @@ use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\EquipmentDetailController;
+use App\Http\Controllers\UserController;
 
 
 // Index Page
@@ -66,7 +67,6 @@ Route::get('/fix-equipment-images', [ImageFixController::class, 'fixImages'])->n
 Route::get('/fix-images', [App\Http\Controllers\ImageFixController::class, 'fixImages'])->name('fix.images');
 
 // Client Routes
-//Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
 Route::get('/client/reservations/filter', [ClientController::class, 'ShowHomeClient'])->name('profile');
 Route::post('/profile', [ClientController::class, 'update'])->name('profile.update');
 Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
@@ -78,7 +78,21 @@ Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cance
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/clients', [AdminController::class, 'clients'])->name('admin.clients');
-    Route::get('/partners', [AdminController::class, 'partners'])->name('admin.partners'); });
+    Route::get('/partners', [AdminController::class, 'partners'])->name('admin.partners');
+    Route::get('/users/{user}/details', [AdminController::class, 'getUserDetails'])->name('admin.user.details');
+    Route::post('/users/{user}/update', [AdminController::class, 'updateUserDetails'])->name('admin.user.update');
+    Route::post('/users/{user}/deactivate', [UserController::class, 'deactivateUser'])
+        ->name('admin.users.deactivate')
+        ->middleware(['auth', 'admin']);
+    Route::post('/users/{id}/toggle-activation', [UserController::class, 'toggleActivation'])
+        ->name('admin.users.toggleActivation');
+});
+
+
+Route::get('/admin/recent-reservations', [AdminController::class, 'getRecentReservations']);
+Route::get('/admin/recent-equipments', [AdminController::class, 'getRecentEquipments']);
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::post('/admin/users/{user}/save-notes', [UserController::class, 'saveNotes']);
 
 
 
@@ -86,18 +100,47 @@ Route::prefix('admin')->group(function () {
 Route::get('/register', [RegistrationController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
 
-// Login Routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-////////////////////////////////////////////////
-Route::get('/showAllNotifications', [NotificationController::class, 'showAllNotifications'])->name('showAllNotifications');
 
-// Profiles Routes
+// Reservation Routes
+Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
+Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cancel'])->name('client.reservations.cancel');
+
+
+// Listings Client Routes
+Route::get('/listings/{listing}', [EquipmentDetailController::class, 'show'])->name('client.listings.show');
+Route::get('/equipment/{listing}/reserved-dates', [EquipmentDetailController::class, 'getReservedDates'])->name('equipment.reserved-dates');
+
+
+
+// Image Fix Routes
+Route::get('/fix-equipment-images', [ImageFixController::class, 'fixImages'])->name('fix.equipment.images');
+Route::get('/fix-images', [ImageFixController::class, 'fixImages'])->name('fix.images');
+
+
+// Profile Routes
 Route::get('/profile/client/{user}', [ProfileController::class, 'indexClientProfile'])->name('client.profile.index');
 Route::get('/profile/partner/{user}', [ProfileController::class, 'indexPartnerProfile'])->name('partner.profile.index');
 
 
 
-Route::get('/equipment/{listing}/reserved-dates', [EquipmentDetailController::class, 'getReservedDates'])->name('equipment.reserved-dates');
-Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
-Route::get('/listings/{listing}', [EquipmentDetailController::class, 'show'])->name('client.listings.show');
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// Notification Routes
+Route::get('/showAllNotifications', [NotificationController::class, 'showAllNotifications'])->name('showAllNotifications');
+
+
+// User Routes
+Route::post('/user/become-partner', [UserController::class, 'becomePartner'])
+    ->middleware('auth')
+    ->name('user.become-partner');
+
+
+
+
+
+

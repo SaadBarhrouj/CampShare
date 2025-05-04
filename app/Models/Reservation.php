@@ -67,4 +67,12 @@ class Reservation extends Model
         return $query->whereIn('status', ['confirmed', 'ongoing']);
     }
 
+
+public function equipment()
+{
+    return $this->belongsTo(Item::class, 'item_id');
+}
+
+
+
 }

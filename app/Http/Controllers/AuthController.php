@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class AuthController extends Controller
 {
-
     public function showLoginForm()
     {
         return view('auth.login');
@@ -20,13 +17,13 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->filled('remember-me'))) {
-
             $request->session()->regenerate();
 
             $user = Auth::user();
-            $user->save();
 
-            session()->flash('success', 'Contrat PDF généré avec succès.');
+            // Si besoin d’enregistrer autre chose au login, tu peux le faire ici
+
+            session()->flash('success', 'Connexion réussie.');
 
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
@@ -35,13 +32,16 @@ class AuthController extends Controller
             } else {
                 return redirect()->route('client.listings.index');
             }
-
         }
-        
+
         return back()->withErrors([
             'email' => 'Email ou mot de passe incorrect.',
         ]);
-
     }
 
+    public function logout()
+    {
+        Auth::logout();  
+        return redirect()->route('login');  
+    }
 }
