@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         <!-- Page header -->
@@ -18,7 +20,7 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                    <div class="bg-forest dark:bg-meadow h-2.5 rounded-full progress-bar" style="width: 20%"></div>
+                    <div class="bg-forest dark:bg-meadow h-2.5 rounded-full progress-bar" style="width: 25%"></div>
                 </div>
             </div>
             <div class="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -26,16 +28,13 @@
                     <span class="font-medium text-forest dark:text-meadow">1. Informations</span>
                 </div>
                 <div class="step-indicator" data-step="2">
-                    <span>2. Photos</span>
+                    <span>2. Disponibilité</span>
                 </div>
                 <div class="step-indicator" data-step="3">
-                    <span>3. Disponibilité</span>
+                    <span>3. Options</span>
                 </div>
                 <div class="step-indicator" data-step="4">
-                    <span>4. Options</span>
-                </div>
-                <div class="step-indicator" data-step="5">
-                    <span>5. Publication</span>
+                    <span>4. Publication</span>
                 </div>
             </div>
         </div>
@@ -80,82 +79,21 @@
                                 Information
                             </h4>
                             <p class="text-sm text-blue-700 dark:text-blue-200">
-                                Les informations de base de votre équipement sont déjà renseignées. Vous allez maintenant ajouter des photos et définir la disponibilité pour créer votre annonce.
+                                Les informations de base de votre équipement sont déjà renseignées. Vous allez maintenant définir la disponibilité pour créer votre annonce.
                             </p>
                         </div>
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-end space-x-4">
-                        <button type="button" id="next-to-step-2" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
-                            Continuer vers Photos
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Step 2: Photos -->
-                <div class="form-step" id="step-2" style="display: none;">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Photos de l'équipement</h2>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                            Ajoutez des photos de qualité pour mettre en valeur votre équipement.
-                        </p>
-                    </div>
-                    
-                    <div class="p-6 space-y-6">
-                        <!-- Zone de drop pour les photos -->
-                        <div id="dropzone-container" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                            <div class="space-y-4">
-                                <div class="mx-auto flex justify-center">
-                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500"></i>
-                                </div>
-                                <div class="space-y-2">
-                                    <h4 class="text-gray-700 dark:text-gray-300 font-medium">Déposez vos photos ici</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        Glissez-déposez vos photos ou cliquez pour sélectionner des fichiers
-                                    </p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        Formats acceptés: JPG, PNG, WEBP • Max 5 Mo par image
-                                    </p>
-                                </div>
-                                <button type="button" id="browse-files" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow">
-                                    Parcourir les fichiers
-                                </button>
-                                <input type="file" id="file-input" name="images[]" multiple accept="image/*" class="hidden">
-                            </div>
-                        </div>
-                        
-                        <!-- Prévisualisations des photos -->
-                        <div id="preview-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6" style="display: none;">
-                            <!-- Les prévisualisations seront ajoutées ici dynamiquement -->
-                        </div>
-                        
-                        <!-- Message d'aide -->
-                        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-md p-4">
-                            <h4 class="font-medium text-yellow-800 dark:text-yellow-300 flex items-center mb-2">
-                                <i class="fas fa-lightbulb mr-2"></i>
-                                Conseil
-                            </h4>
-                            <p class="text-sm text-yellow-700 dark:text-yellow-200">
-                                Ajoutez au moins 3 photos de qualité prises sous différents angles. La première photo sera utilisée comme image principale dans les résultats de recherche. Vous pouvez réorganiser vos photos en les faisant glisser.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
-                        <button type="button" id="back-to-step-1" class="px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Retour
-                        </button>
-                        <button type="button" id="next-to-step-3" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-2" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Disponibilité
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
                 
-                <!-- Step 3: Disponibilité et localisation -->
-                <div class="form-step" id="step-3" style="display: none;">
+                <!-- Step 2: Disponibilité et localisation -->
+                <div class="form-step" id="step-2" style="display: none;">
                     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-xl font-bold text-gray-900 dark:text-white">Disponibilité et localisation</h2>
                         <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
@@ -246,39 +184,49 @@
                                 @enderror
                             </div>
                             
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Position exacte</label>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mb-2">Cliquez sur la carte pour indiquer où vous pouvez mettre l'équipement à disposition.</p>
+                                
+                                <div id="map-container" class="w-full h-80 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 mb-3"></div>
+                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="latitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Latitude (optionnel)</label>
-                                    <input type="text" id="latitude" name="latitude" placeholder="Ex: 33.5731104" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white">
+                                        <label for="latitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Latitude</label>
+                                        <input type="text" id="latitude" name="latitude" placeholder="Ex: 33.5731104" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white" readonly>
                                     @error('latitude')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div>
-                                    <label for="longitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Longitude (optionnel)</label>
-                                    <input type="text" id="longitude" name="longitude" placeholder="Ex: -7.5898434" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white">
+                                        <label for="longitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Longitude</label>
+                                        <input type="text" id="longitude" name="longitude" placeholder="Ex: -7.5898434" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white" readonly>
                                     @error('longitude')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
+                                    </div>
                                 </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                    <i class="fas fa-info-circle mr-1"></i> L'emplacement exact ne sera partagé qu'avec les locataires après confirmation de la réservation.
+                                </p>
                             </div>
                         </div>
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
-                        <button type="button" id="back-to-step-2" class="px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
+                        <button type="button" id="back-to-step-1" class="btn-back px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour
                         </button>
-                        <button type="button" id="next-to-step-4" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-3" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Options
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
                 
-                <!-- Step 4: Options premium -->
-                <div class="form-step" id="step-4" style="display: none;">
+                <!-- Step 3: Options premium -->
+                <div class="form-step" id="step-3" style="display: none;">
                     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-xl font-bold text-gray-900 dark:text-white">Options de mise en avant</h2>
                         <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
@@ -354,95 +302,102 @@
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
-                        <button type="button" id="back-to-step-3" class="px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
+                        <button type="button" id="back-to-step-2" class="btn-back px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour
                         </button>
-                        <button type="button" id="next-to-step-5" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-4" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Publication
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
                 
-                <!-- Step 5: Publication (Récapitulatif) -->
-                <div class="form-step" id="step-5" style="display: none;">
+                <!-- Step 4: Publication (Récapitulatif) -->
+                <div class="form-step" id="step-4" style="display: none;">
                     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-xl font-bold text-gray-900 dark:text-white">Récapitulatif de votre annonce</h2>
                         <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                            Vérifiez les informations avant de publier votre annonce.
+                            Vérifiez les détails de votre annonce avant de la publier.
                         </p>
                     </div>
                     
                     <div class="p-6 space-y-6">
-                        <!-- Aperçu de l'annonce -->
-                        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm">
-                            <!-- En-tête avec image principale -->
-                            <div id="recap-main-image" class="h-64 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-gray-400 dark:text-gray-500">
-                                    <i class="fas fa-image text-4xl"></i>
-                                </div>
-                                <!-- L'image principale sera insérée ici par JavaScript -->
-                            </div>
-                            
-                            <!-- Informations de l'annonce -->
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ $equipment->title }}</h3>
-                                <p class="text-forest dark:text-meadow font-medium text-lg mb-4">{{ $equipment->price_per_day }} MAD / jour</p>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Informations de l'équipement -->
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Votre équipement</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    @if($equipment->images && count($equipment->images) > 0)
+                                        <img src="{{ asset('storage/' . $equipment->images[0]->url) }}" alt="{{ $equipment->title }}" class="w-24 h-24 object-cover rounded-md mr-4">
+                                    @else
+                                        <div class="w-24 h-24 bg-gray-200 dark:bg-gray-600 rounded-md flex items-center justify-center mr-4">
+                                            <i class="fas fa-campground text-gray-400 dark:text-gray-500 text-2xl"></i>
+                                        </div>
+                                    @endif
+                                    
                                     <div>
-                                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Disponibilité</h4>
-                                        <p class="text-gray-900 dark:text-white" id="recap-dates">Du <span id="recap-start-date">--/--/----</span> au <span id="recap-end-date">--/--/----</span></p>
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white" id="recap-equipment-title">{{ $equipment->title }}</h4>
+                                        <p class="text-forest dark:text-meadow font-medium" id="recap-equipment-price">{{ $equipment->price_per_day }} MAD / jour</p>
                                     </div>
-                                    <div>
-                                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Localisation</h4>
-                                        <p class="text-gray-900 dark:text-white" id="recap-city">--</p>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Livraison</h4>
-                                        <p class="text-gray-900 dark:text-white" id="recap-delivery">--</p>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Mise en avant</h4>
-                                        <p class="text-gray-900 dark:text-white" id="recap-premium">Non</p>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Description</h4>
-                                    <p class="text-gray-900 dark:text-white">{{ $equipment->description }}</p>
                                 </div>
                             </div>
+                            </div>
                             
-                            <!-- Galerie d'images (miniatures) -->
-                            <div class="px-6 pb-6">
-                                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Photos</h4>
-                                <div id="recap-gallery" class="flex space-x-2 overflow-x-auto pb-2">
-                                    <!-- Les miniatures seront insérées ici par JavaScript -->
+                        <!-- Détails de l'annonce -->
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Détails de l'annonce</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 space-y-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400">Période de disponibilité</h4>
+                                        <p class="text-gray-900 dark:text-white" id="recap-dates">-</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400">Localisation</h4>
+                                        <p class="text-gray-900 dark:text-white" id="recap-location">-</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400">Option de livraison</h4>
+                                        <p class="text-gray-900 dark:text-white" id="recap-delivery">-</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400">Mise en avant</h4>
+                                        <p class="text-gray-900 dark:text-white" id="recap-premium">-</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Conditions générales -->
-                        <div class="flex items-start mt-6">
-                            <div class="flex items-center h-5">
-                                <input id="terms_agree" name="terms_agree" type="checkbox" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600 rounded" required>
+                        <!-- Conditions -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Conditions d'utilisation</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start">
+                                    <div class="flex items-center h-5 mt-1">
+                                        <input id="terms_agree" name="terms_agree" type="checkbox" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600" required>
+                                    </div>
+                                    <div class="ml-3">
+                                        <label for="terms_agree" class="text-sm text-gray-700 dark:text-gray-300">
+                                            Je confirme avoir lu et accepté les <a href="#" class="text-forest dark:text-meadow hover:underline">conditions générales d'utilisation</a> et les <a href="#" class="text-forest dark:text-meadow hover:underline">conditions de location</a> de CampShare.
+                                        </label>
+                                    </div>
                             </div>
-                            <div class="ml-3 text-sm">
-                                <label for="terms_agree" class="font-medium text-gray-700 dark:text-gray-300">J'accepte les conditions générales</label>
-                                <p class="text-gray-500 dark:text-gray-400">En publiant cette annonce, j'accepte les <a href="#" class="text-forest dark:text-meadow hover:underline">conditions générales</a> et je certifie que toutes les informations fournies sont exactes.</p>
+                                
+                                @error('terms_agree')
+                                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
-                        <button type="button" id="back-to-step-4" class="px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
+                        <button type="button" id="back-to-step-3" class="btn-back px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour
                         </button>
-                        <button type="submit" id="publish-button" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-check mr-2"></i>
+                        <button type="submit" id="publish-button" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors flex items-center">
+                            <i class="fas fa-paper-plane mr-2"></i>
                             Publier l'annonce
                         </button>
                     </div>
@@ -503,12 +458,17 @@
             
             // Mettre à jour l'étape actuelle
             currentStep = step;
+            
+            // Si on passe à l'étape de la carte, initialiser la carte
+            if (step === 2) {
+                initMap();
+            }
         }
         
         // Initialisation : afficher uniquement la première étape
         goToStep(1);
         
-        // Événement pour le bouton "Continuer vers Photos"
+        // Événement pour le bouton "Continuer vers Disponibilité"
         const nextToStep2Button = document.getElementById('next-to-step-2');
         if (nextToStep2Button) {
             nextToStep2Button.addEventListener('click', function() {
@@ -524,7 +484,7 @@
             });
         }
         
-        // Événement pour le bouton "Continuer vers Disponibilité"
+        // Événement pour le bouton "Continuer vers Options"
         const nextToStep3Button = document.getElementById('next-to-step-3');
         if (nextToStep3Button) {
             nextToStep3Button.addEventListener('click', function() {
@@ -540,58 +500,12 @@
             });
         }
         
-        // Événement pour le bouton "Continuer vers Options"
+        // Événement pour le bouton "Continuer vers Publication"
         const nextToStep4Button = document.getElementById('next-to-step-4');
         if (nextToStep4Button) {
             nextToStep4Button.addEventListener('click', function() {
-                // Valider les champs obligatoires avant de passer à l'étape suivante
-                const startDate = document.getElementById('start_date').value;
-                const endDate = document.getElementById('end_date').value;
-                const cityId = document.getElementById('city_id').value;
-                
-                let isValid = true;
-                let errorMessage = '';
-                
-                if (!startDate) {
-                    isValid = false;
-                    errorMessage += 'La date de début est requise.\n';
-                    document.getElementById('start_date').classList.add('border-red-500');
-                } else {
-                    document.getElementById('start_date').classList.remove('border-red-500');
-                }
-                
-                if (!endDate) {
-                    isValid = false;
-                    errorMessage += 'La date de fin est requise.\n';
-                    document.getElementById('end_date').classList.add('border-red-500');
-                } else {
-                    document.getElementById('end_date').classList.remove('border-red-500');
-                }
-                
-                if (!cityId) {
-                    isValid = false;
-                    errorMessage += 'La ville est requise.\n';
-                    document.getElementById('city_id').classList.add('border-red-500');
-                } else {
-                    document.getElementById('city_id').classList.remove('border-red-500');
-                }
-                
-                if (startDate && endDate) {
-                    const start = new Date(startDate);
-                    const end = new Date(endDate);
-                    
-                    if (end < start) {
-                        isValid = false;
-                        errorMessage += 'La date de fin doit être postérieure à la date de début.\n';
-                        document.getElementById('end_date').classList.add('border-red-500');
-                    }
-                }
-                
-                if (isValid) {
                     goToStep(4);
-                } else {
-                    alert('Veuillez corriger les erreurs suivantes :\n' + errorMessage);
-                }
+                updateRecapitulatif();
             });
         }
         
@@ -600,23 +514,6 @@
         if (backToStep3Button) {
             backToStep3Button.addEventListener('click', function() {
                 goToStep(3);
-            });
-        }
-        
-        // Événement pour le bouton "Continuer vers Publication"
-        const nextToStep5Button = document.getElementById('next-to-step-5');
-        if (nextToStep5Button) {
-            nextToStep5Button.addEventListener('click', function() {
-                goToStep(5);
-                updateRecapitulatif();
-            });
-        }
-        
-        // Événement pour le bouton "Retour" (étape 5 vers étape 4)
-        const backToStep4Button = document.getElementById('back-to-step-4');
-        if (backToStep4Button) {
-            backToStep4Button.addEventListener('click', function() {
-                goToStep(4);
             });
         }
         
@@ -664,118 +561,51 @@
         
         // Fonction pour mettre à jour le récapitulatif
         function updateRecapitulatif() {
-            // Dates
+            // Récupérer les valeurs
             const startDate = document.getElementById('start_date').value;
             const endDate = document.getElementById('end_date').value;
+            const cityId = document.getElementById('city_id').value;
+            const cityName = document.getElementById('city_id').options[document.getElementById('city_id').selectedIndex].text;
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
             
-            if (startDate) {
-                const formattedStartDate = new Date(startDate).toLocaleDateString('fr-FR');
-                document.getElementById('recap-start-date').textContent = formattedStartDate;
+            // Options de livraison
+            let deliveryOption = '';
+            if (document.getElementById('delivery_option_pickup').checked) {
+                deliveryOption = 'Récupération sur place uniquement';
+            } else if (document.getElementById('delivery_option_delivery').checked) {
+                deliveryOption = 'Livraison uniquement';
+            } else if (document.getElementById('delivery_option_both').checked) {
+                deliveryOption = 'Récupération sur place ou livraison';
             }
             
-            if (endDate) {
-                const formattedEndDate = new Date(endDate).toLocaleDateString('fr-FR');
-                document.getElementById('recap-end-date').textContent = formattedEndDate;
+            // Options premium
+            let premiumOption = 'Aucune option premium sélectionnée';
+            if (document.getElementById('is_premium').checked) {
+                const premiumType = document.querySelector('input[name="premium_type"]:checked').value;
+                premiumOption = `Option premium: ${premiumType}`;
             }
             
-            // Ville
-            const citySelect = document.getElementById('city_id');
-            if (citySelect.selectedIndex > 0) {
-                const selectedCity = citySelect.options[citySelect.selectedIndex].text;
-                document.getElementById('recap-city').textContent = selectedCity;
+            // Mettre à jour le récapitulatif
+            document.getElementById('recap-equipment-title').textContent = document.querySelector('.bg-gray-50 h3').textContent;
+            document.getElementById('recap-equipment-price').textContent = document.querySelector('.bg-gray-50 .text-forest').textContent;
+            
+            document.getElementById('recap-dates').textContent = `Du ${formatDate(startDate)} au ${formatDate(endDate)}`;
+            
+            let locationText = cityName;
+            if (latitude && longitude) {
+                locationText += ` (Position GPS: ${latitude}, ${longitude})`;
             }
+            document.getElementById('recap-location').textContent = locationText;
             
-            // Option de livraison
-            const deliveryOptions = document.querySelectorAll('input[name="delivery_option"]');
-            deliveryOptions.forEach(option => {
-                if (option.checked) {
-                    let deliveryText = '';
-                    if (option.value === 'pickup') {
-                        deliveryText = 'Récupération sur place uniquement';
-                    } else if (option.value === 'delivery') {
-                        deliveryText = 'Livraison uniquement';
-                    } else if (option.value === 'both') {
-                        deliveryText = 'Récupération sur place ou livraison';
-                    }
-                    document.getElementById('recap-delivery').textContent = deliveryText;
-                }
-            });
-            
-            // Option premium
-            const isPremium = document.getElementById('is_premium').checked;
-            let premiumText = 'Non';
-            
-            if (isPremium) {
-                const selectedPremiumOption = document.querySelector('input[name="premium_type"]:checked');
-                if (selectedPremiumOption) {
-                    const premiumType = selectedPremiumOption.value;
-                    let premiumLabel = '';
-                    
-                    if (premiumType === '7 jours') {
-                        premiumLabel = 'Basique (7 jours) - + 49 MAD';
-                    } else if (premiumType === '15 jours') {
-                        premiumLabel = 'Standard (15 jours) - + 89 MAD';
-                    } else if (premiumType === '30 jours') {
-                        premiumLabel = 'Premium (30 jours) - + 149 MAD';
-                    }
-                    
-                    premiumText = premiumLabel;
-                }
-            }
-            
-            document.getElementById('recap-premium').textContent = premiumText;
-            
-            // Images
-            updateRecapImages();
+            document.getElementById('recap-delivery').textContent = deliveryOption;
+            document.getElementById('recap-premium').textContent = premiumOption;
         }
         
-        // Fonction pour mettre à jour les images dans le récapitulatif
-        function updateRecapImages() {
-            const recapMainImage = document.getElementById('recap-main-image');
-            const recapGallery = document.getElementById('recap-gallery');
-            
-            // Vider la galerie
-            recapGallery.innerHTML = '';
-            
-            // Récupérer toutes les images prévisualisées
-            const previewImages = document.querySelectorAll('#preview-container .group');
-            
-            if (previewImages.length > 0) {
-                // Trouver l'image principale (celle avec l'indicateur)
-                let mainImageSrc = null;
-                
-                previewImages.forEach((preview, index) => {
-                    const img = preview.querySelector('img');
-                    const isMain = preview.querySelector('.main-image-indicator');
-                    
-                    // Créer une miniature pour la galerie
-                    const thumbnail = document.createElement('div');
-                    thumbnail.className = 'w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700';
-                    
-                    const thumbImg = document.createElement('img');
-                    thumbImg.src = img.src;
-                    thumbImg.className = 'w-full h-full object-cover';
-                    thumbImg.alt = 'Photo ' + (index + 1);
-                    
-                    thumbnail.appendChild(thumbImg);
-                    recapGallery.appendChild(thumbnail);
-                    
-                    // Si c'est l'image principale
-                    if (isMain) {
-                        mainImageSrc = img.src;
-                    }
-                });
-                
-                // Mettre à jour l'image principale
-                if (mainImageSrc) {
-                    recapMainImage.innerHTML = '';
-                    const mainImg = document.createElement('img');
-                    mainImg.src = mainImageSrc;
-                    mainImg.className = 'w-full h-full object-cover';
-                    mainImg.alt = 'Image principale';
-                    recapMainImage.appendChild(mainImg);
-                }
-            }
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR');
         }
         
         // Validation du formulaire avant soumission
@@ -790,165 +620,106 @@
                 return;
             }
             
-            // Vérifier si au moins une image a été ajoutée
-            const hasImages = document.querySelectorAll('#preview-container .group').length > 0;
-            
-            if (!hasImages) {
-                e.preventDefault();
-                alert('Vous devez ajouter au moins une photo pour publier votre annonce.');
-                return;
-            }
-            
             // Soumettre le formulaire si tout est valide
             form.submit();
         });
         
-        // Gestion de l'upload des photos
-        const dropzoneContainer = document.getElementById('dropzone-container');
-        const fileInput = document.getElementById('file-input');
-        const browseFilesButton = document.getElementById('browse-files');
-        const previewContainer = document.getElementById('preview-container');
-        const uploadedFiles = new Set();
+        // Initialisation de la carte
+        let map, marker;
         
-        // Ouvrir le sélecteur de fichiers au clic sur le bouton ou la zone de drop
-        browseFilesButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            fileInput.click();
-        });
-        
-        dropzoneContainer.addEventListener('click', function() {
-            fileInput.click();
-        });
-        
-        // Gestion du drag & drop
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropzoneContainer.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzoneContainer.addEventListener(eventName, highlight, false);
-        });
-        
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzoneContainer.addEventListener(eventName, unhighlight, false);
-        });
-        
-        function highlight() {
-            dropzoneContainer.classList.add('border-forest', 'dark:border-meadow', 'bg-green-50', 'dark:bg-green-900/10');
-        }
-        
-        function unhighlight() {
-            dropzoneContainer.classList.remove('border-forest', 'dark:border-meadow', 'bg-green-50', 'dark:bg-green-900/10');
-        }
-        
-        // Gestion du drop de fichiers
-        dropzoneContainer.addEventListener('drop', handleDrop, false);
-        
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        }
-        
-        // Gestion de la sélection de fichiers via l'input
-        fileInput.addEventListener('change', function() {
-            handleFiles(this.files);
-        });
-        
-        function handleFiles(files) {
-            if (files.length > 0) {
-                previewContainer.style.display = 'grid';
-                
-                Array.from(files).forEach(file => {
-                    if (!uploadedFiles.has(file.name) && file.type.match('image.*')) {
-                        uploadedFiles.add(file.name);
-                        createPreview(file);
-                    }
-                });
-            }
-        }
-        
-        function createPreview(file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
+        function initMap() {
+            // Vérifier si la carte est déjà initialisée
+            if (map) return;
             
-            reader.onload = function() {
-                const previewWrapper = document.createElement('div');
-                previewWrapper.className = 'relative group';
+            // Coordonnées par défaut (Maroc)
+            const defaultLat = 31.7917;
+            const defaultLng = -7.0926;
+            const defaultZoom = 5;
+            
+            // Créer la carte
+            map = L.map('map-container').setView([defaultLat, defaultLng], defaultZoom);
+            
+            // Ajouter la couche de tuiles OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Gérer le clic sur la carte
+            map.on('click', function(e) {
+                // Mettre à jour les coordonnées dans les champs
+                document.getElementById('latitude').value = e.latlng.lat.toFixed(6);
+                document.getElementById('longitude').value = e.latlng.lng.toFixed(6);
                 
-                const previewImage = document.createElement('div');
-                previewImage.className = 'relative aspect-square rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700';
-                
-                const img = document.createElement('img');
-                img.src = reader.result;
-                img.className = 'w-full h-full object-cover';
-                img.alt = file.name;
-                
-                const overlay = document.createElement('div');
-                overlay.className = 'absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity flex items-center justify-center';
-                
-                const actions = document.createElement('div');
-                actions.className = 'absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1';
-                
-                const mainButton = document.createElement('button');
-                mainButton.type = 'button';
-                mainButton.className = 'p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
-                mainButton.innerHTML = '<i class="fas fa-star text-xs"></i>';
-                mainButton.title = 'Définir comme image principale';
-                
-                const deleteButton = document.createElement('button');
-                deleteButton.type = 'button';
-                deleteButton.className = 'p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
-                deleteButton.innerHTML = '<i class="fas fa-trash-alt text-xs"></i>';
-                deleteButton.title = 'Supprimer cette image';
-                
-                // Événement pour supprimer l'image
-                deleteButton.addEventListener('click', function() {
-                    uploadedFiles.delete(file.name);
-                    previewWrapper.remove();
-                    
-                    if (uploadedFiles.size === 0) {
-                        previewContainer.style.display = 'none';
-                    }
-                });
-                
-                // Événement pour définir l'image principale
-                mainButton.addEventListener('click', function() {
-                    // Retirer la classe de toutes les images
-                    document.querySelectorAll('.main-image-indicator').forEach(el => el.remove());
-                    
-                    // Ajouter l'indicateur d'image principale
-                    const mainIndicator = document.createElement('div');
-                    mainIndicator.className = 'absolute top-2 left-2 p-1 bg-forest dark:bg-meadow rounded-full shadow-sm text-white main-image-indicator';
-                    mainIndicator.innerHTML = '<i class="fas fa-star text-xs"></i>';
-                    
-                    previewImage.appendChild(mainIndicator);
-                    
-                    // Déplacer cette image en première position
-                    previewContainer.prepend(previewWrapper);
-                });
-                
-                actions.appendChild(mainButton);
-                actions.appendChild(deleteButton);
-                
-                previewImage.appendChild(img);
-                previewImage.appendChild(overlay);
-                
-                previewWrapper.appendChild(previewImage);
-                previewWrapper.appendChild(actions);
-                
-                previewContainer.appendChild(previewWrapper);
-                
-                // Si c'est la première image, la définir comme principale
-                if (previewContainer.children.length === 1) {
-                    mainButton.click();
+                // Ajouter ou déplacer le marqueur
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
                 }
-            };
+            });
+            
+            // Récupérer la position de l'utilisateur si disponible
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Mettre à jour la vue de la carte
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        map.setView([userLat, userLng], 12);
+                        
+                        // Ajouter un marqueur pour la position de l'utilisateur
+                        if (marker) {
+                            marker.setLatLng([userLat, userLng]);
+                        } else {
+                            marker = L.marker([userLat, userLng]).addTo(map);
+                        }
+                        
+                        // Mettre à jour les champs
+                        document.getElementById('latitude').value = userLat.toFixed(6);
+                        document.getElementById('longitude').value = userLng.toFixed(6);
+                    },
+                    function(error) {
+                        // Gérer les erreurs
+                        console.log('Erreur de géolocalisation:', error.message);
+                    }
+                );
+            }
+            
+            // Redimensionner la carte après son chargement
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+        
+        // Événement quand on sélectionne une ville
+        const citySelect = document.getElementById('city_id');
+        if (citySelect) {
+            citySelect.addEventListener('change', function() {
+                if (!map) return;
+                
+                const selectedCity = this.options[this.selectedIndex].text;
+                if (selectedCity && selectedCity !== 'Sélectionnez une ville') {
+                    // Utiliser l'API de géocodage pour trouver les coordonnées de la ville
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selectedCity)},Maroc`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const lat = parseFloat(data[0].lat);
+                                const lng = parseFloat(data[0].lon);
+                                
+                                // Mettre à jour la vue de la carte
+                                map.setView([lat, lng], 12);
+                                
+                                // Ne pas ajouter automatiquement de marqueur ni mettre à jour les coordonnées
+                                // car l'utilisateur doit cliquer pour définir l'emplacement exact
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de la géolocalisation de la ville:', error);
+                        });
+                }
+            });
         }
     });
 </script>

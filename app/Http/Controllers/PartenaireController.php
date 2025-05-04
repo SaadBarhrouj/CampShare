@@ -253,8 +253,7 @@ public function storeAnnonce(Request $request)
             'longitude' => 'nullable|numeric',
             'is_premium' => 'nullable',
             'premium_type' => 'nullable|required_if:is_premium,1|in:7 jours,15 jours,30 jours',
-            'terms_agree' => 'required',
-            'images.*' => 'nullable|image|max:5120', // Max 5MB par image
+            'terms_agree' => 'required'
         ]);
 
         // Vérifier que l'équipement appartient au partenaire connecté
@@ -287,25 +286,7 @@ public function storeAnnonce(Request $request)
         
         $listing->save();
         
-        // Traitement des images
-        if ($request->hasFile('images')) {
-            $mainImageSet = false;
-            
-            foreach ($request->file('images') as $index => $imageFile) {
-                $path = $imageFile->store('listings', 'public');
-                
-                $image = new Image();
-                $image->url = $path;
-                $image->item_id = $request->item_id;
-                // Suppression de la ligne qui cause l'erreur car la colonne is_main n'existe pas
-                // $image->is_main = !$mainImageSet;
-                $image->save();
-                
-                $mainImageSet = true;
-            }
-        }
-
-        return redirect()->route('partenaire.mes-annonces')->with('success', 'Votre annonce a été publiée avec succès !');
+        return redirect()->route('partenaire.mes-annonces')->with('success', 'Votre annonce a été publiée avec succès ! Vous pouvez gérer toutes vos annonces dans cette page.');
     }
 
 public function handleAction(Request $request)
@@ -397,16 +378,100 @@ public function Avisfilter(Request $request)
     ]);
 }
 
-public function showEquipements()
+public function showEquipements(Request $request)
 {
     $user = Auth::user();
-    $equipements = Item::where('partner_id', $user->id)
-        ->with(['category', 'images', 'reviews'])
-        ->get();
-    $categories = Category::all();
-
     
-    return view('Partenaire.equipements', compact('equipements', 'categories', 'user'));
+    // Start building the query
+    $query = Item::where('partner_id', $user->id);
+    
+    // Apply search filter
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('description', 'like', '%' . $search . '%');
+        });
+    }
+    
+    // Apply category filter
+    if ($request->has('category') && !empty($request->category)) {
+        $query->where('category_id', $request->category);
+    }
+    
+    // Apply price range filter
+    if (($request->has('min_price') && !empty($request->min_price)) || 
+        ($request->has('max_price') && !empty($request->max_price))) {
+        
+        if ($request->has('min_price') && !empty($request->min_price)) {
+            $query->where('price_per_day', '>=', $request->min_price);
+        }
+        
+        if ($request->has('max_price') && !empty($request->max_price)) {
+            $query->where('price_per_day', '<=', $request->max_price);
+        }
+    }
+    
+    // Apply sorting
+    if ($request->has('sort_by') && !empty($request->sort_by)) {
+        $sort_by = $request->sort_by;
+        if ($sort_by == 'newest') {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($sort_by == 'price-asc') {
+            $query->orderBy('price_per_day', 'asc');
+        } elseif ($sort_by == 'price-desc') {
+            $query->orderBy('price_per_day', 'desc');
+        } elseif ($sort_by == 'title-asc') {
+            $query->orderBy('title', 'asc');
+        } elseif ($sort_by == 'title-desc') {
+            $query->orderBy('title', 'desc');
+        }
+    } else {
+        // Default sorting
+        $query->orderBy('created_at', 'desc');
+    }
+    
+    // Execute the query with relationships
+    $AllEquipement = $query->with(['category', 'images', 'reviews'])->get();
+    
+    // Get all categories for the dropdown
+    $categories = Category::all();
+    
+    // Get other data needed for the dashboard view using PartenaireModel methods
+    $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
+    $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
+    $AverageRating = PartenaireModel::getAverageRatingPartner($user->email);
+    $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
+    $TotalListing = PartenaireModel::countListingsByEmail($user->email);
+    $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
+    $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
+    $RecentListing = PartenaireModel::getRecentPartnerListingsWithImagesByEmail($user->email);
+    $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
+    $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+    $NumberOfPartenaireEquipement = PartenaireModel::getNumberOfPartenaireEquipement($user->email);
+    $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
+    $NumberLocationsEncours = PartenaireModel::getNumberLocationsEncours($user->email);
+    $LesAvis = PartenaireModel::getAvis($user->email);
+    
+    return view('Partenaire.tablea_de_bord_partenaire', compact(
+        'user',
+        'sumPayment',
+        'NumberReservationCompleted',
+        'AverageRating',
+        'TotalAvis',
+        'TotalListing',
+        'pendingReservation',
+        'TotalListingActive',
+        'RecentListing',
+        'AllReservationForPartner',
+        'AllEquipement',
+        'NumberPendingReservation',
+        'NumberOfPartenaireEquipement',
+        'LocationsEncours',
+        'NumberLocationsEncours',
+        'LesAvis',
+        'categories'
+    ));
 }
 
 public function createEquipement(Request $request)
@@ -416,6 +481,7 @@ public function createEquipement(Request $request)
         'description' => 'required|string',
         'price_per_day' => 'required|numeric|min:0',
         'category_id' => 'required|exists:categories,id',
+        'images' => 'required|array|min:1|max:5',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
     ]);
 
@@ -629,18 +695,11 @@ public function deleteAllEquipements()
         $search = $request->input('search', '');
         
         // Requête de base pour récupérer les annonces du partenaire
-        $query = Listing::join('items', 'listings.item_id', '=', 'items.id')
+        $query = Listing::select('listings.*', 'items.title', 'items.description', 'items.price_per_day', 'cities.name as city_name')
+            ->join('items', 'listings.item_id', '=', 'items.id')
             ->join('cities', 'listings.city_id', '=', 'cities.id')
-            ->leftJoin('images', 'items.id', '=', 'images.item_id')
-            ->select(
-                'listings.*', 
-                'items.title', 
-                'items.description', 
-                'items.price_per_day',
-                'cities.name as city_name',
-                'images.url as image_urls',
-            )
-            ->where('items.partner_id', $user->id);
+            ->where('items.partner_id', $user->id)
+            ->distinct();
         
         // Appliquer les filtres
         if ($status !== 'all') {
@@ -674,6 +733,15 @@ public function deleteAllEquipements()
         
         // Paginer les résultats
         $annonces = $query->paginate(10);
+        
+        // Charger les images pour chaque annonce
+        foreach ($annonces as $annonce) {
+            $item = Item::find($annonce->item_id);
+            if ($item) {
+                $firstImage = $item->images()->first();
+                $annonce->image_urls = $firstImage ? $firstImage->url : null;
+            }
+        }
         
         return view('Partenaire.mes-annonces', compact('annonces', 'status', 'sortBy', 'search'));
     }
@@ -736,7 +804,7 @@ public function deleteAllEquipements()
         }
         
         // Si la requête contient uniquement le statut, mettre à jour le statut
-        if ($request->has('status') && count($request->all()) === 3) { // status + _token + _method
+        if ($request->has('status')) {
             $listing->status = $request->status;
             $listing->save();
             
@@ -803,8 +871,90 @@ public function deleteAllEquipements()
         
         // Récupérer les données nécessaires pour le formulaire
         $cities = City::all();
-        $images = Image::where('item_id', $item->id)->get();
         
-        return view('Partenaire.annonce-edit', compact('listing', 'item', 'cities', 'images'));
+        return view('Partenaire.annonce-edit', compact('listing', 'item', 'cities'));
+    }
+
+    /**
+     * Affiche les détails d'une annonce pour le partenaire
+     */
+    public function showAnnonceDetails(Listing $listing)
+    {
+        // Vérifier que l'annonce appartient au partenaire connecté
+        $user = Auth::user();
+        $item = Item::with('images', 'category')->find($listing->item_id);
+        
+        if ($item->partner_id !== $user->id) {
+            return redirect()->route('partenaire.mes-annonces')
+                ->with('error', 'Vous n\'êtes pas autorisé à voir cette annonce.');
+        }
+        
+        // Récupérer la ville
+        $city = City::find($listing->city_id);
+        
+        // Calculer les revenus potentiels
+        $startDate = \Carbon\Carbon::parse($listing->start_date);
+        $endDate = \Carbon\Carbon::parse($listing->end_date);
+        $availableDays = $endDate->diffInDays($startDate);
+        $potentialRevenue = $availableDays * $item->price_per_day;
+        
+        // Récupérer le nombre de vues et de réservations pour cette annonce
+        $viewCount = 0; // À implémenter si vous avez un système de suivi des vues
+        $reservationCount = Reservation::where('listing_id', $listing->id)->count();
+        $completedReservationCount = Reservation::where('listing_id', $listing->id)
+            ->where('status', 'completed')
+            ->count();
+            
+        return view('Partenaire.annonce-details', compact(
+            'listing',
+            'item',
+            'city',
+            'availableDays',
+            'potentialRevenue',
+            'viewCount',
+            'reservationCount',
+            'completedReservationCount'
+        ));
+    }
+
+    /**
+     * Récupère les détails complets d'un équipement
+     */
+    public function getEquipementDetails($id)
+    {
+        // Récupérer l'équipement par ID avec ses relations
+        $item = Item::with(['images', 'category', 'reviews.reviewer'])->findOrFail($id);
+
+        // Vérifier que l'équipement appartient au partenaire connecté
+        if ($item->partner_id != Auth::id()) {
+            return response()->json(['error' => 'Non autorisé'], 403);
+        }
+
+        // Récupérer des statistiques supplémentaires
+        $annoncesCount = Listing::where('item_id', $item->id)->count();
+        $activeAnnonceCount = Listing::where('item_id', $item->id)->where('status', 'active')->count();
+        $reservationsCount = Reservation::whereHas('listing', function($query) use ($item) {
+            $query->where('item_id', $item->id);
+        })->count();
+        $completedReservationsCount = Reservation::whereHas('listing', function($query) use ($item) {
+            $query->where('item_id', $item->id);
+        })->where('status', 'completed')->count();
+
+        // Calculer le revenu total généré par cet équipement
+        $revenue = Reservation::whereHas('listing', function($query) use ($item) {
+            $query->where('item_id', $item->id);
+        })->where('status', 'completed')
+        ->sum(DB::raw('DATEDIFF(end_date, start_date) * ' . $item->price_per_day));
+
+        return response()->json([
+            'equipment' => $item,
+            'stats' => [
+                'annonces_count' => $annoncesCount,
+                'active_annonce_count' => $activeAnnonceCount,
+                'reservations_count' => $reservationsCount,
+                'completed_reservations_count' => $completedReservationsCount,
+                'revenue' => $revenue
+            ]
+        ]);
     }
 }

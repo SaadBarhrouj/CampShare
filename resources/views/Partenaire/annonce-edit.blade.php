@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         <!-- Page header -->
@@ -37,24 +39,6 @@
                             <p class="text-gray-800 dark:text-gray-200">{{ $item->description }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">La description ne peut pas être modifiée ici. Pour modifier la description, veuillez mettre à jour votre équipement.</p>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Photos de l'équipement -->
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Photos de l'équipement</h2>
-                </div>
-                <div class="p-6 space-y-6">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Photos actuelles</h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            @foreach($images as $image)
-                                <div class="relative group">
-                                    <img src="{{ asset('storage/' . $image->url) }}" alt="Photo de l'équipement" class="w-full h-32 object-cover rounded-lg">
-                                </div>
-                            @endforeach
-                        </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">Pour modifier les photos, veuillez mettre à jour votre équipement.</p>
                     </div>
                 </div>
                 
@@ -116,8 +100,24 @@
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse précise</label>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">L'adresse exacte sera partagée uniquement avec les locataires après confirmation de la réservation.</p>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Position exacte</label>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-2">Cliquez sur la carte pour indiquer où vous pouvez mettre l'équipement à disposition.</p>
+                            
+                            <div id="map-container" class="w-full h-80 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 mb-3"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="latitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Latitude</label>
+                                    <input type="text" id="latitude" name="latitude" value="{{ $listing->latitude }}" placeholder="Ex: 33.5731104" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white" readonly>
+                                </div>
+                                <div>
+                                    <label for="longitude" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Longitude</label>
+                                    <input type="text" id="longitude" name="longitude" value="{{ $listing->longitude }}" placeholder="Ex: -7.5898434" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white" readonly>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                <i class="fas fa-info-circle mr-1"></i> L'emplacement exact ne sera partagé qu'avec les locataires après confirmation de la réservation.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -210,11 +210,11 @@
                 
                 <!-- Boutons de soumission -->
                 <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
-                    <a href="{{ route('partenaire.mes-annonces') }}" class="px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
+                    <a href="{{ route('partenaire.mes-annonces') }}" class="btn-cancel px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors">
                         <i class="fas fa-times mr-2"></i>
                         Annuler
                     </a>
-                    <button type="submit" class="px-6 py-2 bg-forest hover:bg-forest-dark dark:bg-meadow dark:hover:bg-meadow-dark text-white font-medium rounded-md shadow-sm transition-colors">
+                    <button type="submit" class="btn-save px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                         <i class="fas fa-save mr-2"></i>
                         Enregistrer les modifications
                     </button>
@@ -262,6 +262,96 @@
                 premiumTypeInput.value = premiumType;
             });
         });
+        
+        // Initialisation de la carte
+        let map, marker;
+        initMap();
+        
+        function initMap() {
+            // Vérifier si la carte est déjà initialisée
+            if (map) return;
+            
+            // Coordonnées par défaut (Maroc) ou coordonnées existantes
+            const lat = document.getElementById('latitude').value || 31.7917;
+            const lng = document.getElementById('longitude').value || -7.0926;
+            const defaultZoom = lat && lng && lat != 31.7917 ? 12 : 5;
+            
+            // Créer la carte
+            map = L.map('map-container').setView([lat, lng], defaultZoom);
+            
+            // Ajouter la couche de tuiles OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Ajouter un marqueur si des coordonnées sont déjà définies
+            if (lat && lng && lat != 31.7917) {
+                marker = L.marker([lat, lng]).addTo(map);
+            }
+            
+            // Gérer le clic sur la carte
+            map.on('click', function(e) {
+                // Mettre à jour les coordonnées dans les champs
+                document.getElementById('latitude').value = e.latlng.lat.toFixed(6);
+                document.getElementById('longitude').value = e.latlng.lng.toFixed(6);
+                
+                // Ajouter ou déplacer le marqueur
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
+                }
+            });
+            
+            // Récupérer la position de l'utilisateur si aucune position n'est définie
+            if ((!lat || !lng || lat == 31.7917) && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Mettre à jour la vue de la carte
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        map.setView([userLat, userLng], 12);
+                    },
+                    function(error) {
+                        // Gérer les erreurs
+                        console.log('Erreur de géolocalisation:', error.message);
+                    }
+                );
+            }
+            
+            // Redimensionner la carte après son chargement
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+        
+        // Événement quand on sélectionne une ville
+        const citySelect = document.getElementById('city_id');
+        if (citySelect) {
+            citySelect.addEventListener('change', function() {
+                if (!map) return;
+                
+                const selectedCity = this.options[this.selectedIndex].text;
+                if (selectedCity && selectedCity !== 'Sélectionnez une ville') {
+                    // Utiliser l'API de géocodage pour trouver les coordonnées de la ville
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selectedCity)},Maroc`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const lat = parseFloat(data[0].lat);
+                                const lng = parseFloat(data[0].lon);
+                                
+                                // Mettre à jour la vue de la carte
+                                map.setView([lat, lng], 12);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de la géolocalisation de la ville:', error);
+                        });
+                }
+            });
+        }
     });
 </script>
 @endsection

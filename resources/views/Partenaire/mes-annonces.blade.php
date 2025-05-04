@@ -11,7 +11,11 @@
                     Gérez vos annonces d'équipements de camping publiées
                 </p>
             </div>
-            <div class="mt-4 md:mt-0">
+            <div class="mt-4 md:mt-0 flex space-x-4">
+                <a href="{{ route('partenaire.equipements') }}" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Créer une annonce
+                </a>
                 <a href="{{ route('HomePartenaie') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Retour au tableau de bord
@@ -79,7 +83,7 @@
                 </div>
                 
                 <div>
-                    <button type="submit" class="w-full md:w-auto px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                    <button type="submit" class="btn-filter w-full md:w-auto px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                         <i class="fas fa-filter mr-2"></i>
                         Filtrer
                     </button>
@@ -96,7 +100,7 @@
                     </div>
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">Aucune annonce trouvée</h3>
                     <p class="text-gray-500 dark:text-gray-400 mb-4">Vous n'avez pas encore publié d'annonces ou aucune annonce ne correspond à vos critères de recherche.</p>
-                    <a href="{{ route('partenaire.equipements') }}" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                    <a href="{{ route('partenaire.equipements') }}" class="btn-publish inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
                         <i class="fas fa-plus mr-2"></i>
                         Publier une annonce
                     </a>
@@ -184,7 +188,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex flex-col space-y-2">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('client.listings.show', $annonce->id) }}" class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50" title="Voir l'annonce">
+                                                <a href="{{ route('partenaire.annonces.details', $annonce->id) }}" class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50" title="Voir les détails">
                                                     <i class="fas fa-eye mr-1"></i> Voir
                                                 </a>
                                                 

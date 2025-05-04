@@ -182,4 +182,14 @@ class Listing extends Model
             'percentages' => $percentages,
         ];
     }
+
+
+    // reviews fati
+    public function reviewss()
+    {
+        return $this->item->reviews();
+    }
+
+
+
 }

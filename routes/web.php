@@ -43,6 +43,8 @@ Route::post('/partenaire/equipements/create', [PartenaireController::class, 'cre
 Route::put('/partenaire/equipements/{item}', [PartenaireController::class, 'updateEquipement'])->name('partenaire.equipements.update');
 Route::delete('/partenaire/equipements/{item}', [PartenaireController::class, 'deleteEquipement'])->name('partenaire.equipements.delete');
 Route::get('/partenaire/equipements/{item}/reviews', [PartenaireController::class, 'getEquipementReviews'])->name('partenaire.equipements.reviews');
+Route::get('/partenaire/equipements/{item}/details', [PartenaireController::class, 'getEquipementDetails'])->name('partenaire.equipements.details');
+
 Route::delete('/partenaire/equipements/delete-all', [PartenaireController::class, 'deleteAllEquipements'])->name('partenaire.equipements.delete-all');
 Route::get('/profile_partenaire', [PartenaireController::class, 'voir_profile_partenaire'])->name('partenaire.profile');
 
@@ -54,6 +56,8 @@ Route::get('/devenir_partenaire', [PartenaireController::class, 'devenir_partena
 Route::get('/partenaire/annonces/create/{equipment_id}', [PartenaireController::class, 'createAnnonceForm'])->name('partenaire.annonces.create');
 Route::post('/partenaire/annonces/store', [PartenaireController::class, 'storeAnnonce'])->name('partenaire.annonces.store');
 Route::get('/partenaire/mes-annonces', [PartenaireController::class, 'mesAnnonces'])->name('partenaire.mes-annonces');
+Route::get('/partenaire/annonces/{listing}/details', [PartenaireController::class, 'showAnnonceDetails'])->name('partenaire.annonces.details');
+
 Route::get('/partenaire/annonces/{listing}/edit', [PartenaireController::class, 'editAnnonce'])->name('partenaire.annonces.edit');
 Route::put('/partenaire/annonces/{listing}/update', [PartenaireController::class, 'updateAnnonce'])->name('partenaire.annonces.update');
 Route::put('/partenaire/annonces/{listing}/archive', [PartenaireController::class, 'archiveAnnonce'])->name('partenaire.annonces.archive');

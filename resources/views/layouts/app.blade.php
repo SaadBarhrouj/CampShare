@@ -6,6 +6,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Tailwind CSS (optional) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
 </head>
 <body class="antialiased">
     @yield('content') <!-- This is where your page content will be injected -->
