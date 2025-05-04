@@ -24,15 +24,40 @@
                 <div>
                     <p class="font-medium text-gray-900 dark:text-white">{{$allRes->partner_username}}</p>
                     <div class="flex items-center text-sm">
-                        <i class="fas fa-star text-amber-400 mr-1"></i>
-                        <span>{{$allRes->partner_avg_rating}} </span>
+                        @if($allRes->partner_avg_rating)
+                            @php
+                                $rating = $allRes->partner_avg_rating;
+                                $fullStars = floor($rating);
+                                $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                            @endphp
+                            
+                            <div class="flex text-amber-400">
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <i class="fas fa-star"></i>
+                                @endfor
+                                
+                                @if ($hasHalfStar)
+                                    <i class="fas fa-star-half-alt"></i>
+                                @endif
+                                
+                                {{-- Fill remaining empty stars --}}
+                                @for ($i = 0; $i < (5 - $fullStars - ($hasHalfStar ? 1 : 0)); $i++)
+                                    <i class="far fa-star"></i>
+                                @endfor
+                            </div>
+                            <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">
+                                {{ number_format($rating, 1) }}
+                            </span>
+                        @else
+                            <div class="text-sm text-gray-500">No ratings yet</div>
+                        @endif
                     </div>
                 </div>
             </div>
             
             <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
                 <div class="flex justify-between text-sm mb-1">
-                    <span class="text-gray-600 dark:text-gray-400">Dates:</span>
+                    <span class="text-gray-600 dark:text-gray-400">Date:</span>
                     <span class="font-medium text-gray-900 dark:text-white">{{$allRes->start_date}} - {{$allRes->end_date}}</span>
                 </div>
                 <div class="flex justify-between text-sm mb-1">
@@ -44,9 +69,6 @@
             
             <div class="flex items-center space-x-2">
                 @if($allRes->status === 'pending')
-                    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
-                        <i class="fas fa-calendar-alt mr-2"></i> Modifier
-                    </button>
                     <button onclick="cancelReservation({{ $allRes->id }})"
                             class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
                         <i class="fas fa-times mr-2"></i> Annuler

@@ -178,12 +178,24 @@
                                                 
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{$Reservation->created_at}}</p>
                                                 <div class="flex space-x-2 w-full lg:w-auto">
-                                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
+                                                <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                                                    @csrf
+                                                    <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
+                                                    <input type="hidden" name="action" value="accept">
+                                                    <button type="submit" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md w-full">
                                                         Accepter
                                                     </button>
-                                                    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
+                                                </form>
+
+                                                <!-- Refuse Button -->
+                                                <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                                                    @csrf
+                                                    <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
+                                                    <input type="hidden" name="action" value="refuse">
+                                                    <button type="submit" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
                                                         Refuser
                                                     </button>
+                                                </form>
                                                     <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                                         <i class="fas fa-comment-alt"></i>
                                                     </button>
@@ -320,7 +332,7 @@ function sendFilterRequest() {
                             </div>
 
                             <div class="flex flex-col items-start lg:items-end lg:ml-6 space-y-3">
-                                ${getStatusBadge(reservation.status, reservation.created_at)}
+                                ${getStatusBadge(reservation.status, reservation.created_at,reservation.id)}
                             </div>
                         </div>
                     </div>`;
@@ -333,7 +345,7 @@ function sendFilterRequest() {
     .catch(error => console.error('Error:', error));  // Catch any errors
 }
 
-function getStatusBadge(status, createdAt) {
+function getStatusBadge(status, createdAt,id) {
     let statusClass = '';
     let textColor = '';
     let buttons = '';
@@ -344,12 +356,24 @@ function getStatusBadge(status, createdAt) {
             textColor = "text-amber-800 dark:text-amber-300";
             buttons = `
                 <div class="flex space-x-2 w-full lg:w-auto">
-                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1 lg:flex-initial">
-                        Accepter
-                    </button>
-                    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1 lg:flex-initial">
-                        Refuser
-                    </button>
+                    <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                        @csrf
+                        <input type="hidden" name="reservation_id" value="${id}">
+                        <input type="hidden" name="action" value="accept">
+                        <button type="submit" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md w-full">
+                            Accepter
+                        </button>
+                    </form>
+
+                    <!-- Refuse Button -->
+                    <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                        @csrf
+                        <input type="hidden" name="reservation_id" value="${id}">
+                        <input type="hidden" name="action" value="refuse">
+                        <button type="submit" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
+                            Refuser
+                        </button>
+                    </form>
                     <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-comment-alt"></i>
                     </button>

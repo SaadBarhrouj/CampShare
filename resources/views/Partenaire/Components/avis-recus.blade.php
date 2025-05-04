@@ -118,7 +118,7 @@
                                     <div class="flex flex-col lg:flex-row lg:items-start">
                                        
 
-                                        <div class="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-3 mb-4 lg:mb-0">
+                                        <div class="flex-grow grid grid-cols-1 lg:grid-cols-5 gap-3 mb-4 lg:mb-0">
                                             <div>
                                                 <div class="flex-shrink-0 items-center content-center mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
                                                     <div class="flex items-center content-center w-12">

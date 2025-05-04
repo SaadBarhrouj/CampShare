@@ -93,9 +93,10 @@
                     <!-- Recent activity -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                            <h2 class="font-bold text-xl text-gray-900 dark:text-white">Activité récente</h2>
+                            <h2 class="font-bold text-xl text-gray-900 dark:text-white">Avis Recent</h2>
                         </div>
                         <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @foreach($lastAvisPartnerForObjet as $avis)
                             <div class="px-6 py-4">
                                 <div class="flex">
                                     <div class="flex-shrink-0 mr-4">
@@ -105,80 +106,32 @@
                                     </div>
                                     <div>
                                         <p class="font-medium text-gray-900 dark:text-white">
-                                            Paiement reçu
+                                            {{$avis->username}} -  Equipment : {{$avis->object_title}}
                                         </p>
                                         <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Leila a payé 900 MAD pour "Pack Camping Complet 2p"
+                                              commentaire: {{$avis->comment}}
                                         </p>
                                         <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 1 heure
+                                        @php
+                                            $rating = $avis->rating;  
+                                            $fullStars = floor($rating); 
+                                            $halfStar = $rating - $fullStars !=0
+                                        @endphp
+
+                                            <div class="flex text-amber-400">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star"></i>
+                                            @endfor
+                        
+                                            @if ($halfStar)
+                                                <i class="fas fa-star-half-alt"></i>
+                                            @endif
+                                            </div>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div class="h-10 w-10 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
-                                            <i class="fas fa-star text-amber-600 dark:text-amber-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">
-                                            Nouvel avis
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Ahmed vous a laissé un avis 5 étoiles pour "Pack Camping Complet 2p"
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 3 heures
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                            <i class="fas fa-check text-blue-600 dark:text-blue-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">
-                                            Location confirmée
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Vous avez confirmé la location de "Matelas Gonflable Double" à Karim
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 1 jour
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                                            <i class="fas fa-campground text-indigo-600 dark:text-indigo-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">
-                                            Équipement ajouté
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Vous avez ajouté un nouvel équipement : "Tente Familiale 4 Personnes"
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 2 jours
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                         <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700/50 text-center">
                             <a href="#all-activity" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
@@ -222,13 +175,25 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">
-    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1">
-        Accepter
-    </button>
-    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
-        Refuser
-    </button>
-</div>
+                                        <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                                                @csrf
+                                                <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
+                                                <input type="hidden" name="action" value="accept">
+                                                <button type="submit" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md w-full">
+                                                    Accepter
+                                                </button>
+                                            </form>
+
+                                            <!-- Refuse Button -->
+                                            <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
+                                                @csrf
+                                                <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
+                                                <input type="hidden" name="action" value="refuse">
+                                                <button type="submit" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
+                                                    Refuser
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -246,132 +211,7 @@
                     </div>
                 </div>
                 
-                <!-- My reservations section (NEW) -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Mes réservations</h2>
-                        <a href="#equipment" class="sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
-                            Voir toutes mes réservations
-                        </a>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Reservation 1 -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-                            <div class="relative h-40">
-                                <img src="https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                     alt="Grande Tente 6 Personnes" 
-                                     class="w-full h-full object-cover" />
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div class="absolute top-4 left-4">
-                                    <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Confirmée</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <h3 class="text-white font-bold text-lg truncate">Grande Tente 6 Personnes</h3>
-                                    <p class="text-gray-200 text-sm">Quechua - Comme Neuf</p>
-                                </div>
-                            </div>
-                            
-                            <div class="p-4">
-                                <div class="flex items-start mb-4">
-                                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                         alt="Omar Tazi" 
-                                         class="w-8 h-8 rounded-full object-cover mr-3" />
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">Omar Tazi</p>
-                                        <div class="flex items-center text-sm">
-                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>4.9 <span class="text-gray-500 dark:text-gray-400">(26 avis)</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-gray-600 dark:text-gray-400">Dates:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">5 - 10 Août 2023</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-gray-600 dark:text-gray-400">Prix:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">250 MAD/jour</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600 dark:text-gray-400">Total:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">1 250 MAD (5 jours)</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center space-x-2">
-                                    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-1">
-                                        <i class="fas fa-calendar-alt mr-2"></i> Modifier
-                                    </button>
-                                    <button class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
-                                        <i class="fas fa-times mr-2"></i> Annuler
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
-                                        <i class="fas fa-comment-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Reservation 2 -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-                            <div class="relative h-40">
-                                <img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                     alt="Réchaud Camping + Kit Cuisine" 
-                                     class="w-full h-full object-cover" />
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div class="absolute top-4 left-4">
-                                    <span class="bg-amber-500 text-white text-xs px-2 py-1 rounded-full">En attente</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <h3 class="text-white font-bold text-lg truncate">Réchaud Camping + Kit Cuisine</h3>
-                                    <p class="text-gray-200 text-sm">Coleman - Bon état</p>
-                                </div>
-                            </div>
-                            
-                            <div class="p-4">
-                                <div class="flex items-start mb-4">
-                                    <img src="https://images.unsplash.com/photo-1548544149-4835e62ee5b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                         alt="Salma Benani" 
-                                         class="w-8 h-8 rounded-full object-cover mr-3" />
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">Salma Benani</p>
-                                        <div class="flex items-center text-sm">
-                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>4.7 <span class="text-gray-500 dark:text-gray-400">(18 avis)</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-gray-600 dark:text-gray-400">Dates:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">15 - 18 Août 2023</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-gray-600 dark:text-gray-400">Prix:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">150 MAD/jour</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600 dark:text-gray-400">Total:</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">450 MAD (3 jours)</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center space-x-2">
-                                    <button class="px-3 py-1.5 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-1">
-                                        <i class="fas fa-times mr-2"></i> Annuler
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors flex-1">
-                                        <i class="fas fa-comment-alt mr-2"></i> Contacter
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+>
                 
                 <!-- My equipment section -->
                 <div class="mb-8">
@@ -469,88 +309,7 @@
                 </div>
                 
                 <!-- Latest reviews -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Derniers avis reçus</h2>
-                        <a href="#reviews" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
-                            Voir tous les avis
-                        </a>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Review item 1 -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5">
-                            <div class="flex justify-between items-start">
-                                <div class="flex">
-                                    <div class="mr-4">
-                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                             alt="Ahmed Kaddour" 
-                                             class="w-12 h-12 rounded-full object-cover" />
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-gray-900 dark:text-white">Ahmed Kaddour</div>
-                                        <div class="flex items-center space-x-2 mt-1">
-                                            <div class="flex text-amber-400">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <span class="text-gray-500 dark:text-gray-400 text-sm">15 août 2023</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">
-                                    Pack Camping Complet 2p
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Partenaire exemplaire, service impeccable!</h5>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
-                                    Fatima a été extrêmement professionnelle du début à la fin. Elle a répondu à toutes mes questions en moins d'une heure, m'a donné d'excellents conseils pour mon séjour au lac, et a été très flexible pour la remise et le retour du matériel.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <!-- Review item 2 -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5">
-                            <div class="flex justify-between items-start">
-                                <div class="flex">
-                                    <div class="mr-4">
-                                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                             alt="Leila Mansouri" 
-                                             class="w-12 h-12 rounded-full object-cover" />
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-gray-900 dark:text-white">Leila Mansouri</div>
-                                        <div class="flex items-center space-x-2 mt-1">
-                                            <div class="flex text-amber-400">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <span class="text-gray-500 dark:text-gray-400 text-sm">2 août 2023</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">
-                                    Sacs de Couchage Ultra Confort
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <h5 class="font-semibold text-gray-900 dark:text-white mb-2">Une partenaire fiable et attentionnée</h5>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
-                                    Expérience parfaite avec Fatima! Elle est très organisée et ponctuelle. Les sacs de couchage étaient propres et très confortables comme promis. Fatima nous a même envoyé un message pendant notre séjour pour s'assurer que tout se passait bien.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </main>
     </div>

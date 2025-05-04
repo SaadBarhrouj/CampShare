@@ -73,12 +73,10 @@
                                     </div>
 
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalReservations }}</div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Locations réalisées</div>
                                     </div>
 
                                     <div class="flex flex-col items-center">
-                                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{$totalDepenseByEmail}}</div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Montant total dépensé</div>
                                     </div>
                                 </div>

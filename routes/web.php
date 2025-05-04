@@ -43,6 +43,11 @@ Route::put('/partenaire/equipements/{item}', [PartenaireController::class, 'upda
 Route::delete('/partenaire/equipements/{item}', [PartenaireController::class, 'deleteEquipement'])->name('partenaire.equipements.delete');
 Route::get('/partenaire/equipements/{item}/reviews', [PartenaireController::class, 'getEquipementReviews'])->name('partenaire.equipements.reviews');
 Route::delete('/partenaire/equipements/delete-all', [PartenaireController::class, 'deleteAllEquipements'])->name('partenaire.equipements.delete-all');
+Route::get('/profile_partenaire', [PartenaireController::class, 'voir_profile_partenaire'])->name('partenaire.profile');
+
+Route::get('/devenir_partenaire', [PartenaireController::class, 'devenir_partenaire'])->name('devenir_partenaire');
+
+
 
 // Annonce routes
 Route::get('/partenaire/annonces/create/{equipment_id}', [PartenaireController::class, 'createAnnonceForm'])->name('partenaire.annonces.create');
@@ -52,6 +57,14 @@ Route::get('/partenaire/annonces/{listing}/edit', [PartenaireController::class, 
 Route::put('/partenaire/annonces/{listing}/update', [PartenaireController::class, 'updateAnnonce'])->name('partenaire.annonces.update');
 Route::put('/partenaire/annonces/{listing}/archive', [PartenaireController::class, 'archiveAnnonce'])->name('partenaire.annonces.archive');
 Route::delete('/partenaire/annonces/{listing}/delete', [PartenaireController::class, 'deleteAnnonce'])->name('partenaire.annonces.delete');
+Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
+
+
+//////////
+
+
+////////////////
+
 
 // Routes pour le nettoyage et la maintenance
 Route::prefix('cleanup')->group(function () {
@@ -71,7 +84,6 @@ Route::get('/client/reservations/filter', [ClientController::class, 'ShowHomeCli
 Route::post('/profile', [ClientController::class, 'update'])->name('profile.update');
 Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
 Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cancel'])->name('client.reservations.cancel');
-
 
 
 // Admin Routes
