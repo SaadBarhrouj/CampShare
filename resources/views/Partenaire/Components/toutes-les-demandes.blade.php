@@ -178,24 +178,18 @@
                                                 
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{$Reservation->created_at}}</p>
                                                 <div class="flex space-x-2 w-full lg:w-auto">
-                                                <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
-                                                    @csrf
-                                                    <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
-                                                    <input type="hidden" name="action" value="accept">
-                                                    <button type="submit" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md w-full">
+                                                <form method="POST" action="{{ route('partenaire.reservations.accept', $Reservation->id) }}" class="flex-1 lg:flex-initial">
+                                                    @csrf 
+                                                    <button type="submit" class="w-full px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
                                                         Accepter
                                                     </button>
                                                 </form>
-
-                                                <!-- Refuse Button -->
-                                                <form action="{{ route('reservation.action') }}" method="POST" class="flex-1">
-                                                    @csrf
-                                                    <input type="hidden" name="reservation_id" value="{{ $Reservation->id }}">
-                                                    <input type="hidden" name="action" value="refuse">
-                                                    <button type="submit" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
-                                                        Refuser
-                                                    </button>
-                                                </form>
+                                                <form method="POST" action="{{ route('partenaire.reservations.reject', $Reservation->id) }}" class="flex-1 lg:flex-initial">
+                                                        @csrf
+                                                        <button type="submit" class="w-full px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                                            Refuser
+                                                        </button>
+                                                 </form>
                                                     <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                                         <i class="fas fa-comment-alt"></i>
                                                     </button>

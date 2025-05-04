@@ -156,7 +156,13 @@ Route::post('/user/become-partner', [UserController::class, 'becomePartner'])
     ->name('user.become-partner');
 
 
+//Mail Routes
+Route::post('/partenaire/reservations/{reservation}/accept', [ReservationController::class, 'accept'])
+    ->middleware(['auth']) // Ou ['auth', 'role:partner'] 
+    ->name('partenaire.reservations.accept');
 
+    Route::post('/partenaire/reservations/{reservation}/reject', [ReservationController::class, 'reject'])
+    ->name('partenaire.reservations.reject');
 
 
 
