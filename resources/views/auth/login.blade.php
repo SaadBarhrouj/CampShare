@@ -97,12 +97,6 @@
                 </div>
             </div>
 
-            <!-- Remember Me -->
-            <div class="flex items-center">
-                <input type="checkbox" id="remember-me" name="remember-me" class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600">
-                <label for="remember-me" class="ml-2 text-sm">Se souvenir de moi</label>
-            </div>
-
             <!-- Submit -->
             <button type="submit"
                 class="w-full flex justify-center items-center py-3 px-4 rounded-md bg-sunlight hover:bg-amber-500 text-white font-semibold shadow hover:shadow-md transition duration-200">
@@ -113,8 +107,12 @@
         <!-- Footer Links -->
         <div class="flex flex-col sm:flex-row justify-center items-center gap-3 text-sm pt-2">
             <a href="{{ route('register') }}" class="text-forest dark:text-meadow hover:underline"><i class="fas fa-user-plus mr-1"></i>Créer un compte</a>
-            <a href="{{ url('/') }}" class="text-gray-600 dark:text-gray-400 hover:text-forest dark:hover:text-meadow hover:underline"><i class="fas fa-home mr-1"></i>Retour à l'accueil</a>
+            <a href="{{ url('/') }}" class="flex items-center justify-center py-2 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md transition-all duration-200">
+                <i class="fas fa-home mr-2"></i>
+                Retour à l'accueil
+            </a>
         </div>
+    </div>
 
     <script>
         document.getElementById('toggle-password').addEventListener('click', function () {

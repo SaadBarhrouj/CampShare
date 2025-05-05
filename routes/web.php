@@ -163,6 +163,3 @@ Route::post('/partenaire/reservations/{reservation}/accept', [ReservationControl
 
     Route::post('/partenaire/reservations/{reservation}/reject', [ReservationController::class, 'reject'])
     ->name('partenaire.reservations.reject');
-
-
-
