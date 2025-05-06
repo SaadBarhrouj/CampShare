@@ -24,7 +24,6 @@
             darkMode: 'class',
         }
 
-        // Detect dark mode preference
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.classList.add('dark');
         }
@@ -38,7 +37,6 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Navigation hover effects */
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -59,7 +57,6 @@
             width: 100%;
         }
         
-        /* Active link style */
         .active-nav-link {
             position: relative;
         }
@@ -74,7 +71,6 @@
             background-color: #FFAA33;
         }
         
-        /* Input styles */
         .custom-input {
             transition: all 0.3s ease;
             border-width: 2px;
@@ -84,7 +80,6 @@
             box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
         }
         
-        /* Toggle switch */
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -134,7 +129,6 @@
             transform: translateX(26px);
         }
         
-        /* Sidebar active */
         .sidebar-link.active {
             background-color: rgba(45, 95, 43, 0.1);
             color: #2D5F2B;
@@ -147,7 +141,6 @@
             border-left: 4px solid #4F7942;
         }
         
-        /* Equipment card hover effect */
         .equipment-card {
             transition: all 0.3s ease;
         }
@@ -157,7 +150,6 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
         
-        /* Notification badge */
         .notification-badge {
             position: absolute;
             top: -5px;
@@ -173,7 +165,6 @@
             justify-content: center;
         }
         
-        /* Chat styles */
         .chat-container {
             max-height: 400px;
             overflow-y: auto;
@@ -216,95 +207,143 @@
     </style>
 </head>
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
-    <!-- Navigation -->
     <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <!-- Logo -->
                     <a href="index.html" class="flex items-center">
                         <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
                     </a>
                 </div>
-                
-                <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#trouver-equipement" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Trouver du matériel</a>
-                    @if($user->role =='partner')
-                        <a href="/Partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Partenaire</a>
-                    @elseif($user->role =='client')
-                        <a href="/devenir_partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Devenir Partenaire</a>
-                    @endif
-
-                    <!-- User menu -->
-                    <div class="relative ml-4">
-                        <div class="flex items-center space-x-4">
-                            <!-- Notifications -->
-                            <div class="relative">
-                                <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                    <i class="fas fa-bell"></i>
-                                    <span class="notification-badge">2</span>
+                    @auth
+                        @php
+                            $user = $user ?? Auth::user();
+                        @endphp
+                        @if($user)
+                            @if($user->role == 'partner')
+                                <a href="/Partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Partenaire</a>
+                            @elseif($user->role == 'client')
+                                <button type="button" id="openPartnerModalBtn" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">
+                                    Devenir Partenaire
                                 </button>
-                                
-                                <!-- Notifications dropdown -->
-                                <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
-                                    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                        <div class="flex items-center justify-between">
-                                            <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                                            <a href="#" class="text-sm text-forest dark:text-meadow hover:underline">Marquer tout comme lu</a>
+                            @endif
+                            <div class="relative ml-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="relative">
+                                        <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+                                            <i class="fas fa-bell"></i>
+                                            @php
+                                                $notifications = $notifications ?? collect();
+                                                $unreadNotificationsCount = $notifications->whereNull('read_at')->count();
+                                            @endphp
+                                            @if($unreadNotificationsCount > 0)
+                                                <span class="notification-badge">{{ $unreadNotificationsCount }}</span>
+                                            @endif
+                                        </button>
+                                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
+                                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                                <div class="flex items-center justify-between">
+                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
+                                                    <a href="#" class="text-sm text-forest dark:text-meadow hover:underline">Marquer tout comme lu</a>
+                                                </div>
+                                            </div>
+                                            <div class="max-h-96 overflow-y-auto">
+                                                @forelse($notifications as $notification)
+                                                <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 {{ is_null($notification->read_at) ? 'bg-blue-50 dark:bg-blue-900/20' : '' }} hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                                    <div class="flex">
+                                                        <div class="flex-shrink-0 mr-3">
+                                                            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-500 dark:text-blue-300">
+                                                                <i class="{{ $notification->data['icon'] ?? 'fas fa-info-circle' }}"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->data['title'] ?? 'Nouvelle demande de location' }}</p>
+                                                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ Illuminate\Support\Str::limit($notification->data['message'] ?? ($notification->message ?? 'Détails manquants.'), 50) }}</p>
+                                                             <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                @empty
+                                                <p class="p-4 text-sm text-gray-600 dark:text-gray-400">Aucune notification.</p>
+                                                @endforelse
+                                            </div>
+                                            <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
+                                                <a href="{{ route('showAllNotifications') }}" class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="max-h-96 overflow-y-auto">
-                                        @foreach($notifications as $notification)
-                                        <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <div class="flex">
-                                                <div class="flex-shrink-0 mr-3">
-                                                    <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-500 dark:text-blue-300">
-                                                        <i class="fas fa-shopping-bag"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvelle demande de location</p>
-                                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ $notification->message }}</p>
-                                                    {{-- <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Il y a 23 minutes</p> --}}                                                </div>
+                                    <div class="relative">
+                                        <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                            <img src="{{ $user->avatar_url ?? asset('images/default-avatar.png') }}"
+                                               alt="Avatar de {{ $user->username }}"
+                                               class="h-8 w-8 rounded-full object-cover" />
+                                            <span class="font-medium text-gray-800 dark:text-gray-200">{{ $user->username }}</span>
+                                            <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                                        </button>
+                                        <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
+                                            <div class="py-1">
+                                                <a href="#profile" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                                                </a>
+                                                <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                                                <form method="POST" action="{{ route('logout') }}" id="logout-form-nav-{{ Str::random(4) }}">
+                                                    @csrf
+                                                    <a href="{{ route('logout') }}"
+                                                       onclick="event.preventDefault(); document.getElementById('logout-form-nav-{{ Str::random(4) }}').submit();"
+                                                       class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                                                    </a>
+                                                </form>
                                             </div>
-                                        </a>
-                                        @endforeach
-
-                                    </div>
-                                    <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                        <a href={{ route('showAllNotifications') }} class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- User profile menu -->
-                            <div class="relative">
-                                <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                                    <img src="{{ $user->avatar_url }}" 
-                                       alt="image"  
-                                         class="h-8 w-8 rounded-full object-cover" />
-                                    <span class="font-medium text-gray-800 dark:text-gray-200">{{$user->username}}</span>
-                                    <i class="fas fa-chevron-down text-sm text-gray-500"></i>
-                                </button>
-                                
-                                <!-- User dropdown menu -->
-                                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
-                                    <div class="py-1">
-                                        <a href="#profile" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
-                                        </a>
-                                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
-                                        <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                            @if($user->role == 'client')
+                            <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden max-w-lg w-full p-6 m-4">
+                                    <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                                        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
+                                            Devenir Partenaire Campshare
+                                        </h3>
+                                        <button id="closePartnerModalBtn" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" aria-label="Fermer">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                        </button>
+                                    </div>
+                                    <div class="mt-4 mb-6 max-h-[60vh] overflow-y-auto px-1">
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                                            En devenant partenaire sur <strong>Campshare</strong>, notre plateforme de location d'équipements de camping, vous vous engagez à respecter les points suivants :
+                                            <ul class="mt-3 ml-4 list-disc space-y-2 text-sm">
+                                                <li><strong>Qualité et Sécurité :</strong> Fournir du matériel de camping conforme à sa description, propre, sécurisé et en parfait état de fonctionnement.</li>
+                                                <li><strong>Annonces à Jour :</strong> Maintenir les informations de vos annonces (photos, descriptions, prix, caractéristiques) exactes et actuelles.</li>
+                                                <li><strong>Disponibilité :</strong> Gérer avec précision et réactivité le calendrier de disponibilité de votre matériel pour éviter les doubles réservations.</li>
+                                                <li><strong>Communication :</strong> Répondre rapidement (idéalement sous 24h) aux demandes de réservation et aux questions des locataires potentiels.</li>
+                                                <li><strong>Gestion des Réservations :</strong> Honorer les réservations confirmées. Vous serez notifié par email et via votre espace partenaire lors de l'acceptation d'une réservation par un client.</li>
+                                                <li><strong>Préparation et Restitution :</strong> Préparer le matériel loué pour le retrait par le locataire et vérifier son état lors de la restitution.</li>
+                                                <li><strong>Respect des Règles :</strong> Vous conformer aux <a href="/conditions-generales-partenaires" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">Conditions Générales Partenaires de Campshare</a> et aux lois en vigueur.</li>
+                                            </ul>
+                                            <br>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                                                En cliquant sur 'Accepter et Continuer', vous confirmez avoir lu, compris et accepté ces engagements pour rejoindre la communauté des partenaires Campshare.
+                                            </p>
+                                        </p>
+                                    </div>
+                                    <div class="flex justify-end space-x-3 border-t border-gray-200 dark:border-gray-700 pt-4">
+                                         <button id="cancelPartnerModalBtn" type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition duration-150 ease-in-out">
+                                            Annuler
+                                        </button>
+                                        <a href="/devenir_partenaire" id="confirmPartnerBtn" class="px-4 py-2 bg-forest text-white rounded-md hover:bg-opacity-90 dark:bg-sunlight dark:text-gray-900 dark:hover:bg-opacity-90 transition duration-150 ease-in-out shadow-sm">
+                                            Accepter et Continuer
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                            @endif
+                        @endif
+                    @endauth
                 </div>
-                
-                <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -314,20 +353,16 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#comment-ca-marche" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Comment ça marche ?</a>
                 <a href="annonces.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
                 <a href="#trouver-equipement" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Trouver du matériel</a>
             </div>
-            
-            <!-- Mobile profile menu -->
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
                 <div class="flex items-center px-5">
                     <div class="flex-shrink-0">
-                        <img src=<img src="{{ $user->avatar_url }}" alt="Avatar de {{ $user->name }}" 
+                        <img src="{{ $user->avatar_url }}" alt="Avatar de {{ $user->name }}" 
                              class="h-10 w-10 rounded-full" />
                     </div>
                     <div class="ml-3">
@@ -356,10 +391,7 @@
             </div>
         </div>
     </nav>
-
-    <!-- Dashboard container -->
     <div class="flex flex-col md:flex-row pt-16">
-        <!-- Sidebar (hidden on mobile) -->
         <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
             <div class="p-5">
                 <div class="mb-6 px-3 flex flex-col items-center">
@@ -375,24 +407,19 @@
                     <div class="flex items-center mt-2">
                         @if(isset($note_moyenne) && is_numeric($note_moyenne))
                             @php
-                                $rating = min(max($note_moyenne, 0), 5); // Ensure rating is between 0-5
+                                $rating = min(max($note_moyenne, 0), 5);
                                 $fullStars = floor($rating); 
                                 $hasHalfStar = ($rating - $fullStars) >= 0.5;
                                 $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
                             @endphp
                             
                             <div class="flex text-amber-400 mr-1">
-                                {{-- Full stars --}}
                                 @for ($i = 0; $i < $fullStars; $i++)
                                     <i class="fas fa-star text-base"></i>
                                 @endfor
-                                
-                                {{-- Half star --}}
                                 @if ($hasHalfStar)
                                     <i class="fas fa-star-half-alt text-base"></i>
                                 @endif
-                                
-                                {{-- Empty stars --}}
                                 @for ($i = 0; $i < $emptyStars; $i++)
                                     <i class="far fa-star text-base"></i>
                                 @endfor
@@ -406,8 +433,6 @@
                         @endif
                     </div>
                 </div>
-                
-                
                 <nav class="mt-6 space-y-1">
                     <a href="#dashboard" data-target="dashboard" class="sidebar-link active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
                         <i class="fas fa-tachometer-alt w-5 mr-3"></i>
@@ -426,23 +451,23 @@
                         <i class="fas fa-heart w-5 mr-3"></i>
                         Équipements recommandés
                     </a>
-
-                   
                 </nav>
-                
-               
+                <div class="mt-6 px-3">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition duration-300">
+                            <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                        </button>
+                    </form>
+                </div>
             </div>
         </aside>
-        
-        <!-- Mobile sidebar toggle -->
         <div id="mobile-sidebar-overlay" class="md:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 hidden"></div>
-        
         <div class="md:hidden fixed bottom-4 right-4 z-50">
             <button id="mobile-sidebar-toggle" class="w-14 h-14 rounded-full bg-forest text-white shadow-lg flex items-center justify-center">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
-        
         <div id="mobile-sidebar" class="md:hidden fixed inset-y-0 left-0 transform -translate-x-full w-64 bg-white dark:bg-gray-800 shadow-xl z-50 transition-transform duration-300">
             <div class="p-5">
                 <div class="flex items-center justify-between mb-6">
@@ -451,7 +476,6 @@
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                
                 <div class="mb-6 px-3 flex flex-col items-center">
                     <div class="relative">
                         <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
@@ -463,14 +487,12 @@
                     </div>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">{{$user->username}}</h2>
                 </div>
-                
             </div>
         </div>
     </div>
     <div id="dashboard" class="component">
         @include ('Client.Components.Dashboard');
     </div>
-
     <div id="mes-avis" class="component hidden">
         @include ('Client.Components.Avis');
     </div>
@@ -483,11 +505,8 @@
     <div id="profile" class="component hidden">
         @include ('Client.Components.Profile');
     </div>
-    <!-- Message Modal (hidden by default) -->
-
     <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
-
             <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div class="flex items-center">
                     <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
@@ -502,12 +521,6 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-          
-            
-
-            
-
-            
             <div class="p-4 border-t border-gray-200 dark:border-gray-700">
                 <form id="message-form" class="flex items-end">
                     <div class="flex-grow">
@@ -541,8 +554,45 @@
             document.getElementById(targetId).classList.remove("hidden");
           });
         });
-      </script>
-
-    
+      
+        document.addEventListener('DOMContentLoaded', function() {
+            const openModalBtn = document.getElementById('openPartnerModalBtn');
+            const partnerModal = document.getElementById('partnerAcceptModal');
+            if (openModalBtn && partnerModal) {
+                const closeModalBtn = document.getElementById('closePartnerModalBtn');
+                const cancelModalBtn = document.getElementById('cancelPartnerModalBtn');
+                const openModal = () => {
+                    partnerModal.classList.remove('hidden');
+                    partnerModal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                };
+                const closeModal = () => {
+                    partnerModal.classList.add('hidden');
+                    partnerModal.classList.remove('flex');
+                    document.body.style.overflow = '';
+                };
+                openModalBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    openModal();
+                });
+                if (closeModalBtn) {
+                    closeModalBtn.addEventListener('click', closeModal);
+                }
+                if (cancelModalBtn) {
+                    cancelModalBtn.addEventListener('click', closeModal);
+                }
+                partnerModal.addEventListener('click', (event) => {
+                    if (event.target === partnerModal) {
+                        closeModal();
+                    }
+                });
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && !partnerModal.classList.contains('hidden')) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

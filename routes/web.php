@@ -15,7 +15,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\EquipmentDetailController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\ReviewController; 
 
 // Index Page
 Route::get('/', function () {
@@ -163,3 +163,34 @@ Route::post('/partenaire/reservations/{reservation}/accept', [ReservationControl
 
     Route::post('/partenaire/reservations/{reservation}/reject', [ReservationController::class, 'reject'])
     ->name('partenaire.reservations.reject');
+
+
+     // Notification Routes
+
+     Route::middleware('auth')->group(function () {
+    
+        Route::get('/notifications', [NotificationController::class, 'showAllNotifications'])->name('notifications.index'); // Nom ajouté pour cohérence
+    
+        Route::post('/notifications/{notification}/mark-read/{user}', [NotificationController::class, 'markNotificationAsRead'])
+             ->name('notifications.markAsRead.ajax')
+             ->where(['notification' => '[0-9]+', 'user' => '[0-9]+']);
+    
+        Route::delete('/notifications/{notification}/delete/{user}', [NotificationController::class, 'deleteNotification'])
+             ->name('notifications.delete.ajax') // Nom différent
+             ->where(['notification' => '[0-9]+', 'user' => '[0-9]+']);
+    
+         // Route::post('/notifications/{notId}/mark-read/{userId}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead.old');
+         // Route::delete('/notifications/{notId}/delete/{userId}', [NotificationController::class, 'delete'])->name('notifications.delete.old');
+    
+    
+         // Routes pour les Avis 
+         Route::get('/reservations/{reservation}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+         Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    
+        // ...
+    });
+
+        // Legal Routes
+        Route::get('/conditions-generales-partenaires', function () {
+            return view('legal.conditions-generales-partenaires');
+        })->name('conditions.generales');
