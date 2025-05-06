@@ -300,7 +300,9 @@
 
                                     </div>
                                     <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                        <a href={{ route('showAllNotifications') }} class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                        <a href="{{ route('notifications.partner.index') }}" class="text-sm font-medium text-forest dark:text-meadow hover:underline">
+                                            Voir toutes les notifications
+                                        </a>
                                     </div>
                                 </div>
                             </div>

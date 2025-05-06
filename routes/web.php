@@ -169,8 +169,13 @@ Route::post('/partenaire/reservations/{reservation}/accept', [ReservationControl
 
      Route::middleware('auth')->group(function () {
     
-        Route::get('/notifications', [NotificationController::class, 'showAllNotifications'])->name('notifications.index'); // Nom ajouté pour cohérence
-    
+        Route::get('/client/notifications', [NotificationController::class, 'showClientNotifications'])
+        ->name('notifications.client.index'); // Nouveau nom de route
+
+   // Vous pouvez garder l'URI '/notifications' ou le changer pour '/partenaire/notifications'
+   Route::get('/partenaire/notifications', [NotificationController::class, 'showPartnerNotifications'])
+        ->name('notifications.partner.index'); 
+   
         Route::post('/notifications/{notification}/mark-read/{user}', [NotificationController::class, 'markNotificationAsRead'])
              ->name('notifications.markAsRead.ajax')
              ->where(['notification' => '[0-9]+', 'user' => '[0-9]+']);

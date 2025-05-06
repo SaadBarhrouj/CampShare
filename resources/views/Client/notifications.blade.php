@@ -63,28 +63,26 @@
             <!-- Header with breadcrumbs -->
             <div class="mb-8">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <nav class="flex mb-3" aria-label="Breadcrumb">
-                                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                                        <li class="inline-flex items-center">
-                                            <a href="{{ route('HomePartenaie') }}" class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">
-                                                <i class="fas fa-tachometer-alt mr-2"></i>
-                                                Espace Partenaire
-                                            </a>
-                                        </li>
-                                        <li aria-current="page">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-chevron-right text-gray-400 mx-2 text-xs"></i>
-                                                <span class="text-sm font-medium text-gray-500 dark:text-gray-300">Notifications</span>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </nav>
-                                {{-- Titre de la page --}}
-                                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Notifications Partenaire</h1>
-                                {{-- Description --}}
-                                <p class="text-gray-600 dark:text-gray-400 mt-1">Consultez les notifications liées à vos annonces et réservations.</p>
-                            </div>
+                    <div>
+                        <nav class="flex mb-3" aria-label="Breadcrumb">
+                            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                                <li class="inline-flex items-center">
+                                    <a href="{{ route('HomeClient') }}" class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-forest dark:hover:text-meadow">
+                                        <i class="fas fa-tachometer-alt mr-2"></i>
+                                        Tableau de Bord Client
+                                    </a>
+                                </li>
+                                <li aria-current="page">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-chevron-right text-gray-400 mx-2 text-xs"></i>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-300">Notifications</span>
+                                    </div>
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Mes Notifications</h1>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">Consultez vos notifications liées à vos réservations et aux annonces.</p>
+                    </div>
 
                     <div class="mt-4 md:mt-0 flex space-x-2">
                         <button id="mark-all-read" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors">
@@ -122,9 +120,12 @@
                             <select id="filter-select" class="py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md shadow-sm text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow">
                                 <option value="all">Toutes</option>
                                 <option value="unread">Non lues</option>
-
-                                <option value="review_client">Avis Client</option>
-                        
+                                <option value="review_object">Avis Objet</option>
+                                <option value="review_partner">Avis Partenaire</option>
+                                <option value="accepted_reservation">Résa. Acceptée</option>
+                                <option value="rejected_reservation">Résa. Refusée</option>
+                                <option value="added_listing">Annonce Ajoutée</option>
+                                <option value="updated_listing">Annonce MàJ</option>
                             </select>
 
                             <label for="sort-select" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-4 mr-2">Trier par:</label>

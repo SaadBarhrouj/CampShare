@@ -261,8 +261,12 @@
                                                         <div>
                                                             <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->data['title'] ?? 'Nouvelle demande de location' }}</p>
                                                             <p class="text-sm text-gray-600 dark:text-gray-400">{{ Illuminate\Support\Str::limit($notification->data['message'] ?? ($notification->message ?? 'Détails manquants.'), 50) }}</p>
-                                                             <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
-                                                        </div>
+                                                            @if ($notification->created_at)
+                                                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                                                    {{ $notification->created_at->diffForHumans() }}
+                                                                </p>
+                                                            @endif           
+                                                         </div>
                                                     </div>
                                                 </a>
                                                 @empty
@@ -270,7 +274,9 @@
                                                 @endforelse
                                             </div>
                                             <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                                <a href="{{ route('showAllNotifications') }}" class="text-sm font-medium text-forest dark:text-meadow hover:underline">Voir toutes les notifications</a>
+                                                <a href="{{ route('notifications.client.index') }}" class="text-sm font-medium text-forest dark:text-meadow hover:underline">
+                                                    Voir toutes les notifications
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

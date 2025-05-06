@@ -48,19 +48,56 @@ class NotificationController extends Controller
                            ->count();
     }
 
-    /**
-     * Affiche toutes les notifications de l'utilisateur authentifié, avec pagination.
-     * Utilisé pour la page principale des notifications.
-     */
-    public function showAllNotifications(){
-        $user = Auth::user(); 
-        $notifications = Notification::where('user_id', $user->id)
-                                    ->orderBy('created_at', 'desc')
-                                    ->paginate(4); 
 
+
+    public function showClientNotifications()
+    {
+        $user = Auth::user();
+
+        $clientNotificationTypes = [
+            'review_object',
+            'review_partner',
+            'updated_listing',
+            'added_listing',
+            'accepted_reservation',
+            'rejected_reservation',
+            'reviewed'
+        ];
+
+        $notifications = Notification::where('user_id', $user->id)
+                                    ->whereIn('type', $clientNotificationTypes)
+                                    ->orderBy('created_at', 'desc')
+                                    ->paginate(10); 
+
+        return view('Client.notifications', compact('notifications', 'user'));
+    }
+  public function showPartnerNotifications()
+    {
+        $user = Auth::user();
+
+        // Vérifie si l'utilisateur A BIEN le rôle partenaire (sécurité supplémentaire)
+        if ($user->role !== 'partner') {
+             // Redirige vers le tableau de bord client ou affiche une erreur 403
+             Log::warning("User {$user->id} (role: {$user->role}) attempted to access partner notifications page.");
+             // return redirect()->route('HomeClient')->with('error', 'Accès non autorisé.'); // Option 1: Redirection
+             abort(403, 'Accès non autorisé à cette section.'); // Option 2: Erreur 403
+        }
+
+
+        $partnerNotificationTypes = [
+            'review_client',
+
+        ];
+
+        $notifications = Notification::where('user_id', $user->id)
+                                    ->whereIn('type', $partnerNotificationTypes) // Filtre Partenaire
+                                    ->orderBy('created_at', 'desc')
+                                    ->paginate(10); // Ajustez la pagination
+
+        // Renvoie l'ANCIENNE vue Partenaire (qui est maintenant dédiée)
+        // Pas besoin de passer $current_space car la vue est spécifique
         return view('Partenaire.notifications', compact('notifications', 'user'));
     }
-
     public function markNotificationAsRead(Notification $notification, User $user)
     {
         if ($notification->user_id !== Auth::id() || $user->id !== Auth::id()) {
