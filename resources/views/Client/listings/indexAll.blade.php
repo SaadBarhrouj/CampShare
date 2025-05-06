@@ -56,7 +56,7 @@
 
     <main class="bg-white dark:bg-gray-900 transition-all duration-300">
         <!-- Filter Panel -->
-        <div class="border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-16 bg-white dark:bg-gray-800 z-40 transition-all duration-300">
+        <div class="border-b border-gray-200 dark:border-gray-700 shadow-sm top-16 bg-white dark:bg-gray-800 z-40 transition-all duration-300">
             <div class="max-w-7xl mx-auto">
                 <div class="px-4 sm:px-6 lg:px-8">
                     <div class="py-4 flex flex-wrap items-center justify-between gap-4">
@@ -197,7 +197,7 @@
                             </div>
                             <a href="{{ route('client.listings.show', $listing->id) }}">
                                 <div class="relative h-48">
-                                    <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                    <img src="{{ $listing->item?->images?->first() ? asset($listing->item->images->first()->url) : asset('images/item-default.jpg') }}"
                                         alt="Tente 2 places" 
                                         class="w-full h-full object-cover" />
                                 </div>
@@ -215,7 +215,7 @@
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-user mr-1 text-gray-400"></i>
-                                        <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
+                                        <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">

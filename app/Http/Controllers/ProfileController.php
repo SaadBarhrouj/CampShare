@@ -13,8 +13,8 @@ class ProfileController extends Controller
      */
     public function indexClientProfile(User $user)
     {
-        if (!$user->role === 'client') {
-            abort(403, 'Unauthorized');
+        if ($user->role !== 'client') {
+            abort(403, 'Unauthorized. Ce n\'est pas un client.');
         }
 
         $reservationsCount = $user->clientReservations()->count();
@@ -29,14 +29,14 @@ class ProfileController extends Controller
     public function indexPartnerProfile(User $user)
     {
         if ($user->role !== 'partner') {
-            abort(403, 'Unauthorized');
+            abort(403, 'Unauthorized. Ce n\'est pas un partenaire.');
         }
 
         // Get all item IDs that belong to the partner
         $itemIds = $user->items->pluck('id');
 
         // Get all listings that belong to the partner's items
-        $listings = Listing::whereIn('item_id', $itemIds)->latest()->get();
+        $listings = Listing::whereIn('item_id', $itemIds)->where('status', 'active')->latest()->get();
 
         $listingsCount = $listings->count();
 

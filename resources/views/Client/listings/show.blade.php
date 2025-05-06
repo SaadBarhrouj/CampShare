@@ -106,16 +106,16 @@
                         <div class="mb-6 sm:mb-8">
                              <div class="relative aspect-[4/3] mb-3 sm:mb-4 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
                                 <img id="mainImage"
-                                     src="{{ $listing->item?->images?->first()?->url ?? asset('images/placeholder-lg.png') }}"
+                                     src="{{ $listing->item?->images?->first() ? asset($listing->item->images->first()->url) : asset('images/item-default.jpg') }}"
                                      alt="Image principale de {{ $listing->item?->title ?? 'équipement' }}"
                                      class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ease-in-out p-1"/>
                             </div>
                             @if($listing->item?->images?->count() > 1)
                                 <div class="grid grid-cols-5 gap-2">
-                                    @foreach($listing->item->images as $image)
+                                    @foreach($listing->item->images->take(5) as $image)
                                     <div class="thumbnail aspect-square {{ $loop->first ? 'active border-sunlight' : 'border-transparent' }} bg-gray-100 dark:bg-gray-700 rounded overflow-hidden cursor-pointer border-2 transition-all duration-200"
-                                         onclick="changeImage(this, '{{ $image->url ?? asset('images/placeholder-sm.png') }}')">
-                                        <img src="{{ $image->url ?? asset('images/placeholder-sm.png') }}" alt="Miniature {{ $loop->iteration }}" class="w-full h-full object-cover" loading="lazy"/>
+                                         onclick="changeImage(this, '{{ asset($image->url) ?? asset('images/item-default.jpg') }}')">
+                                        <img src="{{ asset($image->url) ?? asset('images/item-default.jpg') }}" alt="Miniature {{ $loop->iteration }}" class="w-full h-full object-cover" loading="lazy"/>
                                     </div>
                                     @endforeach
                                     @for ($i = ($listing->item?->images?->count() ?? 0); $i < 5; $i++)
@@ -197,12 +197,16 @@
                                          @foreach ($reviews as $review)
                                          <div class="review-item border-b border-gray-200 dark:border-gray-700 pb-5 last:border-b-0 {{ $loop->index >= 3 ? 'hidden' : '' }}">
                                               <div class="flex items-start space-x-3">
-                                                <img src="{{ $review->reviewer?->avatar_url ?? asset('images/default-avatar.jpg') }}"
-                                                     alt="Avatar de {{ $review->reviewer?->username ?? 'Utilisateur' }}"
-                                                     class="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1 border border-gray-200 dark:border-gray-600">
+                                                <a href="{{ route('client.profile.index', $review->reviewer?->id) }}">
+                                                    <img src="{{ asset($review->reviewer?->avatar_url) ?? asset('images/default-avatar.jpg') }}"
+                                                        alt="Avatar de {{ $review->reviewer?->username ?? 'Utilisateur' }}"
+                                                        class="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1 border border-gray-200 dark:border-gray-600">
+                                                </a>
                                                 <div class="flex-1">
                                                     <div class="flex justify-between items-center mb-1">
-                                                        <span class="font-semibold text-sm text-gray-800 dark:text-white">{{ $review->reviewer?->username ?? 'Utilisateur anonyme' }}</span>
+                                                        <a href="{{ route('client.profile.index', $review->reviewer?->id) }}">
+                                                            <span class="font-semibold text-sm text-gray-800 dark:text-white">{{ $review->reviewer?->username ?? 'Utilisateur anonyme' }}</span>
+                                                        </a>
                                                         <span class="text-xs text-gray-500 dark:text-gray-400" title="{{ $review->created_at?->isoFormat('LLLL') }}">
                                                             {{ $review->created_at?->diffForHumans() ?? 'Date inconnue' }}
                                                         </span>
@@ -356,11 +360,15 @@
                                  {{-- Infos Partenaire HTML (identique) --}}
                                   <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Proposé par :</p>
                                  <div class="flex items-center">
-                                    <img src="{{ $listing->item->partner->avatar_url ?? asset(path: 'images/default-avatar.jpg') }}"
-                                         alt="Avatar de {{ $listing->item->partner->username ?? 'Partenaire' }}"
-                                         class="w-9 h-9 rounded-full object-cover mr-2.5 border border-gray-200 dark:border-gray-600">
+                                    <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}">
+                                        <img src="{{ asset($listing->item->partner->avatar_url) ?? asset('images/avatar-default.jpg') }}"
+                                            alt="Avatar de {{ $listing->item->partner->username ?? 'Partenaire' }}"
+                                            class="w-9 h-9 rounded-full object-cover mr-2.5 border border-gray-200 dark:border-gray-600">
+                                    </a>
                                     <div class="leading-tight">
-                                         <span class="font-medium text-gray-800 dark:text-gray-100">{{ $listing->item->partner->username ?? 'Partenaire CampShare' }}</span>
+                                        <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}">
+                                            <span class="font-medium text-gray-800 dark:text-gray-100">{{ $listing->item->partner->username ?? 'Partenaire CampShare' }}</span>
+                                        </a>
                                          <p class="text-xs text-gray-500 dark:text-gray-400">
                                              Membre depuis {{ $listing->item->partner->created_at?->translatedFormat('F Y') ?? 'date inconnue' }}
                                          </p>

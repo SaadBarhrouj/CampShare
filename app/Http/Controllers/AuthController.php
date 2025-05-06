@@ -30,7 +30,7 @@ class AuthController extends Controller
             } elseif ($user->role === 'partner') {
                 return redirect()->route('HomePartenaie');
             } else {
-                return redirect()->route('client.listings.index');
+                return redirect()->route('HomeClient');
             }
         }
 

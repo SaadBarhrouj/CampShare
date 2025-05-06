@@ -503,7 +503,7 @@ public function createEquipement(Request $request)
                 $fileName = time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
                 
                 // Stocker l'image dans le dossier equipment_images
-                $path = $imageFile->storeAs('equipment_images', $fileName, 'public');
+                $path = $imageFile->storeAs('storage/equipment_images', $fileName, 'public');
                 
                 // Créer l'enregistrement d'image dans la base de données
                 $image = new Image();
@@ -554,7 +554,7 @@ public function updateEquipement(Request $request, $item)
                 $fileName = time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
                 
                 // Stocker l'image dans le dossier equipment_images
-                $path = $imageFile->storeAs('equipment_images', $fileName, 'public');
+                $path = $imageFile->storeAs('storage/equipment_images', $fileName, 'public');
                 
                 // Créer l'enregistrement d'image dans la base de données
                 $image = new Image();

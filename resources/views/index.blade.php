@@ -71,7 +71,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Step 1 -->
                     <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-meadow bg-opacity-10 text-meadow mb-4">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-meadow bg-opacity-10 text-white mb-4">
                             <i class="fas fa-search text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">1. Recherchez</h3>
@@ -80,7 +80,7 @@
                     
                     <!-- Step 2 -->
                     <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-forest bg-opacity-10 text-forest mb-4">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-forest bg-opacity-10 text-white mb-4">
                             <i class="fas fa-calendar-check text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">2. Réservez</h3>
@@ -89,7 +89,7 @@
                     
                     <!-- Step 3 -->
                     <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-water bg-opacity-10 text-water mb-4">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-water bg-opacity-10 text-white mb-4">
                             <i class="fas fa-mountain text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">3. Profitez</h3>
@@ -98,7 +98,7 @@
                     
                     <!-- Step 4 -->
                     <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-sunlight bg-opacity-10 text-sunlight mb-4">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-sunlight bg-opacity-10 text-white mb-4">
                             <i class="fas fa-star text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">4. Évaluez</h3>
@@ -169,7 +169,7 @@
                 </div>
                 
                 <div class="text-center mt-12">
-                    <a href="#" class="inline-block px-6 py-3 bg-forest hover:bg-green-700 text-white font-medium rounded-md shadow-md transition duration-300">
+                    <a href="{{ route('client.listings.index') }}" class="inline-block px-6 py-3 bg-forest hover:bg-green-700 text-white font-medium rounded-md shadow-md transition duration-300">
                         Voir toutes les catégories
                     </a>
                 </div>
@@ -234,7 +234,7 @@
                     
                     <!-- Benefit 6 -->
                     <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 transform transition duration-300 hover:shadow-lg">
-                        <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-sky text-white mb-4">
+                        <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-cyan-600 text-white mb-4">
                             <i class="fas fa-users"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Communauté</h3>
@@ -284,7 +284,7 @@
                     <div class="mt-10 md:mt-0 md:w-2/5">
                         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 md:p-8 transition-all duration-300">
                             <div class="text-center mb-6">
-                                <span class="inline-block p-3 rounded-full bg-sunlight bg-opacity-10 text-sunlight">
+                                <span class="inline-block p-3 rounded-full bg-sunlight bg-opacity-10 text-white">
                                     <i class="fas fa-calculator text-2xl"></i>
                                 </span>
                                 <h3 class="text-xl font-bold mt-4 text-gray-900 dark:text-white">Simulez vos revenus</h3>

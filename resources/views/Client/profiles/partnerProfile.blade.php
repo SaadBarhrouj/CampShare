@@ -58,7 +58,7 @@
                                 <div class="flex text-amber-400 mt-1">
                                     <x-star-rating :rating="$user->averageRatingPartner()" />
                                 </div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $user->receivedReviews()->where('is_visible', true)->where('type', 'forPartner')->count() }} avis)</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $user->receivedReviews->where('is_visible', true)->where('type', 'forPartner')->count() }} avis)</div>
                             </div>
                             
                             <div class="flex flex-col items-center">
@@ -121,7 +121,7 @@
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
                                         <i class="fas fa-user mr-1 text-gray-400"></i>
-                                        <a href="/profile/karim-ouazzani" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
+                                        <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}" class="hover:text-forest dark:hover:text-sunlight">{{ $listing->item->partner->username }}</a>
                                     </div>
                                     
                                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-2">
@@ -164,61 +164,62 @@
                 </div>
                 
                 <!-- Review Stats -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8">
-                    <div class="flex flex-col md:flex-row md:items-center">
-                        <div class="flex flex-col items-center mr-8 mb-6 md:mb-0">
-                            <div class="text-5xl font-bold text-gray-900 dark:text-white">{{ $user->averageRatingPartner() }}</div>
-                            <div class="flex text-amber-400 text-xl mt-2">
-                                <x-star-rating :rating="$user->averageRatingPartner()" />
-                            </div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ $user->receivedReviews()->where('is_visible', true)->where('type', 'forPartner')->count() }} avis</div>
-                        </div>
-                        
-                        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <div class="flex items-center mb-2">
-                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">5 étoiles</div>
-                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(5) }}%"></div>
-                                    </div>
-                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(5) }}%</div>
+                @if($user->receivedReviews->where('is_visible', true)->where('type', 'forPartner')->count()!=0)
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8">
+                        <div class="flex flex-col md:flex-row md:items-center">
+                            <div class="flex flex-col items-center mr-8 mb-6 md:mb-0">
+                                <div class="text-5xl font-bold text-gray-900 dark:text-white">{{ $user->averageRatingPartner() }}</div>
+                                <div class="flex text-amber-400 text-xl mt-2">
+                                    <x-star-rating :rating="$user->averageRatingPartner()" />
                                 </div>
-                                <div class="flex items-center mb-2">
-                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">4 étoiles</div>
-                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(4) }}%"></div>
-                                    </div>
-                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(4) }}%</div>
-                                </div>
-                                <div class="flex items-center mb-2">
-                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">3 étoiles</div>
-                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(3) }}%"></div>
-                                    </div>
-                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(3) }}%</div>
-                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ $user->receivedReviews()->where('is_visible', true)->where('type', 'forPartner')->count() }} avis</div>
                             </div>
                             
-                            <div>
-                                <div class="flex items-center mb-2">
-                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">2 étoiles</div>
-                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(2) }}%"></div>
+                            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-24 font-medium text-gray-700 dark:text-gray-300">5 étoiles</div>
+                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(5) }}%"></div>
+                                        </div>
+                                        <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(5) }}%</div>
                                     </div>
-                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(2) }}%</div>
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-24 font-medium text-gray-700 dark:text-gray-300">4 étoiles</div>
+                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(4) }}%"></div>
+                                        </div>
+                                        <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(4) }}%</div>
+                                    </div>
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-24 font-medium text-gray-700 dark:text-gray-300">3 étoiles</div>
+                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(3) }}%"></div>
+                                        </div>
+                                        <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(3) }}%</div>
+                                    </div>
                                 </div>
-                                <div class="flex items-center mb-2">
-                                    <div class="w-24 font-medium text-gray-700 dark:text-gray-300">1 étoile</div>
-                                    <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(1) }}%"></div>
+                                
+                                <div>
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-24 font-medium text-gray-700 dark:text-gray-300">2 étoiles</div>
+                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(2) }}%"></div>
+                                        </div>
+                                        <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(2) }}%</div>
                                     </div>
-                                    <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(1) }}%</div>
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-24 font-medium text-gray-700 dark:text-gray-300">1 étoile</div>
+                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-amber-400 rounded-full" style="width: {{ $user->fiveStarPercentagePartner(1) }}%"></div>
+                                        </div>
+                                        <div class="w-12 text-right text-gray-500 dark:text-gray-400 text-sm">{{ $user->fiveStarPercentagePartner(1) }}%</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                @endif
                 
                 
                 <!-- Review List -->
@@ -230,14 +231,14 @@
                                 <div class="flex justify-between items-start">
                                     <div class="flex">
                                         <div class="mr-4">
-                                            <a href="profile-ahmed.html">
-                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                            <a href="{{ route('client.profile.index', $review->reviewer->id) }}">
+                                                <img src="{{ asset($review->reviewer->avatar_url) ?? asset('images/avatar-default.jpg') }}" 
                                                      alt="Ahmed Kaddour" 
                                                      class="w-12 h-12 rounded-full object-cover" />
                                             </a>
                                         </div>
                                         <div>
-                                            <a href="profile-ahmed.html" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">{{ $review->reviewer->username }}</a>
+                                            <a href="{{ route('client.profile.index', $review->reviewer->id) }}" class="font-bold text-gray-900 dark:text-white hover:text-forest dark:hover:text-meadow">{{ $review->reviewer->username }}</a>
                                             <div class="flex items-center space-x-2 mt-1">
                                                 <div class="flex text-amber-400">
                                                     <x-star-rating :rating="$review->rating" />
@@ -253,11 +254,11 @@
                                 </div>
 
                             </div>
-                            </div>
+                        </div>
 
-                        @empty
-                            <p class="text-gray-500">Aucun avis pour cette annonce.</p>
-                        @endforelse
+                    @empty
+                        <p class="text-gray-500">Ce partenaire n'a pas encore reçu d'avis.</p>
+                    @endforelse
 
                         <!-- Load More Button -->
                         <div class="flex justify-center mt-8 space-x-3">

@@ -18,8 +18,8 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sorting
     
-        $query = Listing::with('item.category'); // eager load
-        $premiumQuery = Listing::where('is_premium', true)->with('item.category');
+        $query = Listing::where('status', 'active')->with('item.category'); // eager load
+        $premiumQuery = Listing::where('is_premium', true)->where('status', 'active')->with('item.category');
     
         if ($request->filled('search')) {
             $search = $request->search;
@@ -182,7 +182,7 @@ class ListingController extends Controller
         $listingsCount = $query->count();
         $premiumListingsCount = $premiumQuery->count();
     
-        $listings = $query->simplePaginate(9)->appends($request->query());
+        $listings = $query->paginate(15)->appends($request->query());
         $premiumListings = $premiumQuery->take(3)->get();
     
         
@@ -207,7 +207,7 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
 
-        $query = Listing::where('is_premium', true)->with('item.category');
+        $query = Listing::where('is_premium', true)->where('status', 'active')->with('item.category');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -284,7 +284,7 @@ class ListingController extends Controller
         }
 
         $premiumListingsCount = $query->count();
-        $premiumListings = $query->simplePaginate(9)->appends($request->query());
+        $premiumListings = $query->paginate(15)->appends($request->query());
 
         $categories = Category::all();
         $cities = City::orderBy('name')->get();
@@ -303,7 +303,7 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
         
-        $query = Listing::with('item.category');
+        $query = Listing::where('status', 'active')->with('item.category');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -379,7 +379,7 @@ class ListingController extends Controller
         }
 
         $listingsCount = $query->count();
-        $listings = $query->simplePaginate(9)->appends($request->query());
+        $listings = $query->paginate(15)->appends($request->query());
 
         $categories = Category::all();
         $cities = City::orderBy('name')->get();

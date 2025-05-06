@@ -68,9 +68,9 @@ class RegistrationController extends Controller
 
         try {
             // Stockage des fichiers
-            $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
-            $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'cin_images');
-            $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'cin_images');
+            $imagePath = $this->storeUploadedFile($request->file('image'), 'storage/profile_images');
+            $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'storage/cin_images');
+            $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'storage/cin_images');
 
             // Création de l'utilisateur
             $user = User::create([
