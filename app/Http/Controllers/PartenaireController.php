@@ -453,6 +453,9 @@ public function showEquipements(Request $request)
     $NumberLocationsEncours = PartenaireModel::getNumberLocationsEncours($user->email);
     $LesAvis = PartenaireModel::getAvis($user->email);
     
+    // Retrieve notifications for the current user
+    $notifications = (new \App\Http\Controllers\NotificationController)->getNotifUser($user->id);
+    
     return view('Partenaire.tablea_de_bord_partenaire', compact(
         'user',
         'sumPayment',
@@ -470,7 +473,8 @@ public function showEquipements(Request $request)
         'LocationsEncours',
         'NumberLocationsEncours',
         'LesAvis',
-        'categories'
+        'categories',
+        'notifications'
     ));
 }
 
@@ -880,7 +884,6 @@ public function deleteAllEquipements()
      */
     public function showAnnonceDetails(Listing $listing)
     {
-        // Vérifier que l'annonce appartient au partenaire connecté
         $user = Auth::user();
         $item = Item::with('images', 'category')->find($listing->item_id);
         
@@ -889,22 +892,22 @@ public function deleteAllEquipements()
                 ->with('error', 'Vous n\'êtes pas autorisé à voir cette annonce.');
         }
         
-        // Récupérer la ville
         $city = City::find($listing->city_id);
         
-        // Calculer les revenus potentiels
         $startDate = \Carbon\Carbon::parse($listing->start_date);
         $endDate = \Carbon\Carbon::parse($listing->end_date);
         $availableDays = $endDate->diffInDays($startDate);
         $potentialRevenue = $availableDays * $item->price_per_day;
         
-        // Récupérer le nombre de vues et de réservations pour cette annonce
-        $viewCount = 0; // À implémenter si vous avez un système de suivi des vues
+        $viewCount = 0;
         $reservationCount = Reservation::where('listing_id', $listing->id)->count();
         $completedReservationCount = Reservation::where('listing_id', $listing->id)
             ->where('status', 'completed')
             ->count();
             
+        // Retrieve notifications for the current user
+        $notifications = (new \App\Http\Controllers\NotificationController)->getNotifUser($user->id);
+        
         return view('Partenaire.annonce-details', compact(
             'listing',
             'item',
@@ -913,7 +916,8 @@ public function deleteAllEquipements()
             'potentialRevenue',
             'viewCount',
             'reservationCount',
-            'completedReservationCount'
+            'completedReservationCount',
+            'notifications'
         ));
     }
 

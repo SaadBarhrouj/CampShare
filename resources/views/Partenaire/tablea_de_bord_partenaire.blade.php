@@ -325,9 +325,16 @@
                                         </a>
 
                                         <div class="border-t border-gray-200 dark:border-gray-700"></div>
-                                        <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <a href="{{ route('logout') }}"
+                                        class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                         </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                            @csrf
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>

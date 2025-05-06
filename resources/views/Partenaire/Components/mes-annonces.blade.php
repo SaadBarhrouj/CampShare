@@ -162,10 +162,10 @@
                                             <form action="{{ route('partenaire.annonces.update', $annonce) }}" method="POST" class="inline-block">
                                                 @csrf
                                                 @method('PUT')
-                                                <input type="hidden" name="status" value="{{ $annonce->status === 'active' ? 'inactive' : 'active' }}">
+                                                <input type="hidden" name="status" value="{{ $annonce->status === 'active' ? 'archived' : 'active' }}">
                                                 <button type="submit" class="{{ $annonce->status === 'active' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-800/50' : 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50' }} px-2 py-1 rounded" title="{{ $annonce->status === 'active' ? 'Désactiver l\'annonce' : 'Activer l\'annonce' }}">
                                                     @if($annonce->status === 'active')
-                                                        <i class="fas fa-toggle-off mr-1"></i> Désactiver
+                                                        <i class="fas fa-toggle-off mr-1"></i> Archiver
                                                     @else
                                                         <i class="fas fa-toggle-on mr-1"></i> Activer
                                                     @endif

@@ -294,14 +294,16 @@
                                                     <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                                 </a>
                                                 <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                                                <form method="POST" action="{{ route('logout') }}" id="logout-form-nav-{{ Str::random(4) }}">
+                                                <a href="{{ route('logout') }}"
+                                                class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                    <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                                                </a>
+
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                                     @csrf
-                                                    <a href="{{ route('logout') }}"
-                                                       onclick="event.preventDefault(); document.getElementById('logout-form-nav-{{ Str::random(4) }}').submit();"
-                                                       class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
-                                                    </a>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
