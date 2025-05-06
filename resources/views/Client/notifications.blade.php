@@ -132,14 +132,13 @@
                             <select id="sort-select" class="py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md shadow-sm text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow">
                                 <option value="newest">Plus récentes</option>
                                 <option value="oldest">Plus anciennes</option>
-                                <option value="important">Non lues d'abord</option> {{-- Renommé pour clarté --}}
+                                <option value="important">Non lues d'abord</option> 
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[600px] overflow-y-auto" id="notifications-list">
-                     {{-- Boucle sur les notifications passées par le contrôleur --}}
                     @forelse ($notifications as $notification)
                         @php
                             $isReviewNotification = in_array($notification->type, ['review_object', 'review_partner', 'review_client']);
@@ -154,7 +153,6 @@
                             $tagText = 'Système'; $tagBgClass = 'bg-gray-100 dark:bg-gray-700'; $tagTextColorClass = 'text-gray-800 dark:text-gray-300';
                             $titleText = ucfirst(str_replace('_', ' ', $notification->type)); // Titre par défaut
 
-                             // Personnalisation basée sur le type de notification
                             switch ($notification->type) {
                                 case 'accepted_reservation':
                                     $iconClass = 'fa-calendar-check'; $bgColorClass = 'bg-green-100 dark:bg-green-800'; $textColorClass = 'text-green-500 dark:text-green-300';
@@ -190,7 +188,6 @@
 
                             <div class="flex-shrink-0 self-start pt-1">
                                 <label class="custom-checkbox">
-                                    {{-- Valeur de la checkbox est l'ID de la notif --}}
                                     <input type="checkbox" class="notification-checkbox" value="{{ $notification->id }}">
                                     <span class="checkmark"></span>
                                 </label>

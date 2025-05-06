@@ -10,17 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-// Importe la classe Controller de base
-use Illuminate\Routing\Controller; 
+use Illuminate\Routing\Controller;
 
 class NotificationController extends Controller 
 {
-
-
-    /**
-     * Récupère les 5 dernières notifications non lues pour l'utilisateur spécifié.
-     * Utilisé pour l'aperçu dans le header.
-     */
     public function getNotifUser($user_id)
     {
         if (Auth::id() != $user_id) {
@@ -34,10 +27,6 @@ class NotificationController extends Controller
                             ->get();
     }
 
-    /**
-     * Compte le nombre total de notifications non lues pour l'utilisateur spécifié.
-     * Utilisé pour le badge numérique.
-     */
     public function totalNotification($user_id)
     {
          if (Auth::id() != $user_id) {
@@ -47,8 +36,6 @@ class NotificationController extends Controller
                            ->where('is_read', false)
                            ->count();
     }
-
-
 
     public function showClientNotifications()
     {
@@ -67,37 +54,32 @@ class NotificationController extends Controller
         $notifications = Notification::where('user_id', $user->id)
                                     ->whereIn('type', $clientNotificationTypes)
                                     ->orderBy('created_at', 'desc')
-                                    ->paginate(10); 
+                                    ->paginate(10);
 
         return view('Client.notifications', compact('notifications', 'user'));
     }
-  public function showPartnerNotifications()
+
+    public function showPartnerNotifications()
     {
         $user = Auth::user();
 
-        // Vérifie si l'utilisateur A BIEN le rôle partenaire (sécurité supplémentaire)
         if ($user->role !== 'partner') {
-             // Redirige vers le tableau de bord client ou affiche une erreur 403
              Log::warning("User {$user->id} (role: {$user->role}) attempted to access partner notifications page.");
-             // return redirect()->route('HomeClient')->with('error', 'Accès non autorisé.'); // Option 1: Redirection
-             abort(403, 'Accès non autorisé à cette section.'); // Option 2: Erreur 403
+             abort(403, 'Accès non autorisé à cette section.');
         }
-
 
         $partnerNotificationTypes = [
             'review_client',
-
         ];
 
         $notifications = Notification::where('user_id', $user->id)
-                                    ->whereIn('type', $partnerNotificationTypes) // Filtre Partenaire
+                                    ->whereIn('type', $partnerNotificationTypes)
                                     ->orderBy('created_at', 'desc')
-                                    ->paginate(10); // Ajustez la pagination
+                                    ->paginate(10);
 
-        // Renvoie l'ANCIENNE vue Partenaire (qui est maintenant dédiée)
-        // Pas besoin de passer $current_space car la vue est spécifique
         return view('Partenaire.notifications', compact('notifications', 'user'));
     }
+
     public function markNotificationAsRead(Notification $notification, User $user)
     {
         if ($notification->user_id !== Auth::id() || $user->id !== Auth::id()) {
@@ -116,7 +98,6 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification marquée comme lue.']);
     }
 
-
     public function deleteNotification(Notification $notification, User $user)
     {
          if ($notification->user_id !== Auth::id() || $user->id !== Auth::id()) {
@@ -126,17 +107,13 @@ class NotificationController extends Controller
              return response()->json(['message' => 'Action non autorisée.'], 403);
         }
 
-        $notificationId = $notification->id; // Garder l'ID pour le log
+        $notificationId = $notification->id;
         $notification->delete();
         Log::info("Notification ID {$notificationId} deleted for User ID {$user->id}");
 
         return response()->noContent();
     }
 
-
-    /**
-     * Marque comme lu (via IDs). Vérifie l'authentification.
-     */
     public function markAsRead($notId, $userId)
     {
          if (Auth::id() != $userId) {
@@ -153,9 +130,6 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification marquée comme lue.']);
     }
 
-    /**
-     *  Supprime (via IDs). Vérifie l'authentification.
-     */
     public function delete($notId, $userId)
     {
         if (Auth::id() != $userId) {
@@ -168,12 +142,6 @@ class NotificationController extends Controller
         $notificationId = $notification->id;
         $notification->delete();
         Log::info("(Original Method) Notification ID {$notificationId} deleted for User ID {$userId}");
-        return response()->noContent(); // 204
+        return response()->noContent();
     }
-
-    // ---a faire .... ---
-    /*
-    public function markAllAsRead(Request $request) { ... }
-    public function deleteSelected(Request $request) { ... }
-    */
 }
