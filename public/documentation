@@ -1,0 +1,13 @@
+DELETE FROM reviews WHERE reservation_id = 2003;
+DELETE FROM notifications WHERE reservation_id = 2003;
+
+
+
+
+Planifier taches (commande pour executer manuelement pour tester ): 
+
+-php artisan reservations:send-review-notifications
+-php artisan reviews:update-visibility-after-delay
+
+create commande:
+php artisan make:command UpdateReviewVisibility

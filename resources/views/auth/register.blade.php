@@ -225,11 +225,10 @@
                             class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4"
                             placeholder="Votre pseudonyme">
                     </div>
-                    
                     <div>
-                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Photo de profil</label>
+                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Photo de profil (Facultatif)</label>
                         <input type="file" id="image" name="image" accept="image/*"
-                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4">
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 dark:file:bg-gray-600 file:text-forest dark:file:text-meadow hover:file:bg-gray-200 dark:hover:file:bg-gray-500">
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email *</label>
@@ -477,17 +476,19 @@
                     </div>
 
                     <div class="flex items-start">
-                        <div class="flex items-center h-5">
-                            <input id="is_subscribed" name="is_subscribed" type="checkbox" value="1"
-                                class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700">
-                        </div>
-                        <div class="ml-3 text-sm">
-                            <label for="is_subscribed" class="font-medium text-gray-700 dark:text-gray-300">
-                                Je souhaite recevoir les notifications (facultatif)
-                            </label>
-                        </div>
+                    <div class="flex items-center h-5">
+                        {{-- Ajout de {{ old('is_subscribed') ? 'checked' : '' }} pour conserver l'état après validation --}}
+                        <input id="is_subscribed" name="is_subscribed" type="checkbox" value="1" {{ old('is_subscribed') ? 'checked' : '' }}
+                            class="h-4 w-4 text-forest focus:ring-forest border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700">
+                    </div>
+                    <div class="ml-3 text-sm">
+                        {{-- Texte du label original conservé --}}
+                        <label for="is_subscribed" class="font-medium text-gray-700 dark:text-gray-300">
+                            Je souhaite recevoir les notifications (facultatif)
+                        </label>
                     </div>
                 </div>
+            </div>
 
                 <div class="mt-8 flex justify-between">
                     <button type="button" id="back-to-step-2" class="flex items-center justify-center py-3 px-6 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest dark:focus:ring-meadow transition duration-150">

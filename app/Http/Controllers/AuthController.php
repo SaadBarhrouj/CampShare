@@ -14,17 +14,30 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials, $request->filled('remember-me'))) {
-            $request->session()->regenerate();
-
+    
             $user = Auth::user();
-
-            // Si besoin d’enregistrer autre chose au login, tu peux le faire ici
-
+    
+            if (!$user->is_active) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+    
+                return back()->withErrors([
+                    'email' => 'Votre compte a été désactivé. Veuillez contacter le support.',
+                ])->withInput($request->only('email', 'remember-me'));
+            }
+    
+            $request->session()->regenerate();
             session()->flash('success', 'Connexion réussie.');
-
+    
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'partner') {
@@ -33,11 +46,12 @@ class AuthController extends Controller
                 return redirect()->route('HomeClient');
             }
         }
-
+    
         return back()->withErrors([
             'email' => 'Email ou mot de passe incorrect.',
-        ]);
+        ])->withInput($request->only('email', 'remember-me'));
     }
+    
 
     public function logout()
     {
