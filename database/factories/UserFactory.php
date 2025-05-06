@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'cin_recto' => 'images/cin-recto.jpg',
             'cin_verso' => 'images/cin-verso.jpg',
             'is_subscriber' => $this->faker->boolean,
-            'is_active' => $this->faker->boolean,
+            'is_active' => $this->faker->numberBetween(1, 100) <= 90,
             'city_id' => $city,
         ];
     }
