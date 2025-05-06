@@ -103,7 +103,7 @@
                             </div>
                             <a href="{{ route('client.listings.show', $listing->id) }}">
                                 <div class="relative h-48">
-                                    <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                    <img src="{{ $listing->item?->images?->first() ? asset($listing->item->images->first()->url) : asset('images/item-default.jpg') }}"
                                         alt="Tente 2 places" 
                                         class="w-full h-full object-cover" />
                                 </div>

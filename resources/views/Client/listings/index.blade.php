@@ -231,7 +231,7 @@
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->start_date }} au {{ $premiumListing->end_date }} </span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $premiumListing->start_date->translatedFormat('j F Y') }} au {{ $premiumListing->end_date->translatedFormat('j F Y') }} </span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -310,7 +310,7 @@
                                     </div>
                                     
                                     <div class="text-sm mb-3">
-                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->start_date }} au {{ $listing->end_date }}</span>
+                                        <span class="text-gray-600 dark:text-gray-300">Disponible du {{ $listing->start_date->translatedFormat('j F Y') }} au {{ $listing->end_date->translatedFormat('j F Y') }}</span>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
