@@ -30,49 +30,57 @@ class RegistrationController extends Controller
      */
     public function register(Request $request)
     {
-        // Validation des données
         $validator = Validator::make($request->all(), [
             'username'      => 'required|string|max:255|unique:users',
             'first_name'    => 'required|string|max:255',
             'last_name'     => 'required|string|max:255',
             'address'       => 'required|string|max:255',
-            'phone_number'  => 'required|string|max:20|regex:/^\+?[0-9\s\-]+$/',
+            'phone_number'  => 'required|string|max:20|regex:/^\+?[0-9\s\-()]+$/',
             'email'         => 'required|string|email|max:255|unique:users',
-            'password'      => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-            ],
-            'image'         => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'password'      => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // Correct: nullable
             'cin_recto'     => 'required|image|mimes:jpeg,png,jpg|max:5120',
             'cin_verso'     => 'required|image|mimes:jpeg,png,jpg|max:5120',
             'city_id'       => 'required|exists:cities,id',
             'terms'         => 'required|accepted',
             'contract'      => 'required|accepted',
+            'is_subscribed' => 'nullable|boolean',
+            'role'          => 'nullable|in:partner', // Valide que si 'role' est présent, c'est 'partner'
         ], [
-            'phone_number.regex' => 'Le numéro de téléphone doit être valide',
-            'terms.required'     => 'Vous devez accepter les CGU',
-            'contract.required'  => 'Vous devez accepter le contrat',
+            'phone_number.regex' => 'Le numéro de téléphone doit être valide.',
+            'terms.accepted'     => 'Vous devez accepter les CGU et la Politique de Confidentialité.',
+            'contract.accepted'  => 'Vous devez accepter le Contrat de Location.',
+            'image.max'          => 'L\'image de profil ne doit pas dépasser 5MB.',
+            'cin_recto.required' => 'La photo recto de la CIN est requise.',
+            'cin_recto.max'      => 'La photo recto de la CIN ne doit pas dépasser 5MB.',
+            'cin_verso.required' => 'La photo verso de la CIN est requise.',
+            'cin_verso.max'      => 'La photo verso de la CIN ne doit pas dépasser 5MB.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
-                ->withInput($request->except('password', 'password_confirmation'));
+                ->withInput($request->except('password', 'password_confirmation', 'image', 'cin_recto', 'cin_verso'));
         }
+
+        $imagePath = null;
+        $cinRectoPath = null;
+        $cinVersoPath = null;
 
         DB::beginTransaction();
 
         try {
-            // Stockage des fichiers
-            $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
+            }
+
             $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'cin_images');
             $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'cin_images');
 
-            // Création de l'utilisateur
+             if ($cinRectoPath === null || $cinVersoPath === null) {
+                 throw new \Exception("Erreur lors du traitement des fichiers CIN requis.");
+             }
+
             $user = User::create([
                 'username'      => $request->username,
                 'first_name'    => $request->first_name,
@@ -84,29 +92,27 @@ class RegistrationController extends Controller
                 'avatar_url'    => $imagePath,
                 'cin_recto'     => $cinRectoPath,
                 'cin_verso'     => $cinVersoPath,
-                'role'          => $request->has('role') ? 'partner' : 'client',
-                'is_subscribed' => $request->has('is_subscribed') ? 1 : 0,
+                'role'          => ($request->has('role') && $request->input('role') === 'partner') ? 'partner' : 'client',
+                 // =============================
+                'is_subscriber' => $request->boolean('is_subscribed'), 
                 'city_id'       => $request->city_id,
-                'newsletter'    => $request->has('newsletter'),
+                'is_active'     => 1,
             ]);
 
             DB::commit();
-
             Auth::login($user);
 
-            return redirect()->route('client.listings.index')
-                ->with('success', 'Votre compte a été créé avec succès!');
+            $redirectRoute = $user->role === 'partner' ? 'HomePartenaie' : 'HomeClient';
+            return redirect()->route($redirectRoute)
+                             ->with('success', 'Votre compte a été créé avec succès!');
 
         } catch (\Exception $e) {
             DB::rollBack();
-
-            $this->cleanupUploads([$imagePath ?? null, $cinRectoPath ?? null, $cinVersoPath ?? null]);
-
-            Log::error("Erreur lors de l'inscription: " . $e->getMessage());
-
+            $this->cleanupUploads(array_filter([$imagePath, $cinRectoPath, $cinVersoPath]));
+            Log::error("Erreur Inscription: " . $e->getMessage());
             return back()
-                ->with('error', 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.')
-                ->withInput();
+                ->with('error', 'Une erreur technique est survenue durant l\'inscription. Veuillez réessayer.')
+                ->withInput($request->except('password', 'password_confirmation', 'image', 'cin_recto', 'cin_verso'));
         }
     }
 
