@@ -44,10 +44,118 @@ class ClientController extends Controller
 
         $notifications = (new NotificationController)->getNotifUser($user->id);
         $totalNotification = (new NotificationController)->totalNotification($user->id);
-
-
-
         return view('Client.tablea_de_bord_client',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+            
+    }
+    function ShowMesReservationClient () {
+        $user = Auth::user();
+        $totalReservations = ClientModel::totalReservationsByEmail($user->email);
+        $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
+        $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);
+        $reservations = ClientModel::getReservationDetailsByEmail($user->email);
+        $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email);
+       
+        if(request()->ajax() && request()->has('status')) {
+            $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email, request('status'));
+            return view('Client.partials.reservations-grid', compact('allReservations'));
+        }
+        
+        $similarListings = ClientModel::getSimilarListingsByCategory($user->email);
+        $allSimilarListings = ClientModel::getAllSimilarListingsByCategory($user->email);
+
+        $reviews = ClientModel::getReviewsAboutMe($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+
+
+        return view('Client.Components.AllReservation',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+            
+    }
+
+    function ShowAvisRecusClient () {
+        $user = Auth::user();
+        $totalReservations = ClientModel::totalReservationsByEmail($user->email);
+        $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
+        $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);
+        $reservations = ClientModel::getReservationDetailsByEmail($user->email);
+        $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email);
+       
+        if(request()->ajax() && request()->has('status')) {
+            $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email, request('status'));
+            return view('Client.partials.reservations-grid', compact('allReservations'));
+        }
+        
+        $similarListings = ClientModel::getSimilarListingsByCategory($user->email);
+        $allSimilarListings = ClientModel::getAllSimilarListingsByCategory($user->email);
+
+        $reviews = ClientModel::getReviewsAboutMe($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+
+
+        return view('Client.Components.Avis',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+            
+    }
+
+    
+    function ShowEquipementRecommendeClient () {
+        $user = Auth::user();
+        $totalReservations = ClientModel::totalReservationsByEmail($user->email);
+        $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
+        $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);
+        $reservations = ClientModel::getReservationDetailsByEmail($user->email);
+        $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email);
+       
+        if(request()->ajax() && request()->has('status')) {
+            $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email, request('status'));
+            return view('Client.partials.reservations-grid', compact('allReservations'));
+        }
+        
+        $similarListings = ClientModel::getSimilarListingsByCategory($user->email);
+        $allSimilarListings = ClientModel::getAllSimilarListingsByCategory($user->email);
+
+        $reviews = ClientModel::getReviewsAboutMe($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+
+
+        return view('Client.Components.Equipements_recommande',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+            
+    }
+    function ShowProfileClient () {
+        $user = Auth::user();
+        $totalReservations = ClientModel::totalReservationsByEmail($user->email);
+        $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
+        $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);
+        $reservations = ClientModel::getReservationDetailsByEmail($user->email);
+        $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email);
+       
+        if(request()->ajax() && request()->has('status')) {
+            $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email, request('status'));
+            return view('Client.partials.reservations-grid', compact('allReservations'));
+        }
+        
+        $similarListings = ClientModel::getSimilarListingsByCategory($user->email);
+        $allSimilarListings = ClientModel::getAllSimilarListingsByCategory($user->email);
+
+        $reviews = ClientModel::getReviewsAboutMe($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+
+
+        return view('Client.Components.Profile',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
             
     }
 

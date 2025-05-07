@@ -31,6 +31,21 @@ Route::get('/listings', [ListingController::class, 'index'])->name('client.listi
 
 // Partner Routes
 Route::get('/Partenaire', [PartenaireController::class, 'ShowHomePartenaire'])->name('HomePartenaie');
+Route::get('/Partenaire/MesEquipement', [PartenaireController::class, 'ShowMesEquipement'])->name('MesEquipement');
+Route::get('/Partenaire/Mesannonces', [PartenaireController::class, 'ShowMesAnnonces'])->name('HomePartenaie');
+Route::get('/Partenaire/DemandeLocation', [PartenaireController::class, 'ShowDemandeLocation'])->name('HomePartenaie');
+Route::get('/Partenaire/LocationEnCours', [PartenaireController::class, 'ShowLocationEnCours'])->name('HomePartenaie');
+Route::get('/Partenaire/AvisRecus', [PartenaireController::class, 'ShowAvisRecus'])->name('HomePartenaie');
+
+
+
+
+
+
+
+
+
+///////////////////////////////
 Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
 Route::post('/demandes/filter', [PartenaireController::class, 'filter'])->name('demandes.filter');
 Route::post('/demandes/EnCours', [PartenaireController::class, 'filterLocationEnCours'])->name('demandes.filter.Encours');
@@ -87,6 +102,16 @@ Route::get('/fix-images', [App\Http\Controllers\ImageFixController::class, 'fixI
 Route::get('/client/reservations/filter', [ClientController::class, 'ShowHomeClient'])->name('profile');
 Route::post('/profile', [ClientController::class, 'update'])->name('profile.update');
 Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
+Route::get('/MesReservation', [ClientController::class, 'ShowMesReservationClient'])->name('HomeClient');
+Route::get('/AvisRecus', [ClientController::class, 'ShowAvisRecusClient'])->name('HomeClient');
+Route::get('/EquipementRecommende', [ClientController::class, 'ShowEquipementRecommendeClient'])->name('HomeClient');
+Route::get('/Client/profile', [ClientController::class, 'ShowProfileClient'])->name('HomeClient');
+
+
+
+
+
+
 Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cancel'])->name('client.reservations.cancel');
 
 

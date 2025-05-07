@@ -25,57 +25,205 @@ use App\Models\Review;
 class PartenaireController extends Controller
 {
     public function ShowHomePartenaire()
-{
+    {
 
-    $user = Auth::user();
+        $user = Auth::user();
+
+        $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
+        $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
+        $TotalListing = PartenaireModel::countListingsByEmail($user->email);
+        $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
+
+        $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
+        $RecentListing = PartenaireModel::getRecentPartnerListingsWithImagesByEmail($user->email);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberOfPartenaireEquipement = PartenaireModel::getNumberOfPartenaireEquipement($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $categories = Category::all();
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+        $lastAvisPartnerForObjet = PartenaireModel::getLastAvisPartnerForObject($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        return view('Partenaire.tablea_de_bord_partenaire', compact(
+            'user',
+            'sumPayment',
+            'NumberReservationCompleted',
+            'AverageRating',
+            'TotalAvis',
+            'TotalListing',
+            'pendingReservation',
+            'TotalListingActive',
+            'RecentListing',
+            'NumberPendingReservation',
+            'NumberOfPartenaireEquipement',
+            'NumberLocationsEncours',
+            'categories' ,
+            'notifications',
+            'totalNotification',
+            'lastAvisPartnerForObjet',
+            'profile'
+        ));
+    
+    }    
+    public function ShowMesEquipement()
+    {
+
+        $user = Auth::user();
+        $AllEquipement = PartenaireModel::getPartenerEquipement($user->email);
 
 
-    $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
-    $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
-    $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
-    $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
-    $TotalListing = PartenaireModel::countListingsByEmail($user->email);
-    $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
 
-    $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
-    $RecentListing = PartenaireModel::getRecentPartnerListingsWithImagesByEmail($user->email);
-    $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
-    $AllEquipement = PartenaireModel::getPartenerEquipement($user->email);
-    $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
-    $NumberOfPartenaireEquipement = PartenaireModel::getNumberOfPartenaireEquipement($user->email);
-    $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
-    $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
-    $LesAvis= PartenaireModel::getAvis($user->email);
-    $categories = Category::all();
-    $notifications = (new NotificationController)->getNotifUser($user->id);
-    $totalNotification = (new NotificationController)->totalNotification($user->id);
-    $lastAvisPartnerForObjet = PartenaireModel::getLastAvisPartnerForObject($user->email);
-    $profile = ClientModel::getClientProfile($user->email); 
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $categories = Category::all();
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
 
-    return view('Partenaire.tablea_de_bord_partenaire', compact(
-        'user',
-        'sumPayment',
-        'NumberReservationCompleted',
-        'AverageRating',
-        'TotalAvis',
-        'TotalListing',
-        'pendingReservation',
-        'TotalListingActive',
-        'RecentListing',
-        'AllReservationForPartner',
-        'AllEquipement',
-        'NumberPendingReservation',
-        'NumberOfPartenaireEquipement',
-        'LocationsEncours',
-        'NumberLocationsEncours',
-        'LesAvis',
-        'categories' ,
-        'notifications',
-        'totalNotification',
-        'lastAvisPartnerForObjet',
-        'profile'
-    ));
-}
+        return view('Partenaire.Components.toutes-les-equipement', compact(
+            'user',
+            'AverageRating',
+            'AllEquipement',
+            'NumberPendingReservation',
+            'NumberLocationsEncours',
+            'categories' ,
+            'notifications',
+            'totalNotification',
+        ));
+    }
+    public function ShowDemandeLocation()
+    {
+
+        $user = Auth::user();
+
+
+        $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
+        $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $categories = Category::all();
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+        return view('Partenaire.Components.toutes-les-demandes', compact(
+            'user',
+            'NumberReservationCompleted',
+            'pendingReservation',
+            'AllReservationForPartner',
+            'AverageRating',
+            'NumberPendingReservation',
+            'categories' ,
+            'notifications',
+            'totalNotification',
+            'NumberLocationsEncours'
+        ));
+    }
+
+    public function ShowMesAnnonces()
+    {
+        $user = Auth::user();
+
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
+        $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $categories = Category::all();
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+        $lastAvisPartnerForObjet = PartenaireModel::getLastAvisPartnerForObject($user->email);
+
+        return view('Partenaire.Components.mes-annonces', compact(
+            'user',
+            'AverageRating',
+            'TotalAvis',
+            'pendingReservation',
+            'NumberPendingReservation',
+            'NumberLocationsEncours',
+            'categories' ,
+            'notifications',
+            'totalNotification',
+        ));
+    }
+
+    public function ShowLocationEnCours()
+    {
+
+        $user = Auth::user();
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
+        $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
+        $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $LocationsEncours = PartenaireModel::getLocationsEncours($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $categories = Category::all();
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+
+        return view('Partenaire.Components.Reservation-En-cours', compact(
+            'user',
+            'AverageRating',
+            'pendingReservation',
+            'TotalListingActive',
+            'AllReservationForPartner',
+            'NumberPendingReservation',
+            'LocationsEncours',
+            'NumberLocationsEncours',
+            'categories' ,
+            'notifications',
+            'totalNotification',
+        ));
+    }
+
+    public function ShowAvisRecus()
+    {
+        $user = Auth::user();
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
+        $TotalListing = PartenaireModel::countListingsByEmail($user->email);
+        $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $LesAvis= PartenaireModel::getAvis($user->email);
+        $notifications = (new NotificationController)->getNotifUser($user->id);
+        $totalNotification = (new NotificationController)->totalNotification($user->id);
+        return view('Partenaire.Components.avis-recus', compact(
+            'user',
+            'AverageRating',
+            'TotalAvis',
+            'TotalListing',
+            'TotalListingActive',
+            'NumberPendingReservation',
+            'NumberLocationsEncours',
+            'LesAvis',
+            'notifications',
+            'totalNotification',
+        ));
+    }
+    public function voir_profile_partenaire()
+    {
+
+        $user = Auth::user();
+        $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
+        $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
+        $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
+        $profile = ClientModel::getClientProfile($user->email); 
+
+        return view('Partenaire.Components.Profile', compact(
+            'sumPayment',
+            'AverageRating',
+            'NumberPendingReservation',
+            'profile',
+            'NumberLocationsEncours'
+        ));
+    }
 public function devenir_partenaire(){
     $user = Auth::user();
     PartenaireModel::updaterole($user->email);
