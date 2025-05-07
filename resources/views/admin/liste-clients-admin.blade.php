@@ -149,12 +149,12 @@
             color: #9CA3AF;
         }
         
-        .badge-purple {
+        .badge-blue {
             background-color: #EDE9FE;
             color: #6D28D9;
         }
         
-        .dark .badge-purple {
+        .dark .badge-blue {
             background-color: rgba(109, 40, 217, 0.2);
             color: #A78BFA;
         }
@@ -277,13 +277,7 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <!-- Quick search -->
-                    <div class="relative">
-                        <input type="text" placeholder="Recherche rapide..." class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary w-64 text-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
-                        </div>
-                    </div>
+                    
                     
                     <!-- User menu -->
                     <div class="relative ml-4">
@@ -406,70 +400,71 @@
         <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
             <div class="p-5">
                 <div class="mb-6 px-3">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Menu Principal</h5>
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Menu Principal</h5>
                     <nav class="space-y-1">
-                        <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
+                            <i class="fas fa-tachometer-alt  w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                         </a>
-                        <a href="{{ route('admin.clients') }}" class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
-                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Clients
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $stats['total'] }}</span>
-                        </a>
-                        <a href={{ route('admin.partners') }} class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        
+                        
+                        
+                    </nav>
+                </div>
+
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Utilisateurs</h5>
+                    <nav class="space-y-1">
+                        <a href="{{ route('admin.partners') }}"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $partnersCount }} </span>
                         </a>
-                        <a href="#equipment" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="{{ route('admin.clients') }}"
+                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Clients
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"> {{ $stats['total'] }}</span>
+                        </a>
+
+                    </nav>
+                </div>
+
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Equi. Réserv. & Avis</h5>
+                    <nav class="space-y-1">
+                        <a href="#equipment"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Équipements
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">432</span>
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">432</span>
                         </a>
-                        <a href="#reservations" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="#reservations"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Réservations
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
                         </a>
-                        <a href="#reviews" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <a href="#reviews"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Avis
-                            <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
-                    </nav>
-                </div>
-                
-                <div class="mb-6 px-3">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Analyse & Rapports</h5>
-                    <nav class="space-y-1">
-                        <a href="#analytics" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-chart-line w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Statistiques
-                        </a>
-                        <a href="#financial" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Finances
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
                         </a>
 
                     </nav>
                 </div>
-                
-                <div class="mb-6 px-3">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Configuration</h5>
-                    <nav class="space-y-1">
-                        <a href="#site-settings" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-cog w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Paramètres du site
-                        </a>
-                        <a href="#admin-users" class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-user-shield w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Administrateurs
-                            <span class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
-                        </a>
 
-                    </nav>
-                </div>
-                
             </div>
         </aside>
         
@@ -498,7 +493,7 @@
                 </div>
                 
                 <!-- Stats cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Stats card 1 - Total Clients -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
@@ -640,756 +635,329 @@
                        
                     </div>
                     
-                    <!-- Advanced filters (collapsible) -->
-                    <div class="mt-4">
-                        <button id="advanced-filters-toggle" class="text-sm text-admin-primary dark:text-admin-secondary flex items-center">
-                            <i class="fas fa-filter mr-1"></i> Filtres avancés
-                            <i class="fas fa-chevron-down ml-1 text-xs transition-transform duration-200"></i>
-                        </button>
-                        
-                        <div id="advanced-filters" class="hidden mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Registration date range -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date d'inscription</label>
-                                <div class="flex space-x-2">
-                                    <input type="date" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="De">
-                                    <input type="date" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="À">
-                                </div>
-                            </div>
-                            
-                            <!-- Reservation count range -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre de réservations</label>
-                                <div class="flex space-x-2">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Min">
-                                    <input type="number" min="0" class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm" placeholder="Max">
-                                </div>
-                            </div>
-                            
-                            <!-- Reserved equipment types -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type d'équipement réservé</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                                    <option value="">Tous les types</option>
-                                    <option value="tentes">Tentes</option>
-                                    <option value="sacs-couchage">Sacs de couchage</option>
-                                    <option value="matelas">Matelas</option>
-                                    <option value="cuisine">Équipement de cuisine</option>
-                                    <option value="eclairage">Éclairage</option>
-                                    <option value="accessoires">Accessoires divers</option>
-                                </select>
-                            </div>
-                        
-                        </div>
-                        
-                        <!-- Filter action buttons -->
-                        <div id="filter-actions" class="hidden mt-4 flex justify-end space-x-3">
-                            <button class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors text-sm">
-                                Réinitialiser les filtres
-                            </button>
-                            <button class="px-4 py-2 bg-admin-primary hover:bg-admin-dark text-white rounded-md shadow-sm transition-colors text-sm">
-                                Appliquer les filtres
-                            </button>
-                        </div>
-                    </div>
                 </div>
-                
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+
                 <!-- Clients table -->
-                <table class="min-w-full">
-    <thead class="bg-gray-50">
-        <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Téléphone</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ville</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Réservations</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avis</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Note</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-        </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-        @foreach($clients as $client)
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4">{{ $client->username }}</td>
-            <td class="px-6 py-4">{{ $client->email }}</td>
-            <td class="px-6 py-4">
-                @if($client->phone_number)
-                    <span class="px-2 py-1 text-sm bg-gray-100 text-gray-800 rounded-full">
-                        {{ $client->phone_number }}
-                    </span>
-                @else
-                    <span class="text-gray-400">Non spécifié</span>
-                @endif
-            </td>
-            <td class="px-6 py-4">
-                <span class="px-2 py-1 text-sm rounded-full {{ $client->city ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                    {{ $client->city ? $client->city->name : 'Non spécifié' }}
-                </span>
-            </td>
-            <td class="px-6 py-4">
-                <span class="px-2 py-1 text-sm bg-purple-100 text-purple-800 rounded-full">
-                    {{ $client->client_reservations_count }}
-                </span>
-            </td>
-            <td class="px-6 py-4">
-                <span class="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
-                    {{ $client->received_reviews_count }}
-                </span>
-            </td>
-            <td class="px-6 py-4">
-                @if($client->avg_rating)
-                    <div class="flex items-center">
-                        <span class="mr-1">{{ number_format($client->avg_rating, 1) }}</span>
-                        <i class="fas fa-star text-yellow-400"></i>
-                    </div>
-                @else
-                    <span class="text-gray-400">-</span>
-                @endif
-            </td>
-            <td class="px-6 py-4 flex space-x-2">
-               
-                <button class="text-purple-600 hover:text-purple-800" title="Voir réservations">
-                    <i class="fas fa-calendar-alt"></i>
-                </button>
-                <button class="text-red-600 hover:text-red-800" title="Bloquer">
-                    <i class="fas fa-ban"></i>
-                </button>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-<!-- After the table closing tag -->
-</table>
+                <table class="w-full admin-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Contact</th>
+                            <th>Ville</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($clients as $client)
 
-<!-- Pagination -->
-<div class="mt-6 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
-    <div class="flex-1 flex justify-between sm:hidden">
-        @if ($clients->onFirstPage())
-            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
-                Précédent
-            </span>
-        @else
-            <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-                Précédent
-            </a>
-        @endif
+                        <tr>
+                            <td>
+                                <div class="flex items-center">
+                                    <img src="{{ $client->avatar_url ? asset($client->avatar_url) : asset('images/default-avatar.jpg') }}" 
+                                         alt="{{ $client->username }}" 
+                                         class="w-10 h-10 rounded-full object-cover mr-3" />
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $client->username }}</p>
+                                        <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
+                                            @php
+                                                $avgRating = $client->receivedReviews->avg('rating') ?? 0;
+                                                $fullStars = floor($avgRating);
+                                                $hasHalfStar = $avgRating - $fullStars >= 0.5;
+                                            @endphp
+                                            
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $fullStars)
+                                                    <i class="fas fa-star text-xs"></i>
+                                                @elseif($i == $fullStars + 1 && $hasHalfStar)
+                                                    <i class="fas fa-star-half-alt text-xs"></i>
+                                                @else
+                                                    <i class="far fa-star text-xs"></i>
+                                                @endif
+                                            @endfor
+                                            <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">{{ number_format($avgRating, 1) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $client->email }}</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $client->phone_number }}</p>
+                            </td>
+                            <td>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $client->city->name ?? 'Non spécifié' }}</p>
+                            </td>
+                            <td>
+                                <div class="flex space-x-1">
+                                    
+                                    <button onclick="showUserDetails({{ $client->id }})"
+                                        class="p-2 text-xs rounded-md bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le client">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
         
-        @if ($clients->hasMorePages())
-            <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-                Suivant
-            </a>
-        @else
-            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md">
-                Suivant
-            </span>
-        @endif
-    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
-            <p class="text-sm text-gray-700 dark:text-gray-400">
-                Affichage de <span class="font-medium">{{ $clients->firstItem() }}</span> à <span class="font-medium">{{ $clients->lastItem() }}</span> sur <span class="font-medium">{{ $clients->total() }}</span> clients
-            </p>
+                        @endforeach
+                    </tbody>
+                </table>
+<!-- After the table closing tag -->
+
+<!-- Pagination --> 
+
+    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">
+            Affichage de <span class="font-medium">{{ $clients->firstItem() }}-{{ $clients->lastItem() }}</span> sur <span class="font-medium">{{ $clients->total() }}</span> clients
         </div>
-
-        <div>
-            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                {{-- Previous Page Link --}}
-                @if ($clients->onFirstPage())
-                    <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
-                        <i class="fas fa-chevron-left"></i>
+        
+        <div class="flex items-center justify-center space-x-2">
+            @if($clients->onFirstPage())
+                <span class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+            @else
+                <a href="{{ $clients->previousPageUrl() }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            @endif
+            
+            @foreach($clients->getUrlRange(1, $clients->lastPage()) as $page => $url)
+                @if($page == $clients->currentPage())
+                    <span class="px-3 py-1 rounded-md bg-admin-primary text-white font-medium">
+                        {{ $page }}
                     </span>
                 @else
-                    <a href="{{ $clients->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <i class="fas fa-chevron-left"></i>
+                    <a href="{{ $url }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        {{ $page }}
                     </a>
                 @endif
-
-                {{-- Pagination Elements --}}
-                @foreach ($clients->getUrlRange(1, $clients->lastPage()) as $page => $url)
-                    @if ($page == $clients->currentPage())
-                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">
-                            {{ $page }}
-                        </span>
-                    @else
-                        <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            {{ $page }}
-                        </a>
-                    @endif
-                @endforeach
-
-                {{-- Next Page Link --}}
-                @if ($clients->hasMorePages())
-                    <a href="{{ $clients->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                @else
-                    <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed">
-                        <i class="fas fa-chevron-right"></i>
-                    </span>
-                @endif
-            </nav>
+            @endforeach
+            
+            @if($clients->hasMorePages())
+                <a href="{{ $clients->nextPageUrl() }}" class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            @else
+                <span class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            @endif
         </div>
     </div>
 </div>
-            </div>
-        </main>
-    </div>
+
+ <!-- User Detail Modal (dynamique) -->
+ <div id="user-detail-modal"
+ class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+ <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full mx-4 max-h-[90vh] flex flex-col">
+     <!-- Header -->
+     <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+         <div class="flex items-center">
+             <img id="user-avatar" src="" alt="User Avatar" class="w-12 h-12 rounded-full object-cover mr-4" />
+             <div>
+                 <h3 id="user-fullname" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                 <div class="flex items-center">
+                     <span id="user-role-badge" class="badge badge-info mr-2">Client or partner</span>
+                     <span class="text-sm text-gray-600 dark:text-gray-400">ID - <span
+                             id="user-id"></span></span>
+                 </div>
+             </div>
+         </div>
+         <button id="close-user-modal"
+             class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none">
+             <i class="fas fa-times"></i>
+         </button>
+     </div>
+
+     <!-- Content -->
+     <div class="p-5 overflow-y-auto flex-grow">
+         <!-- Personal Info and Stats -->
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-6">
+             <!-- Personal info -->
+             <div>
+                 <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Informations
+                     personnelles</h4>
+                 <div class="space-y-2">
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Nom complet</span>
+                         <span id="user-fullname-text" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Email</span>
+                         <span id="user-email" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Téléphone</span>
+                         <span id="user-phone" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Ville</span>
+                         <span id="user-city" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+                     <div class="flex justify-between gap-4">
+                         <span class="text-gray-600 dark:text-gray-400">Adresse</span>
+                         <span id="user-address" class="font-medium text-gray-900 dark:text-white text-right"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Date d'inscription</span>
+                         <span id="user-created-at" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+
+                     <!-- Partner specific info (hidden by default) -->
+                     <div id="partner-info-container" class="hidden">
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Account stats -->
+             <div>
+                 <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Statistiques du compte
+                 </h4>
+                 <div class="space-y-2">
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Statut du compte</span>
+                         <span id="user-status-badge" class="badge"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Rôle</span>
+                         <span id="user-role" class="font-medium text-gray-900 dark:text-white"></span>
+                     </div>
+                     <div class="flex justify-between">
+                         <span class="text-gray-600 dark:text-gray-400">Réservations</span>
+                         <span id="user-reservations-count"
+                             class="font-medium text-gray-900 dark:text-white">0</span>
+                     </div>
+
+                     <!-- Partner specific stats (hidden by default) -->
+                     <div id="partner-stats-container" class="hidden">
+                         <div class="flex justify-between">
+                             <span class="text-gray-600 dark:text-gray-400">Équipements</span>
+                             <span id="user-equipments-count"
+                                 class="font-medium text-gray-900 dark:text-white">0</span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <!-- User reservations -->
+         <div id="user-reservations-section" class="mb-6">
+             <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Réservations</h4>
+             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden">
+                 <table id="user-reservations" class="w-full admin-table">
+                     <thead>
+                         <tr class="text-left border-b border-gray-200 dark:border-gray-700">
+                             <th class="py-3">Listing ID</th>
+                             <th class="py-3">Client ID</th>
+                             <th class="py-3">Partenaire ID</th>
+                             <th class="py-3">Durée résérvation</th>
+                             <th class="py-3 pl-6">Livraison</th>
+                             <th class="py-3 pr-6">Statut</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <!-- Les réservations seront ajoutées dynamiquement ici -->
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+
+         <!-- Partner equipment section (hidden by default) -->
+         <div id="partner-equipment-section" class="mb-6 hidden">
+             <div class="flex items-center justify-between mb-3">
+                 <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Équipements</h4>
+                 <a href="#" id="view-all-equipments"
+                     class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">
+                     Voir tous
+                 </a>
+             </div>
+             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden">
+                 <table id="partner-equipments" class="w-full admin-table">
+                     <thead>
+                         <tr class="text-left border-b border-gray-200 dark:border-gray-700">
+                             <th class="py-3 pl-6">Nom</th>
+                             <th class="py-3">Catégorie</th>
+                             <th class="py-3">Prix/jour</th>
+                             <th class="py-3 pr-6">Actions</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <!-- Les équipements seront ajoutés dynamiquement ici -->
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+
+         <!-- Account actions -->
+         <div class="mt-6 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+             <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Actions administratives
+             </h4>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div>
+                     <label class="flex items-center">
+                         <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte</span>
+                         <label class="switch">
+                             <input id="user-active-toggle" type="checkbox">
+                             <span class="slider"></span>
+                         </label>
+                     </label>
+                 </div>
+                 <div class="flex space-x-2">
+                     <button id="toggle-partner-btn">
+                     </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <!-- Footer -->
+     <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
+         <button id="save-user-details"
+             class="px-6 py-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-lg shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none">
+             Sauvegarder les modifications
+         </button>
+     </div>
+ </div>
+</div>
     
-    <!-- Client Detail Modal (hidden by default) -->
-    <div id="client-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                         alt="Leila Mansouri" 
-                         class="w-12 h-12 rounded-full object-cover mr-4" />
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Leila Mansouri</h3>
-                        <div class="flex items-center">
-                            <span class="badge badge-success mr-2">Actif</span>
-                            <span class="text-sm text-gray-600 dark:text-gray-400">ID: CL-32567</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="close-client-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <!-- Client details content -->
-            <div class="p-5 overflow-y-auto flex-grow">
-                <!-- Client details tabs -->
-                <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex overflow-x-auto">
-                        <button class="admin-tab active">Profil</button>
-                        <button class="admin-tab">Réservations (5)</button>
-                        <button class="admin-tab">Avis laissés (3)</button>
-                        <button class="admin-tab">Historique</button>
-                    </div>
-                </div>
-                
-                <!-- Tab content - Profile -->
-                <div class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <!-- Personal info -->
-                        <div>
-                            <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Informations personnelles</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Nom complet:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">Leila Mansouri</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Email:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">leila.mansouri@example.com</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Téléphone:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">+212 6 12 34 56 78</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Date d'inscription:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">01/05/2023</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Ville:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">Casablanca</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Adresse:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">75 Boulevard Anfa</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Account stats -->
-                        <div>
-                            <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Statistiques du compte</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Statut du compte:</span>
-                                    <span class="badge badge-success">Actif</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Dernière connexion:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">Il y a 25 min</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Réservations:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">5 (2 actives, 3 terminées)</span>
-                                </div>
-                              
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Avis laissés:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">3 (moyenne: 4.2★)</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Signalements:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Verification -->
-                    <div class="mb-6">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Vérification</h4>
-                        <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="flex items-center">
-                                    <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/30 mr-3">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">Email vérifié</p>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400">01/05/2023</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center">
-                                    <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/30 mr-3">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">Téléphone vérifié</p>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400">01/05/2023</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center">
-                                    <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/30 mr-3">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">Pièce d'identité vérifiée</p>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400">02/05/2023</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Current Reservations -->
-                    <div class="mb-6">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Réservations actives</h4>
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden">
-                            <table class="w-full admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Équipement</th>
-                                        <th>Partenaire</th>
-                                        <th>Dates</th>
-                                        <th>Montant</th>
-                                        <th>Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm font-medium text-admin-primary dark:text-admin-secondary">#RS-56789</span>
-                                        </td>
-                                        <td>Grande Tente 6 Personnes</td>
-                                        <td>
-                                            <div class="flex items-center">
-                                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                     alt="Omar Tazi" 
-                                                     class="w-6 h-6 rounded-full object-cover mr-2" />
-                                                <span>Omar Tazi</span>
-                                            </div>
-                                        </td>
-                                        <td>5 - 10 Août 2023</td>
-                                        <td>1 250 MAD</td>
-                                        <td><span class="badge badge-success">Confirmée</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm font-medium text-admin-primary dark:text-admin-secondary">#RS-56923</span>
-                                        </td>
-                                        <td>Réchaud Camping + Kit Cuisine</td>
-                                        <td>
-                                            <div class="flex items-center">
-                                                <img src="https://images.unsplash.com/photo-1548544149-4835e62ee5b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                     alt="Salma Benani" 
-                                                     class="w-6 h-6 rounded-full object-cover mr-2" />
-                                                <span>Salma Benani</span>
-                                            </div>
-                                        </td>
-                                        <td>15 - 18 Août 2023</td>
-                                        <td>450 MAD</td>
-                                        <td><span class="badge badge-warning">En attente</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent activity -->
-                    <div class="mb-6">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Activité récente</h4>
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden">
-                            <table class="w-full admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                        <th>Détails</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>01/08/2023 10:15</td>
-                                        <td>Connexion</td>
-                                        <td>Connexion depuis Chrome/Windows</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01/08/2023 10:18</td>
-                                        <td>Recherche</td>
-                                        <td>A recherché "équipement camping Agadir"</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01/08/2023 10:32</td>
-                                        <td>Visualisation</td>
-                                        <td>A consulté l'équipement "Réchaud Camping + Kit Cuisine"</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01/08/2023 10:45</td>
-                                        <td>Réservation</td>
-                                        <td>A envoyé une demande de réservation pour "Réchaud Camping + Kit Cuisine"</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <!-- Account actions -->
-                    <div class="mt-6 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Actions administratives</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="flex items-center">
-                                    <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte:</span>
-                                    <label class="switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                    <i class="fas fa-envelope mr-1"></i> Envoyer email
-                                </button>
-                                <button class="px-3 py-1.5 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                    <i class="fas fa-ban mr-1"></i> Suspendre
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <label class="block text-gray-700 dark:text-gray-300 mb-2">Notes administratives:</label>
-                            <textarea class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" rows="3" placeholder="Ajouter une note concernant ce client..."></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end">
-                <button id="cancel-client-details" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-md mr-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    Fermer
-                </button>
-                <button class="px-4 py-2 bg-admin-primary hover:bg-admin-dark text-white font-medium rounded-md shadow-sm transition-colors">
-                    Sauvegarder les modifications
-                </button>
-            </div>
-        </div>
-    </div>
     
-    <!-- Client Reservations Modal (hidden by default) -->
-    <div id="client-reservations-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                         alt="Leila Mansouri" 
-                         class="w-12 h-12 rounded-full object-cover mr-4" />
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Réservations de Leila Mansouri</h3>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">5 réservations au total</div>
-                    </div>
-                </div>
-                <button id="close-reservations-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <!-- Reservations content -->
-            <div class="p-5 overflow-y-auto flex-grow">
-                <!-- Filters -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div class="flex items-center space-x-4">
-                        <button class="px-3 py-1.5 bg-admin-primary text-white text-sm rounded-md">Toutes (5)</button>
-                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md">Actives (2)</button>
-                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md">Terminées (3)</button>
-                    </div>
-                    
-                    <div class="flex items-center gap-2">
-                        <div class="relative">
-                            <select class="pl-3 pr-8 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none">
-                                <option value="newest">Plus récentes</option>
-                                <option value="oldest">Plus anciennes</option>
-                                <option value="highest">Montant le plus élevé</option>
-                                <option value="lowest">Montant le plus bas</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="relative">
-                            <input type="text" placeholder="Rechercher..." class="pl-8 pr-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400 dark:text-gray-500 text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Active Reservations -->
-                <div class="mb-8">
-                    <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-4">Réservations actives</h4>
-                    
-                    <!-- Reservation Card 1 -->
-                    <div class="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden mb-4 shadow-sm">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="md:w-48 h-48 md:h-auto relative">
-                                <img src="https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                     alt="Grande Tente 6 Personnes" 
-                                     class="w-full h-full object-cover" />
-                                <div class="absolute top-2 left-2">
-                                    <span class="badge badge-success">Confirmée</span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex-1 p-4">
-                                <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                                    <div>
-                                        <h5 class="font-semibold text-lg text-gray-900 dark:text-white">Grande Tente 6 Personnes</h5>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Quechua - Comme Neuf</p>
-                                        
-                                        <div class="flex items-center mt-2">
-                                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Omar Tazi" 
-                                                 class="w-6 h-6 rounded-full object-cover mr-2" />
-                                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Omar Tazi</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-3 md:mt-0 text-right">
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            <span class="font-medium">Réf:</span> #RS-56789
-                                        </p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                            <span class="font-medium">Réservé le:</span> 25/07/2023
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gray-50 dark:bg-gray-800 rounded p-3 mb-4">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Dates</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">5 - 10 Août 2023</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Durée</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">5 jours</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Montant total</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">1 250 MAD</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between">
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>
-                                        <span>Marrakech</span>
-                                    </div>
-                                    
-                                    <div class="flex mt-3 sm:mt-0 space-x-2">
-                                        <button class="px-3 py-1 text-xs bg-admin-primary text-white rounded">
-                                            <i class="fas fa-eye mr-1"></i> Détails
-                                        </button>
-                                        <button class="px-3 py-1 text-xs border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400 rounded">
-                                            <i class="fas fa-edit mr-1"></i> Modifier
-                                        </button>
-                                        <button class="px-3 py-1 text-xs border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 rounded">
-                                            <i class="fas fa-ban mr-1"></i> Annuler
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Reservation Card 2 -->
-                    <div class="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden mb-4 shadow-sm">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="md:w-48 h-48 md:h-auto relative">
-                                <img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
-                                     alt="Réchaud Camping + Kit Cuisine" 
-                                     class="w-full h-full object-cover" />
-                                <div class="absolute top-2 left-2">
-                                    <span class="badge badge-warning">En attente</span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex-1 p-4">
-                                <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                                    <div>
-                                        <h5 class="font-semibold text-lg text-gray-900 dark:text-white">Réchaud Camping + Kit Cuisine</h5>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Coleman - Bon état</p>
-                                        
-                                        <div class="flex items-center mt-2">
-                                            <img src="https://images.unsplash.com/photo-1548544149-4835e62ee5b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
-                                                 alt="Salma Benani" 
-                                                 class="w-6 h-6 rounded-full object-cover mr-2" />
-                                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Salma Benani</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-3 md:mt-0 text-right">
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            <span class="font-medium">Réf:</span> #RS-56923
-                                        </p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                            <span class="font-medium">Réservé le:</span> 01/08/2023
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gray-50 dark:bg-gray-800 rounded p-3 mb-4">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Dates</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">15 - 18 Août 2023</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Durée</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">3 jours</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Montant total</p>
-                                            <p class="font-medium text-gray-900 dark:text-white">450 MAD</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between">
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>
-                                        <span>Agadir</span>
-                                    </div>
-                                    
-                                    <div class="flex mt-3 sm:mt-0 space-x-2">
-                                        <button class="px-3 py-1 text-xs bg-admin-primary text-white rounded">
-                                            <i class="fas fa-eye mr-1"></i> Détails
-                                        </button>
-                                        <button class="px-3 py-1 text-xs border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400 rounded">
-                                            <i class="fas fa-edit mr-1"></i> Modifier
-                                        </button>
-                                        <button class="px-3 py-1 text-xs border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 rounded">
-                                            <i class="fas fa-ban mr-1"></i> Annuler
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Past Reservations -->
-                <div>
-                    <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-4">Réservations terminées</h4>
-                    
-                    <!-- Past Reservation Table -->
-                    <div class="overflow-x-auto bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <table class="w-full admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Réf.</th>
-                                    <th>Équipement</th>
-                                    <th>Partenaire</th>
-                                    <th>Dates</th>
-                                    <th>Montant</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#RS-45678</td>
-                                    <td>Matelas Gonflable Double</td>
-                                    <td>Omar Tazi</td>
-                                    <td>10-15 Juil. 2023</td>
-                                    <td>600 MAD</td>
-                                    <td><span class="badge badge-info">Terminée</span></td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#RS-42367</td>
-                                    <td>Tente 2 Personnes</td>
-                                    <td>Salma Benani</td>
-                                    <td>20-23 Juin 2023</td>
-                                    <td>400 MAD</td>
-                                    <td><span class="badge badge-info">Terminée</span></td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#RS-39845</td>
-                                    <td>Kit de Cuisine Complet</td>
-                                    <td>Karim Lamrani</td>
-                                    <td>5-10 Juin 2023</td>
-                                    <td>200 MAD</td>
-                                    <td><span class="badge badge-info">Terminée</span></td>
-                                    <td>
-                                        <div class="flex space-x-1">
-                                            <button class="p-1.5 text-xs rounded-md bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end">
-                <button id="close-reservations-details" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    Fermer
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script>
+
+const userButtons = document.querySelectorAll('button .fas.fa-eye'); // Select eye icons within buttons
+const userDetailModal = document.getElementById('user-detail-modal');
+const closeUserModal = document.getElementById('close-user-modal');
+const cancelUserDetails = document.getElementById('cancel-user-details');
+
+userButtons.forEach(button => {
+button.parentElement.addEventListener('click', (e) => { // Attach listener to the parent <button>
+    e.preventDefault(); // Prevent any default button action if needed
+    userDetailModal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden'); // Prevent background scrolling
+});
+});
+
+closeUserModal?.addEventListener('click', () => {
+userDetailModal.classList.add('hidden');
+document.body.classList.remove('overflow-hidden');
+});
+
+cancelUserDetails?.addEventListener('click', () => {
+userDetailModal.classList.add('hidden');
+document.body.classList.remove('overflow-hidden');
+});
+
+
+userDetailModal?.addEventListener('click', (e) => {
+if (e.target === userDetailModal) {
+    userDetailModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+}
+});
+
+
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -1635,7 +1203,329 @@ searchInput.addEventListener('input', function(e) {
                 }
             });
     }
+    
 });
     </script>
+
+<script>
+
+    
+    // Affiche les détails d'un utilisateur
+    async function showUserDetails(userId) {
+        try {
+            openModal();
+
+            const response = await fetch(`/admin/users/${userId}/details`);
+            if (!response.ok) throw new Error('Erreur réseau');
+            const data = await response.json();
+
+            if (data.error) return alert(data.error);
+
+            const user = data.user;
+            fillUserInfo(user);
+            handlePartnerSections(user, data);
+            console.log(data)
+            fillReservations(data.reservations);
+
+        } catch (error) {
+            console.error('Erreur lors du chargement des détails:', error);
+            alert('Erreur lors du chargement des détails');
+        }
+    }
+
+    function openModal() {
+        const modal = document.getElementById('user-detail-modal');
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('user-detail-modal').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    function fillUserInfo(user) {
+        const fullName = `${user.first_name} ${user.last_name}`;
+        document.getElementById('user-avatar').src = user.avatar_url
+            ? `/${user.avatar_url}`
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}`;
+
+        document.getElementById('user-fullname').textContent = fullName;
+        document.getElementById('user-fullname-text').textContent = fullName;
+        document.getElementById('user-email').textContent = user.email;
+        document.getElementById('user-phone').textContent = user.phone_number;
+        document.getElementById('user-address').textContent = user.address;
+        document.getElementById('user-city').textContent = user.city_name || 'Non spécifié';
+        document.getElementById('user-created-at').textContent = new Date(user.created_at).toLocaleDateString();
+        document.getElementById('user-active-toggle').checked = user.is_active;
+        document.getElementById('user-id').textContent = user.id;
+
+        const isPartner = user.role === 'partner';
+        document.getElementById('user-role').textContent = isPartner ? 'Partenaire' : 'Client';
+
+        const roleBadge = document.getElementById('user-role-badge');
+        if (isPartner) {
+        roleBadge.className = 'badge badge-success mr-2';
+        roleBadge.textContent = 'Partenaire';
+        } else {
+        roleBadge.className = 'badge badge-info mr-2';
+        roleBadge.textContent = 'Client';
+        }
+
+        const statusBadge = document.getElementById('user-status-badge');
+        statusBadge.className = user.is_active ? 'badge badge-success' : 'badge badge-danger';
+        statusBadge.textContent = user.is_active ? 'Activé' : 'Désactivé';
+
+        togglePartnerSections(isPartner);
+    }
+
+    function togglePartnerSections(isPartner) {
+        ['partner-info-container', 'partner-stats-container', 'partner-equipment-section'].forEach(id => {
+            document.getElementById(id).classList.toggle('hidden', !isPartner);
+        });
+        document.getElementById('toggle-partner-btn').classList.toggle('hidden', isPartner);
+    }
+
+    function handlePartnerSections(user, data) {
+        if (user.role !== 'partner') return;
+
+        document.getElementById('user-equipments-count').textContent = data.equipments_count || 0;
+
+        const tbody = document.querySelector('#partner-equipments tbody');
+        tbody.innerHTML = '';
+        if (data.items && data.items.length > 0) {
+            console.log(data)
+            data.items.forEach(eq => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${eq.title}</td>
+                <td>${eq.category_name}</td>
+                <td>${eq.price_per_day} MAD</td>
+                <td>
+                    <button onclick="window.location.href='/admin/equipment/${eq.id}'" class="p-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition shadow-md hover:scale-105">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+        } else {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Aucun équipement</td></tr>';
+        }
+
+        document.getElementById('view-all-equipments').href = `/admin/partners/${user.id}/equipments`;
+    }
+
+    function fillReservations(reservations) {
+        console.log(reservations)
+        const tbody = document.querySelector('#user-reservations tbody');
+        tbody.innerHTML = '';
+
+        if (reservations && reservations.length > 0) {
+            document.getElementById('user-reservations-count').textContent = reservations.length;
+
+            reservations.forEach(res => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${res.listing_id} </td>
+                <td>${res.client_id} </td>
+                <td>${res.partner_id} </td>
+                <td>${new Date(res.start_date).toLocaleDateString()} - ${new Date(res.end_date).toLocaleDateString()}</td>
+                <td>${res.delivery_option == 0 ? 'Non' : 'Oui'}</td>
+                <td><span class="badge ${getStatusBadgeClass(res.status)}">${getStatusText(res.status)}</span></td>
+            `;
+                tbody.appendChild(row);
+            });
+        } else {
+            document.getElementById('user-reservations-count').textContent = '0';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Aucune réservation</td></tr>';
+        }
+    }
+
+    // Bascule du statut partenaire/client
+    document.getElementById('toggle-partner-btn').addEventListener('click', async () => {
+        const userId = document.getElementById('user-id').textContent;
+
+        if (!confirm("Voulez-vous vraiment retirer le statut de partenaire à cet utilisateur ?")) return;
+
+        try {
+            const response = await fetch(`/admin/users/${userId}/toggle-partner`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || 'Erreur lors de la modification');
+
+            alert(data.message || 'Statut modifié avec succès');
+            showUserDetails(userId);
+
+        } catch (error) {
+            console.error('Erreur toggle-partner:', error);
+            alert(error.message || 'Erreur lors de la modification');
+        }
+    });
+
+    // Activation/désactivation utilisateur
+    document.getElementById('save-user-details').addEventListener('click', async () => {
+        const userId = document.getElementById('user-id').textContent;
+        const newIsActive = document.getElementById('user-active-toggle').checked ? 1 : 0;
+
+        if (!userId) return alert('ID utilisateur manquant');
+
+        if (!confirm(`Voulez-vous vraiment ${newIsActive ? 'activer' : 'désactiver'} cet utilisateur ?`)) return;
+
+        try {
+
+            const response = await fetch(`/admin/users/${userId}/toggle-activation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ is_active: newIsActive }) 
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || `Erreur HTTP ${response.status}`);
+
+            // Mettre à jour l'interface utilisateur
+            document.getElementById('user-status-badge').className = data.is_active ? 'badge badge-success' : 'badge badge-danger';
+            document.getElementById('user-active-toggle').checked = data.is_active;
+
+            
+            setTimeout(closeModal, 1000);
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert(`Échec de l'opération: ${error.message}`);
+        }
+    });
+
+
+    function getStatusBadgeClass(status) {
+        return {
+            confirmed: 'badge-success',
+            pending: 'badge-warning',
+            cancelled: 'badge-danger',
+            completed: 'badge-info'
+        }[status] || 'badge-neutral';
+    }
+
+    function getStatusText(status) {
+        return {
+            confirmed: 'Confirmée',
+            pending: 'En attente',
+            cancelled: 'Annulée',
+            completed: 'Terminée'
+        }[status] || status;
+    }
+
+    document.getElementById('equipment-tab').addEventListener('click', async function () {
+        // Activer l'onglet
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        this.classList.add('active');
+
+        // Masquer les autres sections
+        document.getElementById('recent-users-section').classList.add('hidden');
+        document.getElementById('recent-equipments-section').classList.remove('hidden');
+
+        // Charger les équipements
+        try {
+            const response = await fetch('/admin/recent-equipments');
+            if (!response.ok) throw new Error('Erreur réseau');
+            const equipments = await response.json();
+
+            const tbody = document.getElementById('equipments-table-body');
+            tbody.innerHTML = '';
+
+            if (equipments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Aucun équipement récent</td></tr>';
+                return;
+            }
+
+            equipments.forEach(equipment => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50';
+                row.innerHTML = `
+            <td class="py-4 pl-6 font-medium text-gray-900 dark:text-white">${equipment.title}</td>
+            <td class="py-4">${equipment.partner_name}</td>
+            <td class="py-4">${equipment.price_per_day} MAD</td>
+            <td class="py-4">${equipment.category_name}</td>
+            <td class="py-4 pr-6">${new Date(equipment.created_at).toLocaleDateString()}</td>
+        `;
+                tbody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            document.getElementById('equipments-table-body').innerHTML =
+                '<tr><td colspan="5" class="text-center py-4 text-red-500">Erreur de chargement</td></tr>';
+        }
+    });
+
+    document.getElementById('reservations-tab').addEventListener('click', async function() {
+    // Activer l'onglet
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    this.classList.add('active');
+
+    // Masquer les autres sections
+    document.getElementById('recent-users-section').classList.add('hidden');
+    document.getElementById('recent-equipments-section').classList.add('hidden');
+    document.getElementById('recent-reservations-section').classList.remove('hidden');
+
+    // Charger les réservations
+    try {
+        const response = await fetch('/admin/recent-reservations', {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) throw new Error('Erreur réseau');
+        const reservations = await response.json();
+        
+        const tbody = document.getElementById('reservations-table-body');
+        tbody.innerHTML = '';
+        
+        if (reservations.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Aucune réservation récente</td></tr>';
+            return;
+        }
+        
+        reservations.forEach(reservation => {
+            const row = document.createElement('tr');
+            row.className = 'border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50';
+            row.innerHTML = `
+                <td class="py-4 pl-6">${reservation.client_name}</td>
+                <td class="py-4">${reservation.equipment_title}</td>
+                <td class="py-4">${reservation.start_date} - ${reservation.end_date}</td>
+                <td class="py-4">${reservation.total_price} </td>
+                <td class="py-4 pr-6"><span class="badge ${getStatusBadgeClass(reservation.status)}">${getStatusText(reservation.status)}</span></td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Erreur:', error);
+        document.getElementById('reservations-table-body').innerHTML = 
+            '<tr><td colspan="5" class="text-center py-4 text-red-500">Erreur de chargement</td></tr>';
+    }
+    });
+
+
+
+</script>
+
 </body>
 </html>

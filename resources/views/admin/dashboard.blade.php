@@ -7,6 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Tableau de bord Administrateur - CampShare | Louez du matériel de camping entre particuliers</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -271,13 +274,13 @@
                                 </button>
                             </div>
 
-                            <!-- Settings -->
-                            <div class="relative">
-                                <button id="settings-button"
-                                    class="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
+
+                            @auth
+                                @php
+                                    $user = $user ?? Auth::user();
+                                @endphp
+                                @if($user)
+                                
 
                             <!-- User profile menu -->
                             <div class="relative">
@@ -286,8 +289,7 @@
                                          alt="Admin User" 
                                          class="h-8 w-8 rounded-full object-cover" />
                                     <div class="flex flex-col items-start">
-                                        <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">Mohamed
-                                            Alami</span>
+                                        <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">{{ $user->first_name }} {{ $user->last_name }}</span>
                                         <span
                                             class="text-xs text-admin-primary dark:text-admin-secondary font-medium">Super
                                             Admin</span>
@@ -302,20 +304,17 @@
                                         class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                     </a>
-                                    <a href="#account-settings"
-                                        class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
-                                    </a>
-                                    <a href="#admin-logs"
-                                        class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-history mr-2 opacity-70"></i> Historique d'actions
-                                    </a>
                                     <div class="border-t border-gray-200 dark:border-gray-700"></div>
-                                    <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <a href="{{ route('logout') }}" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                     </a>
                                 </div>
                             </div>
+
+
+                            @endif
+                            @endauth
+
                         </div>
                     </div>
                 </div>
@@ -398,10 +397,27 @@
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Menu Principal</h5>
                     <nav class="space-y-1">
-                        <a href="#dashboard"
-                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
-                            <i class="fas fa-tachometer-alt w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
+                        </a>
+                        
+                        
+                        
+                    </nav>
+                </div>
+
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Utilisateurs</h5>
+                    <nav class="space-y-1">
+                        <a href="{{ route('admin.partners') }}"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Partenaires
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount }}</span>
                         </a>
                         <a href="{{ route('admin.clients') }}"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -410,13 +426,14 @@
                             <span
                                 class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $clientsCount}}</span>
                         </a>
-                        <a href="{{ route('admin.partners') }}"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Partenaires
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount }}</span>
-                        </a>
+
+                    </nav>
+                </div>
+
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Equi. Réserv. & Avis</h5>
+                    <nav class="space-y-1">
                         <a href="#equipment"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
@@ -436,47 +453,12 @@
                             <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Avis
                             <span
-                                class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
-                    </nav>
-                </div>
-
-                <div class="mb-6 px-3">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Analyse & Rapports</h5>
-                    <nav class="space-y-1">
-                        <a href="#analytics"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-chart-line w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Statistiques
-                        </a>
-                        <a href="#financial"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Finances
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
                         </a>
 
                     </nav>
                 </div>
 
-                <div class="mb-6 px-3">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Configuration</h5>
-                    <nav class="space-y-1">
-                        <a href="#site-settings"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-cog w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Paramètres du site
-                        </a>
-                        <a href="#admin-users"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-user-shield w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Administrateurs
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
-                        </a>
-                    </nav>
-                </div>
             </div>
         </aside>
 
@@ -549,7 +531,7 @@
 
                 <div class="mb-6">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Analyse & Rapports</h5>
+                        Utilisateurs</h5>
                     <nav class="space-y-1">
                         <a href="#analytics"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -571,27 +553,26 @@
 
                 <div class="mb-6">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Configuration</h5>
+                        Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
-                        <a href="#site-settings"
+                        <a href="#analytics"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-cog w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Paramètres du site
+                            <i class="fas fa-chart-line w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Statistiques
                         </a>
-                        <a href="#admin-users"
+                        <a href="#financial"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-user-shield w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Administrateurs
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">6</span>
+                            <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Finances
                         </a>
-                        <a href="#system-logs"
+                        <a href="#reports-gen"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-history w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Logs système
+                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Rapports
                         </a>
                     </nav>
                 </div>
+
             </div>
         </div>
 
@@ -657,11 +638,11 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Réservations</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">278</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $reservations->count() }}</h3>
                                     
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    42 en cours, 236 terminées
+                                    {{ $reservations->where('status', 'ongoing')->count() }} en cours, {{ $reservations->where('status', 'completed')->count() }} terminées
                                 </p>
                             </div>
                         </div>
@@ -679,6 +660,9 @@
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">86.4K</h3>
                                     
                                 </div>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                                    &nbsp;
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -690,14 +674,11 @@
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="flex items-center justify-between">
-                                <h2 class="font-bold text-lg text-gray-900 dark:text-white">Tendances de l'activité</h2>
+                                <h2 class="font-bold text-lg text-gray-900 dark:text-white">Graphique des utilisateurs</h2>
                                 <div class="flex space-x-2">
                                     <button
-                                        class="px-3 py-1 text-xs font-medium bg-admin-primary text-white rounded">Réservations</button>
-                                    <button
-                                        class="px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded">Utilisateurs</button>
-                                    <button
-                                        class="px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded">Revenus</button>
+                                        class="px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded">Nombre Total : {{ $clientsCount+$partnersCount }} utilisateurs</button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -708,118 +689,136 @@
                                 <!-- Placeholder for chart -->
                                 <div
                                     class="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                    <div class="text-center">
-                                        <i class="fas fa-chart-line text-4xl text-gray-300 dark:text-gray-600 mb-2"></i>
-                                        <p class="text-gray-500 dark:text-gray-400">Graphique de tendances des
-                                            réservations</p>
+                                    <div class="chart-container bg-white dark:bg-gray-800 p-4 rounded-lg flex justify-center items-center">
+                                        <canvas id="userPieChart"></canvas>
                                     </div>
                                 </div>
+
+                                    
+                                
                             </div>
                         </div>
                     </div>
+                    
+                    
+                    <script>
+                        // Register the plugin globally
+                        Chart.register(ChartDataLabels);
+                    
+                        const ctx = document.getElementById('userPieChart').getContext('2d');
+                        const userPieChart = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: ['Clients', 'Partners'],
+                                datasets: [{
+                                    data: [{{ $clientsCount }}, {{ $partnersCount }}],
+                                    backgroundColor: ['#3b82f6', '#ffaa33'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, context) => {
+                                            const data = context.chart.data.datasets[0].data;
+                                            const total = data.reduce((sum, val) => sum + val, 0);
+                                            const percentage = (value / total * 100).toFixed(1);
+                                            return `${percentage}%`;
+                                        },
+                                        color: '#fff',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 14
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: {
+                                            color: '#6b7280'
+                                        }
+                                    },
+                                    tooltip: {
+                                        enabled: true
+                                    }
+                                }
+                            },
+                            plugins: [ChartDataLabels]
+                        });
+                    </script>
+                    
+                    
 
-                    <!-- Recent issues -->
+                    <!-- Graph card -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="flex items-center justify-between">
-                                <h2 class="font-bold text-lg text-gray-900 dark:text-white">Problèmes récents</h2>
-                                <a href="#all-issues"
-                                    class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Voir
-                                    tous</a>
+                                <h2 class="font-bold text-lg text-gray-900 dark:text-white">Graphique des résérvations</h2>
+                                <div class="flex space-x-2">
+                                    <button
+                                        class="px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded">Nombre Total : {{ $reservations->count() }} Résérvation</button>
+                                    
+                                </div>
                             </div>
                         </div>
-
-                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <!-- Issue 1 -->
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div
-                                            class="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                                            <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
-                                            Signalement d'utilisateur
-                                            <span class="ml-2 badge badge-danger">Urgent</span>
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Younes a signalé le partenaire "Omar Tazi" pour comportement inapproprié
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 1 heure
-                                        </p>
-                                        <div class="mt-2">
-                                            <button
-                                                class="text-xs font-medium px-2 py-1 bg-admin-primary text-white rounded-md hover:bg-admin-dark">
-                                                Examiner
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Issue 2 -->
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div
-                                            class="h-10 w-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                                            <i class="fas fa-flag text-amber-600 dark:text-amber-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
-                                            Contenu inapproprié
-                                            <span class="ml-2 badge badge-warning">Modération</span>
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Annonce "Pack Camping Ultra Premium" signalée pour photos trompeuses
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 3 heures
-                                        </p>
-                                        <div class="mt-2">
-                                            <button
-                                                class="text-xs font-medium px-2 py-1 bg-admin-primary text-white rounded-md hover:bg-admin-dark">
-                                                Vérifier
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Issue 3 -->
-                            <div class="px-6 py-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div
-                                            class="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                                            <i class="fas fa-comment-slash text-red-600 dark:text-red-400"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white flex items-center">
-                                            Avis négatif
-                                            <span class="ml-2 badge badge-danger">À examiner</span>
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                            Avis 1 étoile laissé par Fatima sur l'équipement "Tente 4 Personnes Deluxe"
-                                        </p>
-                                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                            Il y a 5 heures
-                                        </p>
-                                        <div class="mt-2">
-                                            <button
-                                                class="text-xs font-medium px-2 py-1 bg-admin-primary text-white rounded-md hover:bg-admin-dark">
-                                                Modérer
-                                            </button>
-                                        </div>
+                        @php
+                            $pendingCount = $reservations->where('status', 'pending')->count();
+                            $confirmedCount = $reservations->where('status', 'confirmed')->count();
+                            $ongoingCount = $reservations->where('status', 'ongoing')->count();
+                            $canceledCount = $reservations->where('status', 'canceled')->count();
+                            $completedCount = $reservations->where('status', 'completed')->count();
+                        @endphp
+                    
+                        <!-- Chart container -->
+                        <div class="p-4">
+                            <div class="chart-container">
+                                <!-- Placeholder for chart -->
+                                <div
+                                    class="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                    <div class="rounded-lg p-4 w-max">
+                                        <canvas id="reservationBarChart" height="200" width="500"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const ctx = document.getElementById('reservationBarChart').getContext('2d');
+                        
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Pending', 'Confirmed', 'Ongoing', 'Canceled', 'Completed'],
+                                        datasets: [{
+                                            label: 'Number of Reservations',
+                                            data: [{{ $pendingCount }}, {{ $confirmedCount }}, {{ $ongoingCount }}, {{ $canceledCount }}, {{ $completedCount }}],
+                                            backgroundColor: ['#fbbf24', '#3b82f6', '#10b981', '#ef4444', '#6366f1'],
+                                            borderRadius: 5,
+                                            barThickness: 40
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            },
+                                        },
+                                        plugins: {
+                                            datalabels: {
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold',
+                                                size: 14
+                                        }
+                                    },
+                                            legend: { display: false }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
 
@@ -853,8 +852,6 @@
                                     <i class="fas fa-search text-gray-400 dark:text-gray-500 text-xs"></i>
                                 </div>
                             </div>
-                            <a href="{{ route('admin.clients') }}"
-                                class="text-sm text-admin-primary dark:text-admin-secondary hover:underline">Réinitialiser</a>
                         </form>
                     </div>
 
@@ -878,10 +875,9 @@
                             </thead>
                             <tbody>
                                 @foreach($recentUsers as $user)
-                                    <tr
-                                        class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <trclass="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <td class="flex items-center py-5 pl-6">
-                                            <img src="{{ $user->avatar_url ? asset('storage/' . $user->avatar_url) : 'https://ui-avatars.com/api/?name=' . urlencode($user->first_name . '+' . $user->last_name) . '&color=7F9CF5&background=EBF4FF' }}"
+                                            <img src="{{ $user->avatar_url ? asset($user->avatar_url) : asset('images/default-avatar.jpg') }}"
                                                 alt="{{ $user->first_name }} {{ $user->last_name }}"
                                                 class="w-14 h-14 rounded-full object-cover mr-4 shadow" />
                                             <div>
@@ -904,7 +900,7 @@
                                         </td>
                                         <td class="py-5 pr-6">
                                             <button onclick="showUserDetails({{ $user->id }})"
-                                                class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition shadow-md hover:scale-105">
+                                                class="mr-6 p-2 text-xs rounded-md bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le client">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
@@ -912,6 +908,23 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <!-- Pagination -->
+                        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                                Affichage de <span class="font-medium">1-{{ $recentUsers->count() }}</span> sur <span
+                                    class="font-medium">{{ $totalUsers }}</span> utilisateurs
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ route('admin.clients') }}"
+                                    class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    Voir tous les clients
+                                </a>
+                                <a href="{{ route('admin.partners') }}"
+                                    class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    Voir tous les partenaires
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1016,23 +1029,7 @@
 
 
 
-                <!-- Pagination -->
-                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                    <div class="text-sm text-gray-600 dark:text-gray-400">
-                        Affichage de <span class="font-medium">1-{{ $recentUsers->count() }}</span> sur <span
-                            class="font-medium">{{ $totalUsers }}</span> utilisateurs
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <a href="{{ route('admin.clients') }}"
-                            class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            Voir tous les clients
-                        </a>
-                        <a href="{{ route('admin.partners') }}"
-                            class="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            Voir tous les partenaires
-                        </a>
-                    </div>
-                </div>
+                
             </div>
     </div>
     </main>
@@ -1040,7 +1037,7 @@
     <!-- User Detail Modal (dynamique) -->
     <div id="user-detail-modal"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full mx-4 max-h-[90vh] flex flex-col">
             <!-- Header -->
             <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div class="flex items-center">
@@ -1048,8 +1045,8 @@
                     <div>
                         <h3 id="user-fullname" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
                         <div class="flex items-center">
-                            <span id="user-role-badge" class="badge badge-info mr-2"></span>
-                            <span class="text-sm text-gray-600 dark:text-gray-400">ID: #<span
+                            <span id="user-role-badge" class="badge badge-info mr-2">Client or partner</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">ID - <span
                                     id="user-id"></span></span>
                         </div>
                     </div>
@@ -1063,48 +1060,39 @@
             <!-- Content -->
             <div class="p-5 overflow-y-auto flex-grow">
                 <!-- Personal Info and Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-6">
                     <!-- Personal info -->
                     <div>
                         <h4 class="font-semibold text-gray-900 dark:text-white text-lg mb-3">Informations
                             personnelles</h4>
                         <div class="space-y-2">
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Nom complet:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Nom complet</span>
                                 <span id="user-fullname-text" class="font-medium text-gray-900 dark:text-white"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Email:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Email</span>
                                 <span id="user-email" class="font-medium text-gray-900 dark:text-white"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Téléphone:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Téléphone</span>
                                 <span id="user-phone" class="font-medium text-gray-900 dark:text-white"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Adresse:</span>
-                                <span id="user-address" class="font-medium text-gray-900 dark:text-white"></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Date d'inscription:</span>
-                                <span id="user-created-at" class="font-medium text-gray-900 dark:text-white"></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Ville:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Ville</span>
                                 <span id="user-city" class="font-medium text-gray-900 dark:text-white"></span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-600 dark:text-gray-400">Adresse</span>
+                                <span id="user-address" class="font-medium text-gray-900 dark:text-white text-right"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Date d'inscription</span>
+                                <span id="user-created-at" class="font-medium text-gray-900 dark:text-white"></span>
                             </div>
 
                             <!-- Partner specific info (hidden by default) -->
                             <div id="partner-info-container" class="hidden">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">RIB/IBAN:</span>
-                                    <span id="user-bank-details"
-                                        class="font-medium text-gray-900 dark:text-white"></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Statut de vérification:</span>
-                                    <span id="user-verification-status" class="badge"></span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1115,15 +1103,15 @@
                         </h4>
                         <div class="space-y-2">
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Statut du compte:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Statut du compte</span>
                                 <span id="user-status-badge" class="badge"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Rôle:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Rôle</span>
                                 <span id="user-role" class="font-medium text-gray-900 dark:text-white"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Réservations:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Réservations</span>
                                 <span id="user-reservations-count"
                                     class="font-medium text-gray-900 dark:text-white">0</span>
                             </div>
@@ -1131,14 +1119,9 @@
                             <!-- Partner specific stats (hidden by default) -->
                             <div id="partner-stats-container" class="hidden">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
+                                    <span class="text-gray-600 dark:text-gray-400">Équipements</span>
                                     <span id="user-equipments-count"
                                         class="font-medium text-gray-900 dark:text-white">0</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Revenus totaux:</span>
-                                    <span id="user-total-earnings" class="font-medium text-gray-900 dark:text-white">0
-                                        MAD</span>
                                 </div>
                             </div>
                         </div>
@@ -1152,9 +1135,11 @@
                         <table id="user-reservations" class="w-full admin-table">
                             <thead>
                                 <tr class="text-left border-b border-gray-200 dark:border-gray-700">
-                                    <th class="py-3 pl-6">delivery option</th>
-                                    <th class="py-3">Dates</th>
-                                    <th class="py-3">update equipment</th>
+                                    <th class="py-3">Listing ID</th>
+                                    <th class="py-3">Client ID</th>
+                                    <th class="py-3">Partenaire ID</th>
+                                    <th class="py-3">Durée résérvation</th>
+                                    <th class="py-3 pl-6">Livraison</th>
                                     <th class="py-3 pr-6">Statut</th>
                                 </tr>
                             </thead>
@@ -1179,9 +1164,8 @@
                             <thead>
                                 <tr class="text-left border-b border-gray-200 dark:border-gray-700">
                                     <th class="py-3 pl-6">Nom</th>
-                                    <th class="py-3">Type</th>
+                                    <th class="py-3">Catégorie</th>
                                     <th class="py-3">Prix/jour</th>
-                                    <th class="py-3">Statut</th>
                                     <th class="py-3 pr-6">Actions</th>
                                 </tr>
                             </thead>
@@ -1199,7 +1183,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="flex items-center">
-                                <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte:</span>
+                                <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte</span>
                                 <label class="switch">
                                     <input id="user-active-toggle" type="checkbox">
                                     <span class="slider"></span>
@@ -1207,25 +1191,9 @@
                             </label>
                         </div>
                         <div class="flex space-x-2">
-                            <button
-                                class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-envelope mr-1"></i> Envoyer email
-                            </button>
-                            <button id="toggle-partner-btn"
-                                class="hidden px-3 py-1.5 border border-admin-primary dark:border-admin-secondary text-admin-primary dark:text-admin-secondary text-sm rounded-md hover:bg-admin-light dark:hover:bg-admin-dark/30 transition-colors">
-                                <i class="fas fa-user-tag mr-1"></i> Basculer en client
-                            </button>
-                            <button
-                                class="px-3 py-1.5 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 text-sm rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                <i class="fas fa-ban mr-1"></i> Suspendre
+                            <button id="toggle-partner-btn">
                             </button>
                         </div>
-                    </div>
-                    <div class="mt-3">
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Notes administratives:</label>
-                        <textarea id="admin-notes"
-                            class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm"
-                            rows="3" placeholder="Ajouter une note concernant cet utilisateur..."></textarea>
                     </div>
                 </div>
             </div>
@@ -1278,7 +1246,7 @@
         function fillUserInfo(user) {
             const fullName = `${user.first_name} ${user.last_name}`;
             document.getElementById('user-avatar').src = user.avatar_url
-                ? `/storage/${user.avatar_url}`
+                ? `/${user.avatar_url}`
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}`;
 
             document.getElementById('user-fullname').textContent = fullName;
@@ -1288,13 +1256,24 @@
             document.getElementById('user-address').textContent = user.address;
             document.getElementById('user-city').textContent = user.city_name || 'Non spécifié';
             document.getElementById('user-created-at').textContent = new Date(user.created_at).toLocaleDateString();
-            document.getElementById('user-status-badge').className = user.is_active ? 'badge badge-success' : 'badge badge-danger';
             document.getElementById('user-active-toggle').checked = user.is_active;
             document.getElementById('user-id').textContent = user.id;
 
             const isPartner = user.role === 'partner';
             document.getElementById('user-role').textContent = isPartner ? 'Partenaire' : 'Client';
-            document.getElementById('user-role-badge').className = isPartner ? 'badge badge-success' : 'badge badge-info';
+
+            const roleBadge = document.getElementById('user-role-badge');
+            if (isPartner) {
+            roleBadge.className = 'badge badge-success mr-2';
+            roleBadge.textContent = 'Partenaire';
+            } else {
+            roleBadge.className = 'badge badge-info mr-2';
+            roleBadge.textContent = 'Client';
+            }
+
+            const statusBadge = document.getElementById('user-status-badge');
+            statusBadge.className = user.is_active ? 'badge badge-success' : 'badge badge-danger';
+            statusBadge.textContent = user.is_active ? 'Activé' : 'Désactivé';
 
             togglePartnerSections(isPartner);
         }
@@ -1309,11 +1288,7 @@
         function handlePartnerSections(user, data) {
             if (user.role !== 'partner') return;
 
-            document.getElementById('user-bank-details').textContent = user.bank_details ? '****' + user.bank_details.slice(-4) : 'Non fourni';
-            document.getElementById('user-verification-status').textContent = user.is_verified ? 'Vérifié' : 'Non vérifié';
-            document.getElementById('user-verification-status').className = user.is_verified ? 'badge badge-success' : 'badge badge-warning';
             document.getElementById('user-equipments-count').textContent = data.equipments_count || 0;
-            document.getElementById('user-total-earnings').textContent = data.total_earnings ? `${data.total_earnings} MAD` : '0 MAD';
 
             const tbody = document.querySelector('#partner-equipments tbody');
             tbody.innerHTML = '';
@@ -1325,9 +1300,6 @@
                     <td>${eq.title}</td>
                     <td>${eq.category_name}</td>
                     <td>${eq.price_per_day} MAD</td>
-                    <td><span class="badge ${eq.is_available ? 'badge-success' : 'badge-danger'}">
-                        ${eq.is_available ? 'Disponible' : 'Indisponible'}
-                    </span></td>
                     <td>
                         <button onclick="window.location.href='/admin/equipment/${eq.id}'" class="p-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition shadow-md hover:scale-105">
                             <i class="fas fa-eye"></i>
@@ -1354,16 +1326,18 @@
                 reservations.forEach(res => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>${res.delivery_option || '0'}</td>
+                    <td>${res.listing_id} </td>
+                    <td>${res.client_id} </td>
+                    <td>${res.partner_id} </td>
                     <td>${new Date(res.start_date).toLocaleDateString()} - ${new Date(res.end_date).toLocaleDateString()}</td>
-                    <td>${res.updated_at} </td>
+                    <td>${res.delivery_option == 0 ? 'Non' : 'Oui'}</td>
                     <td><span class="badge ${getStatusBadgeClass(res.status)}">${getStatusText(res.status)}</span></td>
                 `;
                     tbody.appendChild(row);
                 });
             } else {
                 document.getElementById('user-reservations-count').textContent = '0';
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">Aucune réservation</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Aucune réservation</td></tr>';
             }
         }
 
@@ -1398,7 +1372,6 @@
         // Activation/désactivation utilisateur
         document.getElementById('save-user-details').addEventListener('click', async () => {
             const userId = document.getElementById('user-id').textContent;
-            const adminNotes = document.getElementById('admin-notes').value;
             const newIsActive = document.getElementById('user-active-toggle').checked ? 1 : 0;
 
             if (!userId) return alert('ID utilisateur manquant');
@@ -1406,17 +1379,15 @@
             if (!confirm(`Voulez-vous vraiment ${newIsActive ? 'activer' : 'désactiver'} cet utilisateur ?`)) return;
 
             try {
-                const response = await fetch(`/admin/users/${userId}/save-notes`, {
+
+                const response = await fetch(`/admin/users/${userId}/toggle-activation`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        message: adminNotes,
-                        is_active: newIsActive
-                    })
+                    body: JSON.stringify({ is_active: newIsActive }) 
                 });
 
                 const data = await response.json();
@@ -1426,7 +1397,7 @@
                 document.getElementById('user-status-badge').className = data.is_active ? 'badge badge-success' : 'badge badge-danger';
                 document.getElementById('user-active-toggle').checked = data.is_active;
 
-                alert(`Utilisateur ${data.is_active ? 'activé' : 'désactivé'} et notes enregistrées avec succès`);
+                
                 setTimeout(closeModal, 1000);
 
             } catch (error) {
@@ -1527,7 +1498,7 @@
         tbody.innerHTML = '';
         
         if (reservations.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Aucune réservation récente</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Aucune réservation récente</td></tr>';
             return;
         }
         
