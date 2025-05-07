@@ -89,11 +89,11 @@
                                             <a href="{{ route('HomeClient') }}#profile" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                             </a>
-                                            <a href="{{ route('HomeClient') }}" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <a href="{{ route('HomeClient') }}" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 <i class="fas fa-user-circle mr-2 opacity-70"></i> Espace Client
                                             </a>
                                             @if($user->role == 'partner')
-                                            <a href="{{ route('HomePartenaie') }}" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <a href="{{ route('HomePartenaie') }}" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 <i class="fas fa-user-circle mr-2 opacity-70"></i> Espace Partenaire
                                             </a>
                                             @endif

@@ -2,9 +2,27 @@
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Tableau de bord Client - CampShare | Louez du matériel de camping entre particuliers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampShare - Dashboard Client</title>
+
+    <!-- Styles / Scripts -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+
+    <link rel="icon" href="{{ asset('images/favicon_io/favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon_io/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('images/favicon_io/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('images/favicon_io/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="CampShare - Louez facilement le matériel de camping dont vous avez besoin
+    directement entre particuliers.">
+    <meta name="keywords" content="camping, location, matériel, aventure, plein air, partage, communauté">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -35,8 +53,8 @@
             }
         });
     </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
+    
+<style>
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -211,12 +229,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="index.html" class="flex items-center">
+                    <a href="{{ route('index') }}" class="flex items-center">
                         <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#trouver-equipement" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+                    <a href="{{ route('client.listings.index') }}" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
                     @auth
                         @php
                             $user = $user ?? Auth::user();
