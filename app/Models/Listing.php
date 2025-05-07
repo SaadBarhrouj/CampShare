@@ -117,16 +117,16 @@ class Listing extends Model
     protected function getVisibleObjectReviewsQuery()
     {
         // Utilise la relation HasManyThrough
-        return $this->reviews()
-                    ->where('reviews.type', 'forObject')
-                    ->where('reviews.is_visible', true); 
+        return $this->item->reviews
+                    ->where('type', 'forObject')
+                    ->where('is_visible', true); 
     }
 
 
    
     public function getVisibleReviews()
     {
-        return $this->getVisibleObjectReviewsQuery()->with('reviewer')->get();
+        return $this->getVisibleObjectReviewsQuery();
     }
 
 

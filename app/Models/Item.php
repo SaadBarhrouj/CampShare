@@ -48,14 +48,14 @@ class Item extends Model
 
     public function averageRating()
     {
-        $visibleReviews = $this->reviews->where('is_visible', true);
+        $visibleReviews = $this->reviews->where('is_visible', true)->where('type', 'forObject');
 
         return number_format($visibleReviews->avg('rating'), 1);
     }
 
     public function fiveStarPercentage($number)
     {
-        $visibleReviews = $this->reviews->where('is_visible', true);
+        $visibleReviews = $this->reviews->where('is_visible', true)->where('type', 'forObject');
         $total = $visibleReviews->count();
 
         if ($total === 0)
