@@ -249,7 +249,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
                     <!-- Logo -->
-                    <a href="admin-dashboard.html" class="flex items-center">
+                    <a href="{{ route('index') }}" class="flex items-center">
                         <span class="text-admin-primary dark:text-admin-secondary text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
                         <span class="text-xs ml-2 text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">ADMIN</span>
                     </a>
@@ -257,13 +257,7 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <!-- Quick search -->
-                    <div class="relative">
-                        <input type="text" placeholder="Recherche rapide..." class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary w-64 text-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
-                        </div>
-                    </div>
+                    
 
                     <!-- User menu -->
                     <div class="relative ml-4">
@@ -627,10 +621,6 @@
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
                                         {{ $clientsCount + $partnersCount }}
                                     </h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        12.8%
-                                    </span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
                                     {{$clientsCount }} clients, {{$partnersCount}} partenaires
@@ -649,10 +639,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Équipements</p>
                                 <div class="flex items-center">
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">432</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        8.4%
-                                    </span>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
                                     386 actifs, 46 inactifs
@@ -671,10 +658,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Réservations</p>
                                 <div class="flex items-center">
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">278</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        15.6%
-                                    </span>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
                                     42 en cours, 236 terminées
@@ -693,10 +677,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Revenu (MAD)</p>
                                 <div class="flex items-center">
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">86.4K</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        22.3%
-                                    </span>
+                                    
                                 </div>
                             </div>
                         </div>

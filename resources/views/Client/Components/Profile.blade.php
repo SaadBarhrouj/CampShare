@@ -87,12 +87,12 @@
                     </div>
                     <br>
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Email de {{ $profile->username }}</h2>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Email</h2>
                         <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewEmail">
                              {{$profile->email}}
                         </p>
                         <br>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Numero de telephone de {{ $profile->username }}</h2>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Nº téléphone</h2>
                         <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
                             {{$profile->phone_number}}
                         </p>

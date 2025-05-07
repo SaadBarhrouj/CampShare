@@ -12,7 +12,7 @@
             </div>
             <div class="absolute bottom-4 left-4 right-4">
                 <h3 class="text-white font-bold text-lg truncate">{{$allRes->listing_title}}</h3>
-                <p class="text-gray-200 text-sm">{{$allRes->description}}</p>
+                <p class="text-gray-200 text-sm">{{ \Illuminate\Support\Str::limit($allRes->description, 150) }}</p>
             </div>
         </div>
         

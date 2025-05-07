@@ -18,7 +18,7 @@
                         <i class="fas fa-shopping-cart text-blue-600 dark:text-blue-400"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm">total reservation</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Total réservations</p>
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalReservations }}</h3>
                         
                     </div>
@@ -46,7 +46,7 @@
                         <i class="fas fa-campground text-purple-600 dark:text-purple-400"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm">Note moyenne attribuée</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Note moyenne</p>
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$note_moyenne}}</h3>
                       
                     </div>
@@ -78,7 +78,7 @@
                         </div>
                         <div class="absolute bottom-4 left-4 right-4">
                             <h3 class="text-white font-bold text-lg truncate">{{$res->listing_title}}</h3>
-                            <p class="text-gray-200 text-sm">{{$res->description}}</p>
+                            <p class="text-gray-200 text-sm">{{ \Illuminate\Support\Str::limit($res->description, 150) }}</p>
                         </div>
                     </div>
                     
@@ -122,12 +122,12 @@
                         
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
                             <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600 dark:text-gray-400">Date:</span>
+                                <span class="text-gray-600 dark:text-gray-400">Date</span>
                                 <span class="font-medium text-gray-900 dark:text-white">{{$res->start_date}} - {{$res->end_date}}</span>
                             </div>
                             <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600 dark:text-gray-400">Prix:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{$res->montant_paye}}</span>
+                                <span class="text-gray-600 dark:text-gray-400">Prix</span>
+                                <span class="font-medium text-gray-900 dark:text-white">{{$res->montant_paye}} MAD</span>
                             </div>
                           
                         </div>
@@ -164,21 +164,12 @@
                 <!-- Recommendation 1 -->
                 @foreach($similarListings as $item)
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
-                    @if($item->is_premium)
-                        <div class="absolute top-2 left-2 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            Premium
-                        </div>
-                    @endif
+                    
                 
                     <div class="relative h-48">
                         <img src="{{ $item->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute top-4 right-4">
-                            <button class="p-2 bg-white bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-80 rounded-full text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors focus:outline-none">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
                         <div class="absolute bottom-4 left-4 right-4">
                             <h3 class="text-white font-bold text-lg truncate">{{$item->listing_title}}</h3>
                             <p class="text-gray-200 text-sm">{{$item->category_name}}</p>
@@ -236,7 +227,7 @@
                                     {{$item->city_name}}
                                 </span>
                             </div>
-                            <a href="#view-details" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                            <a href="{{ route('client.listings.show', 1) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
                                 Voir les détails
                             </a>
                         </div>

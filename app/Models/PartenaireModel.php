@@ -130,7 +130,7 @@ class PartenaireModel extends Model
             ->where('U.email', $email)
             ->select('m.title', 'm.description', 'm.price_per_day', 'i.url', 'L.status','c.name')
             ->orderBy('L.created_at', 'desc')
-            ->limit(4)
+            ->limit(3)
             ->get();
     }
 

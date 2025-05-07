@@ -4,7 +4,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Mes reservations</h1>
-                <p class="text-gray-600 dark:text-gray-400 mt-1">Bienvenue, {{$user->username}} ! Voici un résumé de vos réservations.</p>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">Voici un résumé de vos réservations, leurs status, dates...</p>
             </div>
             <div class="mt-4 md:mt-0 flex space-x-3">
                 <!-- Status Filter Dropdown -->

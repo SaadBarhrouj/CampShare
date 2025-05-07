@@ -211,7 +211,7 @@
                     </div>
                 </div>
                 
->
+
                 
                 <!-- My equipment section -->
                 <div class="mb-8">

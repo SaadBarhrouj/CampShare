@@ -16,6 +16,49 @@
     @apply bg-green-700 dark:bg-green-600;
 }
 
+/* Filter chip styles */
+.filter-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active {
+            background-color: #2D5F2B;
+            color: white;
+        }
+
+        .dark .filter-chip.active {
+            background-color: #4F7942;
+        }
+
+        .filter-chip:not(.active) {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dark .filter-chip:not(.active) {
+            background-color: #374151;
+            color: #e5e7eb;
+            border: 1px solid #4b5563;
+        }
+
+        .filter-chip:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+
+        .dark .filter-chip:hover:not(.active) {
+            background-color: #4b5563;
+        }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -29,12 +72,6 @@
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Demandes de Réservation</h1>
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez toutes vos demandes de location entrantes.</p>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex space-x-3">
-                        <a href="index.html" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Retour au tableau de bord
-                        </a>
                     </div>
                 </div>
 
@@ -63,7 +100,7 @@
 
                         <div class="flex flex-wrap gap-2">
                             @php
-                                $statuses = ['all' => 'all', 'Pending' => 'Pending', 'confirmed' => 'confirmed', 'ongoing' => 'ongoing', 'canceled' => 'canceled', 'completed' => 'completed'];
+                                $statuses = ['all' => 'Toutes', 'Pending' => 'En Attente', 'confirmed' => 'Confirmée', 'ongoing' => 'ongoing', 'canceled' => 'canceled', 'completed' => 'completed'];
                             @endphp
 
                             @foreach($statuses as $key => $label)

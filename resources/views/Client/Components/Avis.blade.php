@@ -1,5 +1,13 @@
 <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
     <div class="py-8 px-4 md:px-8">
+        <!-- Dashboard header -->
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Avis reçus</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">Voici un résumé des avis des utilisateurs sur vous.</p>
+            </div>
+        
+    </div>
+    <div class="py-8 px-4 md:px-8">
         
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">

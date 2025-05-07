@@ -5,9 +5,12 @@
         
         <!-- Equipment recommendations -->
         <div class="mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Équipements recommandés</h2>
+
+            <div class="mb-16">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Équipements recommandés</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">Voici quelques équipements que vous pouvez utiliser dans votre prochain camping!</p>
             </div>
+                
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Recommendation 1 -->
@@ -22,11 +25,6 @@
                         <img src="{{ $item1->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute top-4 right-4">
-                            <button class="p-2 bg-white bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-80 rounded-full text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors focus:outline-none">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
                         <div class="absolute bottom-4 left-4 right-4">
                             <h3 class="text-white font-bold text-lg truncate">{{$item1->listing_title}}</h3>
                             <p class="text-gray-200 text-sm">{{$item1->category_name}}</p>
@@ -87,7 +85,7 @@
                                     {{$item1->city_name}}
                                 </span>
                             </div>
-                            <a href="#view-details" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                            <a href="{{ route('client.listings.show', 1) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
                                 Voir les détails
                             </a>
                         </div>

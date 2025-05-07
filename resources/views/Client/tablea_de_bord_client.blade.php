@@ -330,7 +330,7 @@
                             </div>
                             @if($user->role == 'client')
                             <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden max-w-lg w-full p-6 m-4">
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden max-w-2xl w-full p-6 m-4">
                                     <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
                                         <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
                                             Devenir Partenaire Campshare
@@ -349,7 +349,7 @@
                                                 <li><strong>Communication :</strong> Répondre rapidement (idéalement sous 24h) aux demandes de réservation et aux questions des locataires potentiels.</li>
                                                 <li><strong>Gestion des Réservations :</strong> Honorer les réservations confirmées. Vous serez notifié par email et via votre espace partenaire lors de l'acceptation d'une réservation par un client.</li>
                                                 <li><strong>Préparation et Restitution :</strong> Préparer le matériel loué pour le retrait par le locataire et vérifier son état lors de la restitution.</li>
-                                                <li><strong>Respect des Règles :</strong> Vous conformer aux <a href="/conditions-generales-partenaires" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">Conditions Générales Partenaires de Campshare</a> et aux lois en vigueur.</li>
+                                                <li><strong>Respect des Règles :</strong> Vous conformer aux <a href="/conditions-generales-partenaires" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">Conditions Générales Partenaires de Campshare</a>.</li>
                                             </ul>
                                             <br>
                                             <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
@@ -476,7 +476,7 @@
                     </a>
                     <a href="#my-favorites" data-target="allSim" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-heart w-5 mr-3"></i>
-                        Équipements recommandés
+                        Équi. recommandés
                     </a>
                 </nav>
                 <div class="mt-6 px-3">

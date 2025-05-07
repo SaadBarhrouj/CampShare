@@ -32,7 +32,7 @@ class PartenaireController extends Controller
 
     $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
     $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
-    $AverageRating = PartenaireModel::getAverageRatingPartner($user->email);
+    $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
     $TotalAvis = PartenaireModel::getCountRatingPartner($user->email);
     $TotalListing = PartenaireModel::countListingsByEmail($user->email);
     $TotalListingActive = PartenaireModel::countActiveListingsByEmail($user->email);

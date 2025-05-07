@@ -489,29 +489,26 @@
                 
                 <!-- Stats cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- Stats card 1 - Total Partners -->
+                    <!-- Stats card 1 - Total Clients -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-admin-light dark:bg-admin-dark mr-4">
-                                <i class="fas fa-handshake text-admin-primary dark:text-admin-secondary"></i>
+                                <i class="fas fa-user text-admin-primary dark:text-admin-secondary"></i>
                             </div>
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Total Partenaires</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Partenaires</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total'] }}</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        8.6%
-                                    </span>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white"> {{ $stats['total'] }}</h3>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    vs mois précédent
+                                    (100% total)
                                 </p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Stats card 2 - Active Partners -->
+                    <!-- Stats card 2 - Active Clients -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30 mr-4">
@@ -520,53 +517,35 @@
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Partenaires Actifs</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">76</h3>
-                                    <span class="text-gray-600 dark:text-gray-400 text-sm flex items-center ml-2">
-                                        (88.4%)
-                                    </span>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">232</h3>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    10 inactifs/suspendus
+                                    (100% par rapport total)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats card 2 - Active Clients -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/30 mr-4">
+                                <i class="fas fa-x text-red-600 dark:text-red-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Partenaires Inactifs</p>
+                                <div class="flex items-center">
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">232</h3>
+                                    
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                                    (100% par rapport total)
                                 </p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Stats card 3 - Equipment Count -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30 mr-4">
-                                <i class="fas fa-campground text-indigo-600 dark:text-indigo-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Équipements listés</p>
-                                <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">432</h3>
-                                </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    Moyenne: 5.02 par partenaire
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Stats card 4 - Revenue -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-amber-100 dark:bg-amber-900/30 mr-4">
-                                <i class="fas fa-money-bill-wave text-amber-600 dark:text-amber-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Revenus générés</p>
-                                <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">65.8K MAD</h3>
-                                </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    Commission: 9.87K MAD
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Filters and search -->
@@ -718,15 +697,15 @@
                 
                 <!-- Partners table -->
 <!-- Partners table -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden m-10">
    
-                    <div class="overflow-x-auto">
+                    
         <table class="w-full admin-table">
             <thead>
                 <tr>
                     <th>Partenaire</th>
                     <th>Contact</th>
-                    <th>Localisation</th>
+                    <th>Ville</th>
                     <th>Statistiques</th>
                     <th>Actions</th>
                 </tr>
@@ -801,7 +780,6 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
                     
                     <!-- Pagination -->
     <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">

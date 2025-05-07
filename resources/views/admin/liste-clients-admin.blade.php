@@ -506,16 +506,13 @@
                                 <i class="fas fa-user text-admin-primary dark:text-admin-secondary"></i>
                             </div>
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Total Clients</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Clients</p>
                                 <div class="flex items-center">
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white"> {{ $stats['total'] }}</h3>
-                                    <span class="text-green-600 dark:text-green-400 text-sm flex items-center ml-2">
-                                        <i class="fas fa-arrow-up mr-1"></i>
-                                        12.4%
-                                    </span>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    vs mois précédent
+                                    (100% total)
                                 </p>
                             </div>
                         </div>
@@ -531,34 +528,35 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Clients Actifs</p>
                                 <div class="flex items-center">
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">232</h3>
-                                    <span class="text-gray-600 dark:text-gray-400 text-sm flex items-center ml-2">
-                                        (95.9%)
-                                    </span>
+                                    
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    10 inactifs/suspendus
+                                    (100% par rapport total)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats card 2 - Active Clients -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/30 mr-4">
+                                <i class="fas fa-x text-red-600 dark:text-red-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Clients Inactifs</p>
+                                <div class="flex items-center">
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">232</h3>
+                                    
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                                    (100% par rapport total)
                                 </p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Stats card 3 - Reservation Count -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30 mr-4">
-                                <i class="fas fa-calendar-check text-indigo-600 dark:text-indigo-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Réservations</p>
-                                <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">386</h3>
-                                </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    Moyenne: 1.6 par client
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    
                     
                     
                 </div>
