@@ -32,7 +32,7 @@
     <!-- Hero Section -->
     <header class="relative pt-16 overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80" alt="Paysage de camping" class="h-full w-full object-cover brightness-75 dark:brightness-50 transition-all duration-300" />
+            <img src="{{ asset('images/hero-image.jpg') }}" alt="Paysage de camping" class="h-full w-full object-cover brightness-75 dark:brightness-50 transition-all duration-300" />
             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50 dark:opacity-70"></div>
         </div>
         
@@ -552,14 +552,6 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
         // Sticky navbar effect on scroll
         window.addEventListener('scroll', () => {
             const navbar = document.querySelector('nav');

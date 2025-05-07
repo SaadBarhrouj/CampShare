@@ -227,7 +227,7 @@
                                         </div>
                                         <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->where('is_visible', true)->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->where('is_visible', true)->where('type', 'forObject')->count() }})</span></span>
                                         </div>
                                     </div>
                                     
@@ -306,7 +306,7 @@
                                         </div>
                                         <div class="flex items-center text-sm flex-nowrap">
                                             <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->where('is_visible', true)->count() }})</span></span>
+                                            <span class="flex flex-nowrap">{{ $listing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $listing->item->reviews->where('is_visible', true)->where('type', 'forObject')->count() }})</span></span>
                                         </div>
                                     </div>
                                     

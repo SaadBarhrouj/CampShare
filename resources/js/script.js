@@ -18,6 +18,193 @@ mobileMenuButton.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
 });
 
+
+// User dropdown toggle
+const userMenuButton = document.getElementById('user-menu-button');
+const userDropdown = document.getElementById('user-dropdown');
+
+userMenuButton?.addEventListener('click', () => {
+    userDropdown.classList.toggle('hidden');
+});
+
+// Notifications dropdown toggle
+const notificationsButton = document.getElementById('notifications-button');
+const notificationsDropdown = document.getElementById('notifications-dropdown');
+
+notificationsButton?.addEventListener('click', () => {
+    notificationsDropdown.classList.toggle('hidden');
+});
+
+// Messages dropdown toggle
+const messagesButton = document.getElementById('messages-button');
+const messagesDropdown = document.getElementById('messages-dropdown');
+
+messagesButton?.addEventListener('click', () => {
+    messagesDropdown.classList.toggle('hidden');
+});
+
+// Hide dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    // User dropdown
+    if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
+        userDropdown.classList.add('hidden');
+    }
+    
+    // Notifications dropdown
+    if (notificationsButton && !notificationsButton.contains(e.target) && notificationsDropdown && !notificationsDropdown.contains(e.target)) {
+        notificationsDropdown.classList.add('hidden');
+    }
+    
+    // Messages dropdown
+    if (messagesButton && !messagesButton.contains(e.target) && messagesDropdown && !messagesDropdown.contains(e.target)) {
+        messagesDropdown.classList.add('hidden');
+    }
+});
+
+// Mobile sidebar toggle
+const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+const mobileSidebar = document.getElementById('mobile-sidebar');
+const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
+const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+
+mobileSidebarToggle?.addEventListener('click', () => {
+    mobileSidebar.classList.toggle('-translate-x-full');
+    mobileSidebarOverlay.classList.toggle('hidden');
+    document.body.classList.toggle('overflow-hidden');
+});
+
+closeMobileSidebar?.addEventListener('click', () => {
+    mobileSidebar.classList.add('-translate-x-full');
+    mobileSidebarOverlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+mobileSidebarOverlay?.addEventListener('click', () => {
+    mobileSidebar.classList.add('-translate-x-full');
+    mobileSidebarOverlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+// Sidebar link active state
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        // Remove active class from all links
+        sidebarLinks.forEach(el => el.classList.remove('active'));
+        
+        // Add active class to clicked link
+        link.classList.add('active');
+    });
+});
+
+// Message modal
+const messageButtons = document.querySelectorAll('button .fas.fa-comment-alt, .fas.fa-envelope');
+const messageModal = document.getElementById('message-modal');
+const closeMessageModal = document.getElementById('close-message-modal');
+const messageForm = document.getElementById('message-form');
+const messageInput = document.getElementById('message-input');
+
+messageButtons.forEach(button => {
+    button.parentElement.addEventListener('click', (e) => {
+        e.preventDefault();
+        messageModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        // Scroll to bottom of chat
+        const chatContainer = document.querySelector('.chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        // Focus input
+        messageInput?.focus();
+    });
+});
+
+closeMessageModal?.addEventListener('click', () => {
+    messageModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+// Close modal when clicking outside
+messageModal?.addEventListener('click', (e) => {
+    if (e.target === messageModal) {
+        messageModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+});
+
+// Handle message form submission
+messageForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = messageInput.value.trim();
+    if (message) {
+        // Create and append new message
+        const chatContainer = document.querySelector('.chat-container');
+        const newMessage = document.createElement('div');
+        newMessage.className = 'chat-message outgoing';
+        
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+        
+        newMessage.innerHTML = `
+            <div class="chat-bubble">
+                <p class="text-white">${message}</p>
+                <p class="text-xs text-gray-300 mt-1">${timeString}</p>
+            </div>
+        `;
+        
+        chatContainer.appendChild(newMessage);
+        messageInput.value = '';
+        
+        // Scroll to bottom of chat
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+});
+
+// Add to favorites functionality
+const heartButtons = document.querySelectorAll('.far.fa-heart');
+
+heartButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (button.classList.contains('far')) {
+            button.classList.remove('far');
+            button.classList.add('fas');
+        } else {
+            button.classList.remove('fas');
+            button.classList.add('far');
+        }
+    });
+});
+
+function cancelReservation(reservationId) {
+if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+    fetch(`/client/reservations/cancel/${reservationId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            // Recharger les réservations
+            document.getElementById('statusFilter').dispatchEvent(new Event('change'));
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Une erreur est survenue');
+    });
+}
+}
+
 // Sticky navbar effect on scroll
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('nav');
@@ -331,3 +518,61 @@ tabReviews1.addEventListener('click', () => {
     reviewsSection1.classList.remove('hidden');
     equipmentSection.classList.add('hidden');
 });
+
+
+const links = document.querySelectorAll(".sidebar-link");
+const components = document.querySelectorAll(".component");
+
+links.forEach(link => {
+    link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute("data-target");
+
+    components.forEach(comp => {
+        comp.classList.add("hidden");
+    });
+
+    document.getElementById(targetId).classList.remove("hidden");
+    });
+});
+      
+document.addEventListener('DOMContentLoaded', function() {
+    const openModalBtn = document.getElementById('openPartnerModalBtn');
+    const partnerModal = document.getElementById('partnerAcceptModal');
+    if (openModalBtn && partnerModal) {
+        const closeModalBtn = document.getElementById('closePartnerModalBtn');
+        const cancelModalBtn = document.getElementById('cancelPartnerModalBtn');
+        const openModal = () => {
+            partnerModal.classList.remove('hidden');
+            partnerModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeModal = () => {
+            partnerModal.classList.add('hidden');
+            partnerModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+        openModalBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            openModal();
+        });
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', closeModal);
+        }
+        if (cancelModalBtn) {
+            cancelModalBtn.addEventListener('click', closeModal);
+        }
+        partnerModal.addEventListener('click', (event) => {
+            if (event.target === partnerModal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !partnerModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    }
+});
+
+

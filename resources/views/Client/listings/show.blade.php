@@ -8,9 +8,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <style>
 
-        
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampShare - ParentCo</title>
+
+    <!-- Styles / Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/styles.css', 'resources/js/script.js'])
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="icon" href="{{ asset('images/favicon_io/favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon_io/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('images/favicon_io/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('images/favicon_io/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="CampShare - Louez facilement le matériel de camping dont vous avez besoin
+    directement entre particuliers.">
+    <meta name="keywords" content="camping, location, matériel, aventure, plein air, partage, communauté">
+
+    <style>
         .flatpickr-calendar { background-color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; width: auto; max-width: 600px; }
         .dark .flatpickr-calendar { background-color: #1f2937; border-color: #374151; }
         .flatpickr-months { background: #2D5F2B; border-top-left-radius: 7px; border-top-right-radius: 7px; }
@@ -57,7 +77,10 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+
 </head>
+
+
 <body class="font-sans antialiased text-gray-800 bg-gray-50 dark:text-gray-200 dark:bg-gray-900">
 
     @include('partials.header')
