@@ -67,6 +67,7 @@ class ClientModel extends Model
     
         return $query->select(
                 'reservations.id',
+                'partner.id AS partner_id',
                 'partner.username AS partner_username',
                 'partner.avatar_url AS partner_img',
                 DB::raw("ROUND(AVG(partner_reviews.rating), 1) as partner_avg_rating"), // Rounded to 1 decimal
@@ -81,6 +82,7 @@ class ClientModel extends Model
             ->groupBy(
                 'reservations.id',
                 'partner.username',
+                'partner.id',
                 'partner.avatar_url',
                 'reservations.start_date',
                 'reservations.end_date',
@@ -117,6 +119,7 @@ class ClientModel extends Model
     
         return $query->select(
                 'reservations.id',
+                'partner.id AS partner_id',
                 'partner.username AS partner_username',
                 'partner.avatar_url AS partner_img',
                 DB::raw("ROUND(AVG(partner_reviews.rating), 1) as partner_avg_rating"), // Rounded to 1 decimal
@@ -129,6 +132,7 @@ class ClientModel extends Model
                 'items.description'
             )
             ->groupBy(
+                'partner.id',
                 'reservations.id',
                 'partner.username',
                 'partner.avatar_url',

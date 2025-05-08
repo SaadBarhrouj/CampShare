@@ -4,9 +4,12 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
         <div class="relative h-40">
+            
             <img src="{{ $allRes->image_url }}" alt="Image"
-                 class="w-full h-full object-cover" />
+                class="w-full h-full object-cover" />
+            
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            
             @php
                 $statusMap = [
                     'pending' => ['label' => 'En attente', 'color' => 'bg-yellow-400'],
@@ -34,11 +37,15 @@
         
         <div class="p-4">
             <div class="flex items-start mb-4">
-                <img src="{{ $allRes->partner_img}}" 
-                     alt="image" 
-                     class="w-8 h-8 rounded-full object-cover mr-3" />
+                <a href="{{ route('partner.profile.index', $allRes->partner_id) }}">
+                    <img src="{{ $allRes->partner_img}}" 
+                        alt="image" 
+                        class="w-8 h-8 rounded-full object-cover mr-3" />
+                </a>
                 <div>
-                    <p class="font-medium text-gray-900 dark:text-white">{{$allRes->partner_username}}</p>
+                    <a href="{{ route('partner.profile.index', $allRes->partner_id) }}">
+                        <p class="font-medium text-gray-900 dark:text-white">{{$allRes->partner_username}}</p>
+                    </a>
                     <div class="flex items-center text-sm">
                         @if($allRes->partner_avg_rating)
                             @php

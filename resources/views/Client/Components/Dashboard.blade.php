@@ -100,11 +100,15 @@
                     
                     <div class="p-4">
                         <div class="flex items-start mb-4">
-                            <img src="{{ $res->partner_img}}" 
-                                 alt="image" 
-                                 class="w-8 h-8 rounded-full object-cover mr-3" />
+                            <a href="{{ route('partner.profile.index', $res->partner_id) }}">
+                                <img src="{{ $res->partner_img}}" 
+                                    alt="image" 
+                                    class="w-8 h-8 rounded-full object-cover mr-3" />
+                            </a>
                             <div>
-                                <p class="font-medium text-gray-900 dark:text-white">{{$res->partner_username}}</p>
+                                <a href="{{ route('partner.profile.index', $res->partner_id) }}">
+                                    <p class="font-medium text-gray-900 dark:text-white">{{$res->partner_username}}</p>
+                                </a>
                                 <div class="flex items-center text-sm">
                                     @if($res->partner_avg_rating)
                                         @php
