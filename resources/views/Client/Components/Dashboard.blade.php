@@ -42,8 +42,8 @@
             <!-- Stats card 3 -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                 <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 mr-4">
-                        <i class="fas fa-campground text-purple-600 dark:text-purple-400"></i>
+                    <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900 mr-4">
+                        <i class="fas fa-star text-yellow-600 dark:text-yellow-400"></i>
                     </div>
                     <div>
                         <p class="text-gray-500 dark:text-gray-400 text-sm">Note moyenne</p>
@@ -59,7 +59,7 @@
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">Mes réservations</h2>
-                <a href="#all-reservations" data-target = "allRes" class=" sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
+                <a href="{{ route('HomeClient.reservations') }}" data-target = "allRes" class=" sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
                     Voir toutes mes réservations
                 </a>
             </div>
@@ -73,8 +73,24 @@
                         <img src="{{ $res->image_url }}" alt="Image"
                              class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        @php
+                            $statusMap = [
+                                'pending' => ['label' => 'En attente', 'color' => 'bg-yellow-400'],
+                                'confirmed' => ['label' => 'Confirmée', 'color' => 'bg-blue-500'],
+                                'ongoing' => ['label' => 'En cours', 'color' => 'bg-green-500'],
+                                'canceled' => ['label' => 'Annulée', 'color' => 'bg-red-500'],
+                                'completed' => ['label' => 'Terminée', 'color' => 'bg-purple-600'],
+                            ];
+
+                            $status = $res->status;
+                            $statusLabel = $statusMap[$status]['label'] ?? $status;
+                            $statusColor = $statusMap[$status]['color'] ?? 'bg-gray-400';
+                        @endphp
+
                         <div class="absolute top-4 left-4">
-                            <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{$res->status}}</span>
+                            <span class="{{ $statusColor }} text-white text-xs px-2 py-1 rounded-full">
+                                {{ $statusLabel }}
+                            </span>
                         </div>
                         <div class="absolute bottom-4 left-4 right-4">
                             <h3 class="text-white font-bold text-lg truncate">{{$res->listing_title}}</h3>
@@ -155,7 +171,7 @@
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">Équipements recommandés</h2>
-                <a href="#all-recommendations" data-target = "allSim" class=" sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
+                <a href="{{ route('HomeClient.equips') }}" data-target = "allSim" class=" sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
                     Voir plus de recommandations
                 </a>
             </div>
@@ -165,7 +181,7 @@
                 @foreach($similarListings as $item)
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
                     
-                
+                    <a href="{{ route('client.listings.show', $item->lis_id) }}">
                     <div class="relative h-48">
                         <img src="{{ $item->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
@@ -222,16 +238,17 @@
                         
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-600 dark:text-gray-300">
-                                <span class="font-medium text-purple-600 dark:text-purple-400">
+                                <span class="font-medium text-green-800 dark:text-green-600">
                                     <i class="fas fa-map-marker-alt mr-1"></i> 
                                     {{$item->city_name}}
                                 </span>
                             </div>
-                            <a href="{{ route('client.listings.show', 1) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                            <a href="{{ route('client.listings.show', $item->lis_id) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
                                 Voir les détails
                             </a>
                         </div>
                     </div>
+                    </a>
                 </div>
                 @endforeach
                 

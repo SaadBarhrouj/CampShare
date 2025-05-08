@@ -7,8 +7,24 @@
             <img src="{{ $allRes->image_url }}" alt="Image"
                  class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            @php
+                $statusMap = [
+                    'pending' => ['label' => 'En attente', 'color' => 'bg-yellow-400'],
+                    'confirmed' => ['label' => 'Confirmée', 'color' => 'bg-blue-500'],
+                    'ongoing' => ['label' => 'En cours', 'color' => 'bg-green-500'],
+                    'canceled' => ['label' => 'Annulée', 'color' => 'bg-red-500'],
+                    'completed' => ['label' => 'Terminée', 'color' => 'bg-purple-600'],
+                ];
+
+                $status = $allRes->status;
+                $statusLabel = $statusMap[$status]['label'] ?? $status;
+                $statusColor = $statusMap[$status]['color'] ?? 'bg-gray-400';
+            @endphp
+
             <div class="absolute top-4 left-4">
-                <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{$allRes->status}}</span>
+                <span class="{{ $statusColor }} text-white text-xs px-2 py-1 rounded-full">
+                    {{ $statusLabel }}
+                </span>
             </div>
             <div class="absolute bottom-4 left-4 right-4">
                 <h3 class="text-white font-bold text-lg truncate">{{$allRes->listing_title}}</h3>

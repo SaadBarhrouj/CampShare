@@ -411,18 +411,18 @@
                     <a href="/MesReservation" data-target="allRes" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-shopping-cart w-5 mr-3"></i>
                         Mes réservations
-                        <span class="ml-auto bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{ $totalReservations }}</span>
-                    </a>
-                    <a href="/AvisRecus" data-target="mes-avis" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-star w-5 mr-3"></i>
-                        Avis reçus
                     </a>
                     <a href="/EquipementRecommende" data-target="allSim" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-heart w-5 mr-3"></i>
                         Équi. recommandés
                     </a>
+                    <a href="/AvisRecus" data-target="mes-avis" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-star w-5 mr-3"></i>
+                        Avis reçus
+                    </a>
+                    
                 </nav>
-                <div class="mt-6 px-3">
+                <div class="mt-28">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition duration-300">

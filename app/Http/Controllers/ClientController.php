@@ -48,7 +48,7 @@ class ClientController extends Controller
         $notifications = (new NotificationController)->getNotifUser($user->id);
         $totalNotification = (new NotificationController)->totalNotification($user->id);
         return view('Client.tablea_de_bord_client',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification','cities'));
-            
+        
     }
     function ShowMesReservationClient () {
         $user = Auth::user();

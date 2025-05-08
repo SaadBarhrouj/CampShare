@@ -66,16 +66,20 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Mes reservations</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-1">Voici un résumé de vos réservations, leurs status, dates...</p>
             </div>
-            <div class="mt-4 md:mt-0 flex space-x-3">
-                <!-- Status Filter Dropdown -->
-                <select id="statusFilter" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">Tous les statuts</option>
-                    <option value="pending">En attente</option>
-                    <option value="confirmed">Confirmé</option>
-                    <option value="completed">Terminé</option>
-                    <option value="canceled">Annulé</option>
-                </select>
-            </div>
+            
+        </div>
+
+        <div class="mt-4 mb-8  md:mt-0 flex space-x-3 justify-end items-center">
+            <!-- Status Filter Dropdown -->
+            <label class="block text-gray-700 dark:text-gray-300">Statut de résérvation</label>
+            <select id="statusFilter" class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all w-46">
+                <option value="all">Tous les statuts</option>
+                <option value="pending">En attente</option>
+                <option value="confirmed">Confirmé</option>
+                <option value="ongoing">En cours</option>
+                <option value="completed">Terminé</option>
+                <option value="canceled">Annulé</option>
+            </select>
         </div>
         
         <!-- Reservations Grid (Will be updated via AJAX) -->

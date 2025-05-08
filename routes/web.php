@@ -106,11 +106,12 @@ Route::get('/fix-images', [App\Http\Controllers\ImageFixController::class, 'fixI
 // Client Routes
 Route::get('/client/reservations/filter', [ClientController::class, 'ShowHomeClient'])->name('profile');
 Route::post('/profile', [ClientController::class, 'update'])->name('profile.update');
-Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
-Route::get('/MesReservation', [ClientController::class, 'ShowMesReservationClient'])->name('HomeClient');
+Route::get('/MesReservation', [ClientController::class, 'ShowMesReservationClient'])->name('HomeClient.reservations');
 Route::get('/AvisRecus', [ClientController::class, 'ShowAvisRecusClient'])->name('HomeClient');
-Route::get('/EquipementRecommende', [ClientController::class, 'ShowEquipementRecommendeClient'])->name('HomeClient');
+Route::get('/EquipementRecommende', [ClientController::class, 'ShowEquipementRecommendeClient'])->name('HomeClient.equips');
 Route::get('/Client/profile', [ClientController::class, 'ShowProfileClient'])->name('HomeClient');
+Route::get('/Client', [ClientController::class, 'ShowHomeClient'])->name('HomeClient');
+
 
 
 
