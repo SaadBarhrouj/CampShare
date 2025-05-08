@@ -291,6 +291,7 @@ class PartenaireModel extends Model
                 'u.email',
                 'u.phone_number',
                 'u.address',
+                'u.is_subscriber',
                 'u.avatar_url',
                 'u.created_at',
                 'c.name as city_name',
@@ -311,6 +312,7 @@ class PartenaireModel extends Model
                 'u.avatar_url',
                 'u.created_at',
                 'c.name',
+                'u.is_subscriber'
             )
             ->first();
     }

@@ -226,21 +226,47 @@
 
                                 <div>
                                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse</label>
-                                    <input type="text" id="address" name="address" value="{{ $profile->address }}"class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                    <input type="text" id="address" name="address" value="{{ $profile->address }}"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
                                     <div>
                                         <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
                                         <input type="password" id="password" name="password" 
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     </div>
+
                                     <div>
                                         <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
                                         <input type="password" id="confirm_password" name="confirm_password" 
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     </div>
+                                    
+                                    <div>
+                                        <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
+                                        <select id="city" name="city_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                            <option value="">Sélectionnez votre ville</option>
+                                            @foreach($cities as $city)
+                                                <option value="{{ $city->id }}" {{ $profile->city_name == $city->name ? 'selected' : '' }}>
+                                                    {{ $city->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte:</span>
+                                                <label class="switch">
+                                                <input type="checkbox" id="user-active-toggle" 
+                                                    {{ $profile->is_subscriber == 1 ? 'checked' : '' }}
+                                                    onchange="document.getElementById('is_subscriber_field').value = this.checked ? '1' : '0'">
+                                                <input type="hidden" id="is_subscriber_field" name="is_subscriber" value="{{ $profile->is_subscriber }}">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </label>
+                                    </div> 
                                 </div>
-                                
-
                             <div class="flex justify-end space-x-4">
                                 <button type="button" onclick="toggleEditMode(false)" 
                                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">

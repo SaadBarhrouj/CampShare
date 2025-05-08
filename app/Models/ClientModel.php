@@ -286,6 +286,7 @@ class ClientModel extends Model
             $join->on('r.reviewee_id', '=', 'u.id')
                 ->where('r.type', 'forClient');
         })
+        ->join('cities as c','c.id','=','u.city_id')
         ->where('u.email', $email)
         ->select(
             'u.first_name',
@@ -296,6 +297,8 @@ class ClientModel extends Model
             'u.password',
             'u.address',
             'u.avatar_url',
+            'u.is_subscriber',
+            'c.name as city_name',
             DB::raw('AVG(r.rating) as avg_rating'),
             'u.created_at',
             DB::raw('COUNT(r.id) as review_count')
@@ -310,7 +313,9 @@ class ClientModel extends Model
             'u.address',
             'u.avatar_url',
             'u.created_at',
-            'u.password'
+            'u.password',
+            'u.is_subscriber',
+            'city_name'
         )
         ->first();
     }
