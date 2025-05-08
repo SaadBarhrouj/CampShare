@@ -15,6 +15,8 @@ use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\ClientModel;
 use Illuminate\Support\Facades\File;
+use App\Models\PartenaireModel;
+
 
 
 use App\Models\Review;
@@ -24,6 +26,7 @@ use App\Models\User;
 class ClientController extends Controller
 {
     function ShowHomeClient () {
+        $cities = PartenaireModel::getCities();
         $user = Auth::user();
         $totalReservations = ClientModel::totalReservationsByEmail($user->email);
         $totalDepenseByEmail = ClientModel::totalDepenseByEmail($user->email);
@@ -44,7 +47,7 @@ class ClientController extends Controller
 
         $notifications = (new NotificationController)->getNotifUser($user->id);
         $totalNotification = (new NotificationController)->totalNotification($user->id);
-        return view('Client.tablea_de_bord_client',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+        return view('Client.tablea_de_bord_client',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification','cities'));
             
     }
     function ShowMesReservationClient () {
@@ -138,7 +141,8 @@ class ClientController extends Controller
         $note_moyenne = ClientModel::noteMoyenneByEmail($user->email);
         $reservations = ClientModel::getReservationDetailsByEmail($user->email);
         $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email);
-       
+        $cities = PartenaireModel::getCities();
+
         if(request()->ajax() && request()->has('status')) {
             $allReservations = ClientModel::getAllReservationDetailsByEmail($user->email, request('status'));
             return view('Client.partials.reservations-grid', compact('allReservations'));
@@ -155,7 +159,7 @@ class ClientController extends Controller
 
 
 
-        return view('Client.Components.Profile',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification'));
+        return view('Client.Components.Profile',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification','cities'));
             
     }
 
@@ -171,6 +175,8 @@ class ClientController extends Controller
         'password' => 'nullable|string|min:8|max:255', // Make password optional
         'confirm_password' => 'required_with:password|same:password', // Only required if password exists
         'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'is_subscriber' =>'nullable',
+        'city_id'=>'nullable',
     ]);
 
     // Handle password update
