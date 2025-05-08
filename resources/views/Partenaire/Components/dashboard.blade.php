@@ -10,16 +10,6 @@
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Tableau de bord</h1>
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Bienvenue, {{$user->username}} ! Voici un résumé de votre activité.</p>
                     </div>
-                    <div class="mt-4 md:mt-0 flex space-x-3">
-                        <a href="#add-equipment" class="inline-flex items-center px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-plus mr-2"></i>
-                            Ajouter un équipement
-                        </a>
-                        <button id="view-public-profile" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md shadow-sm transition-colors">
-                            <i class="fas fa-eye mr-2"></i>
-                            Voir mon profil public
-                        </button>
-                    </div>
                 </div>
                 
                 <!-- Stats cards -->

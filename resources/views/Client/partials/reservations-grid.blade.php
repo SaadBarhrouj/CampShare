@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Reservation 1 -->
-    @foreach( $allReservations as $allRes)
+    @forelse( $allReservations as $allRes)
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
         <div class="relative h-40">
@@ -100,7 +100,11 @@
             </div>
         </div>
     </div>
-    @endforeach
+    @empty
+    <div class="rounded-lg shadow-sm overflow-hidden">
+        <p class="mx-8 text-sm text-gray-600 dark:text-gray-400">Vous n'avez aucune réservation.</p>
+    </div>
+    @endforelse
 
 </div>
 <script>

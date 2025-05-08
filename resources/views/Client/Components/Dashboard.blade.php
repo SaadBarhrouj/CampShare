@@ -66,7 +66,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Reservation 1 -->
-                @foreach($reservations as $res)
+                @forelse($reservations as $res)
 
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                     <div class="relative h-40">
@@ -162,7 +162,11 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="rounded-lg shadow-sm overflow-hidden">
+                    <p class="mx-8 text-sm text-gray-600 dark:text-gray-400">Vous n'avez aucune réservation.</p>
+                </div>
+                @endforelse
 
             </div>
         </div>
@@ -182,7 +186,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Recommendation 1 -->
-                @foreach($similarListings as $item)
+                @forelse($similarListings as $item)
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
                     
                     <a href="{{ route('client.listings.show', $item->lis_id) }}">
@@ -254,7 +258,77 @@
                     </div>
                     </a>
                 </div>
+                @empty
+                @foreach($liss as $lis)
+                <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                    
+                    <a href="{{ route('client.listings.show', $lis->id) }}">
+                    <div class="relative h-48">
+                        <img src="{{ $lis->item?->images?->first() ? asset($lis->item->images->first()->url) : asset('images/item-default.jpg') }}" alt="Image" 
+                             class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h3 class="text-white font-bold text-lg truncate">{{$lis->item->title}}</h3>
+                            <p class="text-gray-200 text-sm">{{$lis->item->category->name}}</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="font-bold text-lg text-gray-900 dark:text-white">{{$lis->item->price_per_day}} MAD</span>
+                                <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                @if($lis->item->averageRating())
+                                    @php
+                                        $rating = $lis->item->averageRating();
+                                        $fullStars = floor($rating);
+                                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                    @endphp
+                                    
+                                    <div class="flex items-center">
+                                        <div class="flex text-amber-400 mr-1">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star"></i>
+                                            @endfor
+                                            
+                                            @if ($hasHalfStar)
+                                                <i class="fas fa-star-half-alt"></i>
+                                            @endif
+                                            
+                                            @for ($i = 0; $i < (5 - $fullStars - ($hasHalfStar ? 1 : 0)); $i++)
+                                                <i class="far fa-star"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500">No ratings yet</div>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div class="text-sm mb-3">
+                            <span class="text-gray-600 dark:text-gray-300">
+                                Dispo. du {{ \Carbon\Carbon::parse($lis->start_date)->format('d M') }} 
+                                au {{ \Carbon\Carbon::parse($lis->end_date)->format('d M') }}
+                            </span>                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-600 dark:text-gray-300">
+                                <span class="font-medium text-green-800 dark:text-green-600">
+                                    <i class="fas fa-map-marker-alt mr-1"></i> 
+                                    {{$lis->city->name}}
+                                </span>
+                            </div>
+                            <a href="{{ route('client.listings.show', $lis->id) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                                Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                    </a>
+                </div>
                 @endforeach
+                @endforelse
                 
             </div>
         </div>

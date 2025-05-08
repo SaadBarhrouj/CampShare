@@ -45,9 +45,11 @@ class ClientController extends Controller
         $reviews = ClientModel::getReviewsAboutMe($user->email);
         $profile = ClientModel::getClientProfile($user->email); 
 
+        $liss = Listing::latest()->take(3)->get();
+
         $notifications = (new NotificationController)->getNotifUser($user->id);
         $totalNotification = (new NotificationController)->totalNotification($user->id);
-        return view('Client.tablea_de_bord_client',compact('totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification','cities'));
+        return view('Client.tablea_de_bord_client',compact('liss', 'totalReservations','totalDepenseByEmail','note_moyenne','user','reservations','allReservations','similarListings','allSimilarListings','reviews','profile','notifications','totalNotification','cities'));
         
     }
     function ShowMesReservationClient () {

@@ -80,22 +80,22 @@
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                                     <div>
                                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
-                                            <span id="viewUsername">{{ $profile->username }}</span>
+                                            <span id="viewUsername">{{ $user->first_name }} {{ $user->last_name }} - {{ $profile->username }}</span>
                                             <span class="ml-3 text-sm font-medium px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md">
                                                 Membre depuis {{ \Carbon\Carbon::parse($profile->created_at)->format('Y') }}
                                             </span>
                                         </h1>
                                         <div class="mt-2 flex items-center text-gray-600 dark:text-gray-300">
                                             <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                                            <span id="viewAddress">{{ $profile->address }}</span>
+                                            <span id="viewAddress"> {{ $user->city->name }} - {{ $profile->address }}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="flex flex-wrap gap-6 mt-6">
+                                <div class="flex flex-wrap gap-16 mt-6">
                                     <div class="flex flex-col items-center">
                                         <div class="text-2xl font-bold text-gray-900 dark:text-white">
-                                            <div class="flex items-center mt-2">
+                                            <div class="flex items-center">
                                                 @if(isset($note_moyenne) && is_numeric($note_moyenne))
                                                     @php
                                                         $rating = min(max($note_moyenne, 0), 5); // Ensure rating is between 0-5
@@ -105,23 +105,12 @@
                                                     @endphp
                                                     
                                                     <div class="flex text-amber-400 mr-1">
-                                                        {{-- Full stars --}}
-                                                        @for ($i = 0; $i < $fullStars; $i++)
+                                                        
                                                             <i class="fas fa-star text-base"></i>
-                                                        @endfor
-                                                        
-                                                        {{-- Half star --}}
-                                                        @if ($hasHalfStar)
-                                                            <i class="fas fa-star-half-alt text-base"></i>
-                                                        @endif
-                                                        
-                                                        {{-- Empty stars --}}
-                                                        @for ($i = 0; $i < $emptyStars; $i++)
-                                                            <i class="far fa-star text-base"></i>
-                                                        @endfor
+                                                       
                                                     </div>
                                                     
-                                                    <span class="text-gray-600 dark:text-gray-300 text-sm ml-1">
+                                                    <span class="ml-1 text-2xl font-bold text-gray-900 dark:text-white">
                                                         {{ number_format($rating, 1) }}
                                                     </span>
                                                 @else
@@ -129,7 +118,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                       
+                                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Note moyenne</div>
                                     </div>
 
                                     <div class="flex flex-col items-center">
@@ -146,21 +135,24 @@
                         </div>
                     </div>
                     <br>
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Email</h2>
-                        <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewEmail">
-                             {{$profile->email}}
-                        </p>
-                        <br>
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Nº téléphone</h2>
-                        <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
-                            {{$profile->phone_number}}
-                        </p>
+                    <div class=" flex gap-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div>
+                            <h2 class="text-md font-bold text-gray-900 dark:text-white mb-1">Email</h2>
+                            <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewEmail">
+                                {{$profile->email}}
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-bold text-gray-900 dark:text-white mb-1">Nº téléphone</h2>
+                            <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
+                                {{$profile->phone_number}}
+                            </p>
+                        </div>
                     </div>
 
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-right">
                         <button onclick="toggleEditMode(true)" 
-                               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                               class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                             <i class="fas fa-edit mr-2"></i> Modifier le profil
                         </button>
                     </div>
@@ -219,39 +211,41 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
-                                    <input type="text" id="phone_number" name="phone_number" value="{{ $profile->phone_number }}"
+                                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
+                                    <input type="password" id="password" name="password" 
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
 
+                                <div>
+                                    <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
+                                    <input type="password" id="confirm_password" name="confirm_password" 
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                
+                                <div>
+                                    <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
+                                    <select id="city" name="city_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                        <option value="">Sélectionnez votre ville</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}" {{ $profile->city_name == $city->name ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div>
                                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse</label>
                                     <input type="text" id="address" name="address" value="{{ $profile->address }}"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
-                                    <div>
-                                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
-                                        <input type="password" id="password" name="password" 
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-
-                                    <div>
-                                        <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
-                                        <input type="password" id="confirm_password" name="confirm_password" 
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
+                                <div>
+                                    <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
+                                    <input type="text" id="phone_number" name="phone_number" value="{{ $profile->phone_number }}"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                </div>
                                     
-                                    <div>
-                                        <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
-                                        <select id="city" name="city_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option value="">Sélectionnez votre ville</option>
-                                            @foreach($cities as $city)
-                                                <option value="{{ $city->id }}" {{ $profile->city_name == $city->name ? 'selected' : '' }}>
-                                                    {{ $city->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    
+                                    
                                     <div class="flex flex-col items-start space-y-2">
                                         <span class=" text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recevoir notifications</span>
                                         
