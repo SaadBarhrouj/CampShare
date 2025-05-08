@@ -23,8 +23,11 @@ class AdminController extends Controller
         // Récupérer les utilisateurs récents (clients et partenaires)
         $recentUsers = User::whereIn('role', ['client', 'partner'])
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
+
+
+        $reservations = Reservation::all();
 
         return view('admin.dashboard', [
             'clientsCount' => $clientsCount,
@@ -32,7 +35,8 @@ class AdminController extends Controller
             'itemsCount' => $itemsCount,
             'categoriesCount' => $categoriesCount,
             'recentUsers' => $recentUsers,
-            'totalUsers' => $clientsCount + $partnersCount
+            'totalUsers' => $clientsCount + $partnersCount,
+            'reservations' => $reservations,
         ]);
     }
 
@@ -147,7 +151,9 @@ class AdminController extends Controller
             'reservations' => DB::table('reservations')->count(),
         ];
 
-        return view('admin.liste-clients-admin', compact('clients', 'stats'));
+        $partnersCount = User::where('role', 'partner')->count();
+
+        return view('admin.liste-clients-admin', compact('clients', 'stats', 'partnersCount'));
     }
 
     public function partners(Request $request)
@@ -194,7 +200,9 @@ class AdminController extends Controller
             'revenue' => DB::table('payments')->sum('amount') ?? 0
         ];
 
-        return view('admin.partners', compact('partners', 'stats', 'sort', 'request'));
+        $clientsCount = User::where('role', 'client')->count();
+
+        return view('admin.partners', compact('partners', 'stats', 'sort', 'request', 'clientsCount'));
     }
 
     public function updateReservationStatus($reservationId, Request $request)

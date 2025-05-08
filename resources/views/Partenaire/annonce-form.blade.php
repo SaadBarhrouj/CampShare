@@ -175,7 +175,7 @@
                                 <label for="city_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
                                 <select id="city_id" name="city_id" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-forest dark:focus:ring-meadow focus:border-forest dark:focus:border-meadow dark:bg-gray-700 dark:text-white" required>
                                     <option value="">Sélectionnez une ville</option>
-                                    @foreach(\App\Models\City::all() as $city)
+                                    @foreach(\App\Models\City::all()->sortBy('name') as $city)
                                         <option value="{{ $city->id }}">{{ $city->name }}</option>
                                     @endforeach
                                 </select>

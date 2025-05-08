@@ -30,6 +30,10 @@
     directement entre particuliers.">
     <meta name="keywords" content="camping, location, matériel, aventure, plein air, partage, communauté">
 
+     <!-- Map dependencies -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <style>
         .flatpickr-calendar { background-color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; width: auto; max-width: 600px; }
         .dark .flatpickr-calendar { background-color: #1f2937; border-color: #374151; }
@@ -152,7 +156,7 @@
 
                         <!-- SOUS-SECTION: Navigation par Onglets -->
                         <div class="border-b border-gray-200 dark:border-gray-700 sticky top-16 bg-gray-50 dark:bg-gray-900 z-30 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:relative lg:top-0 lg:bg-transparent dark:lg:bg-transparent mb-6">
-                             <div class="flex overflow-x-auto scrollbar-hide space-x-6 sm:space-x-8">
+                            <div class="flex overflow-x-auto scrollbar-hide space-x-6 sm:space-x-8">
                                 <button class="tab-button py-3 font-medium text-sm sm:text-base whitespace-nowrap border-b-2" data-target="details-section">
                                     Description
                                 </button>
@@ -269,20 +273,19 @@
                                  @endif
                              </section>
 
-                            <section id="location-section" class="tab-content hidden">
+                            <section id="location-section" class="">
                                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sr-only">Localisation de l'équipement</h2>
                                 <div class="flex items-center text-gray-700 dark:text-gray-300 mb-4 text-base">
                                     <i class="fas fa-map-marker-alt fa-fw mr-2.5 text-gray-400 dark:text-gray-500"></i>
                                     Disponible dans la zone de <span class="font-semibold ml-1">{{ $listing->city?->name ?? 'Ville non spécifiée' }}</span>.
                                 </div>
-                                <div id="map-placeholder" class="mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600">
-                                    <i class="fas fa-map-marked-alt fa-2x mr-2"></i>
-                                    <span>Emplacement approximatif sur la carte</span>
-                                </div>
+                                <div id="listing-map-container" class="mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600"></div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
                                     <i class="fas fa-info-circle mr-1"></i>L'adresse exacte ou le point de rencontre précis vous sera communiqué par le partenaire après la confirmation de votre réservation.
                                 </p>
                             </section>
+
+                            
          
                         </div>
                        
@@ -410,6 +413,66 @@
     </main>
 
     @include('partials.footer')
+
+    
+
+    <!-- Map Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const lat = {{ $listing->latitude }};
+            const lng = {{ $listing->longitude }};
+    
+            const title = @json($listing->item->title);
+            const category = @json($listing->item->category->name);
+            const partner = @json($listing->item->partner->username);
+
+            // Small offset to hide the exact location (±0.01 degrees ≈ ±1km)
+            const offsetLat = lat + (Math.random() - 0.5) * 0.02;
+            const offsetLng = lng + (Math.random() - 0.5) * 0.02;
+    
+            const map = L.map('listing-map-container').setView([offsetLat, offsetLng], 13);
+    
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+    
+            const radiusMeters = 1500; 
+    
+            const circle = L.circle([offsetLat, offsetLng], {
+                color: '#3b82f6',
+                fillColor: '#93c5fd',
+                fillOpacity: 0.3,
+                radius: radiusMeters
+            }).addTo(map);
+    
+            circle.bindPopup(`
+                <div class="flex gap-2 items-center" style="min-width: 250px;">
+                    <div>
+                        <strong>${title}</strong><br>
+                        <small>Catégorie: ${category}</small><br>
+                        <small>Partenaire: ${partner}</small><br>
+                        <em>Zone approximative</em>
+                    </div>
+                </div>
+            `);
+
+            circle.on('mouseover', function () {
+                this.openPopup();
+            });
+            circle.on('mouseout', function () {
+                this.closePopup();
+            });
+
+            bounds.push([loc.offsetLat, loc.offsetLng]);
+
+        });
+    </script>
+    
+    
+
+
+
 
     <!-- === SCRIPTS JAVASCRIPT === -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

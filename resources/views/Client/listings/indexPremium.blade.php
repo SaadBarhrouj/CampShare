@@ -21,6 +21,10 @@
     <meta name="description" content="CampShare - Louez facilement le matériel de camping dont vous avez besoin
     directement entre particuliers.">
     <meta name="keywords" content="camping, location, matériel, aventure, plein air, partage, communauté">
+
+    <!-- Map dependencies -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
 </head>
 
@@ -178,7 +182,7 @@
                                 </div>
                             </div>
                             
-                            <button class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
+                            <button id="toggleMapBtn" class="flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
                                 <i class="fas fa-map-marked-alt mr-2"></i>
                                 <span>Voir la carte</span>
                             </button>
@@ -191,6 +195,26 @@
         <!-- Premium Listings Section -->
         <section class="py-8 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-800 dark:to-gray-800 border-b border-amber-100 dark:border-gray-700 transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                @php
+                    $locations = $premiumListings->map(function($premiumListing) {
+                        return [
+                            'lat' => $premiumListing->latitude,
+                            'lng' => $premiumListing->longitude,
+                            'title' => $premiumListing->item->title,
+                            'url' => route('client.listings.show', $premiumListing->id),
+                            'category' => $premiumListing->item->category->name,
+                            'username' => $premiumListing->item->partner->username,
+                            'image' => $premiumListing->item?->images?->first()
+                                ? asset($premiumListing->item->images->first()->url)
+                                : asset('images/item-default.jpg')
+                        ];
+                    });
+                @endphp
+                
+                <!-- Map -->
+                <div id="listing-map-container" class="hidden mt-4 mb-8 h-80 sm:h-120 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 z-0"></div>
+
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
@@ -272,6 +296,83 @@
     </main>
 
     @include('partials.footer')
+
+        <!-- Map Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const toggleBtn = document.getElementById('toggleMapBtn');
+                const mapContainer = document.getElementById('listing-map-container');
+                const locations = @json($locations);
+                let map = null;
+                let mapInitialized = false;
+        
+                toggleBtn.addEventListener('click', function () {
+                    mapContainer.classList.toggle('hidden');
+        
+                    if (!mapInitialized && !mapContainer.classList.contains('hidden')) {
+                        if (!locations.length) return;
+        
+                        map = L.map('listing-map-container').setView([locations[0].lat, locations[0].lng], 10);
+        
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors',
+                            maxZoom: 19
+                        }).addTo(map);
+        
+                        const bounds = [];
+        
+                        locations.forEach(loc => {
+                            if (loc.lat && loc.lng) {
+                                // Small offset to hide the exact location (±0.01 degrees ≈ ±1km)
+                                const offsetLat = loc.lat + (Math.random() - 0.5) * 0.02;
+                                const offsetLng = loc.lng + (Math.random() - 0.5) * 0.02;
+        
+                                const circle = L.circle([offsetLat, offsetLng], {
+                                    color: '#3b82f6',
+                                    fillColor: '#93c5fd',
+                                    fillOpacity: 0.3,
+                                    radius: 1500 
+                                }).addTo(map);
+        
+                                circle.bindPopup(`
+                                    <div class="flex gap-2 items-center" style="min-width: 250px;">
+                                        <img src="${loc.image}" alt="Image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                        <div>
+                                            <strong>${loc.title}</strong><br>
+                                            <small>Catégorie: ${loc.category}</small><br>
+                                            <small>Partenaire: ${loc.username}</small><br>
+                                            <em>Zone approximative</em>
+                                        </div>
+                                    </div>
+                                `);
+        
+                                circle.on('click', function () {
+                                    window.location.href = loc.url;
+                                });
+    
+                                circle.on('mouseover', function () {
+                                    this.openPopup();
+                                });
+                                circle.on('mouseout', function () {
+                                    this.closePopup();
+                                });
+    
+                                bounds.push([loc.offsetLat, loc.offsetLng]);
+    
+                            }
+                        });
+        
+                        if (bounds.length) map.fitBounds(bounds);
+        
+                        mapInitialized = true;
+                    }
+        
+                    // Change button text
+                    const span = toggleBtn.querySelector('span');
+                    span.textContent = mapContainer.classList.contains('hidden') ? 'Voir la carte' : 'Cacher la carte';
+                });
+            });
+        </script>
 
 </body>
 </html>
