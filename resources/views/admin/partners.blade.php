@@ -268,7 +268,7 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
                     
-                    
+
                     <!-- User menu -->
                     <div class="relative ml-4">
                         <div class="flex items-center space-x-4">
@@ -276,47 +276,58 @@
                             <div class="relative">
                                 <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
                                     <i class="fas fa-bell"></i>
-                                    <span class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">5</span>
+                                    <span
+                                        class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">5</span>
                                 </button>
                             </div>
-                            
-                            <!-- Settings -->
-                            <div class="relative">
-                                <button id="settings-button" class="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                            
+
+
+                            @auth
+                                @php
+                                    $user = $user ?? Auth::user();
+                                @endphp
+                                @if($user)
+                                
+
                             <!-- User profile menu -->
                             <div class="relative">
                                 <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
                                          alt="Admin User" 
                                          class="h-8 w-8 rounded-full object-cover" />
                                     <div class="flex flex-col items-start">
-                                        <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">Mohamed Alami</span>
-                                        <span class="text-xs text-admin-primary dark:text-admin-secondary font-medium">Super Admin</span>
+                                        <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">{{ $user->first_name }} {{ $user->last_name }}</span>
+                                        <span
+                                            class="text-xs text-admin-primary dark:text-admin-secondary font-medium">Super
+                                            Admin</span>
                                     </div>
                                     <i class="fas fa-chevron-down text-sm text-gray-500"></i>
                                 </button>
-                                
+
                                 <!-- User dropdown menu -->
-                                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600 py-1">
-                                    <a href="#profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <div id="user-dropdown"
+                                    class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600 py-1">
+                                    <a href="#profile"
+                                        class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                     </a>
-                                    <a href="#account-settings" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
-                                    </a>
-                                    <a href="#admin-logs" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-history mr-2 opacity-70"></i> Historique d'actions
-                                    </a>
                                     <div class="border-t border-gray-200 dark:border-gray-700"></div>
-                                    <a href="#logout" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <a href="{{ route('logout') }}" 
+                                        class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                     </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
+
+
+                            @endif
+                            @endauth
+
                         </div>
                     </div>
                 </div>
