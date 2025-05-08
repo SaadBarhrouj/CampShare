@@ -210,25 +210,33 @@ class PartenaireController extends Controller
     {
 
         $user = Auth::user();
-        $sumPayment = PartenaireModel::sumPaymentThisMonth($user->email);
+        $sumPayment = PartenaireModel::sumPayment($user->email);
+        $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
         $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
         $NumberPendingReservation = PartenaireModel::getNumberOfPendingReservation($user->email);
         $NumberLocationsEncours= PartenaireModel::getNumberLocationsEncours($user->email);
-        $profile = ClientModel::getClientProfile($user->email); 
+        $profile = PartenaireModel::getPartenaireProfile($user->email); 
+        $cities = PartenaireModel::getCities();
+
 
         return view('Partenaire.Components.Profile', compact(
             'sumPayment',
+            'NumberReservationCompleted',
             'AverageRating',
             'NumberPendingReservation',
             'profile',
-            'NumberLocationsEncours'
+            'NumberLocationsEncours',
+            'cities',
         ));
     }
-public function devenir_partenaire(){
-    $user = Auth::user();
-    PartenaireModel::updaterole($user->email);
-    return redirect()->route('HomePartenaie');
-}
+    public function devenir_partenaire(){
+        $user = Auth::user();
+        PartenaireModel::updaterole($user->email);
+        return redirect()->route('HomePartenaie');
+    }
+    public function ShowDevenirPartenaireForm(){
+        return view('Client.devenir-partenaire');
+    }
 
 
 

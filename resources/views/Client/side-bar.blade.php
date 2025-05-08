@@ -184,11 +184,10 @@
                         @endphp
                         @if($user)
                             @if($user->role == 'partner')
-                                <a href="/Partenaire" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Partenaire</a>
+                                <a href="/Partenaire/Dashboard" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Espace Partenaire</a>
                             @elseif($user->role == 'client')
-                                <button type="button" id="openPartnerModalBtn" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">
-                                    Devenir Partenaire
-                                </button>
+                            <a href="{{ route('DevenirPartenairePage') }}" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">DevenirPartenaire</a>
+
                             @endif
                             <div class="relative ml-4">
                                 <div class="flex items-center space-x-4">
@@ -373,6 +372,8 @@
                         </div>
                     </div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-4">{{$user->username}}</h2>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Membre depuis {{ \Carbon\Carbon::parse($user->created_at)->format('Y') }}</div>
+
                     <div class="flex items-center mt-2">
                         @if(isset($note_moyenne) && is_numeric($note_moyenne))
                             @php

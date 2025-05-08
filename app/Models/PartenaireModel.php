@@ -17,6 +17,14 @@ class PartenaireModel extends Model
             ->whereYear('p.payment_date', Carbon::now()->year)
             ->sum('p.amount');
     }
+    
+        public static function sumPayment($email)
+        {
+            return DB::table('payments as p')
+                ->join('Users as U', 'U.id', '=', 'p.partner_id')
+                ->where('U.email', $email)
+                ->sum('p.amount');
+        }
     public static function getNumberCompletedReservation($email){
         return DB::table('users as U')
             ->join('reservations as R', 'R.partner_id', '=', 'U.id')
@@ -264,11 +272,17 @@ class PartenaireModel extends Model
         ->limit(3)       
         ->get();
     }
+    public static function getCities(){
+        return DB::table('cities as c')
+        ->select('c.name','c.id')  
+        ->get();
+    }
 
     public static function getPartenaireProfile($email)
     {
         return DB::table('users as u')
             ->join('reviews as r', 'r.reviewee_id', '=', 'u.id')
+            ->join('cities as c','c.id','=','u.city_id')
             ->where('u.email', $email)
             ->select(
                 'u.first_name',
@@ -279,6 +293,7 @@ class PartenaireModel extends Model
                 'u.address',
                 'u.avatar_url',
                 'u.created_at',
+                'c.name as city_name',
                 DB::raw("COALESCE(SUM(CASE WHEN r.type = 'forPartner' THEN 1 ELSE 0 END), 0) as review_count"),
                 DB::raw("
                 COALESCE(NULLIF(AVG(CASE WHEN r.type = 'forPartner' THEN r.rating ELSE NULL END), 0), 5)
@@ -294,7 +309,8 @@ class PartenaireModel extends Model
                 'u.phone_number',
                 'u.address',
                 'u.avatar_url',
-                'u.created_at'
+                'u.created_at',
+                'c.name',
             )
             ->first();
     }

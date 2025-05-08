@@ -22,6 +22,8 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
+
+
 // Listings Client Routes
 Route::get('/listings/all', [ListingController::class, 'indexAll'])->name('client.listings.indexAll');
 Route::get('/listings/premium', [ListingController::class, 'indexPremium'])->name('client.listings.indexPremium');
@@ -30,7 +32,7 @@ Route::get('/listings', [ListingController::class, 'index'])->name('client.listi
 
 
 // Partner Routes
-Route::get('/Partenaire', [PartenaireController::class, 'ShowHomePartenaire'])->name('HomePartenaie');
+Route::get('/Partenaire/Dashboard', [PartenaireController::class, 'ShowHomePartenaire'])->name('HomePartenaie');
 Route::get('/Partenaire/MesEquipement', [PartenaireController::class, 'ShowMesEquipement'])->name('MesEquipement');
 Route::get('/Partenaire/Mesannonces', [PartenaireController::class, 'ShowMesAnnonces'])->name('HomePartenaie');
 Route::get('/Partenaire/DemandeLocation', [PartenaireController::class, 'ShowDemandeLocation'])->name('HomePartenaie');
@@ -63,7 +65,10 @@ Route::get('/partenaire/equipements/{item}/details', [PartenaireController::clas
 Route::delete('/partenaire/equipements/delete-all', [PartenaireController::class, 'deleteAllEquipements'])->name('partenaire.equipements.delete-all');
 Route::get('/profile_partenaire', [PartenaireController::class, 'voir_profile_partenaire'])->name('partenaire.profile');
 
-Route::get('/devenir_partenaire', [PartenaireController::class, 'devenir_partenaire'])->name('devenir_partenaire');
+
+
+Route::get('/devenir_partenaire_page', [PartenaireController::class, 'ShowDevenirPartenaireForm'])->name('DevenirPartenairePage');
+Route::post('/devenir_partenaire', [PartenaireController::class, 'devenir_partenaire'])->name('devenir_partenaire');
 
 
 

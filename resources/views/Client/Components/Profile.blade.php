@@ -226,21 +226,20 @@
 
                                 <div>
                                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse</label>
-                                    <input type="text" id="address" name="address" value="{{ $profile->address }}"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                    <input type="text" id="address" name="address" value="{{ $profile->address }}"class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
                                     <div>
                                         <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
                                         <input type="password" id="password" name="password" 
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     </div>
-
                                     <div>
                                         <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
                                         <input type="password" id="confirm_password" name="confirm_password" 
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     </div>
-                            </div>
+                                </div>
+                                
 
                             <div class="flex justify-end space-x-4">
                                 <button type="button" onclick="toggleEditMode(false)" 

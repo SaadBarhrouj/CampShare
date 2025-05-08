@@ -1,3 +1,213 @@
+<style>
+        /* Navigation hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Active link style */
+        .active-nav-link {
+            position: relative;
+        }
+        
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFAA33;
+        }
+        
+        /* Input styles */
+        .custom-input {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .custom-input:focus {
+            box-shadow: 0 0 0 3px rgba(45, 95, 43, 0.2);
+        }
+        
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        .toggle-switch input:checked + .slider {
+            background-color: #2D5F2B;
+        }
+        
+        .dark .toggle-switch input:checked + .slider {
+            background-color: #4F7942;
+        }
+        
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Sidebar active */
+        .sidebar-link2.active {
+            background-color: rgba(45, 95, 43, 0.1);
+            color: #2D5F2B;
+            border-left: 4px solid #2D5F2B;
+        }
+        
+        .dark .sidebar-link2.active {
+            background-color: rgba(79, 121, 66, 0.2);
+            color: #4F7942;
+            border-left: 4px solid #4F7942;
+        }
+        
+        /* Equipment card hover effect */
+        .equipment-card {
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Chat styles */
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        
+        .chat-message.outgoing {
+            justify-content: flex-end;
+        }
+        
+        .chat-bubble {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        
+        .chat-message.incoming .chat-bubble {
+            background-color: #f3f4f6;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .dark .chat-message.incoming .chat-bubble {
+            background-color: #374151;
+        }
+        
+        .chat-message.outgoing .chat-bubble {
+            background-color: #2D5F2B;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .dark .chat-message.outgoing .chat-bubble {
+            background-color: #4F7942;
+        }
+
+        /* Styles pour les boutons principaux - action buttons */
+        button[type="submit"],
+        a.inline-flex,
+        button.px-4.py-2,
+        button.px-6.py-2,
+        .w-full.md\\:w-auto.px-4.py-2,
+        button.inline-flex {
+            background-color: #2D5F2B !important; /* forest color */
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+        
+        /* Exceptions pour les boutons retour/annuler */
+        button[id^="back-to-step"],
+        button[onclick="toggleEditMode(false)"] {
+            background-color: white !important;
+            color: #374151 !important;
+            border: 1px solid #D1D5DB !important;
+        }
+        
+        /* Hover state for action buttons */
+        button[type="submit"]:hover,
+        a.inline-flex:hover,
+        button.px-4.py-2:hover,
+        button.px-6.py-2:hover,
+        .w-full.md\\:w-auto.px-4.py-2:hover,
+        button.inline-flex:hover {
+            background-color: #215A1A !important; /* darker forest */
+        }
+
+
+
+    </style>  
     <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -184,7 +394,7 @@
                         </div>
                     </div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-4">{{ $user->username }}</h2>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis {{ \Carbon\Carbon::parse($user->created_at)->format('Y') }}</div>
                     <div class="flex items-center mt-2">
                     @php
                         $rating = $AverageRating;  
@@ -206,31 +416,31 @@
                 </div>
                 
                 <nav class="mt-6 space-y-1">
-                    <a href="/Partenaire"  class="sidebar-link active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
+                    <a href="/Partenaire/Dashboard"  class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-tachometer-alt w-5 mr-3"></i>
                         Tableau de bord
                     </a>
-                    <a href="/Partenaire/MesEquipement" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/Partenaire/MesEquipement" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-campground w-5 mr-3"></i>
                         Mes équipements
                     </a>
-                    <a href="/Partenaire/Mesannonces"  class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/Partenaire/Mesannonces"  class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-bullhorn w-5 mr-3"></i>
                         Mes annonces
                     </a>
-                    <a href="/Partenaire/DemandeLocation" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/Partenaire/DemandeLocation" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-clipboard-list w-5 mr-3"></i>
                         Demandes de location
                         <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberPendingReservation}}</span>
                     </a>
-                    <a href="/Partenaire/LocationEnCours"  class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/Partenaire/LocationEnCours"  class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-exchange-alt w-5 mr-3"></i>
                         Locations en cours
                         <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberLocationsEncours}}</span>
                     </a>
                     
                  
-                    <a href="/Partenaire/AvisRecus" class="flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/Partenaire/AvisRecus" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-star w-5 mr-3"></i>
                         Avis reçus
                     </a>
@@ -274,8 +484,8 @@
                             <i class="fas fa-check text-white text-xs"></i>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">{{$user->username}}</h2>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis 2021</div>
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mt-3">{{$user->username}}j</h2>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis {{ \Carbon\Carbon::parse($user->created_at)->format('Y') }}</div>
                     <div class="flex items-center mt-1">
                         <div class="flex text-amber-400">
                             <i class="fas fa-star"></i>
@@ -340,3 +550,207 @@
                 </nav>
             </div>
         </div>
+        
+    <script>
+
+
+    function setActiveSidebarLink() {
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar-link2');
+            
+            sidebarLinks.forEach(link => {
+                // Remove 'active' class from all links first
+                link.classList.remove('active');
+                
+                // Check if the link's href matches the current path
+                const linkPath = link.getAttribute('href');
+                if (currentPath === linkPath || 
+                    (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', setActiveSidebarLink);
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // User dropdown toggle
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userDropdown = document.getElementById('user-dropdown');
+        
+        userMenuButton?.addEventListener('click', () => {
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        // Notifications dropdown toggle
+        const notificationsButton = document.getElementById('notifications-button');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        
+        notificationsButton?.addEventListener('click', () => {
+            notificationsDropdown.classList.toggle('hidden');
+        });
+        
+        // Messages dropdown toggle
+        const messagesButton = document.getElementById('messages-button');
+        const messagesDropdown = document.getElementById('messages-dropdown');
+        
+        messagesButton?.addEventListener('click', () => {
+            messagesDropdown.classList.toggle('hidden');
+        });
+        
+        // Hide dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            // User dropdown
+            if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+            
+            // Notifications dropdown
+            if (notificationsButton && !notificationsButton.contains(e.target) && notificationsDropdown && !notificationsDropdown.contains(e.target)) {
+                notificationsDropdown.classList.add('hidden');
+            }
+            
+            // Messages dropdown
+            if (messagesButton && !messagesButton.contains(e.target) && messagesDropdown && !messagesDropdown.contains(e.target)) {
+                messagesDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Mobile sidebar toggle
+        const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        
+        mobileSidebarToggle?.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('-translate-x-full');
+            mobileSidebarOverlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        });
+        
+        closeMobileSidebar?.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileSidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        mobileSidebarOverlay?.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileSidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Sidebar link active state
+
+
+
+        
+        // Equipment settings modal
+        const equipmentSettingsLinks = document.querySelectorAll('a[href="#equipment-status"]');
+        const equipmentSettingsModal = document.getElementById('equipment-settings-modal');
+        const closeEquipmentSettings = document.getElementById('close-equipment-settings');
+        const cancelEquipmentSettings = document.getElementById('cancel-equipment-settings');
+        
+        equipmentSettingsLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                equipmentSettingsModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+        
+        closeEquipmentSettings?.addEventListener('click', () => {
+            equipmentSettingsModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        cancelEquipmentSettings?.addEventListener('click', () => {
+            equipmentSettingsModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Close modal when clicking outside
+        equipmentSettingsModal?.addEventListener('click', (e) => {
+            if (e.target === equipmentSettingsModal) {
+                equipmentSettingsModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+        
+        // Message modal
+        const messageButtons = document.querySelectorAll('button .fas.fa-comment-alt, .fas.fa-envelope');
+        const messageModal = document.getElementById('message-modal');
+        const closeMessageModal = document.getElementById('close-message-modal');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        
+        messageButtons.forEach(button => {
+            button.parentElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                messageModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                // Scroll to bottom of chat
+                const chatContainer = document.querySelector('.chat-container');
+                if (chatContainer) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                // Focus input
+                messageInput?.focus();
+            });
+        });
+        
+        closeMessageModal?.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Close modal when clicking outside
+        messageModal?.addEventListener('click', (e) => {
+            if (e.target === messageModal) {
+                messageModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+        
+        // Handle message form submission
+        messageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+            if (message) {
+                // Create and append new message
+                const chatContainer = document.querySelector('.chat-container');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'chat-message outgoing';
+                
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+                
+                newMessage.innerHTML = `
+                    <div class="chat-bubble">
+                        <p class="text-white">${message}</p>
+                        <p class="text-xs text-gray-300 mt-1">${timeString}</p>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(newMessage);
+                messageInput.value = '';
+                
+                // Scroll to bottom of chat
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        });
+        
+        // View public profile button
+        const viewPublicProfileButton = document.getElementById('view-public-profile');
+        
+        viewPublicProfileButton?.addEventListener('click', () => {
+            window.location.href = 'profil-partenaire-public.html';
+        });
+    </script>
