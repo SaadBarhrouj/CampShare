@@ -386,8 +386,8 @@
             <div class="p-5">
                 <div class="mb-6 px-3 flex flex-col items-center">
                     <div class="relative">
-                        <img src="{{$user->avatar_url}}"  
-                             alt=src="{{$user->username}}"  
+                        <img src="{{ asset($user->avatar_url) }}"  
+                             alt="{{$user->username}}"  
                              class="w-24 h-24 rounded-full border-4 border-forest dark:border-meadow object-cover" />
                         <div class="absolute bottom-1 right-1 bg-green-500 p-1 rounded-full border-2 border-white dark:border-gray-800">
                             <i class="fas fa-check text-white text-xs"></i>

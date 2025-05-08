@@ -141,7 +141,7 @@
                                             En cliquant sur 'Accepter et Continuer', vous confirmez avoir lu, compris et accepté ces engagements pour rejoindre la communauté des partenaires Campshare.
                                         </p>
                                     </p>
-                                </div>
+                                </div>class="flex items-center space-x-4"
                                 <div class="flex justify-end space-x-3 border-t border-gray-200 dark:border-gray-700 pt-4">
                                      <button id="cancelPartnerModalBtn" type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition duration-150 ease-in-out">
                                         Annuler
@@ -150,6 +150,16 @@
                                         Accepter et Continuer
                                     </a>
                                 </div>
+                                <div class="flex justify-end space-x-3 border-t border-gray-200 dark:border-gray-700 pt-4">
+                                    <form method="POST" action="{{ route('devenir_partenaire') }}">
+                                        @csrf
+                                    <button id="cancelPartnerModalBtn"  class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition duration-150 ease-in-out">
+                                        Annuler
+                                    </button>
+                                    <button type="submit" id="confirmPartnerBtn" class="px-4 py-2 bg-forest text-white rounded-md hover:bg-opacity-90 dark:bg-sunlight dark:text-gray-900 dark:hover:bg-opacity-90 transition duration-150 ease-in-out shadow-sm">
+                                        Accepter et Continuer
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         @endif

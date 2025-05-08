@@ -67,7 +67,7 @@
                         <div class="flex flex-col md:flex-row items-start md:items-center">
                             <div class="relative mb-6 md:mb-0 md:mr-8">
                                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
-                                    <img src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
+                                    <img src="{{ asset($profile->avatar_url) ?? 'https://via.placeholder.com/150' }}" 
                                          alt="{{ $profile->username }}" 
                                          class="w-full h-full object-cover" />
                                 </div>
@@ -174,7 +174,7 @@
                             <div class="flex flex-col md:flex-row items-start md:items-center mb-8">
                                 <div class="relative mb-6 md:mb-0 md:mr-8">
                                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
-                                        <img id="avatarPreview" src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
+                                        <img id="avatarPreview" src="{{ asset($profile->avatar_url) ?? 'https://via.placeholder.com/150' }}" 
                                              alt="{{ $profile->username }}" 
                                              class="w-full h-full object-cover" />
                                     </div>
@@ -252,20 +252,24 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
-                                    </div>
-                                    <div>
-                                        <label class="flex items-center">
-                                            <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte:</span>
-                                                <label class="switch">
-                                                <input type="checkbox" id="user-active-toggle" 
-                                                    {{ $profile->is_subscriber == 1 ? 'checked' : '' }}
-                                                    onchange="document.getElementById('is_subscriber_field').value = this.checked ? '1' : '0'">
-                                                <input type="hidden" id="is_subscriber_field" name="is_subscriber" value="{{ $profile->is_subscriber }}">
-                                                <span class="slider"></span>
-                                            </label>
+                                    <div class="flex flex-col items-start space-y-2">
+                                        <span class=" text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recevoir notifications</span>
+                                        
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="user-active-toggle"
+                                                class="sr-only peer"
+                                                {{ $profile->is_subscriber == 1 ? 'checked' : '' }}
+                                                onchange="document.getElementById('is_subscriber_field').value = this.checked ? '1' : '0'">
+                                            
+                                            <div class="w-11 h-6 bg-gray-300 peer-checked:bg-green-500 rounded-full peer -ransition-all duration-300 ease-in-out">
+                                            </div>
+                                            
+                                            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-full"></div>
                                         </label>
-                                    </div> 
+                                        
+                                        <input type="hidden" id="is_subscriber_field" name="is_subscriber" value="{{ $profile->is_subscriber }}">
+                                    </div>
+                                     
                                 </div>
                             <div class="flex justify-end space-x-4">
                                 <button type="button" onclick="toggleEditMode(false)" 
@@ -326,28 +330,13 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            // Update all fields including avatar
-            document.getElementById('viewUsername').textContent = data.user.username;
-            document.getElementById('viewAddress').textContent = data.user.address;
-            document.getElementById('viewEmail').textContent = data.user.email;
-            document.getElementById('viewPhone').textContent = data.user.phone_number;
-            
-            // Update avatar in view mode
-            const avatarView = document.querySelector('#profileView img');
-            if (data.avatar_url) {
-                avatarView.src = data.avatar_url;
-            }
-            
-            toggleEditMode(false);
-        } else {
-            alert('Error: ' + (data.message || 'Une erreur est survenue'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Une erreur est survenue: ' + error.message);
-    });
+    if (data.success) {
+        window.location.href = "{{ route('HomeClient.profile') }}";
+    } else {
+        alert('Error: ' + (data.message || 'Une erreur est survenue'));
+    }
+})
+
 });
 </script>
 <script>

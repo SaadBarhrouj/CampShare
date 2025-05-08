@@ -166,20 +166,19 @@ class ClientController extends Controller
     public function update(Request $request)
 {
     $user = Auth::user();
-    
+
     $validated = $request->validate([
         'username' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
         'phone_number' => 'nullable|string|max:20',
         'address' => 'nullable|string|max:255',
-        'password' => 'nullable|string|min:8|max:255', // Make password optional
-        'confirm_password' => 'required_with:password|same:password', // Only required if password exists
+        'password' => 'nullable|string|min:8|max:255',
+        'confirm_password' => 'required_with:password|same:password',
         'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'is_subscriber' =>'nullable',
         'city_id'=>'nullable',
     ]);
 
-    // Handle password update
     if ($request->filled('password')) {
         $validated['password'] = Hash::make($validated['password']);
     } else {
@@ -187,54 +186,49 @@ class ClientController extends Controller
     }
     unset($validated['confirm_password']);
 
-    // Handle avatar upload
     if ($request->hasFile('avatar')) {
-        // Delete old avatar if it exists
         if ($user->avatar_url && File::exists(public_path($user->avatar_url))) {
             File::delete(public_path($user->avatar_url));
         }
 
-        // Ensure directory exists
         if (!File::exists(public_path('images'))) {
             File::makeDirectory(public_path('images'), 0755, true);
         }
 
-        // Store with original filename in public/images
         $file = $request->file('avatar');
         $filename = $file->getClientOriginalName();
         $file->move(public_path('images'), $filename);
-        $validated['avatar_url'] = '/images/' . $filename;
+        $validated['avatar_url'] = 'images/' . $filename;
     }
 
-
     $user->update($validated);
-    
-    return response()->json([
-        'success' => true,
-        'user' => $user,
-        'avatar_url' => $user->avatar_url // Return updated avatar URL if changed
-    ]);
+
+    if ($request->expectsJson()) {
+        return response()->json(['success' => true]);
+    }
+
+    return redirect()->route('HomeClient.profile')->with('success', 'Profil mis à jour avec succès.');
 }
 
 
 
     public function cancel($id)
-{
-    try {
-        $reservation = Reservation::findOrFail($id);
+    {
+        try {
+            $reservation = Reservation::findOrFail($id);
 
-        $reservation->update(['status' => 'canceled']);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Réservation annulée avec succès'
-        ]);
+            $reservation->update(['status' => 'canceled']);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Réservation annulée avec succès'
+            ]);
 
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Erreur lors de l\'annulation: ' . $e->getMessage()
-        ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'annulation: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
 }
