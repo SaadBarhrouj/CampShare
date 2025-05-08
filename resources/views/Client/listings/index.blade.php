@@ -213,6 +213,7 @@
                     });
                 @endphp
                 
+                <!-- Map -->
                 <div id="listing-map-container" class="hidden mt-4 mb-8 h-80 sm:h-120 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 z-0"></div>
 
                 <div class="flex items-center justify-between mb-6">
