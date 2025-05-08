@@ -57,12 +57,12 @@
             
             <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-3 mb-4">
                 <div class="flex justify-between text-sm mb-1">
-                    <span class="text-gray-600 dark:text-gray-400">Date:</span>
+                    <span class="text-gray-600 dark:text-gray-400">Durée de résérvation</span>
                     <span class="font-medium text-gray-900 dark:text-white">{{$allRes->start_date}} - {{$allRes->end_date}}</span>
                 </div>
                 <div class="flex justify-between text-sm mb-1">
-                    <span class="text-gray-600 dark:text-gray-400">Prix:</span>
-                    <span class="font-medium text-gray-900 dark:text-white">{{$allRes->montant_paye}}</span>
+                    <span class="text-gray-600 dark:text-gray-400">Prix</span>
+                    <span class="font-medium text-gray-900 dark:text-white">{{$allRes->montant_paye}} MAD</span>
                 </div>
               
             </div>

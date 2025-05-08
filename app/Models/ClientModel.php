@@ -166,6 +166,7 @@ class ClientModel extends Model
                 'rv.created_at',
                 'rv.type',
                 'reviewer.username as reviewer_name', // The person who wrote the review
+                'reviewer.id as reviewer_id',
                 'reviewer.avatar_url as reviewer_avatar', // Their avatar
                 'reviewee.username as reviewee_name', // You (for reference if needed)
                 DB::raw("CASE 
