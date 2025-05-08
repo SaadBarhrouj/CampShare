@@ -244,7 +244,15 @@ class ClientModel extends Model
                     ->whereRaw('similar_items.id != li.id'); 
             })
             ->join('listings as ls', 'similar_items.id', '=', 'ls.item_id')
-            ->leftJoin('images', 'similar_items.id', '=', 'images.item_id')
+            ->leftJoin(DB::raw('(
+                SELECT item_id, url 
+                FROM images 
+                WHERE id IN (
+                    SELECT MIN(id) 
+                    FROM images 
+                    GROUP BY item_id
+                )
+            ) as images'), 'similar_items.id', '=', 'images.item_id')
             ->leftJoin('reviews as item_reviews', function($join) {
                 $join->on('item_reviews.item_id', '=', 'similar_items.id')
                     ->where('item_reviews.type', 'forObject');
@@ -252,12 +260,13 @@ class ClientModel extends Model
             ->where('u.email', $email)
             ->where('ls.status', 'active')
             ->select(
-                DB::raw('MIN(images.url) AS image_url'),
+                'images.url AS image_url',
                 'similar_items.price_per_day',
                 'c.name as category_name',
                 'similar_items.title as listing_title',
                 'i.name as city_name',
                 'ls.start_date',
+                'ls.id as lis_id',
                 'ls.end_date',
                 'ls.is_premium',  // Add this to identify premium listings
                 DB::raw('ROUND(AVG(item_reviews.rating), 1) as avg_rating'),
@@ -271,11 +280,13 @@ class ClientModel extends Model
                 'i.name',
                 'ls.start_date',
                 'ls.end_date',
-                'ls.is_premium'
+                'ls.is_premium',
+                'images.url'
             )
             ->orderBy('ls.is_premium', 'desc')  // Premium listings first
             ->orderBy('avg_rating', 'desc')     // Then by highest rating
             ->orderBy('ls.start_date', 'asc')    // Then by availability
+            ->take(41)
             ->get();
     }
 

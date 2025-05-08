@@ -71,16 +71,25 @@
                 <p class="text-gray-600 dark:text-gray-400 mt-1">Voici quelques équipements que vous pouvez utiliser dans votre prochain camping!</p>
             </div>
                 
+            <div class="flex justify-end">
+                <a href="{{ route('client.listings.index') }}"
+                    class="inline-block mb-8 px-4 py-2 bg-forest text-white text-sm font-medium rounded hover:bg-green-700 transition">
+                    Voir tous les équipements
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Recommendation 1 -->
                 @foreach($allSimilarListings as $item1)
-                <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden relative">
                     @if($item1->is_premium)
                         <div class="absolute top-2 left-2 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                             Premium
                         </div>
-                     @endif
+                    @endif
+                    <a href="{{ route('client.listings.show', $item1->lis_id) }}">
                     <div class="relative h-48">
                         <img src="{{ $item1->image_url }}" alt="Image" 
                              class="w-full h-full object-cover" />
@@ -140,16 +149,17 @@
                         
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-600 dark:text-gray-300">
-                                <span class="font-medium text-purple-600 dark:text-purple-400">
+                                <span class="font-medium text-green-700 dark:text-green-600">
                                     <i class="fas fa-map-marker-alt mr-1"></i> 
                                     {{$item1->city_name}}
                                 </span>
                             </div>
-                            <a href="{{ route('client.listings.show', 1) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                            <a href="{{ route('client.listings.show', $item1->lis_id) }}" class="px-3 py-1.5 bg-forest hover:bg-green-700 text-white text-sm rounded-md transition-colors">
                                 Voir les détails
                             </a>
                         </div>
                     </div>
+                    </a>
                 </div>
                 @endforeach
                 
