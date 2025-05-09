@@ -488,6 +488,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
     }
+
+    const openModalBtn = document.getElementById('openPartnerModalBtn');
+    const partnerModal = document.getElementById('partnerAcceptModal');
+    if (openModalBtn && partnerModal) {
+        const closeModalBtn = document.getElementById('closePartnerModalBtn');
+        const cancelModalBtn = document.getElementById('cancelPartnerModalBtn');
+        const openModal = () => {
+            partnerModal.classList.remove('hidden');
+            partnerModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeModal = () => {
+            partnerModal.classList.add('hidden');
+            partnerModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+        openModalBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            openModal();
+        });
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', closeModal);
+        }
+        if (cancelModalBtn) {
+            cancelModalBtn.addEventListener('click', closeModal);
+        }
+        partnerModal.addEventListener('click', (event) => {
+            if (event.target === partnerModal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !partnerModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    }
+
 });
 
 
@@ -536,43 +574,7 @@ links.forEach(link => {
     });
 });
       
-document.addEventListener('DOMContentLoaded', function() {
-    const openModalBtn = document.getElementById('openPartnerModalBtn');
-    const partnerModal = document.getElementById('partnerAcceptModal');
-    if (openModalBtn && partnerModal) {
-        const closeModalBtn = document.getElementById('closePartnerModalBtn');
-        const cancelModalBtn = document.getElementById('cancelPartnerModalBtn');
-        const openModal = () => {
-            partnerModal.classList.remove('hidden');
-            partnerModal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        };
-        const closeModal = () => {
-            partnerModal.classList.add('hidden');
-            partnerModal.classList.remove('flex');
-            document.body.style.overflow = '';
-        };
-        openModalBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            openModal();
-        });
-        if (closeModalBtn) {
-            closeModalBtn.addEventListener('click', closeModal);
-        }
-        if (cancelModalBtn) {
-            cancelModalBtn.addEventListener('click', closeModal);
-        }
-        partnerModal.addEventListener('click', (event) => {
-            if (event.target === partnerModal) {
-                closeModal();
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && !partnerModal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-    }
-});
+
+    
 
 

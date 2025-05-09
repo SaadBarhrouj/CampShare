@@ -312,9 +312,13 @@
                         <i class="fas fa-arrow-left mr-2"></i> Retourner à mon espace
                     </a>
                     
-                    <a href="{{ url('/devenir_partenaire') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-sunlight hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sunlight">
-                        <i class="fas fa-check mr-2"></i> J'accepte et je continue
-                    </a>
+                    <form method="POST" action="{{ route('devenir_partenaire') }}">
+                        @csrf
+                        <button type="submit" id="confirmPartnerBtn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-sunlight hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sunlight">
+                            <i class="fas fa-check mr-2"></i> J'accepte et je continue
+                        </button>
+                    </form> 
+
                 </div>
                 
                 <div class="mt-4 text-center">

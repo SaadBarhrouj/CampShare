@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         @if($user->role == 'client')
-                        <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto  flex items-center justify-center" style="background: rgba(0, 0, 0, 0.6)" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden max-w-2xl w-full p-6 m-4">
                                 <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
                                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
@@ -142,14 +142,19 @@
                                         </p>
                                     </p>
                                 </div>
+                                
                                 <div class="flex justify-end space-x-3 border-t border-gray-200 dark:border-gray-700 pt-4">
-                                     <button id="cancelPartnerModalBtn" type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition duration-150 ease-in-out">
-                                        Annuler
-                                    </button>
-                                    <a href="/devenir_partenaire" id="confirmPartnerBtn" class="px-4 py-2 bg-forest text-white rounded-md hover:bg-opacity-90 dark:bg-sunlight dark:text-gray-900 dark:hover:bg-opacity-90 transition duration-150 ease-in-out shadow-sm">
-                                        Accepter et Continuer
-                                    </a>
+                                    <form method="POST" action="{{ route('devenir_partenaire') }}">
+                                        @csrf
+                                        <a id="cancelPartnerModalBtn"  class="cursor-pointer mr-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition duration-150 ease-in-out">
+                                            Annuler
+                                        </a>
+                                        <button type="submit" id="confirmPartnerBtn" class="cursor-pointer px-4 py-2 bg-forest text-white rounded-md hover:bg-opacity-90 dark:bg-sunlight dark:text-gray-900 dark:hover:bg-opacity-90 transition duration-150 ease-in-out shadow-sm">
+                                            Accepter et Continuer
+                                        </button>
+                                    </form> 
                                 </div>
+
                             </div>
                         </div>
                         @endif
