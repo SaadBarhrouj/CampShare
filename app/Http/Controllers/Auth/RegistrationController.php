@@ -79,11 +79,11 @@ class RegistrationController extends Controller
 
 
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
-                $imagePath = $this->storeUploadedFile($request->file('image'), 'storage/profile_images');
+                $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
             }
 
-            $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'storage/cin_images');
-            $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'storage/cin_images');
+            $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'cin_images');
+            $cinVersoPath = $this->storeUploadedFile($request->file('cin_verso'), 'cin_images');
 
              if ($cinRectoPath === null || $cinVersoPath === null) {
                  throw new \Exception("Erreur lors du traitement des fichiers CIN requis.");
@@ -97,7 +97,7 @@ class RegistrationController extends Controller
                 'phone_number'  => $request->phone_number,
                 'email'         => $request->email,
                 'password'      => Hash::make($request->password),
-                'avatar_url'    => $imagePath,
+                'avatar_url'    => 'storage/' . $imagePath,
                 'cin_recto'     => $cinRectoPath,
                 'cin_verso'     => $cinVersoPath,
                 'role'          => ($request->has('role') && $request->input('role') === 'partner') ? 'partner' : 'client',

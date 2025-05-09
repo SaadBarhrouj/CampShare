@@ -45,7 +45,7 @@ class ClientController extends Controller
         $reviews = ClientModel::getReviewsAboutMe($user->email);
         $profile = ClientModel::getClientProfile($user->email); 
 
-        $liss = Listing::latest()->take(3)->get();
+        $liss = Listing::latest()->where('status', 'active')->take(3)->get();
 
         $notifications = (new NotificationController)->getNotifUser($user->id);
         $totalNotification = (new NotificationController)->totalNotification($user->id);
@@ -189,18 +189,12 @@ class ClientController extends Controller
     unset($validated['confirm_password']);
 
     if ($request->hasFile('avatar')) {
-        if ($user->avatar_url && File::exists(public_path($user->avatar_url))) {
-            File::delete(public_path($user->avatar_url));
-        }
-
-        if (!File::exists(public_path('images'))) {
-            File::makeDirectory(public_path('images'), 0755, true);
-        }
 
         $file = $request->file('avatar');
-        $filename = $file->getClientOriginalName();
-        $file->move(public_path('images'), $filename);
-        $validated['avatar_url'] = 'images/' . $filename;
+
+        $filePath = $file->store('profile_images', 'public');
+
+        $validated['avatar_url'] = 'storage/' . $filePath;
     }
 
     $user->update($validated);
