@@ -144,7 +144,6 @@
 
 
 
-    <div class="flex flex-col md:flex-row pt-16">
         <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
             <div class="py-8 px-4 md:px-8">
                 <!-- Page header -->
@@ -298,7 +297,6 @@
                 </div>
             </div>
         </main>
-    </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM loaded - script running');
