@@ -136,7 +136,6 @@
         ->paginate(5);
 @endphp
 
-<div class="flex flex-col md:flex-row pt-16">
     <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div class="py-8 px-4 md:px-8">
             <!-- Page header -->
@@ -223,7 +222,6 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Statut</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Prix</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Lieu</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
                                     <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
@@ -234,7 +232,7 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if($annonce->item->images->isNotEmpty())
-                                                    <img class="h-10 w-10 rounded-md object-cover" src="{{ asset('storage/' . $annonce->item->images->first()->url) }}" alt="{{ $annonce->title }}">
+                                                    <img class="h-10 w-10 rounded-md object-cover" src="{{ asset($annonce->item->images->first()->url) }}" alt="{{ $annonce->title }}">
                                                 @else
                                                     <div class="h-10 w-10 rounded-md bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                                                         <i class="fas fa-campground text-gray-400 dark:text-gray-500"></i>
@@ -244,9 +242,6 @@
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-white">
                                                     {{ $annonce->title }}
-                                                </div>
-                                                <div class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                                                    {{ $annonce->description }}
                                                 </div>
                                             </div>
                                         </div>
@@ -268,11 +263,6 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 dark:text-white">{{ $annonce->city_name }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        <span title="Dernière mise à jour: {{ $annonce->updated_at->format('d/m/Y H:i') }}">
-                                            {{ $annonce->created_at->format('d/m/Y') }}
-                                        </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex space-x-2 justify-end">
@@ -320,7 +310,6 @@
             </div>
         </div>
     </main>
-</div> 
 <script>
     function sendFilterRequest() {
         var formData = new FormData(document.getElementById('filters-form'));  // Get all the form data

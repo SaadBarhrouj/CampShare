@@ -220,6 +220,7 @@ class PartenaireController extends Controller
 
 
         return view('Partenaire.Components.Profile', compact(
+            'user',
             'sumPayment',
             'NumberReservationCompleted',
             'AverageRating',

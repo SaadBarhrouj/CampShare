@@ -145,7 +145,7 @@
                 <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden">
                     <div class="relative h-48">
                         @if($equipment->images && count($equipment->images) > 0)
-                            <img src="{{ asset('storage/' . $equipment->images[0]->url) }}" 
+                            <img src="{{ asset($equipment->images[0]->url) }}" 
                                  alt="{{ $equipment->title }}" 
                                  class="w-full h-full object-cover">
                         @else
@@ -719,7 +719,7 @@ editButtons.forEach(button => {
                         imgContainer.dataset.imageId = image.id;
                         
                         const img = document.createElement('img');
-                        img.src = `/storage/${image.url}`;
+                        img.src = `/${image.url}`;
                         img.alt = data.equipment.title;
                         img.className = 'w-full h-32 object-cover rounded-md';
                         imgContainer.appendChild(img);
@@ -986,7 +986,7 @@ viewDetailsButtons.forEach(button => {
                         imgDiv.className = 'w-full h-64 flex-shrink-0 snap-center relative';
                         imgDiv.setAttribute('data-index', index);
                         imgDiv.innerHTML = `
-                            <img src="/storage/${image.url}" alt="${equipment.title}" class="w-full h-full object-cover">
+                            <img src="/${image.url}" alt="${equipment.title}" class="w-full h-full object-cover">
                             <div class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-full">
                                 ${index + 1}/${equipment.images.length}
                             </div>

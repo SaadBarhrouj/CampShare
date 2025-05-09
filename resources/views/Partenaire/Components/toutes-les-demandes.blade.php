@@ -126,7 +126,6 @@
 
 
 
-    <div class="flex flex-col md:flex-row pt-16">
         <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
             <div class="py-8 px-4 md:px-8">
                 <!-- Page header -->
@@ -228,10 +227,10 @@
 
                                         <div class="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4 lg:mb-0">
                                             <div>
-                                            <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                            <div class="flex gap-2 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
     
                                                 <div class="flex items-center lg:w-16">
-                                                    <img src="{{$Reservation->avatar_url}}"
+                                                    <img src="{{ asset($Reservation->avatar_url)}}"
                                                         alt="Mehdi Idrissi" 
                                                         class="w-12 h-12 rounded-full object-cover" />
                                                     <div class="lg:hidden ml-1">
@@ -351,7 +350,6 @@
                 </div>
             </div>
         </main>
-    </div>
 
 
 
