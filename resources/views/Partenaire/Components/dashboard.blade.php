@@ -1,4 +1,4 @@
-<div class="flex flex-col md:flex-row pt-16">
+
        
         
         <!-- Main content -->
@@ -302,7 +302,6 @@
                 
             </div>
         </main>
-    </div>
     
     <!-- Equipment Settings Modal (hidden by default) -->
     <div id="equipment-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">

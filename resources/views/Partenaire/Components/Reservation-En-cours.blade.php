@@ -181,7 +181,7 @@
 
                         <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div class="flex items-center">
-                                <label for="date-filter" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Date:</label>
+                                <label for="date-filter" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Date</label>
                                 <select 
                                     id="date-filter" 
                                     name="date" 
@@ -195,7 +195,7 @@
                             </div>
 
                             <div class="flex items-center">
-                                <label for="sort-by" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Trier par:</label>
+                                <label for="sort-by" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Trier par</label>
                                 <select 
                                     id="sort-by" 
                                     name="sort" 
@@ -224,25 +224,19 @@
                             @foreach($LocationsEncours as $Reservation)
                                 <div class="px-6 py-4">
                                     <div class="flex flex-col lg:flex-row lg:items-start">
-                                        <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                        <div class="flex gap-2 mb-4 lg:mb-0 lg:mr-28 w-full lg:w-auto">
                                             <div class="flex items-center lg:w-16">
-                                                <img src="{{$Reservation->avatar_url}}"
+                                                <img src="{{asset($Reservation->avatar_url)}}"
                                                     alt="Mehdi Idrissi" 
                                                     class="w-12 h-12 rounded-full object-cover" />
                                                 <div class="lg:hidden ml-3">
                                                     <h3 class="font-medium text-gray-900 dark:text-white">{{$Reservation->username}}</h3>
-                                                    <div class="flex items-center text-sm">
-                                                        <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                        <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="hidden lg:block mt-2">
                                                 <h3 class="font-medium text-gray-900 dark:text-white text-center">{{$Reservation->username}}</h3>
-                                                <div class="flex items-center justify-center text-xs mt-1">
-                                                    <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                    <span>4.8</span>
-                                                </div>
+                                                
                                             </div>
                                         </div>
 
@@ -254,9 +248,9 @@
                                                 </p>
                                             </div>
                                             <div>
-                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Durée de résérvation</p>
                                                 <p class="font-medium text-gray-900 dark:text-white">{{$Reservation->start_date}} - {{$Reservation->end_date}}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">({{$Reservation->number_days}})</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">({{$Reservation->number_days}} jours)</p>
                                             </div>
                                             <div>
                                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
@@ -356,25 +350,19 @@
                             container.innerHTML += `
                             <div class="px-6 py-4">
                                             <div class="flex flex-col lg:flex-row lg:items-start">
-                                                <div class="flex-shrink-0 mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
+                                                <div class="flex gap-2 mb-4 lg:mb-0 lg:mr-28 w-full lg:w-auto">
                                                     <div class="flex items-center lg:w-16">
                                                         <img src="${reservation.avatar_url}"
                                                             alt="Mehdi Idrissi" 
                                                             class="w-12 h-12 rounded-full object-cover" />
                                                         <div class="lg:hidden ml-3">
                                                             <h3 class="font-medium text-gray-900 dark:text-white">${reservation.username}</h3>
-                                                            <div class="flex items-center text-sm">
-                                                                <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                                <span>4.8 <span class="text-gray-500 dark:text-gray-400">(14)</span></span>
-                                                            </div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="hidden lg:block mt-2">
                                                         <h3 class="font-medium text-gray-900 dark:text-white text-center">${reservation.username}</h3>
-                                                        <div class="flex items-center justify-center text-xs mt-1">
-                                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                            <span>4.8</span>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
 
@@ -468,8 +456,7 @@
                                     <div class="hidden lg:block mt-2">
                                         <h3 class="font-medium text-gray-900 dark:text-white text-center">${reservation.username}</h3>
                                         <div class="flex items-center justify-center text-xs mt-1">
-                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span>4.8</span>
+                                           
                                         </div>
                                     </div>
                                 </div>

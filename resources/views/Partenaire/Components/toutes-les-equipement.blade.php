@@ -59,8 +59,8 @@
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
     <!-- Navigation -->
 @include('Partenaire.side-bar');
-<div class="flex flex-col md:flex-row pt-16">
-    <main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+
+<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div class="py-8 px-4 md:px-8">
             <!-- Page header -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
@@ -246,7 +246,8 @@
             @endif
         </div>
     </main>
-</div><!-- Add Equipment Modal -->
+
+<!-- Add Equipment Modal -->
 <div id="add-equipment-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-screen overflow-y-auto">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-800 z-10">

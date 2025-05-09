@@ -99,7 +99,7 @@
 
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Note reçu</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Note reçue</p>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-star text-amber-400 mr-1"></i>
                                     <span>{{ $review->rating }}</span>

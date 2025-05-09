@@ -504,13 +504,13 @@
                     </a>
                     <a href="/Partenaire/DemandeLocation" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-clipboard-list w-5 mr-3"></i>
-                        Demandes de location
-                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberPendingReservation}}</span>
+                        Demandes location
+                        <!--<span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{-- $NumberPendingReservation --}}</span>-->
                     </a>
                     <a href="/Partenaire/LocationEnCours"  class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-exchange-alt w-5 mr-3"></i>
                         Locations en cours
-                        <span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{$NumberLocationsEncours}}</span>
+                        <!--<span class="ml-auto bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{-- $NumberLocationsEncours --}}</span>-->
                     </a>
                     
                  
@@ -519,7 +519,7 @@
                         Avis reçus
                     </a>
                 </nav>
-                <div class="mt-6 px-3">
+                <div class="mt-12">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition duration-300">

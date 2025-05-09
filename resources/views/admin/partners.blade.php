@@ -589,7 +589,7 @@
 <!-- Sort filter -->
 <div class="relative inline-block text-left" id="sort-filter-container">
     <button id="sort-filter-button" class="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
-        <span>Trier par: 
+        <span>Trier par 
             @switch($sort)
                 @case('oldest') Plus anciens @break
                 @case('name-asc') Nom (A-Z) @break
@@ -1153,7 +1153,7 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
             option.addEventListener('click', () => {
                 sortOptions.forEach(opt => opt.classList.remove('active'));
                 option.classList.add('active');
-                sortFilterButton.querySelector('span').textContent = `Trier par: ${option.textContent}`;
+                sortFilterButton.querySelector('span').textContent = `Trier par ${option.textContent}`;
                 sortFilterDropdown.classList.add('hidden');
             });
         });
