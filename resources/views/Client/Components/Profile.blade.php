@@ -150,7 +150,11 @@
                         </div>
                     </div>
 
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-right">
+                    <div class="flex items-center justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-right gap-4">
+                        <a href="{{ route('client.profile.index', $user->id) }}"
+                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                            <i class="fa-solid fa-address-card mr-2"></i> Mon profil Public
+                        </a>
                         <button onclick="toggleEditMode(true)" 
                                class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                             <i class="fas fa-edit mr-2"></i> Modifier le profil
@@ -170,7 +174,7 @@
                                              alt="{{ $profile->username }}" 
                                              class="w-full h-full object-cover" />
                                     </div>
-                                    <label for="avatarUpload" class="absolute -bottom-2 -right-2 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700 cursor-pointer hover:bg-blue-600 transition-colors">
+                                    <label for="avatarUpload" class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700 cursor-pointer hover:bg-green-600 transition-colors">
                                         <i class="fas fa-camera"></i>
                                         <input type="file" id="avatarUpload" name="avatar" accept="image/*" class="hidden">
                                     </label>
@@ -271,7 +275,7 @@
                                     Annuler
                                 </button>
                                 <button type="submit" 
-                                        class="px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                        class="px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                                     Enregistrer les modifications
                                 </button>
                             </div>

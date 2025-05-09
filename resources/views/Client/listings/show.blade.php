@@ -363,7 +363,7 @@
                                         <span id="price-breakdown" class="text-gray-600 dark:text-gray-400">Calcul du prix...</span>
                                         <span class="text-gray-700 dark:text-gray-200 font-medium" id="subtotal">0.00 MAD</span>
                                     </div>
-                                    <div id="delivery-fee-row" class="hidden flex justify-between">
+                                    <div id="delivery-fee-row" class="hidden justify-between">
                                         <span class="text-gray-600 dark:text-gray-400">Frais de livraison</span>
                                         <span class="text-gray-700 dark:text-gray-200 font-medium" id="delivery-fee">0.00 MAD</span>
                                     </div>

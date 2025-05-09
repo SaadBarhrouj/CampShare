@@ -37,7 +37,7 @@
                     <!-- Profile Image -->
                     <div class="relative mb-6 md:mb-0 md:mr-8">
                         <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
-                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" 
+                            <img src="{{ $user->avatar_url ? asset($user->avatar_url) : asset('images/item-default.jpg') }}"
                                  alt="Fatima Benali" 
                                  class="w-full h-full object-cover" />
                         </div>

@@ -86,7 +86,7 @@
                                     </button>
                                     <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
                                         <div class="py-1">
-                                            <a href="{{ route('HomeClient') }}#profile" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <a href="{{ route('HomeClient.profile') }}#profile" data-target="profile" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                             </a>
                                             <a href="{{ route('HomeClient') }}" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         @if($user->role == 'client')
-                        <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto  flex items-center justify-center" style="background: rgba(0, 0, 0, 0.6)" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div id="partnerAcceptModal" class="fixed inset-0 z-[60] hidden overflow-y-auto items-center justify-center" style="background: rgba(0, 0, 0, 0.6)" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden max-w-2xl w-full p-6 m-4">
                                 <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
                                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
@@ -213,7 +213,7 @@
                                 </div>
                             </div>
                             <div class="mt-3 space-y-1 px-2">
-                                <a href="{{ route('HomeClient') }}#profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                                <a href="{{ route('HomeClient.profile') }}#profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
                                     <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                 </a>
                                 <a href="{{ route('HomeClient') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
