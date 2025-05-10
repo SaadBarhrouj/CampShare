@@ -16,6 +16,11 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\EquipmentDetailController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController; 
+use App\Http\Controllers\EquipementController;
+use App\Http\Controllers\AdminReservationController;
+use App\Http\Controllers\ReviewAdminController;
+use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AdminDetailsEquipmentController;
 
 // Index Page
 Route::get('/', function () {
@@ -92,6 +97,11 @@ Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cance
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
+    Route::get('/equipments/{listing}', [AdminDetailsEquipmentController::class, 'show'])
+    ->name('admin.equipments.show');
+    Route::get('/admin/reviews', [ReviewAdminController::class, 'index'])->name('admin.reviews');
+    Route::get('/reservations', [AdminReservationController::class, 'index'])->name('admin.reservations.index');
+    Route::get('/equipements', [EquipementController::class, 'index'])->name('equipements.index');    Route::get('/equipments', [AdminController::class, 'equipments'])->name('admin.equipments');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/clients', [AdminController::class, 'clients'])->name('admin.clients');
     Route::get('/partners', [AdminController::class, 'partners'])->name('admin.partners');
@@ -199,3 +209,9 @@ Route::post('/partenaire/reservations/{reservation}/accept', [ReservationControl
         Route::get('/conditions-generales-partenaires', function () {
             return view('legal.conditions-generales-partenaires');
         })->name('conditions.generales');
+
+
+
+
+    Route::get('/admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+Route::put('/admin/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');

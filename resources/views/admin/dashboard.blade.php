@@ -260,7 +260,7 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    
+
 
                     <!-- User menu -->
                     <div class="relative ml-4">
@@ -280,41 +280,42 @@
                                     $user = $user ?? Auth::user();
                                 @endphp
                                 @if($user)
-                                
 
+                                
                             <!-- User profile menu -->
-                            <div class="relative">
-                                <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
+                                <div class="relative">
+                                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
                                          alt="Admin User" 
                                          class="h-8 w-8 rounded-full object-cover" />
-                                    <div class="flex flex-col items-start">
-                                        <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">{{ $user->first_name }} {{ $user->last_name }}</span>
-                                        <span
-                                            class="text-xs text-admin-primary dark:text-admin-secondary font-medium">Super
-                                            Admin</span>
-                                    </div>
-                                    <i class="fas fa-chevron-down text-sm text-gray-500"></i>
-                                </button>
+                                        <div class="flex flex-col items-start">
+                                            <span class="font-medium text-gray-800 dark:text-gray-200 text-sm"> {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} </span>
+                                            <span
+                                                class="text-xs text-admin-primary dark:text-admin-secondary font-medium">
+                                                {{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}
+                                            </span>
+                                        </div>
+                                        <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                                    </button>
 
-                                <!-- User dropdown menu -->
-                                <div id="user-dropdown"
+                                    <!-- User dropdown menu -->
+                                    <div id="user-dropdown"
                                     class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600 py-1">
-                                    <a href="#profile"
+                                    <a href="{{ route('admin.profile.edit') }}"
                                         class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
-                                    </a>
+                                                <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                                            </a>
                                     <div class="border-t border-gray-200 dark:border-gray-700"></div>
                                     <a href="{{ route('logout') }}" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                                                    <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                     </a>
-                                </div>
-                            </div>
+                                        </div>
+                                    </div>
 
 
                             @endif
                             @endauth
-
+                      
                         </div>
                     </div>
                 </div>
@@ -434,27 +435,28 @@
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
-                        <a href="#equipment"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Équipements
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">432</span>
-                        </a>
-                        <a href="#reservations"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Réservations
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
-                        </a>
-                        <a href="#reviews"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Avis
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
+                    <a href="{{ route('equipements.index') }}"
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+   <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+   Équipements
+</a>
+
+<a href="{{ route('admin.reservations.index') }}" 
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Réservations
+</a>
+
+                    
+         <a href="{{ route('admin.reviews') }}"
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Avis
+    <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+        {{ \App\Models\Review::count() }}
+    </span>
+</a>
+
 
                     </nav>
                 </div>
@@ -505,12 +507,13 @@
                             <span
                                 class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount ?? 0 }}</span>
                         </a>
-                        <a href="#equipment"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Équipements
+                        <a href="{{ route('admin.clients') }}" id="partners-link"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            id="partners-link">
+                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            hhhhhhh
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">432</span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">{{ $partnersCount ?? 0 }}</span>
                         </a>
                         <a href="#reservations"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -519,16 +522,17 @@
                             <span
                                 class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
                         </a>
-                        <a href="#reviews"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Avis
-                            <span
-                                class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
+                 <a href="{{ route('admin.reviews') }}"
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Avis
+    <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+        {{ \App\Models\Review::count() }}
+    </span>
+</a>
                     </nav>
                 </div>
-
+                
                 <div class="mb-6">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Utilisateurs</h5>
@@ -831,7 +835,6 @@
                             <button id="users-tab" class="admin-tab active">Utilisateurs récents</button>
                             <button id="equipment-tab" class="admin-tab">Équipements récents</button>
                             <button id="reservations-tab" class="admin-tab">Dernières réservations</button>
-                            <button class="admin-tab">Derniers avis</button>
                         </div>
                     </div>
                 </div>
