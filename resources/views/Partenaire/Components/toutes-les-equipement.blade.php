@@ -187,46 +187,16 @@
                         
                         <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-3">{{ $equipment->description }}</p>
                         
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="text-amber-400 flex">
-                                    @php
-                                        $rating = 0;
-                                        $reviewCount = 0;
-                                        if(isset($equipment->reviews) && count($equipment->reviews) > 0) {
-                                            $rating = $equipment->reviews->avg('rating');
-                                            $reviewCount = $equipment->reviews->count();
-                                        }
-                                        $fullStars = floor($rating);
-                                        $halfStar = $rating - $fullStars > 0;
-                                        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
-                                    @endphp
-                                    
-                                    @for($i = 0; $i < $fullStars; $i++)
-                                        <i class="fas fa-star"></i>
-                                    @endfor
-                                    
-                                    @if($halfStar)
-                                        <i class="fas fa-star-half-alt"></i>
-                                    @endif
-                                    
-                                    @for($i = 0; $i < $emptyStars; $i++)
-                                        <i class="far fa-star"></i>
-                                    @endfor
-                                </div>
-                                <span class="ml-1 text-sm text-gray-500 dark:text-gray-400">{{ $reviewCount }}</span>
-                            </div>
+                        <div class="flex items-center justify-between mt-6">
                             
-                            <div class="flex flex-col space-y-2 mt-2">
                                 <a href="{{ route('partenaire.annonces.create', ['equipment_id' => $equipment->id]) }}" 
-                                   class="px-3 py-2 bg-forest hover:bg-meadow text-white rounded-md shadow-sm flex items-center justify-center text-sm font-medium">
-                                    <i class="fas fa-bullhorn mr-2"></i> Ajouter une annonce
+                                   class="px-3 py-2 bg-forest hover:bg-meadow text-white rounded-md shadow-sm flex items-center justify-center text-sm ">
+                                    <i class="fas fa-bullhorn mr-2"></i> Publier
                                 </a>
-                                <button class="view-details-btn px-3 py-2 border border-forest text-forest dark:border-meadow dark:text-meadow hover:bg-forest hover:text-white dark:hover:bg-meadow rounded-md text-sm font-medium flex items-center justify-center" 
+                                <button class="view-details-btn px-3 py-2 border border-forest text-forest dark:border-meadow dark:text-meadow hover:bg-forest dark:hover:text-white dark:hover:bg-meadow rounded-md text-sm font-medium flex items-center justify-center" 
                                         data-id="{{ $equipment->id }}">
                                     <i class="fas fa-eye mr-2"></i> Voir détails
                                 </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -460,7 +430,7 @@
     </div>
 </div><!-- Equipment Details Modal -->
 <div id="equipment-details-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-screen overflow-y-auto">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-800 z-10">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="detail-title">Détails de l'équipement</h3>
             <button id="close-details-modal" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
@@ -557,7 +527,7 @@
             </div>
             
             <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-end">
-                <a id="detail-create-annonce-link" href="#" class="px-4 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                <a id="detail-create-annonce-link" href="#" class="px-4 py-2 bg-forest hover:bg-meadow dark:bg-meadow dark:hover:bg-forest/partenaire/annonces/create/ text-white font-medium rounded-md shadow-sm transition-colors">
                     <i class="fas fa-bullhorn mr-2"></i>
                     Créer une annonce
                 </a>
@@ -967,7 +937,7 @@ viewDetailsButtons.forEach(button => {
                 document.getElementById('detail-avg-rating').textContent = avgRating.toFixed(1);
                 document.getElementById('detail-review-count').textContent = `${equipment.reviews ? equipment.reviews.length : 0} avis`;
                 document.getElementById('detail-reviews-summary').textContent = equipment.reviews && equipment.reviews.length > 0 
-                    ? `${equipment.reviews.length} avis, ${avgRating.toFixed(1)}/5` 
+                    ? `${equipment.reviews.length} avis` 
                     : 'Aucun avis';
                 
                 // Images

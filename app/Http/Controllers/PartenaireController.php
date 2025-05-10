@@ -381,7 +381,7 @@ public function filterLocationEnCours(Request $request)
 public function createAnnonceForm($equipment_id)
 {
     $user = Auth::user();
-    
+    $AverageRating = $user->averageRatingPartner();
     // Récupérer l'équipement spécifique
     $equipment = Item::with('images')->findOrFail($equipment_id);
     
@@ -391,7 +391,7 @@ public function createAnnonceForm($equipment_id)
             ->with('error', 'Vous n\'êtes pas autorisé à créer une annonce pour cet équipement.');
     }
     
-    return view('Partenaire.annonce-form', compact('equipment'));
+    return view('Partenaire.annonce-form', compact('equipment', 'AverageRating'));
 }
 
 /**
@@ -410,7 +410,6 @@ public function storeAnnonce(Request $request)
             'longitude' => 'nullable|numeric',
             'is_premium' => 'nullable',
             'premium_type' => 'nullable|required_if:is_premium,1|in:7 jours,15 jours,30 jours',
-            'terms_agree' => 'required'
         ]);
 
         // Vérifier que l'équipement appartient au partenaire connecté
@@ -443,7 +442,7 @@ public function storeAnnonce(Request $request)
         
         $listing->save();
         
-        return redirect()->route('partenaire.mes-annonces')->with('success', 'Votre annonce a été publiée avec succès ! Vous pouvez gérer toutes vos annonces dans cette page.');
+        return redirect()->route('HomePartenaie.mesannonces')->with('success', 'Votre annonce a été publiée avec succès ! Vous pouvez gérer toutes vos annonces dans cette page.');
     }
 
 public function handleAction(Request $request)

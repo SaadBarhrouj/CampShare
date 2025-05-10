@@ -1,15 +1,141 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampShare - Dashboard Partenaire</title>
 
-@section('content')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Styles / Scripts -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+
+    <link rel="icon" href="{{ asset('images/favicon_io/favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon_io/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('images/favicon_io/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('images/favicon_io/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="CampShare - Louez facilement le matériel de camping dont vous avez besoin
+    directement entre particuliers.">
+    <meta name="keywords" content="camping, location, matériel, aventure, plein air, partage, communauté">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#2D5F2B',
+                        'meadow': '#4F7942',
+                        'earth': '#8B7355',
+                        'wood': '#D2B48C',
+                        'sky': '#5D9ECE',
+                        'water': '#1E7FCB',
+                        'sunlight': '#FFAA33',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+
+        // Detect dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+   
+<style>
+
+    
+        /* Filter chip styles */
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active {
+            background-color: #2D5F2B;
+            color: white;
+        }
+
+        .dark .filter-chip.active {
+            background-color: #4F7942;
+        }
+
+        .filter-chip:not(.active) {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dark .filter-chip:not(.active) {
+            background-color: #374151;
+            color: #e5e7eb;
+            border: 1px solid #4b5563;
+        }
+
+        .filter-chip:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+
+        .dark .filter-chip:hover:not(.active) {
+            background-color: #4b5563;
+        }
+
+
+    .filter-chip {
+    @apply px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-colors mr-2 mb-2;
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300;
+}
+
+.filter-chip.active {
+    @apply bg-forest dark:bg-meadow text-white;
+}
+
+.filter-chip:hover {
+    @apply bg-gray-200 dark:bg-gray-600;
+}
+
+.filter-chip.active:hover {
+    @apply bg-green-700 dark:bg-green-600;
+}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
+
+@include('Partenaire.side-bar');
+
+<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+            <div class="py-8 px-4 md:px-8">
+                
         <!-- Page header -->
         <div class="mb-8">
-            <a href="{{ route('HomePartenaie') }}" class="inline-flex items-center text-forest dark:text-meadow hover:underline mb-4">
-                <i class="fas fa-arrow-left mr-2"></i> Retour au tableau de bord
-            </a>
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Publier une annonce pour "{{ $equipment->title }}"</h1>
             <p class="text-gray-600 dark:text-gray-400 mt-2">
                 Remplissez ce formulaire pour rendre votre équipement disponible à la location.
@@ -58,7 +184,7 @@
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                             <div class="flex items-start">
                                 @if($equipment->images && count($equipment->images) > 0)
-                                    <img src="{{ asset('storage/' . $equipment->images[0]->url) }}" alt="{{ $equipment->title }}" class="w-24 h-24 object-cover rounded-md mr-4">
+                                    <img src="{{ asset($equipment->images[0]->url) }}" alt="{{ $equipment->title }}" class="w-24 h-24 object-cover rounded-md mr-4">
                                 @else
                                     <div class="w-24 h-24 bg-gray-200 dark:bg-gray-600 rounded-md flex items-center justify-center mr-4">
                                         <i class="fas fa-campground text-gray-400 dark:text-gray-500 text-2xl"></i>
@@ -85,7 +211,7 @@
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-end space-x-4">
-                        <button type="button" id="next-to-step-2" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-2" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-forest text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Disponibilité
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -151,17 +277,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                        <input id="delivery_option_both" name="delivery_option" type="radio" value="both" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600">
-                                    </div>
-                                    <div class="ml-3">
-                                        <label for="delivery_option_both" class="text-sm font-medium text-gray-700 dark:text-gray-300">Les deux options</label>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                                            Le locataire pourra choisir entre récupération sur place ou livraison.
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                             @error('delivery_option')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -218,7 +333,7 @@
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour
                         </button>
-                        <button type="button" id="next-to-step-3" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-3" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-forest text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Options
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -306,7 +421,7 @@
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour
                         </button>
-                        <button type="button" id="next-to-step-4" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors">
+                        <button type="button" id="next-to-step-4" class="btn-continue px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-forest text-white font-medium rounded-md shadow-sm transition-colors">
                             Continuer vers Publication
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -329,7 +444,7 @@
                             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                                 <div class="flex items-start">
                                     @if($equipment->images && count($equipment->images) > 0)
-                                        <img src="{{ asset('storage/' . $equipment->images[0]->url) }}" alt="{{ $equipment->title }}" class="w-24 h-24 object-cover rounded-md mr-4">
+                                        <img src="{{ asset($equipment->images[0]->url) }}" alt="{{ $equipment->title }}" class="w-24 h-24 object-cover rounded-md mr-4">
                                     @else
                                         <div class="w-24 h-24 bg-gray-200 dark:bg-gray-600 rounded-md flex items-center justify-center mr-4">
                                             <i class="fas fa-campground text-gray-400 dark:text-gray-500 text-2xl"></i>
@@ -369,26 +484,6 @@
                             </div>
                         </div>
                         
-                        <!-- Conditions -->
-                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Conditions d'utilisation</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5 mt-1">
-                                        <input id="terms_agree" name="terms_agree" type="checkbox" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600" required>
-                                    </div>
-                                    <div class="ml-3">
-                                        <label for="terms_agree" class="text-sm text-gray-700 dark:text-gray-300">
-                                            Je confirme avoir lu et accepté les <a href="#" class="text-forest dark:text-meadow hover:underline">conditions générales d'utilisation</a> et les <a href="#" class="text-forest dark:text-meadow hover:underline">conditions de location</a> de CampShare.
-                                        </label>
-                                    </div>
-                            </div>
-                                
-                                @error('terms_agree')
-                                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="p-6 bg-gray-50 dark:bg-gray-700/50 flex justify-between space-x-4">
@@ -405,8 +500,8 @@
                 
             </form>
         </div>
-    </div>
-</div>
+            </div>
+</main>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -723,4 +818,4 @@
         }
     });
 </script>
-@endsection
+</html>
