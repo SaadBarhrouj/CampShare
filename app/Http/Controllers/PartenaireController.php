@@ -612,7 +612,7 @@ public function showEquipements(Request $request)
     // Retrieve notifications for the current user
     $notifications = (new \App\Http\Controllers\NotificationController)->getNotifUser($user->id);
     
-    return view('Partenaire.tablea_de_bord_partenaire', compact(
+    return view('Partenaire.Components.toutes-les-equipement', compact(
         'user',
         'sumPayment',
         'NumberReservationCompleted',
@@ -730,7 +730,7 @@ public function updateEquipement(Request $request, $item)
         }
     }
 
-    return redirect()->route('HomePartenaie')->with('success', 'Équipement mis à jour avec succès.');
+    return redirect()->route('MesEquipement')->with('success', 'Équipement mis à jour avec succès.');
 }
 
 public function deleteEquipement($item)

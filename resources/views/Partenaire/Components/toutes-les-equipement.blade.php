@@ -55,6 +55,18 @@
         });
     </script>
 
+    <style>
+        @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+    </style>
+
 </head>
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
     <!-- Navigation -->
@@ -78,7 +90,7 @@
 
             <!-- Filters and search -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
-                <form action="{{ route('partenaire.equipements') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <form action="{{ route('partenaire.equipements') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-5 gap-x-16">
                     <!-- Recherche -->
                     <div class="md:col-span-2">
                         <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rechercher</label>
@@ -231,7 +243,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2">
                     <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Titre</label>
-                    <input type="text" id="title" name="title" required
+                    <input type="text" id="title" name="title" required placeholder="Titre de l'équipement ..."
                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow">
                 </div>
                 
@@ -248,13 +260,13 @@
                 
                 <div>
                     <label for="price_per_day" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prix par jour (MAD)</label>
-                    <input type="number" id="price_per_day" name="price_per_day" min="0" step="0.01" required
+                    <input type="number" id="price_per_day" name="price_per_day" min="0" step="0.01" required placeholder="Prix /jour"
                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow">
                 </div>
                 
                 <div class="md:col-span-2">
                     <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-                    <textarea id="description" name="description" rows="4" required
+                    <textarea id="description" name="description" rows="4" required placeholder="Description de votre équipement ..."
                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow"></textarea>
                 </div>
                 
@@ -292,7 +304,7 @@
     </div>
 </div><!-- Edit Equipment Modal -->
 <div id="edit-equipment-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-screen overflow-y-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full max-h-screen overflow-y-auto no-scrollbar">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-800 z-10">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white">Modifier l'équipement</h3>
             <button id="close-edit-modal" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
@@ -308,13 +320,13 @@
                 <div class="md:col-span-2">
                     <label for="edit-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Titre</label>
                     <input type="text" id="edit-title" name="title" required
-                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow">
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow no-scrollbar">
                 </div>
                 
                 <div>
                     <label for="edit-category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catégorie</label>
                     <select id="edit-category_id" name="category_id" required
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow">
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow ">
                         <option value="">Sélectionner une catégorie</option>
                         @foreach(\App\Models\Category::all() as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -331,7 +343,7 @@
                 <div class="md:col-span-2">
                     <label for="edit-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
                     <textarea id="edit-description" name="description" rows="4" required
-                              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow"></textarea>
+                              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow no-scrollbar"></textarea>
                 </div>
                 
                 <div class="md:col-span-2">
@@ -430,7 +442,7 @@
     </div>
 </div><!-- Equipment Details Modal -->
 <div id="equipment-details-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-screen overflow-y-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-screen overflow-y-auto no-scrollbar">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-800 z-10">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="detail-title">Détails de l'équipement</h3>
             <button id="close-details-modal" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
@@ -442,7 +454,7 @@
                 <!-- Colonne de gauche: Images et informations de base -->
                 <div>
                     <div class="bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
-                        <div id="detail-image-slider" class="w-full h-64 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                        <div id="detail-image-slider" class="w-full h-64 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide no-scrollbar">
                             <!-- Images will be added here dynamically -->
                             <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex-shrink-0 snap-center flex items-center justify-center">
                                 <i class="fas fa-campground text-5xl text-gray-400 dark:text-gray-500"></i>
@@ -515,7 +527,7 @@
                             <span class="text-sm text-gray-500 dark:text-gray-400" id="detail-reviews-summary">Chargement...</span>
                         </div>
                         
-                        <div id="detail-reviews-container" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div id="detail-reviews-container" class="space-y-4 max-h-96 overflow-y-auto pr-2 no-scrollbar">
                             <!-- Reviews will be loaded here dynamically -->
                             <div class="text-center py-8 text-gray-500 dark:text-gray-400" id="no-reviews-message">
                                 <i class="far fa-comment-alt text-3xl mb-2"></i>
@@ -1111,7 +1123,9 @@ viewDetailsButtons.forEach(button => {
                         }
                         
                         const reviewerName = review.reviewer ? review.reviewer.username || 'Utilisateur' : 'Utilisateur';
-                        const reviewerAvatar = review.reviewer && review.reviewer.avatar_url ? review.reviewer.avatar_url : '/images/default-avatar.png';
+
+                        const reviewerAvata = "{{ asset('') }}";
+                        const reviewerAvatar = reviewerAvata + review.reviewer.avatar_url;
                         
                         const reviewDate = new Date(review.created_at).toLocaleDateString('fr-FR');
                         

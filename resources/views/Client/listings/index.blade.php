@@ -75,7 +75,7 @@
                     <div class="py-4 flex flex-wrap items-center justify-between gap-4">
 
                         <!-- Category Filter Pills -->
-                        <div class="flex items-center space-x-3 overflow-x-auto">
+                        <div class="flex items-center space-x-3 overflow-x-auto no-scrollbar">
                             <!-- All Categories Button -->
                             <a href="{{ route('client.listings.index') }}">
                                 <button class="whitespace-nowrap px-5 py-2 text-sunlight rounded-full font-medium border border-sunlight hover:bg-opacity-20 transition-all">
