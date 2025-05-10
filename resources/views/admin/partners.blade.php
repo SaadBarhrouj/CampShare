@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Partenaires - CampShare | Administration</title>
@@ -330,8 +331,8 @@
 
                         </div>
                     </div>
-                </div>
-                
+                </div>   
+                             
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none">
@@ -435,27 +436,25 @@
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
-                        <a href="#equipment"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Équipements
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">432</span>
-                        </a>
-                        <a href="#reservations"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Réservations
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
-                        </a>
-                        <a href="#reviews"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                            Avis
-                            <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">12</span>
-                        </a>
+                        <a href="{{ route('equipements.index') }}"
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+   <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+   Équipements
+</a>
+                        <a href="{{ route('admin.reservations.index') }}" 
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Réservations
+</a>
+
+                      <a href="{{ route('admin.reviews') }}"
+   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Avis
+    <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+        {{ \App\Models\Review::count() }}
+    </span>
+</a>
 
                     </nav>
                 </div>
@@ -653,81 +652,98 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden m-10">
    
                     
-        <table class="w-full admin-table">
-            <thead>
-                <tr>
-                    <th>Partenaire</th>
-                    <th>Contact</th>
-                    <th>Ville</th>
-                    <th>Statistiques</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($partners as $partner)
-                <tr>
-                    <td>
-                        <div class="flex items-center">
-                            <img src="{{ $partner->avatar_url ? asset($partner->avatar_url) : asset('images/default-avatar.jpg') }}" 
-                                 alt="{{ $partner->username }}" 
-                                 class="w-10 h-10 rounded-full object-cover mr-3" />
-                            <div>
-                                <p class="font-medium text-gray-900 dark:text-white">{{ $partner->username }}</p>
-                                <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
-                                    @php
-                                        $avgRating = $partner->receivedReviews->avg('rating') ?? 0;
-                                        $fullStars = floor($avgRating);
-                                        $hasHalfStar = $avgRating - $fullStars >= 0.5;
-                                    @endphp
-                                    
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $fullStars)
-                                            <i class="fas fa-star text-xs"></i>
-                                        @elseif($i == $fullStars + 1 && $hasHalfStar)
-                                            <i class="fas fa-star-half-alt text-xs"></i>
-                                        @else
-                                            <i class="far fa-star text-xs"></i>
-                                        @endif
-                                    @endfor
-                                    <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">{{ number_format($avgRating, 1) }}</span>
-                                </div>
-                            </div>
+<table class="w-full admin-table">
+    <thead>
+        <tr>
+            <th>Partenaire</th>
+            <th>Contact</th>
+            <th>Ville</th>
+            <th>Statistiques</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CIN Recto</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CIN Verso</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($partners as $partner)
+        <tr>
+            <td>
+                <div class="flex items-center">
+                    <img src="{{ $partner->avatar_url ? asset($partner->avatar_url) : asset('images/default-avatar.jpg') }}" 
+                         alt="Avatar de {{ $partner->username }}" 
+                         class="w-10 h-10 rounded-full object-cover mr-3" />
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ $partner->username }}</p>
+                        <div class="flex items-center text-amber-400 dark:text-amber-400 mt-0.5">
+                            @php
+                                $avgRating = $partner->receivedReviews->avg('rating') ?? 0;
+                                $fullStars = floor($avgRating);
+                                $hasHalfStar = $avgRating - $fullStars >= 0.5;
+                            @endphp
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $fullStars)
+                                    <i class="fas fa-star text-xs"></i>
+                                @elseif($i == $fullStars + 1 && $hasHalfStar)
+                                    <i class="fas fa-star-half-alt text-xs"></i>
+                                @else
+                                    <i class="far fa-star text-xs"></i>
+                                @endif
+                            @endfor
+                            <span class="ml-1 text-gray-600 dark:text-gray-400 text-xs">{{ number_format($avgRating, 1) }}</span>
                         </div>
-                    </td>
-                    <td>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->email }}</p>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->phone_number }}</p>
-                    </td>
-                    <td>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->city->name ?? 'Non spécifié' }}</p>
-                    </td>
-                    <td>
-                        <div class="space-y-1 text-sm">
-                            <p class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ $partner->equipments_count }}</span>
-                            </p>
-                            <p class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ $partner->partner_reservations_count }}</span>
-                            </p>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex space-x-1">
-                            
-                            <button onclick="showUserDetails({{ $partner->id }})"
-                                class="mr-6 p-2 text-xs rounded-md bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40" title="Voir le partenaire">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                    </div>
+                </div>
+            </td>
 
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-                    
+            <td>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->email }}</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->phone_number }}</p>
+            </td>
+
+            <td>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $partner->city->name ?? 'Non spécifié' }}</p>
+            </td>
+
+            <td>
+                <div class="space-y-1 text-sm">
+                    <p class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Équipements:</span>
+                        <span class="font-medium text-gray-900 dark:text-white">{{ $partner->equipments_count }}</span>
+                    </p>
+                    <p class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Réservations reçues:</span>
+                        <span class="font-medium text-gray-900 dark:text-white">{{ $partner->partner_reservations_count }}</span>
+                    </p>
+                </div>
+            </td>
+
+           <td class="px-6 py-4">
+    <img src="{{ asset($partner->cin_recto) }}"
+         alt="CIN Recto"
+         class="w-12 h-12 object-cover rounded cursor-pointer hover:scale-105 transition">
+</td>
+
+<!-- CIN Verso -->
+<td class="px-6 py-4">
+    <img src="{{ asset($partner->cin_verso) }}"
+         alt="CIN Verso"
+         class="w-12 h-12 object-cover rounded cursor-pointer hover:scale-105 transition">
+</td>
+
+            <td>
+                <div class="flex space-x-1">
+                    <button onclick="showUserDetails({{ $partner->id }})"
+                        class="mr-6 p-2 text-xs rounded-md bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40" 
+                        title="Voir le partenaire">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+     
                     <!-- Pagination -->
     <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">
@@ -1568,6 +1584,60 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
 
 
 </script>
+
+
+<div id="image-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="relative max-w-4xl w-full mx-4 bg-white rounded-lg shadow-xl overflow-hidden">
+        <!-- Bouton de fermeture en haut à droite -->
+        <button id="close-image-modal" 
+                class="absolute top-4 right-4 z-50 text-gray-600 hover:text-gray-900 focus:outline-none bg-white bg-opacity-80 rounded-full p-2 transition-colors border border-gray-200">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        
+        <!-- Contenu de l'image -->
+        <div class="p-4">
+            <img id="modal-image-content" src="" alt="CIN Image" class="max-w-full max-h-[80vh] mx-auto rounded-md">
+            <div class="text-center mt-2 text-gray-600 text-sm">Document CIN</div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Modal pour les images CIN
+const cinImages = document.querySelectorAll('img[alt="CIN Recto"], img[alt="CIN Verso"]');
+const imageModal = document.getElementById('image-modal');
+const modalImageContent = document.getElementById('modal-image-content');
+const closeImageModal = document.getElementById('close-image-modal');
+
+// Ouvrir le modal quand on clique sur une image CIN
+cinImages.forEach(img => {
+    img.addEventListener('click', () => {
+        modalImageContent.src = img.src;
+        modalImageContent.alt = img.alt;
+        imageModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    });
+});
+
+// Fermer le modal
+closeImageModal.addEventListener('click', () => {
+    imageModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+});
+
+// Fermer en cliquant à l'extérieur
+imageModal.addEventListener('click', (e) => {
+    if (e.target === imageModal) {
+        imageModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+});
+</script>
+
+
+
+
 
 
 </body>

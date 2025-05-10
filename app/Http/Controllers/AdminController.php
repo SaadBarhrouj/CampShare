@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Item;
 use App\Models\Reservation;
+use App\Models\Review;
 
 class AdminController extends Controller
 {
@@ -26,7 +27,6 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-
         $reservations = Reservation::all();
 
         return view('admin.dashboard', [
@@ -39,8 +39,6 @@ class AdminController extends Controller
             'reservations' => $reservations,
         ]);
     }
-
-
 
     public function updateUserDetails($userId, Request $request)
     {
@@ -75,19 +73,14 @@ class AdminController extends Controller
         }
 
         // Pour les partenaires, récupérer leurs équipements (items)
-        if ($user->role === 'partner') {
-            $items = DB::table('items')
+        $items = ($user->role === 'partner')
+            ? DB::table('items')
                 ->join('categories', 'items.category_id', '=', 'categories.id')
                 ->where('items.partner_id', $userId)
-                ->select(
-                    'items.*',
-                    'categories.name as category_name'
-                )
+                ->select('items.*', 'categories.name as category_name')
                 ->orderBy('items.created_at', 'desc')
-                ->get();
-        } else {
-            $items = collect();
-        }
+                ->get()
+            : collect(); // Clients n'ont pas d'items
 
         // Récupérer les réservations (pour clients et partenaires)
         $reservations = DB::table('reservations')
@@ -160,10 +153,7 @@ class AdminController extends Controller
     {
         $query = User::where('role', 'partner')
             ->with(['city', 'items'])
-            ->withCount([
-                'items',
-                'reservations'
-            ]);
+            ->withCount(['items', 'reservations']);
 
         // Filtre de recherche
         if ($request->has('search') && !empty($request->search)) {
@@ -242,44 +232,119 @@ class AdminController extends Controller
         return response()->json($equipments);
     }
     
-   
+    public function getRecentReservations()
+    {
+        try {
+            $reservations = Reservation::with(['client', 'equipment'])
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function($reservation) {
+                    return [
+                        'client_name' => $reservation->delivery_option ?? 'Inconnu',
+                        'equipment_title' => $reservation->updated_at ?? 'Équipement supprimé',
+                        'start_date' => \Carbon\Carbon::parse($reservation->start_date)->format('d/m/Y'),
+                        'end_date' => \Carbon\Carbon::parse($reservation->end_date)->format('d/m/Y'),
+                        'total_price' => $reservation->partner_id,
+                        'status' => $reservation->status,
+                        'created_at' => $reservation->created_at
+                    ];
+                });
 
-public function getRecentReservations()
-{
-    try {
-        $reservations = Reservation::with(['client', 'equipment'])
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get()
-            ->map(function($reservation) {
-                return [
-                    'client_name' => $reservation->delivery_option ?? 'Inconnu',
-                    'equipment_title' => $reservation->updated_at ?? 'Équipement supprimé',
-                    'start_date' => \Carbon\Carbon::parse($reservation->start_date)->format('d/m/Y'),
-                    'end_date' => \Carbon\Carbon::parse($reservation->end_date)->format('d/m/Y'),
-                    'total_price' => $reservation->partner_id,
-                    'status' => $reservation->status,
-                    'created_at' => $reservation->created_at
-                ];
-            });
-
-        return response()->json($reservations);
-        
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Erreur serveur',
-            'message' => $e->getMessage()
-        ], 500);
+            return response()->json($reservations);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur serveur',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
-public function showEquipment($id)
+    public function showEquipment($id)
+    {
+        $equipment = Item::with('images')->findOrFail($id);
+        
+        return view('admin.equipment.show', compact('equipment'));
+    }
+
+    public function equipments()
+    {
+        $equipments = Item::with(['partner', 'category', 'images', 'listings'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.dashboard', [
+            'equipments' => $equipments,
+            // Gardez les autres variables nécessaires pour le dashboard
+            'clientsCount' => User::where('role', 'client')->count(),
+            'partnersCount' => User::where('role', 'partner')->count(),
+            'recentUsers' => User::orderBy('created_at', 'desc')->take(5)->get(),
+            'totalUsers' => User::count(),
+            'reservations' => Reservation::all()
+        ]);
+    }
+
+    public function reviews(Request $request)
 {
-    $equipment = Item::with('images')->findOrFail($id);
-    
-    return view('admin.equipment.show', compact('equipment'));
+    $query = Review::with([
+        'reviewer:id,username,avatar_url',
+        'reviewee:id,username',
+        'item:id,title'
+    ]);
+
+    // Filtre de recherche
+    if ($request->has('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('comment', 'like', "%{$search}%")
+              ->orWhereHas('reviewer', function($q) use ($search) {
+                  $q->where('username', 'like', "%{$search}%");
+              })
+              ->orWhereHas('reviewee', function($q) use ($search) {
+                  $q->where('username', 'like', "%{$search}%");
+              })
+              ->orWhereHas('item', function($q) use ($search) {
+                  $q->where('title', 'like', "%{$search}%");
+              });
+        });
+    }
+
+    // Tri des résultats
+    $sort = $request->input('sort', 'recent');
+    switch ($sort) {
+        case 'oldest':
+            $query->orderBy('created_at', 'asc');
+            break;
+        case 'rating-high':
+            $query->orderBy('rating', 'desc');
+            break;
+        case 'rating-low':
+            $query->orderBy('rating', 'asc');
+            break;
+        default: // 'recent'
+            $query->orderBy('created_at', 'desc');
+    }
+
+    // Pagination des avis
+    $reviews = $query->paginate(10);
+
+    // Calcul des statistiques
+    $partnersCount = User::where('role', 'partner')->count();
+
+    $stats = [
+        'totalReviews' => Review::count(),
+        'averageRating' => Review::avg('rating'),
+        'clientsCount' => User::where('role', 'client')->count(),
+        'partnersCount' => $partnersCount, // Ajouter ici
+        'five_stars' => Review::where('rating', 5)->count(),
+    ];
+
+    // Retourner la vue avec les données nécessaires
+    return view('admin.reviews', [
+        'reviews' => $reviews,
+        'stats' => $stats,
+        'partnersCount' => $partnersCount // Passer la variable à la vue
+    ]);
 }
-
-
 
 }
