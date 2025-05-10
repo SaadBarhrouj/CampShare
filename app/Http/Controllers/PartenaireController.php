@@ -938,14 +938,14 @@ public function deleteAllEquipements()
         $item = Item::find($listing->item_id);
         
         if ($item->partner_id !== $user->id) {
-            return redirect()->route('partenaire.mes-annonces')
+            return redirect()->route('HomePartenaie.mesannonces')
                 ->with('error', 'Vous n\'êtes pas autorisé à supprimer cette annonce.');
         }
         
         // Supprimer l'annonce
         $listing->delete();
         
-        return redirect()->route('partenaire.mes-annonces')
+        return redirect()->route('HomePartenaie.mesannonces')
             ->with('success', 'L\'annonce a été supprimée avec succès.');
     }
     
@@ -959,7 +959,7 @@ public function deleteAllEquipements()
         $item = Item::find($listing->item_id);
         
         if ($item->partner_id !== $user->id) {
-            return redirect()->route('partenaire.mes-annonces')
+            return redirect()->route('HomePartenaie.mesannonces')
                 ->with('error', 'Vous n\'êtes pas autorisé à modifier cette annonce.');
         }
         
@@ -969,7 +969,7 @@ public function deleteAllEquipements()
             $listing->save();
             
             $message = $request->status === 'active' ? 'activée' : ($request->status === 'inactive' ? 'désactivée' : 'mise à jour');
-            return redirect()->route('partenaire.mes-annonces')
+            return redirect()->route('HomePartenaie.mesannonces')
                 ->with('success', 'L\'annonce a été ' . $message . ' avec succès.');
         }
         
@@ -1010,7 +1010,7 @@ public function deleteAllEquipements()
         
         $listing->save();
         
-        return redirect()->route('partenaire.mes-annonces')
+        return redirect()->route('HomePartenaie.mesannonces')
             ->with('success', 'L\'annonce a été mise à jour avec succès.');
     }
     
@@ -1022,6 +1022,8 @@ public function deleteAllEquipements()
         // Vérifier que l'annonce appartient au partenaire connecté
         $user = Auth::user();
         $item = Item::find($listing->item_id);
+
+        $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
         
         if ($item->partner_id !== $user->id) {
             return redirect()->route('partenaire.mes-annonces')
@@ -1032,7 +1034,7 @@ public function deleteAllEquipements()
         // Récupérer les données nécessaires pour le formulaire
         $cities = City::all();
         
-        return view('Partenaire.annonce-edit', compact('listing', 'item', 'cities'));
+        return view('Partenaire.annonce-edit', compact('listing', 'item', 'cities', 'AverageRating',));
     }
 
     /**
@@ -1060,11 +1062,14 @@ public function deleteAllEquipements()
         $completedReservationCount = Reservation::where('listing_id', $listing->id)
             ->where('status', 'completed')
             ->count();
+
+            $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
             
         // Retrieve notifications for the current user
         $notifications = (new \App\Http\Controllers\NotificationController)->getNotifUser($user->id);
         
         return view('Partenaire.annonce-details', compact(
+            'AverageRating',
             'listing',
             'item',
             'city',
