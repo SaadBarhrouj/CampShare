@@ -141,7 +141,7 @@
             <!-- Page header -->
             <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Mes annonces</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Annonces</h1>
                     <p class="mt-1 text-gray-600 dark:text-gray-400">
                         Gérez vos annonces d'équipements de camping publiées
                     </p>

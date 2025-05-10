@@ -292,9 +292,6 @@
                                                             Refuser
                                                         </button>
                                                  </form>
-                                                    <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                                        <i class="fas fa-comment-alt"></i>
-                                                    </button>
                                                 </div>
                                             
                                             @elseif($Reservation->status == "confirmed")
@@ -471,9 +468,6 @@
                                 Refuser
                             </button>
                         </form>
-                        <button class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-comment-alt"></i>
-                        </button>
                     </div>`;
                 break;
             case "confirmed":

@@ -65,7 +65,7 @@
             <!-- Page header -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Vos Équipements</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Équipements</h1>
                     <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez toutes vos équipements.</p>
                 </div>
                 <div class="mt-4 md:mt-0">

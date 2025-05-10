@@ -33,10 +33,10 @@ Route::get('/listings', [ListingController::class, 'index'])->name('client.listi
 
 // Partner Routes
 Route::get('/Partenaire/MesEquipement', [PartenaireController::class, 'ShowMesEquipement'])->name('MesEquipement');
-Route::get('/Partenaire/Mesannonces', [PartenaireController::class, 'ShowMesAnnonces'])->name('HomePartenaie');
-Route::get('/Partenaire/DemandeLocation', [PartenaireController::class, 'ShowDemandeLocation'])->name('HomePartenaie');
-Route::get('/Partenaire/LocationEnCours', [PartenaireController::class, 'ShowLocationEnCours'])->name('HomePartenaie');
-Route::get('/Partenaire/AvisRecus', [PartenaireController::class, 'ShowAvisRecus'])->name('HomePartenaie');
+Route::get('/Partenaire/Mesannonces', [PartenaireController::class, 'ShowMesAnnonces'])->name('HomePartenaie.mesannonces');
+Route::get('/Partenaire/DemandeLocation', [PartenaireController::class, 'ShowDemandeLocation'])->name('HomePartenaie.demandes');
+Route::get('/Partenaire/LocationEnCours', [PartenaireController::class, 'ShowLocationEnCours'])->name('HomePartenaie.locations.en.cours');
+Route::get('/Partenaire/AvisRecus', [PartenaireController::class, 'ShowAvisRecus'])->name('HomePartenaie.avis');
 Route::get('/Partenaire/Dashboard', [PartenaireController::class, 'ShowHomePartenaire'])->name('HomePartenaie');
 
 

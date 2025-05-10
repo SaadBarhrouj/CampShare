@@ -14,27 +14,13 @@
                 
                 <!-- Stats cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- Stats card 1 -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 mr-4">
-                                <i class="fas fa-coins text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Revenus du mois</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$sumPayment}} MAD</h3>
-                                <p class="text-green-600 dark:text-green-400 text-sm flex items-center mt-1">
-                                    
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    
                     
                     <!-- Stats card 2 -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 mr-4">
-                                <i class="fas fa-exchange-alt text-blue-600 dark:text-blue-400"></i>
+                                <i class="fa-regular fa-circle-check text-blue-600 dark:text-blue-400"></i>
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Locations réalisées</p>
@@ -46,6 +32,23 @@
                         </div>
                     </div>
                     
+                    
+                    
+                    <!-- Stats card 4 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 mr-4">
+                                <i class="fa-solid fa-campground text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Équipements actifs</p>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$TotalListingActive}} / {{$TotalListing}}</h3>
+                                <p class="text-purple-600 dark:text-purple-400 text-sm flex items-center mt-1">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Stats card 3 -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
@@ -61,17 +64,18 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Stats card 4 -->
+
+                    <!-- Stats card 1 -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 mr-4">
-                                <i class="fas fa-campground text-purple-600 dark:text-purple-400"></i>
+                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 mr-4">
+                                <i class="fas fa-coins text-green-600 dark:text-green-400"></i>
                             </div>
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Listings actifs</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$TotalListingActive}} / {{$TotalListing}}</h3>
-                                <p class="text-purple-600 dark:text-purple-400 text-sm flex items-center mt-1">
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Revenus du mois</p>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$sumPayment}} MAD</h3>
+                                <p class="text-green-600 dark:text-green-400 text-sm flex items-center mt-1">
+                                    
                                 </p>
                             </div>
                         </div>
@@ -88,10 +92,10 @@
                         <div class="divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach($lastAvisPartnerForObjet as $avis)
                             <div class="px-6 py-4">
-                                <div class="flex">
+                                <div class="flex items-center">
                                     <div class="flex-shrink-0 mr-4">
-                                        <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                                            <i class="fas fa-money-bill-wave text-green-600 dark:text-green-400"></i>
+                                        <div class="h-10 w-10 rounded-full bg-amber-100 dark:bg-amber-800  flex items-center justify-center">
+                                            <i class="fas fa-star text-amber-600 dark:text-amber-400"></i>
                                         </div>
                                     </div>
                                     <div>
@@ -99,24 +103,14 @@
                                             {{$avis->username}} -  Equipment : {{$avis->object_title}}
                                         </p>
                                         <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                              commentaire: {{$avis->comment}}
+                                              {{$avis->comment}}
                                         </p>
                                         <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                        @php
-                                            $rating = $avis->rating;  
-                                            $fullStars = floor($rating); 
-                                            $halfStar = $rating - $fullStars !=0
-                                        @endphp
 
-                                            <div class="flex text-amber-400">
-                                            @for ($i = 0; $i < $fullStars; $i++)
-                                                <i class="fas fa-star"></i>
-                                            @endfor
-                        
-                                            @if ($halfStar)
-                                                <i class="fas fa-star-half-alt"></i>
-                                            @endif
-                                            </div>
+                                            <div class="flex items-center text-sm">
+                                                    <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                    <span>{{ $avis->rating }}</span>
+                                                </div>
                                         </p>
                                     </div>
                                 </div>
@@ -124,8 +118,8 @@
                             @endforeach
                         </div>
                         <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700/50 text-center">
-                            <a href="#all-activity" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
-                                Voir toute l'activité
+                            <a href="{{ route('HomePartenaie.avis') }}" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
+                                Voir tous les avis
                             </a>
                         </div>
                     </div>
@@ -138,7 +132,7 @@
                                {{$NumberPendingReservation}} en attente
                             </span>
                         </div>
-                        @foreach ($pendingReservation as $Reservation)
+                        @forelse ($pendingReservation as $Reservation)
                         <div class="divide-y divide-gray-200 dark:divide-gray-700">
                             <div class="px-6 py-4">
                                 <div class="flex items-start">
@@ -156,11 +150,11 @@
                                         </p>
                                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded p-2 mb-3">
                                             <div class="flex justify-between text-sm mb-1">
-                                                <span class="text-gray-600 dark:text-gray-400">Dates:</span>
-                                                <span class="font-medium text-gray-900 dark:text-white">{{$Reservation->start_date}} - {{$Reservation->end_date}}</span>
+                                                <span class="text-gray-600 dark:text-gray-400">Durée de résérvation</span>
+                                                <span class="font-medium text-gray-900 dark:text-white">{{$Reservation->start_date}} -> {{$Reservation->end_date}}</span>
                                             </div>
                                             <div class="flex justify-between text-sm">
-                                                <span class="text-gray-600 dark:text-gray-400">Montant total:</span>
+                                                <span class="text-gray-600 dark:text-gray-400">Montant total</span>
                                                 <span class="font-medium text-gray-900 dark:text-white">{{$Reservation->montant_total}} MAD ({{$Reservation->number_days}} jours)</span>
                                             </div>
                                         </div>
@@ -192,12 +186,21 @@
                             
                             
                         </div>
-                        @endforeach
+                        @empty
+                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                            <div class="px-6 py-4 text-sm text-gray-500">
+                                Vous n'avez aucune demande de location dans ce moment.
+                            </div>
+                        </div>
+                        
+                        @endforelse
+                        @if($pendingReservation->count()!=0)
                         <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700/50 text-center">
-                            <a href="toutes-les-demandes" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
+                            <a href="{{ route('HomePartenaie.demandes') }}" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
                                 Voir toutes les demandes
                             </a>
                         </div>
+                        @endif
                     </div>
                 </div>
                 
@@ -207,7 +210,7 @@
                 <div class="mb-8">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold text-gray-900 dark:text-white">Mes équipements</h2>
-                        <a href="#equipment" data-target="AllMyEquipement" class="sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
+                        <a href="{{ route('MesEquipement') }}" data-target="AllMyEquipement" class="sidebar-link text-forest dark:text-meadow hover:underline text-sm font-medium">
                             Voir tous mes équipements
                         </a>
                     </div>
@@ -218,21 +221,17 @@
 
                         <div class="equipment-card bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
                             <div class="relative h-48">
-                                <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                <img src="{{asset($Listing->url)}}" 
                                      alt="Pack Camping Complet 2p" 
                                      class="w-full h-full object-cover" />
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                 @if($Listing->status == "active")
                                     <div class="absolute top-4 left-4">
-                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">{{$Listing->status}}</span>
+                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
                                     </div>
-                                @elseif($Listing->status == "inactive")
+                                @elseif($Listing->status == "archived")
                                     <div class="absolute top-4 left-4">
-                                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{$Listing->status}}</span>
-                                    </div>
-                                @else
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{$Listing->status}}</span>
+                                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Archivé</span>
                                     </div>
                                 @endif
                                 <div class="absolute bottom-4 left-4 right-4">
@@ -257,17 +256,13 @@
                                 </div>
                                 
                                 <div class="flex items-center justify-between">
-                                    <div class="text-sm text-gray-600 dark:text-gray-300">
-                                        <span class="font-medium text-purple-600 dark:text-purple-400">
-                                            <i class="fas fa-fire-alt mr-1"></i> Populaire
-                                        </span>
-                                    </div>
+                                   
                                     <div class="flex items-center space-x-2">
-                                        <a href="#edit-equipment" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="#show-equipment" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                                            <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="#equipment-status" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
-                                            <i class="fas fa-cog"></i>
+                                        <a href="#edit-equipement" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                     </div>
                                 </div>

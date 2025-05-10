@@ -256,8 +256,8 @@
                                             </div>
                                             @else
                                             <div>
-                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Pour partenaire</p>
-                                                <p class="font-medium text-gray-900 dark:text-white"></p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Sur vous</p>
+                                                <p class="font-medium text-gray-900 dark:text-white">-</p>
                                             </div>
                                             @endif
                                             <div>

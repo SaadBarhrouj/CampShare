@@ -106,7 +106,7 @@ class PartenaireModel extends Model
             ->where('U.email', $email)
             ->where('R.status', 'pending')
             ->orderby('R.created_at', 'desc')
-            ->limit(3)
+            ->limit(2)
             ->get();
     }
     public static function getListingsByEmail($email)
@@ -136,7 +136,7 @@ class PartenaireModel extends Model
             ->leftJoin('images as i', 'i.item_id', '=', 'm.id')
             ->join('categories as c','c.id','m.category_id')
             ->where('U.email', $email)
-            ->select('m.title', 'm.description', 'm.price_per_day', 'i.url', 'L.status','c.name')
+            ->select('m.title', 'm.description', 'm.price_per_day', 'i.url', 'L.status','c.name', 'L.id')
             ->orderBy('L.created_at', 'desc')
             ->limit(3)
             ->get();
