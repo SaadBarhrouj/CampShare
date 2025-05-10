@@ -350,7 +350,10 @@
                             if (hasHalfStar) {
                                 starsHtml += '<i class="fas fa-star-half-alt"></i>';
                             }
-                            
+
+                            const avatarUrl = "{{ asset('') }}";
+                            const fullUrl = avatarUrl + avi.avatar_url;
+
                             container.innerHTML += `
                             <div class="px-6 py-4">
                                 <div class="flex flex-col lg:flex-row lg:items-start">
@@ -358,11 +361,11 @@
                                         <div class="col-span-2">
                                             <div class="flex gap-2 items-center content-center mb-4 lg:mb-0 lg:mr-6 w-full lg:w-auto">
                                                 <div class="flex items-center content-center w-12">
-                                                    <img src="${avi.avatar_url}"
+                                                    <img src="${fullUrl}"
                                                         alt="${avi.username}" 
                                                         class="w-12 h-12 rounded-full object-cover" />
                                                 </div>
-                                                <div class="lg:block mt-2">
+                                                <div class="lg:block mt-2 pb-2">
                                                     <h3 class="font-medium text-gray-900 dark:text-white">${avi.username}</h3>
                                                 </div>
                                             </div>

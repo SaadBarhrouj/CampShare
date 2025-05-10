@@ -250,12 +250,12 @@
                                             <div>
                                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Durée de résérvation</p>
                                                 <p class="font-medium text-gray-900 dark:text-white">{{$Reservation->start_date}} - {{$Reservation->end_date}}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">({{$Reservation->number_days}} jours)</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">( {{$Reservation->number_days}} jours )</p>
                                             </div>
                                             <div>
                                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
                                                 <p class="font-medium text-gray-900 dark:text-white">{{$Reservation->montant_total}} MAD</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">({{$Reservation->price_per_day }}MAD/jour)</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">( {{$Reservation->price_per_day }} MAD/jour )</p>
                                             </div>
                                         </div>
 
@@ -271,19 +271,19 @@
                         <div class="text-sm text-gray-600 dark:text-gray-400">
                             Affichage de 
                             <span class="font-medium text-gray-900 dark:text-white">
-                                {{ $AllReservationForPartner->firstItem() }}
+                                {{ $LocationsEncours->firstItem() }}
                             </span> 
                             à 
                             <span class="font-medium text-gray-900 dark:text-white">
-                                {{ $AllReservationForPartner->lastItem() }}
+                                {{ $LocationsEncours->lastItem() }}
                             </span> 
                             sur 
                             <span class="font-medium text-gray-900 dark:text-white">
-                                {{ $AllReservationForPartner->total() }}
+                                {{ $LocationsEncours->total() }}
                             </span> demandes
                         </div>
                         <div>
-                            {{ $AllReservationForPartner->links() }}
+                            {{ $LocationsEncours->links() }}
                         </div>
                     </div>
 
@@ -347,12 +347,16 @@
                     
                     if (data.demandes && data.demandes.length > 0) {
                         data.demandes.forEach(reservation => {
+
+                            const avatarUrl = "{{ asset('') }}";
+                            const fullUrl = avatarUrl + reservation.avatar_url;
+
                             container.innerHTML += `
                             <div class="px-6 py-4">
                                             <div class="flex flex-col lg:flex-row lg:items-start">
                                                 <div class="flex gap-2 mb-4 lg:mb-0 lg:mr-28 w-full lg:w-auto">
                                                     <div class="flex items-center lg:w-16">
-                                                        <img src="${reservation.avatar_url}"
+                                                        <img src="${fullUrl}"
                                                             alt="Mehdi Idrissi" 
                                                             class="w-12 h-12 rounded-full object-cover" />
                                                         <div class="lg:hidden ml-3">
@@ -374,14 +378,14 @@
                                                         </p>
                                                     </div>
                                                     <div>
-                                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dates</p>
+                                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Durée de résérvation</p>
                                                         <p class="font-medium text-gray-900 dark:text-white">${reservation.start_date} - ${reservation.end_date}</p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.number_days})</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">( ${reservation.number_days} jours )</p>
                                                     </div>
                                                     <div>
                                                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Montant</p>
                                                         <p class="font-medium text-gray-900 dark:text-white">${reservation.montant_total} MAD</p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">(${reservation.price_per_day }MAD/jour)</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">( ${reservation.price_per_day } MAD/jour )</p>
                                                     </div>
                                                 </div>
 

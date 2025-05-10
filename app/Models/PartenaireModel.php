@@ -99,8 +99,8 @@ class PartenaireModel extends Model
                 'R.end_date',
                 'R.created_at',
                 'R.id',
-                DB::raw('DATEDIFF(R.end_date, R.start_date) * i.price_per_day AS montant_total'),
-                DB::raw('DATEDIFF(R.end_date, R.start_date)  AS number_days')
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date) * i.price_per_day) AS montant_total'),
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date))  AS number_days')
 
             )
             ->where('U.email', $email)
@@ -158,8 +158,8 @@ class PartenaireModel extends Model
                 'R.created_at',
                 'R.status',
                 'i.price_per_day',
-                DB::raw('DATEDIFF(R.end_date, R.start_date) * i.price_per_day AS montant_total'),
-                DB::raw('DATEDIFF(R.end_date, R.start_date) AS number_days')
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date) * i.price_per_day) AS montant_total'),
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date)) AS number_days')
 
             )
             ->where('U.email', $email)
@@ -223,7 +223,7 @@ class PartenaireModel extends Model
         )
         ->where('U.email', $email)
         ->where ('R.status','ongoing')
-        ->get();
+        ->paginate(5);
     }
     public static function getNumberLocationsEncours($email)
     {

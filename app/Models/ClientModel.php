@@ -67,6 +67,7 @@ class ClientModel extends Model
     
         return $query->select(
                 'reservations.id',
+                'listings.id AS listing_id',
                 'partner.id AS partner_id',
                 'partner.username AS partner_username',
                 'partner.avatar_url AS partner_img',
@@ -76,10 +77,12 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'items.title AS listing_title',
-                DB::raw('COALESCE(SUM(payments.amount), 0) AS montant_paye'),
+                DB::raw('ABS(DATEDIFF(reservations.end_date, reservations.start_date) * items.price_per_day) AS montant_paye'),
                 'items.description'
             )
             ->groupBy(
+                'listings.id',
+                'items.price_per_day',
                 'reservations.id',
                 'partner.username',
                 'partner.id',
@@ -119,6 +122,8 @@ class ClientModel extends Model
     
         return $query->select(
                 'reservations.id',
+                'listings.id',
+                DB::raw('ABS(DATEDIFF(reservations.end_date, reservations.start_date) * items.price_per_day) AS montant_paye'),
                 'partner.id AS partner_id',
                 'partner.username AS partner_username',
                 'partner.avatar_url AS partner_img',
@@ -128,10 +133,11 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'items.title AS listing_title',
-                DB::raw('COALESCE(SUM(payments.amount), 0) AS montant_paye'),
                 'items.description'
             )
             ->groupBy(
+                'listings.id',
+                'items.price_per_day',
                 'partner.id',
                 'reservations.id',
                 'partner.username',
