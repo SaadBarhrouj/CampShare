@@ -6,43 +6,29 @@ use Illuminate\Console\Command;
 use App\Models\Reservation;
 use App\Models\Notification;
 use App\Models\Review;
-use App\Models\User; 
-use App\Models\Listing; 
-use App\Models\Item; 
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestClientActionMail;
+use App\Mail\RequestPartnerToReviewClientMail;
 
 class ReviewNotification extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'reservations:send-review-notifications';
+    protected $description = 'Check for ended reservations and send review notifications and emails if no review exists yet';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Check for ended reservations and send review notifications if no review exists yet';
-
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
-        $targetDate = Carbon::yesterday(); 
-        $this->info("Starting review notification check for reservations ended on {$targetDate->toDateString()}...");
-        Log::info("Scheduled Task: Starting {$this->signature}");
+        $targetDate = Carbon::yesterday();
+        $this->info("Starting review notification and email check for reservations ended on {$targetDate->toDateString()}...");
+        Log::info("Scheduled Task (Command: {$this->signature}): Starting process for reservations ended on {$targetDate->toDateString()}.");
 
-        // 1. Récupérer les réservations pertinentes (statut 'completed', date de fin = hier)
-        $endedReservations = Reservation::where('status', 'completed') 
+        $endedReservations = Reservation::where('status', 'completed')
                                     ->whereDate('end_date', '=', $targetDate)
-                                    ->with([ 
-                                        'client:id,username',
-                                        'partner:id,username', 
+                                    ->with([
+                                        'client:id,username,email',
+                                        'partner:id,username,email',
                                         'listing:id,item_id',
                                         'listing.item:id,title'
                                         ])
@@ -50,105 +36,118 @@ class ReviewNotification extends Command
 
         if ($endedReservations->isEmpty()) {
             $this->info('No completed reservations found for the target date.');
-            Log::info("Scheduled Task: {$this->signature} - No completed reservations found for {$targetDate->toDateString()}.");
-            return Command::SUCCESS; 
+            Log::info("Scheduled Task (Command: {$this->signature}): No completed reservations found for {$targetDate->toDateString()}.");
+            return Command::SUCCESS;
         }
 
         $reservationIds = $endedReservations->pluck('id');
 
-        // 2. Récupérer les avis DÉJÀ laissés pour ces réservations (en une seule requête)
         $existingReviews = Review::whereIn('reservation_id', $reservationIds)
-                                ->select('reservation_id', 'reviewer_id', 'type') 
+                                ->select('reservation_id', 'reviewer_id', 'type')
                                 ->get()
                                 ->groupBy('reservation_id');
 
-        // 3. Récupérer les notifications d'avis DÉJÀ envoyées
         $existingNotifications = Notification::whereIn('reservation_id', $reservationIds)
                                         ->whereIn('type', ['review_object', 'review_partner', 'review_client'])
                                         ->select('reservation_id', 'user_id', 'type')
                                         ->get()
                                         ->keyBy(fn($n) => $n->reservation_id . '_' . $n->user_id . '_' . $n->type);
 
-
         $notificationsCreatedCount = 0;
+        $emailsSentCount = 0;
 
-        // 4. Boucle sur chaque réservation terminée hier
         foreach ($endedReservations as $reservation) {
             $this->line("Processing Reservation ID: {$reservation->id}");
+            Log::debug("Scheduled Task (Command: {$this->signature}): Processing Reservation ID {$reservation->id}.");
 
             $reviewsForThisReservation = $existingReviews->get($reservation->id, collect());
 
-            $clientId = optional($reservation->client)->id;
-            $partnerId = optional($reservation->partner)->id;
-            $itemTitle = optional(optional($reservation->listing)->item)->title ?? '[Article Supprimé]';
-            $clientUsername = optional($reservation->client)->username ?? '[Client Supprimé]';
-            $partnerUsername = optional($reservation->partner)->username ?? '[Partenaire Supprimé]';
-            $listingId = optional($reservation->listing)->id;
+            $client = $reservation->client;
+            $partner = $reservation->partner;
 
-            // Si le client ou le listing n'existe plus, on ne peut pas envoyer de notif fiable
-             if (!$clientId || !$partnerId || !$listingId) {
-                $this->warn("  -> Skipping Resa ID {$reservation->id}: Missing Client, Partner, or Listing relation.");
-                Log::warning("Scheduled Task: Skipped Resa ID {$reservation->id} due to missing relations.");
-                continue; 
+            if (!$client || !$partner || !$reservation->listing || !$client->email || !$partner->email) {
+                $this->warn("  -> Skipping Resa ID {$reservation->id}: Missing Client/Partner (or their email)/Listing relation.");
+                Log::warning("Scheduled Task (Command: {$this->signature}): Skipped Resa ID {$reservation->id} due to missing relations or email for notification/email.");
+                continue;
             }
 
-            // --- Créer Notif CLIENT -> ÉVALUER OBJET ---
-            $clientHasReviewedObject = $reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $clientId && $r->type == 'forObject');
-            $notifKeyObject = $reservation->id . '_' . $clientId . '_review_object';
+            $itemTitle = optional($reservation->listing->item)->title ?? '[Article Supprimé]';
+            $clientUsername = $client->username ?? '[Client Supprimé]';
+            $partnerUsername = $partner->username ?? '[Partenaire Supprimé]';
+            $listingId = $reservation->listing->id;
 
-            if (!$clientHasReviewedObject && !$existingNotifications->has($notifKeyObject)) {
+            $needsClientObjectReview = !$reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $client->id && $r->type == 'forObject');
+            $needsClientPartnerReview = !$reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $client->id && $r->type == 'forPartner');
+
+            $notifKeyObject = $reservation->id . '_' . $client->id . '_review_object';
+            $notifKeyPartner = $reservation->id . '_' . $client->id . '_review_partner';
+
+            $clientActionRequiredForEmail = false;
+
+            if ($needsClientObjectReview && !$existingNotifications->has($notifKeyObject)) {
                 Notification::create([
-                    'user_id' => $clientId,
+                    'user_id' => $client->id,
                     'message' => "Évaluez l'équipement \"{$itemTitle}\" loué (Résa #{$reservation->id}).",
-                    'type' => 'review_object',
-                    'listing_id' => $listingId,
-                    'reservation_id' => $reservation->id,
-                    'is_read' => 0,
+                    'type' => 'review_object', 'listing_id' => $listingId, 'reservation_id' => $reservation->id, 'is_read' => 0,
                 ]);
                 $notificationsCreatedCount++;
-                 $this->line("  -> Notif 'review_object' créée pour client {$clientId}");
-                 Log::debug("Scheduled Task: Created 'review_object' notification for User {$clientId}, Res {$reservation->id}");
+                $this->line("  -> Notif (interne) 'review_object' créée pour client {$client->id}");
+                Log::debug("Scheduled Task (Command: {$this->signature}): Created 'review_object' internal notification for User {$client->id}, Res {$reservation->id}");
+                $clientActionRequiredForEmail = true;
             }
 
-             // --- Créer Notif CLIENT -> ÉVALUER PARTENAIRE ---
-             $clientHasReviewedPartner = $reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $clientId && $r->type == 'forPartner');
-             $notifKeyPartner = $reservation->id . '_' . $clientId . '_review_partner';
-
-             if (!$clientHasReviewedPartner && !$existingNotifications->has($notifKeyPartner)) {
-                 Notification::create([
-                    'user_id' => $clientId,
-                    'message' => "Comment s'est passée votre expérience avec {$partnerUsername} (Résa #{$reservation->id}) ?",
-                    'type' => 'review_partner',
-                    'listing_id' => $listingId,
-                    'reservation_id' => $reservation->id,
-                    'is_read' => 0,
-                ]);
-                 $notificationsCreatedCount++;
-                 $this->line("  -> Notif 'review_partner' créée pour client {$clientId}");
-                 Log::debug("Scheduled Task: Created 'review_partner' notification for User {$clientId}, Res {$reservation->id}");
-             }
-
-            // --- Créer Notif PARTENAIRE -> ÉVALUER CLIENT ---
-            $partnerHasReviewedClient = $reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $partnerId && $r->type == 'forClient');
-             $notifKeyClient = $reservation->id . '_' . $partnerId . '_review_client';
-
-             if (!$partnerHasReviewedClient && !$existingNotifications->has($notifKeyClient)) {
+            if ($needsClientPartnerReview && !$existingNotifications->has($notifKeyPartner)) {
                 Notification::create([
-                    'user_id' => $partnerId,
-                    'message' => "Évaluez votre expérience avec {$clientUsername} pour la location de \"{$itemTitle}\" (Résa #{$reservation->id}).",
-                    'type' => 'review_client',
-                    'listing_id' => $listingId,
-                    'reservation_id' => $reservation->id,
-                    'is_read' => 0,
+                    'user_id' => $client->id,
+                    'message' => "Comment s'est passée votre expérience avec {$partnerUsername} (Résa #{$reservation->id}) ?",
+                    'type' => 'review_partner', 'listing_id' => $listingId, 'reservation_id' => $reservation->id, 'is_read' => 0,
                 ]);
-                 $notificationsCreatedCount++;
-                 $this->line("  -> Notif 'review_client' créée pour partenaire {$partnerId}");
-                 Log::debug("Scheduled Task: Created 'review_client' notification for User {$partnerId}, Res {$reservation->id}");
+                $notificationsCreatedCount++;
+                $this->line("  -> Notif (interne) 'review_partner' créée pour client {$client->id}");
+                Log::debug("Scheduled Task (Command: {$this->signature}): Created 'review_partner' internal notification for User {$client->id}, Res {$reservation->id}");
+                $clientActionRequiredForEmail = true;
+            }
+
+            if ($clientActionRequiredForEmail) {
+                try {
+                    Mail::to($client->email)->send(new RequestClientActionMail($reservation, $client, $itemTitle, $partnerUsername, $needsClientObjectReview, $needsClientPartnerReview));
+                    $this->line("    -> Email 'RequestClientActionMail' envoyé à client {$client->id} ({$client->email})");
+                    Log::info("Scheduled Task (Command: {$this->signature}): Sent 'RequestClientActionMail' to User {$client->id}, Res {$reservation->id}");
+                    $emailsSentCount++;
+                } catch (\Exception $e) {
+                    $this->error("    -> Erreur envoi email 'RequestClientActionMail' à client {$client->id}: " . $e->getMessage());
+                    Log::error("Scheduled Task (Command: {$this->signature}): Failed to send 'RequestClientActionMail' for User {$client->id}, Res {$reservation->id}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+                }
+            }
+
+            $needsPartnerClientReview = !$reviewsForThisReservation->contains(fn($r) => $r->reviewer_id == $partner->id && $r->type == 'forClient');
+            $notifKeyClient = $reservation->id . '_' . $partner->id . '_review_client';
+
+            if ($needsPartnerClientReview && !$existingNotifications->has($notifKeyClient)) {
+                Notification::create([
+                    'user_id' => $partner->id,
+                    'message' => "Évaluez votre expérience avec {$clientUsername} pour la location de \"{$itemTitle}\" (Résa #{$reservation->id}).",
+                    'type' => 'review_client', 'listing_id' => $listingId, 'reservation_id' => $reservation->id, 'is_read' => 0,
+                ]);
+                $notificationsCreatedCount++;
+                $this->line("  -> Notif (interne) 'review_client' créée pour partenaire {$partner->id}");
+                Log::debug("Scheduled Task (Command: {$this->signature}): Created 'review_client' internal notification for User {$partner->id}, Res {$reservation->id}");
+
+                try {
+                    Mail::to($partner->email)->send(new RequestPartnerToReviewClientMail($reservation, $partner, $clientUsername, $itemTitle));
+                    $this->line("    -> Email 'RequestPartnerToReviewClientMail' envoyé à partenaire {$partner->id} ({$partner->email})");
+                    Log::info("Scheduled Task (Command: {$this->signature}): Sent 'RequestPartnerToReviewClientMail' to User {$partner->id}, Res {$reservation->id}");
+                    $emailsSentCount++;
+                } catch (\Exception $e) {
+                    $this->error("    -> Erreur envoi email 'RequestPartnerToReviewClientMail' à partenaire {$partner->id}: " . $e->getMessage());
+                    Log::error("Scheduled Task (Command: {$this->signature}): Failed to send 'RequestPartnerToReviewClientMail' for User {$partner->id}, Res {$reservation->id}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+                }
             }
         }
 
-        $this->info($notificationsCreatedCount . ' nouvelles notifications d\'évaluation créées.');
-        Log::info("Scheduled Task: {$this->signature} finished. Created {$notificationsCreatedCount} new notifications.");
+        $this->info($notificationsCreatedCount . ' nouvelles notifications d\'évaluation (internes) créées.');
+        $this->info($emailsSentCount . ' e-mails d\'évaluation envoyés (ou tentés).');
+        Log::info("Scheduled Task (Command: {$this->signature}): Finished. Created {$notificationsCreatedCount} new internal notifications. Attempted to send {$emailsSentCount} emails.");
         return Command::SUCCESS;
     }
 }
