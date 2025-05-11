@@ -11,3 +11,6 @@ Planifier taches (commande pour executer manuelement pour tester ):
 
 create commande:
 php artisan make:command UpdateReviewVisibility
+php artisan listings:update-premium-status
+
+lister les commandes :php artisan list
