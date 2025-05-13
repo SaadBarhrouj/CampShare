@@ -238,7 +238,7 @@
                             <div class="flex items-center space-x-4">
                                 <div class="relative">
                                     <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                        <i class="fas fa-bell"></i>
+                                      <a  href="{{ route('notifications.partner.index') }}"> <i class="fas fa-bell"></i></a> 
                                         @php
                                             $notifications = $notifications ?? collect();
                                             $unreadNotificationsCount = $notifications->whereNull('read_at')->count();
@@ -247,43 +247,6 @@
                                             <span class="notification-badge">{{ $unreadNotificationsCount }}</span>
                                         @endif
                                     </button>
-                                    <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600">
-                                         <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                            <div class="flex items-center justify-between">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                                                <a href="#" class="text-sm text-forest dark:text-meadow hover:underline">Marquer tout comme lu</a>
-                                            </div>
-                                        </div>
-                                        <div class="max-h-96 overflow-y-auto">
-                                            @forelse($notifications as $notification)
-                                            <a href="#" class="block px-4 py-3 border-b border-gray-200 dark:border-gray-700 {{ is_null($notification->read_at) ? 'bg-blue-50 dark:bg-blue-900/20' : '' }} hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                                <div class="flex">
-                                                    <div class="flex-shrink-0 mr-3">
-                                                        <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-500 dark:text-blue-300">
-                                                            <i class="{{ $notification->data['icon'] ?? 'fas fa-info-circle' }}"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->data['title'] ?? 'Nouvelle demande de location' }}</p>
-                                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ Illuminate\Support\Str::limit($notification->data['message'] ?? ($notification->message ?? 'Détails manquants.'), 50) }}</p>
-                                                        @if ($notification->created_at)
-                                                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                                                                {{ $notification->created_at->diffForHumans() }}
-                                                            </p>
-                                                        @endif           
-                                                     </div>
-                                                </div>
-                                            </a>
-                                            @empty
-                                            <p class="p-4 text-sm text-gray-600 dark:text-gray-400">Aucune notification.</p>
-                                            @endforelse
-                                        </div>
-                                        <div class="p-3 text-center border-t border-gray-200 dark:border-gray-700">
-                                            <a href="{{ route('notifications.client.index') }}" class="text-sm font-medium text-forest dark:text-meadow hover:underline">
-                                                Voir toutes les notifications
-                                            </a>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="relative">
                                     <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
