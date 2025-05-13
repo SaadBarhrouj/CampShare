@@ -189,7 +189,11 @@ class Listing extends Model
     {
         return $this->item->reviews();
     }
+    
 
-
+public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
 }

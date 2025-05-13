@@ -450,8 +450,13 @@ class ListingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Listing $listing)
+   public function destroy(Listing $listing)
     {
-        //
+        try {
+            $listing->delete();
+            return redirect()->back()->with('success', 'Annonce supprimée avec succès');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors de la suppression');
+        }
     }
 }

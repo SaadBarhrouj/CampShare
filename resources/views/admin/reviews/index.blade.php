@@ -147,16 +147,18 @@
                 <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                     Utilisateurs</h5>
                 <nav class="space-y-1">
-                    <a href="#"
-                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                        Partenaires
-                    </a>
-                    <a href="#"
-                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-                        Clients
-                    </a>
+                   <a href="{{ route('admin.partners') }}"
+    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Partenaires
+</a>
+
+<a href="{{ route('admin.clients') }}"
+    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+    <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+    Clients
+</a>
+
                 </nav>
             </div>
 

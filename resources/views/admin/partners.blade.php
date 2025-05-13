@@ -1345,34 +1345,37 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
     }
 
     function handlePartnerSections(user, data) {
-        if (user.role !== 'partner') return;
+    if (user.role !== 'partner') return;
 
-        document.getElementById('user-equipments-count').textContent = data.equipments_count || 0;
+    document.getElementById('user-equipments-count').textContent = data.equipments_count || 0;
 
-        const tbody = document.querySelector('#partner-equipments tbody');
-        tbody.innerHTML = '';
-        if (data.items && data.items.length > 0) {
-            console.log(data)
-            data.items.forEach(eq => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+    const tbody = document.querySelector('#partner-equipments tbody');
+    tbody.innerHTML = '';
+    if (data.items && data.items.length > 0) {
+        data.items.forEach(eq => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
                 <td>${eq.title}</td>
                 <td>${eq.category_name}</td>
                 <td>${eq.price_per_day} MAD</td>
                 <td>
-                    <button onclick="window.location.href='/admin/equipment/${eq.id}'" class="p-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition shadow-md hover:scale-105">
+                    <button onclick="window.location.href='${window.location.origin}/admin/annonces/${eq.id}'" 
+                            class="p-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition shadow-md hover:scale-105">
                         <i class="fas fa-eye"></i>
                     </button>
                 </td>
             `;
-                tbody.appendChild(row);
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Aucun équipement</td></tr>';
-        }
-
-        document.getElementById('view-all-equipments').href = `/admin/partners/${user.id}/equipments`;
+            tbody.appendChild(row);
+        });
+    } else {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Aucun équipement</td></tr>';
     }
+
+    document.getElementById('view-all-equipments').href = `/admin/partners/${user.id}/equipments`;
+}
+
+
+
 
     function fillReservations(reservations) {
         console.log(reservations)

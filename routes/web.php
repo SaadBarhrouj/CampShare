@@ -20,6 +20,7 @@ use App\Http\Controllers\EquipementController;
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\ReviewAdminController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AnnonceAdminController;
 use App\Http\Controllers\AdminDetailsEquipmentController;
 
 
@@ -180,6 +181,9 @@ Route::middleware(['auth', 'active.account'])->group(function () {
             Route::post('/users/{user}/deactivate', [UserController::class, 'deactivateUser'])->name('admin.users.deactivate');
             Route::post('/users/{id}/toggle-activation', [UserController::class, 'toggleActivation'])->name('admin.users.toggleActivation');
 
+            Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])->name('listings.destroy');
+            Route::delete('/annonces/{id}', [AnnonceAdminController::class, 'destroy'])->name('admin.equipements.destroy');
+            Route::get('/annonces/{id}', [AnnonceAdminController::class, 'show'])->name('admin.annonces.show');
         });
 
         // Routes pour le nettoyage et la maintenance
