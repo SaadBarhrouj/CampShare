@@ -6,13 +6,13 @@ use App\Models\Listing;
 use App\Models\Reservation;
 use App\Models\User;
 use App\Mail\clientAccept;
-use App\Mail\partnerAccept; // Importer
-use App\Mail\clientRefuse;  // Importer
+use App\Mail\partnerAccept; 
+use App\Mail\clientRefuse;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log; // Gardé pour les erreurs critiques
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class ReservationController extends Controller
@@ -49,9 +49,19 @@ class ReservationController extends Controller
         if (!$listing->item?->partner) {
              return redirect()->back()
                          ->with('error', 'Impossible de trouver le propriétaire de cet équipement.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         }
         $partner = $listing->item->partner;
+
+        // Ajout : Vérifier que le client ne réserve pas son propre équipement
+        if ($client->id === $partner->id) {
+             return redirect()->back()
+                         ->with('error', 'Vous ne pouvez pas réserver votre propre équipement.')
+                         ->with('notificationTimeout', 5000) // durée en millisecondes
+                         ->with('notificationType', 'error')
+                         ->withInput();
+        }
 
 
 
@@ -59,6 +69,7 @@ class ReservationController extends Controller
         if ($listing->status !== 'active') {
              return redirect()->back()
                          ->with('error', 'Cet équipement n\'est plus disponible à la location.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         }
 
@@ -70,11 +81,13 @@ class ReservationController extends Controller
         if ($listing->start_date && $startDate->isBefore($listing->start_date)) {
             return redirect()->back()
                          ->with('error', 'La date de début demandée est avant la disponibilité de l\'équipement.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         }
         if ($listing->end_date && $endDate->isAfter($listing->end_date)) {
             return redirect()->back()
                          ->with('error', 'La date de fin demandée est après la disponibilité de l\'équipement.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         }
 
@@ -101,6 +114,7 @@ class ReservationController extends Controller
         if ($overlappingReservations) {
             return redirect()->back()
                          ->with('error', 'Les dates sélectionnées ne sont plus disponibles car elles chevauchent une réservation existante.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         }
 
@@ -114,6 +128,7 @@ class ReservationController extends Controller
              // Si l'utilisateur coche livraison mais que le listing ne l'offre pas
              return redirect()->back()
                          ->with('error', 'L\'option de livraison n\'est pas disponible pour cet équipement.')
+                         ->with('notificationType', 'error')
                          ->withInput();
         } elseif ($deliveryRequested && $listing->delivery_option) {
              $applyDelivery = true;
@@ -133,10 +148,10 @@ class ReservationController extends Controller
             $reservation->save();
 
 
-       
-
-
-             return redirect()->back()->with('success', 'Votre demande de réservation a été envoyée !');
+             // Modification : Rediriger vers la page des réservations du client
+             return redirect()->route('HomeClient.reservations')
+                              ->with('success', 'Votre réservation a été enregistrée !')
+                              ->with('notificationType', 'success');
 
 
         // } catch (\Exception $e) {
@@ -154,7 +169,11 @@ class ReservationController extends Controller
     {
         // Vérifications initiales
         if (Auth::id() !== $reservation->partner_id) { abort(403); }
-        if ($reservation->status !== 'pending') { return redirect()->back()->with('error', 'Déjà traitée.'); }
+        if ($reservation->status !== 'pending') { 
+            return redirect()->back()
+                             ->with('error', 'Déjà traitée.')
+                             ->with('notificationType', 'error'); 
+        }
 
         // Vérification conflit
         $startDate = Carbon::parse($reservation->start_date);
@@ -162,7 +181,11 @@ class ReservationController extends Controller
         $conflicting = Reservation::where('listing_id', $reservation->listing_id)
              ->where('id', '!=', $reservation->id)->whereIn('status', ['confirmed', 'ongoing'])
              ->where(fn($q) => $q->where('start_date', '<', $endDate)->where('end_date', '>', $startDate))->exists();
-        if ($conflicting) { return redirect()->back()->with('error', 'Conflit de dates.'); }
+        if ($conflicting) { 
+            return redirect()->back()
+                             ->with('error', 'Conflit de dates.')
+                             ->with('notificationType', 'error'); 
+        }
 
         // Mise à jour statut
         try {
@@ -170,7 +193,9 @@ class ReservationController extends Controller
             $reservation->save();
         } catch (\Exception $e) {
             Log::error("Erreur sauvegarde accept Résa ID: {$reservation->id}: " . $e->getMessage());
-            return redirect()->back()->with('error', 'Erreur sauvegarde statut.');
+            return redirect()->back()
+                             ->with('error', 'Erreur sauvegarde statut.')
+                             ->with('notificationType', 'error');
         }
 
         // Récupération données pour emails
@@ -197,7 +222,9 @@ class ReservationController extends Controller
             Log::error("Infos client/partenaire manquantes pour emails Résa ID: {$reservation->id}");
         }
 
-        return redirect()->back()->with('success', 'Réservation acceptée ! Notifications envoyées.');
+        return redirect()->back()
+                         ->with('success', 'Réservation acceptée ! Notifications envoyées.')
+                         ->with('notificationType', 'success');
     }
 
   
@@ -205,7 +232,11 @@ class ReservationController extends Controller
     {
         // Vérifications initiales
         if (Auth::id() !== $reservation->partner_id) { abort(403); }
-        if ($reservation->status !== 'pending') { return redirect()->back()->with('error', 'Déjà traitée.'); }
+        if ($reservation->status !== 'pending') { 
+            return redirect()->back()
+                             ->with('error', 'Déjà traitée.')
+                             ->with('notificationType', 'error'); 
+        }
 
         // Mise à jour statut
         try {
@@ -213,7 +244,9 @@ class ReservationController extends Controller
             $reservation->save();
         } catch (\Exception $e) {
             Log::error("Erreur sauvegarde refus Résa ID: {$reservation->id}: " . $e->getMessage());
-            return redirect()->back()->with('error', 'Erreur sauvegarde statut.');
+            return redirect()->back()
+                             ->with('error', 'Erreur sauvegarde statut.')
+                             ->with('notificationType', 'error');
         }
 
         // Récupération client pour email
@@ -227,6 +260,8 @@ class ReservationController extends Controller
             Log::error("Infos client manquantes pour email refus Résa ID: {$reservation->id}");
         }
 
-        return redirect()->back()->with('success', 'Réservation refusée. Le client a été notifié.');
+        return redirect()->back()
+                         ->with('success', 'Réservation refusée. Le client a été notifié.')
+                         ->with('notificationType', 'success');
     }
 }

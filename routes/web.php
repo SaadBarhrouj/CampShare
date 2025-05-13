@@ -219,12 +219,13 @@ Route::post('/partenaire/reservations/{reservation}/accept', [ReservationControl
          // Route::post('/notifications/{notId}/mark-read/{userId}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead.old');
          // Route::delete('/notifications/{notId}/delete/{userId}', [NotificationController::class, 'delete'])->name('notifications.delete.old');
     
-    
+        Route::post('/notifications/client/mark-all-as-read', [NotificationController::class, 'markAllClientNotificationsAsRead'])
+         ->name('notifications.client.markAllAsRead');
          // Routes pour les Avis 
          Route::get('/reservations/{reservation}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
          Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     
-        // ...
+
     });
 
         // Legal Routes

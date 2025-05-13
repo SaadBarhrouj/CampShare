@@ -14,6 +14,64 @@ use Illuminate\Routing\Controller;
 
 class NotificationController extends Controller 
 {
+
+public static $clientNotificationTypes = [
+        'review_object',
+        'review_partner',
+        'updated_listing',
+        'added_listing',
+        'accepted_reservation',
+        'rejected_reservation',
+        'reviewed'
+    ];
+
+
+    protected $partnerNotificationTypes = [
+        'review_client',
+        // 'new_reservation_request',
+    ];
+
+
+
+      public static function getUnreadClientNotificationCount(User $user = null): int
+    {
+        if (!$user) {
+            $user = Auth::user();
+        }
+
+        if (!$user) {
+            return 0; 
+        }
+
+
+        return Notification::where('user_id', $user->id)
+                           ->whereIn('type', self::$clientNotificationTypes)
+                           ->where('is_read', false)
+                           ->count();
+    }
+
+
+     public function getUnreadNotificationCountForHeader(User $user): int
+    {
+        $relevantTypes = []; 
+
+        if ($user->role === 'partner') {
+            $relevantTypes = $this->partnerNotificationTypes;
+        } elseif ($user->role === 'client') {
+            $relevantTypes = $this->clientNotificationTypes;
+        }
+
+        if (empty($relevantTypes)) {
+            return 0;
+        }
+
+        return Notification::where('user_id', $user->id)
+                           ->whereIn('type', $relevantTypes) 
+                           ->where('is_read', false)         
+                           ->count();
+    }
+
+
     public function getNotifUser($user_id)
     {
         if (Auth::id() != $user_id) {
