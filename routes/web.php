@@ -20,6 +20,7 @@ use App\Http\Controllers\EquipementController;
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\ReviewAdminController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AnnonceAdminController;
 use App\Http\Controllers\AdminDetailsEquipmentController;
 
 // Index Page
@@ -97,6 +98,11 @@ Route::post('/client/reservations/cancel/{id}', [ClientController::class, 'cance
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
+
+    Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])
+        ->name('listings.destroy');
+    Route::delete('/annonces/{id}', [AnnonceAdminController::class, 'destroy'])->name('admin.equipements.destroy');
+    Route::get('/annonces/{id}', [AnnonceAdminController::class, 'show'])->name('admin.annonces.show');
     Route::get('/equipments/{listing}', [AdminDetailsEquipmentController::class, 'show'])
     ->name('admin.equipments.show');
     Route::get('/admin/reviews', [ReviewAdminController::class, 'index'])->name('admin.reviews');
