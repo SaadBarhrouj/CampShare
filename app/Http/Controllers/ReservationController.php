@@ -19,57 +19,137 @@ class ReservationController extends Controller
 {
     
      public function store(Request $request)
-     {
-         // --- 1. Validation ---
-         $validator = Validator::make($request->all(), [/* ... règles ... */]);
-         if ($validator->fails()) { /* ... retour erreur validation ... */ }
-         $validatedData = $validator->validated();
+    {
+        // --- 1. Validation des données du formulaire ---
+        $validator = Validator::make($request->all(), [
+            'listing_id' => 'required|integer|exists:listings,id',
+            'start_date' => 'required|date_format:Y-m-d|after_or_equal:today',
+            'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date',
+            'delivery_option' => 'nullable|boolean',
+        ]);
 
-         // --- 2. Récupération Infos ---
-         $listing = Listing::with(['item.partner'])->find($validatedData['listing_id']);
-         if (!$listing?->item?->partner) { /* ... retour erreur équipement/partenaire non trouvé ... */ }
-         $partner = $listing->item->partner;
-         $client = Auth::user();
 
-         // --- 3. Vérifications Disponibilité/Conflit ---
-         if ($listing->status !== 'active') { /* ... retour erreur inactif ... */ }
-         $startDate = Carbon::parse($validatedData['start_date']);
-         $endDate = Carbon::parse($validatedData['end_date']);
-         if ($listing->start_date && $startDate->isBefore(Carbon::parse($listing->start_date))) { /* ... retour erreur date début ... */ }
-         if ($listing->end_date && $endDate->isAfter(Carbon::parse($listing->end_date))) { /* ... retour erreur date fin ... */ }
-         $overlappingReservations = Reservation::where('listing_id', $listing->id)
-             ->whereIn('status', ['confirmed', 'ongoing'])
-             ->where(fn($q) => $q->where('start_date', '<', $endDate)->where('end_date', '>', $startDate))
-             ->exists();
-         if ($overlappingReservations) { /* ... retour erreur chevauchement ... */ }
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
-         // --- 4. Gestion Livraison ---
-         $deliveryRequested = $request->has('delivery_option') && $request->input('delivery_option') == '1';
-         $applyDelivery = false;
-         if ($deliveryRequested) {
-             if (!$listing->delivery_option) { /* ... retour erreur livraison non dispo ... */ }
+
+        // Récupérer les données validées
+        $validatedData = $validator->validated();
+
+
+        // --- 2. Récupérer les informations nécessaires ---
+        $listing = Listing::with('item.partner')->findOrFail($validatedData['listing_id']);
+        $client = Auth::user();
+        
+
+
+        if (!$listing->item?->partner) {
+             return redirect()->back()
+                         ->with('error', 'Impossible de trouver le propriétaire de cet équipement.')
+                         ->withInput();
+        }
+        $partner = $listing->item->partner;
+
+
+
+
+        if ($listing->status !== 'active') {
+             return redirect()->back()
+                         ->with('error', 'Cet équipement n\'est plus disponible à la location.')
+                         ->withInput();
+        }
+
+
+        $startDate = \Carbon\Carbon::parse($validatedData['start_date']);
+        $endDate = \Carbon\Carbon::parse($validatedData['end_date']);
+
+
+        if ($listing->start_date && $startDate->isBefore($listing->start_date)) {
+            return redirect()->back()
+                         ->with('error', 'La date de début demandée est avant la disponibilité de l\'équipement.')
+                         ->withInput();
+        }
+        if ($listing->end_date && $endDate->isAfter($listing->end_date)) {
+            return redirect()->back()
+                         ->with('error', 'La date de fin demandée est après la disponibilité de l\'équipement.')
+                         ->withInput();
+        }
+
+
+        $overlappingReservations = Reservation::where('listing_id', $listing->id)
+            ->whereIn('status', ['confirmed', 'ongoing'])
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where(function ($q) use ($startDate, $endDate) {
+                    // La nouvelle résa commence PENDANT une existante
+                    $q->where('start_date', '<=', $startDate)
+                      ->where('end_date', '>=', $startDate);
+                })->orWhere(function ($q) use ($startDate, $endDate) {
+                    // La nouvelle résa finit PENDANT une existante
+                    $q->where('start_date', '<=', $endDate)
+                      ->where('end_date', '>=', $endDate);
+                })->orWhere(function ($q) use ($startDate, $endDate) {
+                    $q->where('start_date', '>=', $startDate)
+                      ->where('end_date', '<=', $endDate);
+                });
+            })
+            ->exists();
+
+
+        if ($overlappingReservations) {
+            return redirect()->back()
+                         ->with('error', 'Les dates sélectionnées ne sont plus disponibles car elles chevauchent une réservation existante.')
+                         ->withInput();
+        }
+
+
+        // --- 4. Gestion de l'option de livraison ---
+        $deliveryRequested = $request->has('delivery_option') && $validatedData['delivery_option'] == '1';
+        $applyDelivery = false;
+
+
+        if ($deliveryRequested && !$listing->delivery_option) {
+             // Si l'utilisateur coche livraison mais que le listing ne l'offre pas
+             return redirect()->back()
+                         ->with('error', 'L\'option de livraison n\'est pas disponible pour cet équipement.')
+                         ->withInput();
+        } elseif ($deliveryRequested && $listing->delivery_option) {
              $applyDelivery = true;
-         }
-
-         // --- 5. Création Réservation ---
-         try {
-             $reservation = new Reservation();
-             $reservation->listing_id = $listing->id; $reservation->client_id = $client->id;
-             $reservation->partner_id = $partner->id; $reservation->start_date = $startDate->toDateString();
-             $reservation->end_date = $endDate->toDateString(); $reservation->status = 'pending';
-             $reservation->delivery_option = $applyDelivery; $reservation->save();
-
-             // Optionnel: Notifier partenaire de la nouvelle demande ici
-
-             return redirect()->back()->with('success', 'Votre demande de réservation a été envoyée avec succès !');
-         } catch (\Exception $e) {
-             Log::error('Erreur création réservation: ' . $e->getMessage());
-             return redirect()->back()->with('error', 'Erreur technique lors de la réservation.')->withInput();
-         }
-     }
+        }
 
 
-   
+        // --- 5. Création de la Réservation ---
+        // try {
+            $reservation = new Reservation();
+            $reservation->listing_id = $listing->id;
+            $reservation->client_id = $client->id;
+            $reservation->partner_id = $partner->id;
+            $reservation->start_date = $startDate;
+            $reservation->end_date = $endDate;
+            $reservation->status = 'pending';
+            $reservation->delivery_option = $applyDelivery;
+            $reservation->save();
+
+
+       
+
+
+             return redirect()->back()->with('success', 'Votre demande de réservation a été envoyée !');
+
+
+        // } catch (\Exception $e) {
+        //     \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
+
+
+        //     return redirect()->back()
+        //                  ->with('error', 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.')
+        //                  ->withInput();
+        // }
+    }
+
+
     public function accept(Reservation $reservation)
     {
         // Vérifications initiales

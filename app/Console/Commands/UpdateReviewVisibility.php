@@ -10,25 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateReviewVisibility extends Command
 {
-    /**
-     * La signature de la commande console.
-     * Utilisée pour appeler la commande : php artisan reviews:update-visibility-after-delay
-     *
-     * @var string
-     */
+
     protected $signature = 'reviews:update-visibility-after-delay';
 
-    /**
-     * La description de la commande console.
-     * Affichée quand on tape : php artisan list
-     *
-     * @var string
-     */
+
     protected $description = 'Rend visibles les avis client/partenaire si le délai de 7 jours est passé et qu\'ils sont encore cachés.';
 
-    /**
-     * Le service qui contient la logique de mise à jour de la visibilité.
-     */
     protected ReviewVisibilityService $reviewVisibilityService;
 
 
