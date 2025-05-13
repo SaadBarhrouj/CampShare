@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\City;
 use App\Models\Listing;
 use App\Models\Category;
@@ -18,8 +19,14 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sorting
     
-        $query = Listing::where('status', 'active')->with('item.category'); // eager load
-        $premiumQuery = Listing::where('is_premium', true)->where('status', 'active')->with('item.category');
+        $query = Listing::where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->with('item.category'); 
+
+        $premiumQuery = Listing::where('is_premium', true)
+            ->where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->with('item.category');
     
         if ($request->filled('search')) {
             $search = $request->search;
@@ -207,7 +214,10 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
 
-        $query = Listing::where('is_premium', true)->where('status', 'active')->with('item.category');
+        $query = Listing::where('is_premium', true)
+            ->where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->with('item.category');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -303,7 +313,9 @@ class ListingController extends Controller
     {
         $sort = $request->query('sort', 'latest'); // default sort
         
-        $query = Listing::where('status', 'active')->with('item.category');
+        $query = Listing::where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->with('item.category');
 
         if ($request->filled('search')) {
             $search = $request->search;

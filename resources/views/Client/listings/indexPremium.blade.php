@@ -245,9 +245,26 @@
                                             <h3 class="font-bold text-gray-900 dark:text-white text-lg">{{ $premiumListing->item->title }}</h3>
                                             <p class="text-sm text-gray-500 dark:text-gray-400">Catégorie - {{ $premiumListing->item->category->name }}</p>
                                         </div>
-                                        <div class="flex items-center text-sm flex-nowrap">
-                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                            <span class="flex flex-nowrap">{{ $premiumListing->item->averageRating() }} <span class="text-gray-500 dark:text-gray-400">({{ $premiumListing->item->reviews->count() }})</span></span>
+                                        <div class="flex items-center text-sm flex-nowrap mt-1">
+                                            @php
+                                                $visibleReviews = $premiumListing->item->reviews->where('is_visible', true)->where('type', 'forObject');
+                                                $reviewCount = $visibleReviews->count();
+                                            @endphp
+
+                                            @if ($reviewCount === 0)
+                                                <span class="flex items-center whitespace-nowrap">
+                                                    <i class="far fa-star text-amber-400 mr-1"></i>
+                                                    <span class="text-gray-500 dark:text-gray-400">Non noté</span>
+                                                </span>
+                                            @else
+                                                <i class="fas fa-star text-amber-400 mr-1"></i>
+                                                <span class="flex flex-nowrap">
+                                                    {{ $premiumListing->item->averageRating() }}
+                                                    <span class="text-gray-500 dark:text-gray-400">
+                                                        ({{ $reviewCount }})
+                                                    </span>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                     
