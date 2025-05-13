@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+-<!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -80,12 +80,29 @@
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Équipements</h1>
                     <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez toutes vos équipements.</p>
                 </div>
+                       @if (session('error'))
+                            <div id="error-box" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4 mx-4" role="alert">
+                                <span class="block sm:inline">{{ session('error') }}</span>
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4 mx-4" role="alert">
+                                <strong class="font-bold">Whoops!</strong>
+                                <ul class="list-disc pl-5">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                 <div class="mt-4 md:mt-0">
                     <button id="add-equipment-button" class="px-4 py-3 bg-forest hover:bg-meadow text-white rounded-md shadow-lg flex items-center font-medium">
                         <i class="fas fa-plus mr-2"></i>
                         Ajouter un équipement
                     </button>
                 </div>
+                          
             </div>
 
             <!-- Filters and search -->
@@ -198,7 +215,8 @@
                         </div>
                         
                         <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-3">{{ $equipment->description }}</p>
-                        
+
+
                         <div class="flex items-center justify-between mt-6">
                             
                                 <a href="{{ route('partenaire.annonces.create', ['equipment_id' => $equipment->id]) }}" 
@@ -549,6 +567,19 @@
 </div>
 </body>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorBox = document.getElementById("error-box");
+        if (errorBox) {
+            setTimeout(() => {
+                errorBox.style.display = 'none';
+            }, 3000); // 5000ms = 5s
+        }
+    });
+</script>
+
+<script>
+
+    
   const links = document.querySelectorAll(".sidebar-link");
   const components = document.querySelectorAll(".component");
 

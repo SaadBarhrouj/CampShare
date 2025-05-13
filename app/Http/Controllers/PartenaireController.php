@@ -367,6 +367,7 @@ public function filterLocationEnCours(Request $request)
         DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) * items.price_per_day AS montant_total'),
         DB::raw('DATEDIFF(Reservations.end_date, Reservations.start_date) AS number_days')
     );
+    
     $demandes = $demandes->get();
 
     return response()->json([
@@ -384,12 +385,23 @@ public function createAnnonceForm($equipment_id)
     $AverageRating = $user->averageRatingPartner();
     // Récupérer l'équipement spécifique
     $equipment = Item::with('images')->findOrFail($equipment_id);
+
     
     // Vérifier que l'équipement appartient bien au partenaire connecté
     if ($equipment->partner_id !== $user->id) {
         return redirect()->route('partenaire.equipements')
             ->with('error', 'Vous n\'êtes pas autorisé à créer une annonce pour cet équipement.');
     }
+    $count = DB::table('listings as l')
+        ->join('items as i', 'i.id', '=', 'l.item_id')
+        ->where('i.partner_id', $equipment->partner_id)
+        ->distinct('l.id')
+        ->count('l.id');
+     if ($count > 5 ) {
+        return redirect()->back()->with('error', 'Impossible de ajouter plus de 5 annonces!');
+
+    }
+
     
     return view('Partenaire.annonce-form', compact('equipment', 'AverageRating'));
 }
@@ -399,7 +411,6 @@ public function createAnnonceForm($equipment_id)
  */
 public function storeAnnonce(Request $request)
 {
-        // Validation des données
         $request->validate([
             'item_id' => 'required|exists:items,id',
             'start_date' => 'required|date',

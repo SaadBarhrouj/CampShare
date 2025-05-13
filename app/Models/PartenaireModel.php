@@ -10,12 +10,13 @@ class PartenaireModel extends Model
 {
     public static function sumPaymentThisMonth($email)
     {
-        return DB::table('payments as p')
-            ->join('Users as U', 'U.id', '=', 'p.partner_id')
+        return DB::table('reservations as r')
+            ->join('listings as l', 'l.id', '=', 'r.listing_id')
+            ->join('items as i', 'i.id', '=', 'l.item_id')
+            ->join('users as u', 'u.id', '=', 'r.partner_id')
             ->where('U.email', $email)
-            ->whereMonth('p.payment_date', Carbon::now()->month)
-            ->whereYear('p.payment_date', Carbon::now()->year)
-            ->sum('p.amount');
+            ->select(DB::raw('COALESCE(SUM(DATEDIFF(r.end_date, r.start_date) * i.price_per_day), 0) as total'))
+            ->value('total');
     }
     
         public static function sumPayment($email)
@@ -130,16 +131,41 @@ class PartenaireModel extends Model
     }
     public static function getRecentPartnerListingsWithImagesByEmail($email)
     {
-        return DB::table('users as U')
-            ->join('items as m', 'm.partner_id', '=', 'U.id')
-            ->join('listings as L', 'L.item_id', '=', 'm.id')
-            ->leftJoin('images as i', 'i.item_id', '=', 'm.id')
-            ->join('categories as c','c.id','m.category_id')
+        
+               $items = DB::table('users as U')
+            ->join('items as i','i.partner_id','=','U.id')
+            ->join('categories as C', 'C.id', '=', 'i.category_id')
+            ->leftJoin('images as img', 'img.item_id', '=', 'i.id')
+            ->leftJoin('reviews as R', function($join) {
+                $join->on('R.reviewee_id', '=', 'i.id')
+                    ->where('R.type', '=', 'forObject')
+                    ->where('R.is_visible', '=', true);
+            })
+            ->select(
+                'i.id',
+                'i.title',
+                'i.description',
+                'i.price_per_day',
+                'i.category_id',
+                'C.name as category_name',
+                DB::raw('GROUP_CONCAT(DISTINCT img.url) as image_urls'),
+                DB::raw('AVG(R.rating) as avg_rating'),
+                DB::raw('COUNT(DISTINCT R.id) as review_count')
+            )
             ->where('U.email', $email)
-            ->select('m.title', 'm.description', 'm.price_per_day', 'i.url', 'L.status','c.name', 'L.id')
-            ->orderBy('L.created_at', 'desc')
+            ->groupBy('i.id', 'i.title', 'i.description', 'i.price_per_day', 'i.category_id', 'C.name')
             ->limit(3)
             ->get();
+
+        return $items->map(function($item) {
+            $imageUrls = $item->image_urls ? explode(',', $item->image_urls) : [];
+            $item->images = collect($imageUrls)->map(function($url) {
+                return (object)['url' => $url];
+            });
+            $item->avg_rating = $item->avg_rating ?? 0;
+            $item->review_count = $item->review_count ?? 0;
+            return $item;
+        });
     }
 
     public static function getPartenerDemandeReservation($email){
