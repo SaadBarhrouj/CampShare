@@ -258,7 +258,7 @@
                                         <input id="delivery_option_pickup" name="delivery_option" type="radio" value="pickup" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600" checked>
                                     </div>
                                     <div class="ml-3">
-                                        <label for="delivery_option_pickup" class="text-sm font-medium text-gray-700 dark:text-gray-300">Récupération sur place uniquement</label>
+                                        <label for="delivery_option_pickup" class="text-sm font-medium text-gray-700 dark:text-gray-300">Récupération sur place</label>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Les locataires devront venir chercher l'équipement à l'adresse indiquée.
                                         </p>
@@ -270,7 +270,7 @@
                                         <input id="delivery_option_delivery" name="delivery_option" type="radio" value="delivery" class="h-4 w-4 text-forest dark:text-meadow focus:ring-forest dark:focus:ring-meadow border-gray-300 dark:border-gray-600">
                                     </div>
                                     <div class="ml-3">
-                                        <label for="delivery_option_delivery" class="text-sm font-medium text-gray-700 dark:text-gray-300">Livraison uniquement</label>
+                                        <label for="delivery_option_delivery" class="text-sm font-medium text-gray-700 dark:text-gray-300">Livraison</label>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Vous vous engagez à livrer l'équipement au locataire.
                                         </p>
@@ -370,7 +370,7 @@
                             
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <!-- Option 7 jours -->
-                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="7 jours">
+                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="7 jours" data-price="49">
                                     <div class="flex justify-between items-start mb-2">
                                         <h4 class="font-semibold text-gray-900 dark:text-white">Basique</h4>
                                         <span class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs px-2 py-1 rounded-full">7 jours</span>
@@ -381,7 +381,7 @@
                                 </div>
                                 
                                 <!-- Option 15 jours -->
-                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="15 jours">
+                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="15 jours" data-price="89">
                                     <div class="flex justify-between items-start mb-2">
                                         <h4 class="font-semibold text-gray-900 dark:text-white">Standard</h4>
                                         <span class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs px-2 py-1 rounded-full">15 jours</span>
@@ -392,7 +392,7 @@
                                 </div>
                                 
                                 <!-- Option 30 jours -->
-                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="30 jours">
+                                <div class="premium-option border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-forest dark:hover:border-meadow transition-colors" data-value="30 jours" data-price="149">
                                     <div class="flex justify-between items-start mb-2">
                                         <h4 class="font-semibold text-gray-900 dark:text-white">Premium</h4>
                                         <span class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs px-2 py-1 rounded-full">30 jours</span>
@@ -410,7 +410,7 @@
                                     Information
                                 </h4>
                                 <p class="text-sm text-blue-700 dark:text-blue-200">
-                                    Les annonces mises en avant sont vues jusqu'à 5 fois plus que les annonces standards. Le paiement sera prélevé une fois l'annonce publiée.
+                                    Le paiement sera prélevé une fois l'annonce publiée.
                                 </p>
                             </div>
                         </div>
@@ -493,7 +493,8 @@
                         </button>
                         <button type="submit" id="publish-button" class="px-6 py-2 bg-forest hover:bg-green-700 dark:bg-meadow dark:hover:bg-green-600 text-white font-medium rounded-md shadow-sm transition-colors flex items-center">
                             <i class="fas fa-paper-plane mr-2"></i>
-                            Publier l'annonce
+                            <span id="button-text">Publier l'annonce</span>
+                            <span id="premium-text" class="hidden ml-2">- Payer <span id="premium-amount"></span> MAD</span>
                         </button>
                     </div>
                 </div>
@@ -677,8 +678,15 @@
             // Options premium
             let premiumOption = 'Aucune option premium sélectionnée';
             if (document.getElementById('is_premium').checked) {
-                const premiumType = document.querySelector('input[name="premium_type"]:checked').value;
-                premiumOption = `Option premium: ${premiumType}`;
+                const selectedPremium = document.querySelector('input[name="premium_type"]:checked');
+                if (selectedPremium) {
+                    const premiumOptionDiv = selectedPremium.closest('.premium-option');
+                    const premiumType = selectedPremium.value;
+                    const premiumPrice = premiumOptionDiv.dataset.price;
+                    premiumOption = `Mise en avant (${premiumType}) -- ${premiumPrice} MAD seront payés pour promouvoir cette annonce`;
+                } else {
+                    premiumOption = 'Option premium sélectionnée mais non spécifiée';
+                }
             }
             
             // Mettre à jour le récapitulatif
@@ -703,21 +711,15 @@
             return date.toLocaleDateString('fr-FR');
         }
         
-        // Validation du formulaire avant soumission
+
         const publishButton = document.getElementById('publish-button');
         
         publishButton.addEventListener('click', function(e) {
-            const termsAgree = document.getElementById('terms_agree').checked;
-            
-            if (!termsAgree) {
-                e.preventDefault();
-                alert('Vous devez accepter les conditions générales pour publier votre annonce.');
-                return;
-            }
             
             // Soumettre le formulaire si tout est valide
             form.submit();
         });
+
         
         // Initialisation de la carte
         let map, marker;

@@ -297,7 +297,7 @@
                     <div class="md:w-1/3 mb-4 md:mb-0">
                         @if($item->images->isNotEmpty())
                             <div class="rounded-lg overflow-hidden h-48">
-                                <img src="{{ asset('storage/' . $item->images->first()->url) }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
+                                <img src="{{ asset($item->images->first()->url) }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
                             </div>
                         @else
                             <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">

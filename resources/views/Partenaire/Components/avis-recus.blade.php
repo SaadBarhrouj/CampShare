@@ -351,8 +351,7 @@
                                 starsHtml += '<i class="fas fa-star-half-alt"></i>';
                             }
 
-                            const avatarUrl = "{{ asset('') }}";
-                            const fullUrl = avatarUrl + avi.avatar_url;
+                            const routeUrl = "{{ route('') }}" + avi.avatar_url;
 
                             container.innerHTML += `
                             <div class="px-6 py-4">

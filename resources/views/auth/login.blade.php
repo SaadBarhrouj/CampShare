@@ -58,7 +58,9 @@
         
         <!-- Logo -->
         <div class="text-center">
-            <h1 class="text-4xl font-extrabold text-forest dark:text-meadow">Camp<span class="text-sunlight">Share</span></h1>
+            <a href="{{ route('index') }}">
+                <h1 class="text-4xl font-extrabold text-forest dark:text-meadow">Camp<span class="text-sunlight">Share</span></h1>
+            </a>
             <p class="text-sm text-gray-500 dark:text-gray-400">by ParentCo</p>
         </div>
 

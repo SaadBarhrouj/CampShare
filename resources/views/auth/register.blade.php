@@ -117,7 +117,9 @@
         <!-- Logo -->
         <div class="flex justify-center mb-6">
             <div class="flex items-center">
-                <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                <a href="{{ route('index') }}">
+                    <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                </a>
                 <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
             </div>
         </div>
