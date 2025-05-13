@@ -13,9 +13,6 @@ class ProfileController extends Controller
      */
     public function indexClientProfile(User $user)
     {
-        if ($user->role !== 'client') {
-            abort(403, 'Unauthorized. Ce n\'est pas un client.');
-        }
 
         $reservationsCount = $user->clientReservations()->count();
 

@@ -279,7 +279,7 @@
                                     <i class="fas fa-map-marker-alt fa-fw mr-2.5 text-gray-400 dark:text-gray-500"></i>
                                     Disponible dans la zone de <span class="font-semibold ml-1">{{ $listing->city?->name ?? 'Ville non spécifiée' }}</span>.
                                 </div>
-                                <div id="listing-map-container" class="mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600"></div>
+                                <div id="listing-map-container" class="z-0 mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600"></div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
                                     <i class="fas fa-info-circle mr-1"></i>L'adresse exacte ou le point de rencontre précis vous sera communiqué par le partenaire après la confirmation de votre réservation.
                                 </p>

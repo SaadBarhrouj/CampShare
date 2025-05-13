@@ -25,11 +25,13 @@ class ClientModel extends Model
         return DB::table('users')
             ->leftJoin('reservations', 'users.id', '=', 'reservations.client_id')
             ->leftJoin('listings', 'reservations.listing_id', '=', 'listings.id')
-            ->leftJoin('payments', 'payments.listing_id', '=', 'listings.id')
+            ->leftJoin('items', 'listings.item_id', '=', 'items.id') // Added join to items table
             ->where('users.email', $email)
-            ->where('payments.status', 'completed')
-            ->select( DB::raw('COALESCE(SUM(payments.amount), 0) AS total_depense'))
-            ->value('total_depense'); 
+            ->where('reservations.status', 'completed')
+            ->selectRaw('COALESCE(SUM(
+                ABS(DATEDIFF(reservations.end_date, reservations.start_date)) * items.price_per_day
+            ), 0) AS total_depense')
+            ->value('total_depense');
     }
 
     public  static function  noteMoyenneByEmail($email)

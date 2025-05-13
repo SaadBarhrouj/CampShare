@@ -17,7 +17,7 @@
                 
                 @auth
                     @php
-                        $user = $user ?? Auth::user();
+                        $user =  Auth::user();
                     @endphp
                     @if($user)
                         @if($user->role == 'client')
