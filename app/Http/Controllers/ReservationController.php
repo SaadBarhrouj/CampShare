@@ -49,7 +49,7 @@ class ReservationController extends Controller
         if (!$listing->item?->partner) {
              return redirect()->back()
                          ->with('error', 'Impossible de trouver le propriétaire de cet équipement.')
-                         ->with('notificationType', 'error')
+                          // -----------------
                          ->withInput();
         }
         $partner = $listing->item->partner;
@@ -69,7 +69,7 @@ class ReservationController extends Controller
         if ($listing->status !== 'active') {
              return redirect()->back()
                          ->with('error', 'Cet équipement n\'est plus disponible à la location.')
-                         ->with('notificationType', 'error')
+                          //--------------
                          ->withInput();
         }
 
@@ -81,13 +81,13 @@ class ReservationController extends Controller
         if ($listing->start_date && $startDate->isBefore($listing->start_date)) {
             return redirect()->back()
                          ->with('error', 'La date de début demandée est avant la disponibilité de l\'équipement.')
-                         ->with('notificationType', 'error')
+                          //-------
                          ->withInput();
         }
         if ($listing->end_date && $endDate->isAfter($listing->end_date)) {
             return redirect()->back()
                          ->with('error', 'La date de fin demandée est après la disponibilité de l\'équipement.')
-                         ->with('notificationType', 'error')
+                          //--------
                          ->withInput();
         }
 
@@ -114,7 +114,7 @@ class ReservationController extends Controller
         if ($overlappingReservations) {
             return redirect()->back()
                          ->with('error', 'Les dates sélectionnées ne sont plus disponibles car elles chevauchent une réservation existante.')
-                         ->with('notificationType', 'error')
+                          //-------
                          ->withInput();
         }
 
@@ -128,7 +128,7 @@ class ReservationController extends Controller
              // Si l'utilisateur coche livraison mais que le listing ne l'offre pas
              return redirect()->back()
                          ->with('error', 'L\'option de livraison n\'est pas disponible pour cet équipement.')
-                         ->with('notificationType', 'error')
+                          //---------
                          ->withInput();
         } elseif ($deliveryRequested && $listing->delivery_option) {
              $applyDelivery = true;
@@ -172,7 +172,7 @@ class ReservationController extends Controller
         if ($reservation->status !== 'pending') { 
             return redirect()->back()
                              ->with('error', 'Déjà traitée.')
-                             ->with('notificationType', 'error'); 
+                             ; 
         }
 
         // Vérification conflit
@@ -184,7 +184,7 @@ class ReservationController extends Controller
         if ($conflicting) { 
             return redirect()->back()
                              ->with('error', 'Conflit de dates.')
-                             ->with('notificationType', 'error'); 
+                             ; 
         }
 
         // Mise à jour statut
@@ -195,7 +195,7 @@ class ReservationController extends Controller
             Log::error("Erreur sauvegarde accept Résa ID: {$reservation->id}: " . $e->getMessage());
             return redirect()->back()
                              ->with('error', 'Erreur sauvegarde statut.')
-                             ->with('notificationType', 'error');
+                             ;
         }
 
         // Récupération données pour emails
@@ -235,7 +235,7 @@ class ReservationController extends Controller
         if ($reservation->status !== 'pending') { 
             return redirect()->back()
                              ->with('error', 'Déjà traitée.')
-                             ->with('notificationType', 'error'); 
+                             ; 
         }
 
         // Mise à jour statut
@@ -246,7 +246,7 @@ class ReservationController extends Controller
             Log::error("Erreur sauvegarde refus Résa ID: {$reservation->id}: " . $e->getMessage());
             return redirect()->back()
                              ->with('error', 'Erreur sauvegarde statut.')
-                             ->with('notificationType', 'error');
+                             ;
         }
 
         // Récupération client pour email
