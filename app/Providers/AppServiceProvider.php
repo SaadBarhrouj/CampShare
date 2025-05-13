@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;      // Nécessaire pour View::composer
 use Illuminate\Support\Facades\Auth;      // Nécessaire pour Auth::check() et Auth::user()
