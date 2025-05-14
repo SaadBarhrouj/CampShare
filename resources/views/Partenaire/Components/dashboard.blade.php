@@ -100,7 +100,7 @@
                             <h2 class="font-bold text-xl text-gray-900 dark:text-white">Avis Recent</h2>
                         </div>
                         <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach($lastAvisPartnerForObjet as $avis)
+                            @forelse($lastAvisPartnerForObjet as $avis)
                             <div class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 mr-4">
@@ -125,13 +125,21 @@
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+                            @empty
+                            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <div class="px-6 py-4 text-sm text-gray-500">
+                                    Vous n'avez aucune demande de location dans ce moment.
+                                </div>
+                            </div>
+                            @endforelse
                         </div>
+                        @if($lastAvisPartnerForObjet->count()!=0)
                         <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700/50 text-center">
                             <a href="{{ route('HomePartenaie.avis') }}" class="text-forest dark:text-meadow hover:underline text-sm font-medium">
                                 Voir tous les avis
                             </a>
                         </div>
+                        @endif
                     </div>
                     
                     <!-- Rental requests -->
