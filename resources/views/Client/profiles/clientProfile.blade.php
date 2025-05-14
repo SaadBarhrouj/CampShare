@@ -58,7 +58,7 @@
                                 </h1>
                                 <div class="mt-2 flex items-center text-gray-600 dark:text-gray-300">
                                     <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                                    <span>Rabat, Maroc</span>
+                                    <span>{{$user->city->name}}, Maroc</span>
                                 </div>
                             </div>
                         </div>

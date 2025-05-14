@@ -29,7 +29,7 @@ class ClientModel extends Model
             ->where('users.email', $email)
             ->where('reservations.status', 'completed')
             ->selectRaw('COALESCE(SUM(
-                ABS(DATEDIFF(reservations.end_date, reservations.start_date)) * items.price_per_day
+                ABS(DATEDIFF(reservations.end_date, reservations.start_date)+ 1 ) * items.price_per_day
             ), 0) AS total_depense')
             ->value('total_depense');
     }
@@ -79,7 +79,7 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'items.title AS listing_title',
-                DB::raw('ABS(DATEDIFF(reservations.end_date, reservations.start_date) * items.price_per_day) AS montant_paye'),
+                DB::raw('ABS((DATEDIFF(reservations.end_date, reservations.start_date) + 1) * items.price_per_day) + CASE WHEN reservations.delivery_option = 1 THEN 50 ELSE 0 END AS montant_paye'),
                 'items.description'
             )
             ->groupBy(
@@ -93,9 +93,10 @@ class ClientModel extends Model
                 'reservations.end_date',
                 'reservations.status',
                 'items.title',
-                'items.description'
+                'items.description',
+                'reservations.delivery_option'
             )
-            ->orderBy('reservations.start_date', 'desc')
+            ->orderBy('reservations.created_at', 'desc')
             ->get();
     }
    
@@ -124,8 +125,7 @@ class ClientModel extends Model
     
         return $query->select(
                 'reservations.id',
-                'listings.id',
-                DB::raw('ABS(DATEDIFF(reservations.end_date, reservations.start_date) * items.price_per_day) AS montant_paye'),
+                DB::raw('ABS((DATEDIFF(reservations.end_date, reservations.start_date) + 1 ) * items.price_per_day) + CASE WHEN reservations.delivery_option = 1 THEN 50 ELSE 0 END AS montant_paye'),
                 'partner.id AS partner_id',
                 'partner.username AS partner_username',
                 'partner.avatar_url AS partner_img',
@@ -145,12 +145,15 @@ class ClientModel extends Model
                 'partner.username',
                 'partner.avatar_url',
                 'reservations.start_date',
+                'reservations.created_at',
                 'reservations.end_date',
                 'reservations.status',
                 'items.title',
-                'items.description'
+                'items.description',
+                'reservations.delivery_option'
+
             )
-            ->orderBy('reservations.start_date', 'desc')
+            ->orderBy('reservations.created_at', 'desc')
             ->get();
     }
 

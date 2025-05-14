@@ -120,7 +120,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                //alert(data.message);
                 // Recharger les réservations
                 document.getElementById('statusFilter').dispatchEvent(new Event('change'));
             } else {

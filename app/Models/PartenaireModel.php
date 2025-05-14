@@ -15,7 +15,7 @@ class PartenaireModel extends Model
             ->join('items as i', 'i.id', '=', 'l.item_id')
             ->join('users as u', 'u.id', '=', 'r.partner_id')
             ->where('U.email', $email)
-            ->select(DB::raw('COALESCE(SUM(DATEDIFF(r.end_date, r.start_date) * i.price_per_day), 0) as total'))
+            ->select(DB::raw('COALESCE(SUM((DATEDIFF(r.end_date, r.start_date) + 1 ) * i.price_per_day), 0) as total'))
             ->value('total');
     }
     
@@ -42,7 +42,7 @@ class PartenaireModel extends Model
         ->select(DB::raw('AVG(R.rating) as avg_rating'))
         ->value('avg_rating');
 
-        return $avgRating ?? 5;
+        return $avgRating;
     }
     Public static function getCountRatingPartner($email){
         return DB::table('users as U')
@@ -100,8 +100,8 @@ class PartenaireModel extends Model
                 'R.end_date',
                 'R.created_at',
                 'R.id',
-                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date) * i.price_per_day) AS montant_total'),
-                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date))  AS number_days')
+                DB::raw('ABS((DATEDIFF(R.end_date, R.start_date)+ 1) * i.price_per_day) + CASE WHEN R.delivery_option = 1 THEN 50 ELSE 0 END AS montant_total'),
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date)+ 1)  AS number_days')
 
             )
             ->where('U.email', $email)
@@ -123,7 +123,7 @@ class PartenaireModel extends Model
                 'R.start_date',
                 'R.end_date',
                 'R.created_at',
-                DB::raw('DATEDIFF(R.end_date, R.start_date) * i.price_per_day AS montant_total')
+                DB::raw('(DATEDIFF(R.end_date, R.start_date) + 1) * i.price_per_day + CASE WHEN R.delivery_option = 1 THEN 50 ELSE 0 END AS montant_total')
             )
             ->where('U.email', $email)
             ->where('R.status', 'pending')
@@ -184,8 +184,8 @@ class PartenaireModel extends Model
                 'R.created_at',
                 'R.status',
                 'i.price_per_day',
-                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date) * i.price_per_day) AS montant_total'),
-                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date)) AS number_days')
+                DB::raw('ABS((DATEDIFF(R.end_date, R.start_date) + 1 ) * i.price_per_day) + CASE WHEN R.delivery_option = 1 THEN 50 ELSE 0 END AS montant_total'),
+                DB::raw('ABS(DATEDIFF(R.end_date, R.start_date) + 1) AS number_days')
 
             )
             ->where('U.email', $email)
@@ -243,8 +243,8 @@ class PartenaireModel extends Model
             'C.avatar_url',
             'R.created_at',
             'i.price_per_day',
-            DB::raw('DATEDIFF(R.end_date, R.start_date) * i.price_per_day AS montant_total'),
-            DB::raw('DATEDIFF(R.end_date, R.start_date) AS number_days')
+            DB::raw('(DATEDIFF(R.end_date, R.start_date) + 1 )* i.price_per_day + CASE WHEN R.delivery_option = 1 THEN 50 ELSE 0 END AS montant_total'),
+            DB::raw('DATEDIFF(R.end_date, R.start_date) + 1 AS number_days')
 
         )
         ->where('U.email', $email)
@@ -304,45 +304,46 @@ class PartenaireModel extends Model
         ->get();
     }
 
-    public static function getPartenaireProfile($email)
-    {
-        return DB::table('users as u')
-            ->join('reviews as r', 'r.reviewee_id', '=', 'u.id')
-            ->join('cities as c','c.id','=','u.city_id')
-            ->where('u.email', $email)
-            ->select(
-                'u.first_name',
-                'u.last_name',
-                'u.username',
-                'u.email',
-                'u.phone_number',
-                'u.address',
-                'u.is_subscriber',
-                'u.avatar_url',
-                'u.created_at',
-                'c.name as city_name',
-                DB::raw("COALESCE(SUM(CASE WHEN r.type = 'forPartner' THEN 1 ELSE 0 END), 0) as review_count"),
-                DB::raw("
-                COALESCE(NULLIF(AVG(CASE WHEN r.type = 'forPartner' THEN r.rating ELSE NULL END), 0), 5)
-                as avg_rating
-            ") 
-            )
-            ->groupBy(
-                'u.id',
-                'u.first_name',
-                'u.last_name',
-                'u.username',
-                'u.email',
-                'u.phone_number',
-                'u.address',
-                'u.avatar_url',
-                'u.created_at',
-                'c.name',
-                'u.is_subscriber'
-            )
-            ->first();
-    }
-
+public static function getPartenaireProfile($email)
+{
+    return DB::table('users as u')
+        ->leftJoin('reviews as r', function($join) {
+            $join->on('r.reviewee_id', '=', 'u.id')
+                ->where('r.type', 'forPartner');
+        })
+        ->join('cities as c','c.id','=','u.city_id')
+        ->where('u.email', $email)
+        ->select(
+            'u.first_name',
+            'u.last_name',
+            'u.username',
+            'u.email',
+            'u.phone_number',
+            'u.password',
+            'u.address',
+            'u.avatar_url',
+            'u.is_subscriber',
+            'c.name as city_name',
+            DB::raw('AVG(r.rating) as avg_rating'),
+            'u.created_at',
+            DB::raw('COUNT(r.id) as review_count')
+        )
+        ->groupBy(
+            'u.id',
+            'u.first_name',
+            'u.last_name',
+            'u.username',
+            'u.email',
+            'u.phone_number',
+            'u.address',
+            'u.avatar_url',
+            'u.created_at',
+            'u.password',
+            'u.is_subscriber',
+            'city_name'
+        )
+        ->first();
+}
     public static function updaterole($email)
     {
         return DB::table('users')

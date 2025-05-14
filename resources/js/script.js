@@ -197,6 +197,7 @@ if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
         } else {
             alert(data.message);
         }
+        window.location.reload();
     })
     .catch(error => {
         console.error('Error:', error);

@@ -395,9 +395,10 @@ public function createAnnonceForm($equipment_id)
     $count = DB::table('listings as l')
         ->join('items as i', 'i.id', '=', 'l.item_id')
         ->where('i.partner_id', $equipment->partner_id)
+        ->where('l.status', 'active')     
         ->distinct('l.id')
         ->count('l.id');
-     if ($count > 5 ) {
+     if ($count > 4 ) {
         return redirect()->back()->with('error', 'Impossible de ajouter plus de 5 annonces!');
 
     }
@@ -913,6 +914,8 @@ public function deleteAllEquipements()
                 $annonce->image_urls = $firstImage ? $firstImage->url : null;
             }
         }
+        
+
         
         return view('Partenaire.mes-annonces', compact('annonces', 'status', 'sortBy', 'search'));
     }

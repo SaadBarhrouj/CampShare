@@ -47,7 +47,11 @@
                     </div>
                     <div>
                         <p class="text-gray-500 dark:text-gray-400 text-sm">Note moyenne</p>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$note_moyenne}}</h3>
+                        @if(isset($note_moyenne) && $note_moyenne != 0)
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$note_moyenne}}</h3>
+                        @else
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Not Rated</h3>
+                        @endif
                       
                     </div>
                 </div>
@@ -516,7 +520,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                //alert(data.message);
                 // Recharger les réservations
                 document.getElementById('statusFilter').dispatchEvent(new Event('change'));
             } else {
