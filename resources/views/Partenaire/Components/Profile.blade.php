@@ -70,7 +70,7 @@
                             <div class="relative mb-6 md:mb-0 md:mr-8">
                                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
                                     <img src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
-                                         alt="{{ $profile->username }}" 
+                                         
                                          class="w-full h-full object-cover" />
                                 </div>
                                 <div class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700">
@@ -82,7 +82,7 @@
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                                     <div>
                                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
-                                            <span id="viewUsername">{{ $profile->username }}</span>
+                                            <span id="viewUsername">{{ $profile->first_name }} {{ $profile->last_name }} - {{ $profile->username }}</span>
                                             <span class="ml-3 text-sm font-medium px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md">
                                                 Membre depuis {{ \Carbon\Carbon::parse($profile->created_at)->format('Y') }}
                                             </span>
@@ -161,8 +161,12 @@
                     </div>
 
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-right">
+                        <a href="{{ route('partner.profile.index', $user->id) }}"
+                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                            <i class="fa-solid fa-address-card mr-2"></i> Mon profil Public
+                        </a>
                         <button onclick="toggleEditMode(true)" 
-                               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                               class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                             <i class="fas fa-edit mr-2"></i> Modifier le profil
                         </button>
                     </div>

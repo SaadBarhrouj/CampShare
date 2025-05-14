@@ -209,22 +209,41 @@ class ClientController extends Controller
 
 
     public function cancel($id)
-    {
-        try {
-            $reservation = Reservation::findOrFail($id);
+{
+    try {
+        // 1. Find the reservation (or fail with 404)
+        $reservation = Reservation::findOrFail($id);
 
-            $reservation->update(['status' => 'canceled']);
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Réservation annulée avec succès'
-            ]);
-
-        } catch (\Exception $e) {
+        // 2. Check if already canceled (optional)
+        if ($reservation->status === 'canceled') {
             return response()->json([
                 'success' => false,
-                'message' => 'Erreur lors de l\'annulation: ' . $e->getMessage()
-            ], 500);
+                'message' => 'La réservation est déjà annulée.'
+            ], 400);
         }
+
+        // 3. Update status (wrap in transaction if needed)
+        $reservation->update(['status' => 'canceled']);
+
+        // 4. Return success
+        return response()->json([
+            'success' => true,
+            'message' => 'Réservation annulée avec succès.'
+        ]);
+
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        // Specific error for missing reservation
+        return response()->json([
+            'success' => false,
+            'message' => 'Réservation introuvable.'
+        ], 404);
+
+    } catch (\Exception $e) {
+        // Generic server error
+        return response()->json([
+            'success' => false,
+            'message' => 'Erreur lors de l\'annulation: ' . $e->getMessage()
+        ], 500);
     }
+}
 }

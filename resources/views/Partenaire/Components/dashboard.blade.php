@@ -67,10 +67,16 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Note moyenne</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$AverageRating}} / 5</h3>
-                                <p class="text-amber-600 dark:text-amber-400 text-sm flex items-center mt-1">
+                                @if(isset($AverageRating) && $AverageRating != 0)
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$AverageRating}} / 5</h3>
+                                    <p class="text-amber-600 dark:text-amber-400 text-sm flex items-center mt-1"></p>
+                                @else
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Not Rated</h3>
+
+                                @endif
+
                                     
-                                </p>
+                                
                             </div>
                         </div>
                     </div>

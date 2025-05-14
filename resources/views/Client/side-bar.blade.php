@@ -390,9 +390,9 @@
                     <div class="text-sm text-gray-500 dark:text-gray-400">Membre depuis {{ \Carbon\Carbon::parse($user->created_at)->format('Y') }}</div>
 
                     <div class="flex items-center mt-2">
-                        @if(isset($note_moyenne) && is_numeric($note_moyenne))
+                        @if(isset($note_moyenne) && $note_moyenne != 0)
                             @php
-                                $rating = min(max($note_moyenne, 0), 5);
+                                $rating = $note_moyenne;
                                 $fullStars = floor($rating); 
                                 $hasHalfStar = ($rating - $fullStars) >= 0.5;
                                 $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);

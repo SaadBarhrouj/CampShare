@@ -385,12 +385,19 @@
                 const reservaion = document.getElementById("reservations");
                 reservaion.innerHTML = ""; 
 
+
                 if (data.demandes.length > 0) {
                     data.demandes.forEach(reservation => {
-
+                        const date = new Date(reservation.created_at);
+                        const formattedCreatedAt = date.toLocaleString('fr-FR', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
                         const avatarUrl = "{{ asset('') }}";
                         const fullUrl = avatarUrl + reservation.avatar_url;
-
                         let newReservation = `
                         <div class="px-6 py-4">
                             <div class="flex flex-col lg:flex-row lg:items-start">
@@ -439,7 +446,10 @@
                                 </div>
 
                                 <div class="flex flex-col items-start lg:ml-6 space-y-3">
-                                    ${getStatusBadge(reservation.status, reservation.created_at,reservation.id)}
+                                
+
+
+                                    ${getStatusBadge(reservation.status, formattedCreatedAt,reservation.id)}
                                 </div>
                             </div>
                         </div>`;

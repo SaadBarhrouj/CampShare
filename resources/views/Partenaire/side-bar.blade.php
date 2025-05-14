@@ -433,12 +433,13 @@
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-4">{{ $user->username }}</h2>
                     <div class="text-sm text-gray-500 dark:text-gray-400">Partenaire depuis {{ \Carbon\Carbon::parse($user->created_at)->format('Y') }}</div>
                     <div class="flex items-center mt-2">
-                    @php
-                        $rating = $AverageRating;  
-                        $fullStars = floor($rating); 
-                        $halfStar = $rating - $fullStars !=0
-                    @endphp
+                    @if(isset($AverageRating) && $AverageRating!= 0)
 
+                        @php
+                            $rating = $AverageRating;  
+                            $fullStars = floor($rating); 
+                            $halfStar = $rating - $fullStars !=0
+                        @endphp
                         <div class="flex text-amber-400">
                         @for ($i = 0; $i < $fullStars; $i++)
                             <i class="fas fa-star"></i>
@@ -449,6 +450,9 @@
                         @endif
                         </div>
                         <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">{{ $AverageRating }}</span>
+                    @else
+                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">Not Rated</span>
+                    @endif
                     </div>
                 </div>
                 
@@ -477,7 +481,7 @@
                     </a>
                     
                  
-                    <a href="/Partenaire/AvisRecus" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="{{ route('HomePartenaie.avis') }}"  class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-star w-5 mr-3"></i>
                         Avis reçus
                     </a>

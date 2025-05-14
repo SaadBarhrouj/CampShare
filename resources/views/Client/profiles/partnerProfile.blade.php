@@ -58,7 +58,7 @@
                                 </h1>
                                 <div class="mt-2 flex items-center text-gray-600 dark:text-gray-300">
                                     <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                                    <span>Rabat, Maroc</span>
+                                    <span>{{ $user->city->name }}, Maroc</span>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
         <section id="equipment-section1" class="py-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Équipements proposés par Fatima</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Équipements proposés par {{ $user->username }}</h2>
                 </div>
                 
                 <!-- Equipment Grid -->
