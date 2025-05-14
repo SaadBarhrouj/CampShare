@@ -250,11 +250,13 @@
                                         <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                                     </div>
                                     <div class="flex items-center text-sm">
-                                        <i class="fas fa-star text-amber-400 mr-1"></i>
+                                        
                                         @if($Listing->review_count != 0) 
+                                            <i class="fas fa-star text-amber-400 mr-1"></i>
                                             <span>{{ number_format($Listing->avg_rating, 1) }}<span class="text-gray-500 dark:text-gray-400">({{$Listing->review_count}})</span></span>
                                         @else 
-                                            <span> No Rating </span>
+                                            <i class="far fa-star text-amber-400 mr-1"></i>
+                                            <span> Non noté </span>
                                         @endif
 
                                     </div>

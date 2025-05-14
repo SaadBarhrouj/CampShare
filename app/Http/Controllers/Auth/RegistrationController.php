@@ -79,7 +79,9 @@ class RegistrationController extends Controller
 
 
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
-                $imagePath = $this->storeUploadedFile($request->file('image'), 'profile_images');
+                $imagePath = 'storage/' . $this->storeUploadedFile($request->file('image'), 'profile_images');
+            } else {
+                $imagePath = "images/avatar-default.jpg";
             }
 
             $cinRectoPath = $this->storeUploadedFile($request->file('cin_recto'), 'cin_images');
@@ -97,7 +99,7 @@ class RegistrationController extends Controller
                 'phone_number'  => $request->phone_number,
                 'email'         => $request->email,
                 'password'      => Hash::make($request->password),
-                'avatar_url'    => 'storage/' . $imagePath,
+                'avatar_url'    => $imagePath,
                 'cin_recto'     => $cinRectoPath,
                 'cin_verso'     => $cinVersoPath,
                 'role'          => ($request->has('role') && $request->input('role') === 'partner') ? 'partner' : 'client',
