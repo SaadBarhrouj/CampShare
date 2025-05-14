@@ -184,6 +184,11 @@ Route::middleware(['auth', 'active.account'])->group(function () {
             Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])->name('listings.destroy');
             Route::delete('/annonces/{id}', [AnnonceAdminController::class, 'destroy'])->name('admin.equipements.destroy');
             Route::get('/annonces/{id}', [AnnonceAdminController::class, 'show'])->name('admin.annonces.show');
+
+            Route::get('/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+            Route::get('/profile/edit', [AdminProfileController::class, 'showEditForm'])->name('admin.profile.edit.form');
+            Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
         });
 
         // Routes pour le nettoyage et la maintenance
@@ -197,9 +202,6 @@ Route::middleware(['auth', 'active.account'])->group(function () {
         Route::get('/admin/recent-reservations', [AdminController::class, 'getRecentReservations']);
         Route::get('/admin/recent-equipments', [AdminController::class, 'getRecentEquipments']);
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-        Route::get('/admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
-        Route::put('/admin/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 
 
 
