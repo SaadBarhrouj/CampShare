@@ -180,7 +180,7 @@ class AuthenticationTest extends TestCase
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,
             'phone_number' => '+33611111111',
-            'email' => $existingUser->email, // Email qui existe déjà
+            'email' => $existingUser->email, 
             'password' => $password,
             'password_confirmation' => $password,
             'image' => UploadedFile::fake()->image('profil_dup.jpg'),
@@ -325,12 +325,7 @@ class AuthenticationTest extends TestCase
 
         $response = $this->post(route('logout'));
 
-        // Votre AuthController redirige vers 'login' qui est la route POST
-        // Mais la route pour afficher le formulaire est 'login.form'
-        // Après logout, on devrait aller vers la page de formulaire
-        // Si votre route 'login' redirige vers 'login.form' en GET, c'est ok.
-        // Sinon, il vaut mieux rediriger explicitement vers 'login.form' dans AuthController@logout
-        $response->assertRedirect(route('login.form')); // Ajusté pour correspondre à la logique attendue après logout
+        $response->assertRedirect(route('login.form'));
         $this->assertGuest();
     }
 }
