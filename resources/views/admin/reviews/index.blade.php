@@ -10,10 +10,10 @@
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
                 <a href="#" class="flex items-center">
-                    <span class="text-3xl font-extrabold leading-none">
+                    <span class="text-3xl font-bold leading-none">
                         <span class="text-[#173BCA]">Camp</span><span class="text-[#FDAA2A]">Share</span>
                     </span>
-                    <span class="text-xs ml-2 text-[#6B7280] bg-[#F1F2F6] px-2 py-1 rounded-full font-medium">
+                    <span class="text-xs ml-2 text-gray-600 bg-gray-100 px-2 py-1 rounded-full font-medium">
                         ADMIN
                     </span>
                 </a>
@@ -37,11 +37,11 @@
                             <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">
                                 {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
                             </span>
-                            <span class="text-xs text-admin-primary dark:text-admin-secondary font-medium">
+                            <span class="text-xs text-blue-600 dark:text-blue-400 font-medium">
                                 {{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}
                             </span>
                         </div>
-                        <i class="fas fa-chevron-down text-xs text-gray-500 group-hover:text-admin-primary transition-colors"></i>
+                        <i class="fas fa-chevron-down text-xs text-gray-500 group-hover:text-blue-600 transition-colors"></i>
                     </button>
 
                     <!-- Dropdown -->
@@ -66,7 +66,7 @@
 
             <!-- Mobile menu button -->
             <div class="md:hidden flex items-center">
-                <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none">
+                <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -81,7 +81,7 @@
             <!-- Mobile search -->
             <div class="relative mb-3">
                 <input type="text" placeholder="Recherche rapide..."
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
                 </div>
@@ -92,11 +92,13 @@
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
             <div class="flex items-center px-4">
                 <div class="flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Admin User" class="h-10 w-10 rounded-full" />
+                    <div class="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-500 dark:text-gray-400"></i>
+                    </div>
                 </div>
                 <div class="ml-3">
-                    <div class="text-base font-medium text-gray-800 dark:text-white">Mohamed Alami</div>
-                    <div class="text-sm font-medium text-admin-primary dark:text-admin-secondary">Super Admin</div>
+                    <div class="text-base font-medium text-gray-800 dark:text-white">{{ auth()->user()->first_name ?? 'Utilisateur' }} {{ auth()->user()->last_name ?? '' }}</div>
+                    <div class="text-sm font-medium text-blue-600 dark:text-blue-400">{{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}</div>
                 </div>
                 <div class="ml-auto flex items-center space-x-4">
                     <button class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
@@ -115,9 +117,6 @@
                 <a href="#account-settings" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
                 </a>
-                <a href="#admin-logs" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-history mr-2 opacity-70"></i> Historique d'actions
-                </a>
                 <a href="#logout" class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                 </a>
@@ -132,11 +131,11 @@
     <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
         <div class="p-5">
             <div class="mb-6 px-3">
-                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                     Menu Principal</h5>
                 <nav class="space-y-1">
                      <a href="{{ route('admin.dashboard') }}"
-                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                    </a>
@@ -144,27 +143,26 @@
             </div>
 
             <div class="mb-6 px-3">
-                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                     Utilisateurs</h5>
                 <nav class="space-y-1">
                    <a href="{{ route('admin.partners') }}"
-    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-    <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-    Partenaires
-</a>
+                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Partenaires
+                    </a>
 
-<a href="{{ route('admin.clients') }}"
-    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-    <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-    Clients
-</a>
-
+                    <a href="{{ route('admin.clients') }}"
+                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Clients
+                    </a>
                 </nav>
             </div>
 
             <div class="mb-6 px-3">
-                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                    Equi. Réserv. & Avis</h5>
+                <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                    Gestion des Services</h5>
                 <nav class="space-y-1">
                     <a href="{{ route('equipements.index') }}"
                         class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -179,8 +177,8 @@
                     </a>
 
                     <a href="{{ route('admin.reviews') }}"
-                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400 rounded-md transition-colors">
+                        <i class="fas fa-star w-5 mr-3 text-blue-500 dark:text-blue-400"></i>
                         Avis
                         <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
                             {{ \App\Models\Review::count() }}
@@ -194,27 +192,39 @@
     <!-- Main Content -->
     <div class="md:ml-64 flex-1 p-6 mt-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
                 <div class="flex justify-between items-center">
-                    <h1 class="font-extrabold text-3xl text-[#173BCA] dark:text-white flex items-center space-x-2">
+                    <h1 class="font-bold text-2xl text-gray-800 dark:text-white flex items-center space-x-3">
                         <i class="fas fa-star text-yellow-400"></i>
-                        <span>Évaluations des utilisateurs</span>
+                        <span>Gestion des Évaluations</span>
                     </h1>
 
-                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                        {{ $reviews->total() }} évaluations au total
+                    <div class="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        Total: <span class="text-blue-600 dark:text-blue-400">{{ $reviews->total() }}</span> évaluations
                     </div>
                 </div>
             </div>
             
-            <!-- Barre de recherche -->
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/20">
-                <div class="relative max-w-md">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+            <!-- Barre de recherche et filtres -->
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="relative w-full md:w-80">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <input type="text" id="searchInput" placeholder="Rechercher par email ou nom..." 
+                               class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
                     </div>
-                    <input type="text" id="searchInput" placeholder="Rechercher par email ou nom..." 
-                           class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary">
+                    
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">Filtrer par note:</span>
+                        <div class="flex space-x-1">
+                            <button class="rating-filter px-3 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-300 font-medium transition-colors" data-rating="all">Tous</button>
+                            <button class="rating-filter px-3 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-300 font-medium transition-colors" data-rating="5">5★</button>
+                            <button class="rating-filter px-3 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-300 font-medium transition-colors" data-rating="4">4★</button>
+                            <button class="rating-filter px-3 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-300 font-medium transition-colors" data-rating="1-3">1-3★</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -224,7 +234,7 @@
             </div>
             
             <!-- Pagination -->
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/20">
+            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
                 {{ $reviews->links() }}
             </div>
         </div>
@@ -245,7 +255,7 @@
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
-        if (!event.target.closest('#user-menu-button')) {
+        if (!event.target.closest('#user-menu-button') && !event.target.closest('#user-dropdown')) {
             const dropdown = document.getElementById('user-dropdown');
             if (!dropdown.classList.contains('hidden')) {
                 dropdown.classList.add('hidden');
@@ -253,12 +263,65 @@
         }
     });
 
+    // Active class for sidebar links
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        if (link.classList.contains('active')) {
+            link.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'text-blue-600', 'dark:text-blue-400');
+            link.classList.remove('text-gray-600', 'dark:text-gray-300');
+            
+            // Change icon color
+            const icon = link.querySelector('i');
+            if (icon) {
+                icon.classList.add('text-blue-500', 'dark:text-blue-400');
+                icon.classList.remove('text-gray-500', 'dark:text-gray-400');
+            }
+        }
+    });
+
     // Fonction de recherche avec AJAX
-    document.getElementById('searchInput').addEventListener('input', function() {
+    document.getElementById('searchInput').addEventListener('input', debounce(function() {
         const searchTerm = this.value;
-        const url = new URL(window.location.href);
+        fetchFilteredReviews(searchTerm);
+    }, 300));
+
+    // Gestion des filtres par note
+    document.querySelectorAll('.rating-filter').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('.rating-filter').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'dark:bg-blue-900/30', 'text-blue-700', 'dark:text-blue-400');
+            });
+            
+            // Add active class to clicked button
+            this.classList.add('bg-blue-100', 'dark:bg-blue-900/30', 'text-blue-700', 'dark:text-blue-400');
+            
+            const rating = this.dataset.rating;
+            const searchTerm = document.getElementById('searchInput').value;
+            fetchFilteredReviews(searchTerm, rating);
+        });
+    });
+
+    // Helper function to debounce input events
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func.apply(this, args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Function to fetch filtered reviews
+    function fetchFilteredReviews(searchTerm, rating = 'all') {
+        const url = new URL("{{ route('admin.reviews') }}", window.location.origin);
+        url.searchParams.append('search', searchTerm);
+        url.searchParams.append('rating', rating);
+        url.searchParams.append('ajax', '1');
         
-        fetch(`{{ route('admin.reviews') }}?search=${encodeURIComponent(searchTerm)}&ajax=1`, {
+        fetch(url, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
@@ -278,20 +341,28 @@
             if (paginationContainer && data.pagination) {
                 paginationContainer.innerHTML = data.pagination;
             }
+
+            // Update URL without reloading page
+            const stateUrl = new URL(window.location.href);
+            stateUrl.searchParams.set('search', searchTerm);
+            stateUrl.searchParams.set('rating', rating);
+            window.history.pushState({}, '', stateUrl);
         })
         .catch(error => {
             console.error('Error:', error);
-            // Optionnel: Afficher un message d'erreur à l'utilisateur
+            // Optionally display error message to user
         });
-    });
+    }
 
     // Gestion du clic sur la pagination après une recherche
     document.addEventListener('click', function(e) {
-        if (e.target.closest('.pagination a')) {
+        const paginationLink = e.target.closest('.pagination a');
+        if (paginationLink) {
             e.preventDefault();
-            const url = e.target.closest('a').href;
+            const url = new URL(paginationLink.href);
+            url.searchParams.append('ajax', '1');
             
-            fetch(`${url}&ajax=1`, {
+            fetch(url, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
@@ -303,15 +374,27 @@
                 
                 // Mettre à jour la pagination
                 const paginationContainer = document.querySelector('.pagination');
-                if (paginationContainer) {
+                if (paginationContainer && data.pagination) {
                     paginationContainer.innerHTML = data.pagination;
                 }
                 
-                // Mettre à jour l'URL dans la barre d'adresse sans recharger la page
-                window.history.pushState({}, '', url.split('&ajax=1')[0]);
+                // Update URL without reloading page
+                window.history.pushState({}, '', paginationLink.href);
             })
             .catch(error => console.error('Error:', error));
         }
+    });
+
+    // Set active rating filter on page load based on URL
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rating = urlParams.get('rating') || 'all';
+        
+        document.querySelectorAll('.rating-filter').forEach(btn => {
+            if (btn.dataset.rating === rating) {
+                btn.classList.add('bg-blue-100', 'dark:bg-blue-900/30', 'text-blue-700', 'dark:text-blue-400');
+            }
+        });
     });
 </script>
 @endsection

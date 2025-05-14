@@ -37,4 +37,31 @@ class ReviewAdminController extends Controller
 
         return view('admin.reviews.index', compact('reviews'));
     }
+
+    public function update(Request $request, Review $review)
+    {
+        $request->validate([
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $review->update([
+            'comment' => $request->comment,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Commentaire mis à jour avec succès',
+            'review' => $review->fresh()
+        ]);
+    }
+
+    public function destroy(Review $review)
+    {
+        $review->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Review supprimée avec succès'
+        ]);
+    }
 }
