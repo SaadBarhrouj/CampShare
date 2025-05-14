@@ -222,7 +222,7 @@
         <div class="md:ml-64 w-full">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
              
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">📊 Statistiques des Réservations</h2>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Statistiques des Réservations</h2>
 
 
 
@@ -240,24 +240,25 @@
                 </div>
             </div>
 
-        
-            <form method="GET" action="{{ route('admin.reservations.index') }}" class="mb-6">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <div class="relative w-full sm:w-1/2">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400" aria-hidden="true"></i>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <form method="GET" action="{{ route('admin.reservations.index') }}" class="mb-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="relative w-full sm:w-1/2">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400" aria-hidden="true"></i>
+                            </div>
+                            <input type="text" name="search" placeholder="Rechercher par nom, prénom..."
+                                value="{{ request('search') }}"
+                                class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-admin-primary"
+                                aria-label="Rechercher des réservations">
                         </div>
-                        <input type="text" name="search" placeholder="Rechercher par nom, prénom..."
-                            value="{{ request('search') }}"
-                            class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-admin-primary"
-                            aria-label="Rechercher des réservations">
+                        <button type="submit"
+                            class="px-4 py-2 bg-[#0055A4] text-white rounded-lg hover:bg-[#00448a] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0055A4]">
+                            Rechercher
+                        </button>
                     </div>
-                    <button type="submit"
-                        class="px-4 py-2 bg-[#0055A4] text-white rounded-lg hover:bg-[#00448a] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0055A4]">
-                        Rechercher
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
 
        
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">

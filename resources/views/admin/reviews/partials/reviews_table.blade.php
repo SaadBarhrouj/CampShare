@@ -2,7 +2,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700 sticky top-0">
+            <thead class="z-0 bg-gray-50 dark:bg-gray-700 sticky top-0">
                 <tr>
                     <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Évaluateur</th>
                     <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Évalué</th>
@@ -21,7 +21,7 @@
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10">
                                 <img class="h-10 w-10 rounded-full border border-gray-200 dark:border-gray-600" 
-                                     src="{{ $review->reviewer->avatar_url ?? asset('images/default-avatar.jpg') }}" 
+                                     src="{{ asset($review->reviewer->avatar_url) ?? asset('images/default-avatar.jpg') }}" 
                                      alt="{{ $review->reviewer->first_name }}">
                             </div>
                             <div class="ml-4">
@@ -35,7 +35,7 @@
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10">
                                     <img class="h-10 w-10 rounded-full border border-gray-200 dark:border-gray-600" 
-                                         src="{{ $review->reviewee->avatar_url ?? asset('images/default-avatar.jpg') }}" 
+                                         src="{{ asset($review->reviewee->avatar_url) ?? asset('images/default-avatar.jpg') }}" 
                                          alt="{{ $review->reviewee->first_name }}">
                                 </div>
                                 <div class="ml-4">
@@ -73,37 +73,11 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="flex items-center mr-2">
-                                @php
-                                    $fullStars = floor($review->rating);
-                                    $hasHalfStar = fmod($review->rating, 1) !== 0.0;
-                                    $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
-                                @endphp
-                                
-                                @for($i = 0; $i < $fullStars; $i++)
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                     </svg>
-                                @endfor
-                                
-                                @if($hasHalfStar)
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <defs>
-                                            <linearGradient id="half-star-{{ $review->id }}" x1="0" x2="100%" y1="0" y2="0">
-                                                <stop offset="50%" stop-color="currentColor"/>
-                                                <stop offset="50%" stop-color="#D1D5DB"/>
-                                            </linearGradient>
-                                        </defs>
-                                        <path fill="url(#half-star-{{ $review->id }} )" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                @endif
-                                
-                                @for($i = 0; $i < $emptyStars; $i++)
-                                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                @endfor
                             </div>
-                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ number_format($review->rating, 1) }}/5</span>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $review->rating }}/5</span>
                         </div>
                     </td>
                     <td class="px-6 py-4">

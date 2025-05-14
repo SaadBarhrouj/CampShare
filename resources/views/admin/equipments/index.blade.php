@@ -226,7 +226,6 @@
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div class="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
                     <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
-                        <i class="fas fa-campground text-blue-500 mr-2"></i>
                         Les Équipements Disponibles
                     </h1>
 

@@ -189,6 +189,8 @@ Route::middleware(['auth', 'active.account'])->group(function () {
             Route::get('/profile/edit', [AdminProfileController::class, 'showEditForm'])->name('admin.profile.edit.form');
             Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 
+            Route::delete('/reviews/{review}', [ReviewAdminController::class, 'destroy'])->name('admin.reviews.destroy');
+
         });
 
         // Routes pour le nettoyage et la maintenance

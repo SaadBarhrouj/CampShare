@@ -195,7 +195,6 @@
             <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
                 <div class="flex justify-between items-center">
                     <h1 class="font-bold text-2xl text-gray-800 dark:text-white flex items-center space-x-3">
-                        <i class="fas fa-star text-yellow-400"></i>
                         <span>Gestion des Évaluations</span>
                     </h1>
 

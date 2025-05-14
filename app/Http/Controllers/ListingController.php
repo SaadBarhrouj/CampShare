@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Listing;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreListingRequest;
 use App\Http\Requests\UpdateListingRequest;
 
@@ -450,7 +451,7 @@ class ListingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(Listing $listing)
+   public function destruyoy(Listing $listing)
     {
         try {
             $listing->delete();
@@ -459,4 +460,19 @@ class ListingController extends Controller
             return redirect()->back()->with('error', 'Erreur lors de la suppression');
         }
     }
+
+    public function destroy(Listing $listing)
+    {
+        try {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $listing->delete();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            
+            return redirect()->back()->with('success', 'Annonce supprimée avec succès');
+        } catch (\Exception $e) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->back()->with('error', 'Erreur lors de la suppression: ' . $e->getMessage());
+        }
+    }
+    
 }
