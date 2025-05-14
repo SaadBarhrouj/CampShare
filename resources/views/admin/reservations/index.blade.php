@@ -3,12 +3,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 @section('content')
-    {{-- Header pleine largeur --}}
+   
     <nav
         class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <!-- Logo stylisé -->
+             
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#" class="flex items-center">
                         <span class="text-3xl font-extrabold leading-none">
@@ -31,7 +31,7 @@
                         </button>
                     </div>
 
-                    <!-- User menu -->
+                    
                     @auth
                         <div class="relative">
                             <button id="user-menu-button" class="flex items-center space-x-3 focus:outline-none group">
@@ -47,7 +47,7 @@
                                     class="fas fa-chevron-down text-xs text-gray-500 group-hover:text-admin-primary transition-colors"></i>
                             </button>
 
-                            <!-- Dropdown -->
+                      
                             <div id="user-dropdown"
                                 class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 overflow-hidden border border-gray-100 dark:border-gray-700">
                                 <div class="py-2">
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <!-- Mobile menu button -->
+      
         <div class="md:hidden flex items-center">
             <button id="mobile-menu-button" aria-label="Menu principal" aria-expanded="false"
                 class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none focus:ring-2 focus:ring-admin-primary rounded p-1">
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- Mobile profile menu -->
+          
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
                 <div class="flex items-center px-4">
                     <div class="flex-shrink-0">
@@ -149,9 +149,9 @@
         </div>
     </nav>
 
-    <!-- Main Content with Sidebar -->
+   
     <div class="flex pt-16">
-        <!-- Sidebar amélioré -->
+      
         <aside
             class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto border-r border-gray-100 dark:border-gray-700">
             <div class="p-5">
@@ -219,15 +219,14 @@
             </div>
         </aside>
 
-        <!-- Main content area -->
         <div class="md:ml-64 w-full">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {{-- Titre --}}
+             
                 <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">📊 Statistiques des Réservations</h2>
 
 
 
-                {{-- Aperçu en texte --}}
+              
                 <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @forelse ($reservationStats as $status => $total)
                         <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
@@ -241,7 +240,7 @@
                 </div>
             </div>
 
-            {{-- Barre de recherche --}}
+        
             <form method="GET" action="{{ route('admin.reservations.index') }}" class="mb-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div class="relative w-full sm:w-1/2">
@@ -260,7 +259,7 @@
                 </div>
             </form>
 
-            {{-- Tableau des réservations --}}
+       
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Liste des Réservations</h3>
@@ -323,7 +322,7 @@
                     </table>
                 </div>
 
-                <!-- Pagination (ajout pour compléter l'interface) -->
+             
                 @if(isset($reservations) && $reservations->hasPages())
                     <div class="mt-6">
                         {{ $reservations->links() }}
@@ -339,7 +338,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Toggle pour le dropdown de l'utilisateur
+     
             const userMenuButton = document.getElementById('user-menu-button');
             const userDropdown = document.getElementById('user-dropdown');
 
@@ -350,7 +349,6 @@
                     userDropdown.classList.toggle('hidden');
                 });
 
-                // Fermer le menu quand on clique en dehors
                 document.addEventListener('click', function (event) {
                     if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
                         userDropdown.classList.add('hidden');
@@ -359,7 +357,7 @@
                 });
             }
 
-            // Toggle pour le menu mobile
+          
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -371,7 +369,6 @@
                 });
             }
 
-            // Initialisation du graphique
             const ctx = document.getElementById('reservationsChart');
             if (ctx) {
                 new Chart(ctx, {
