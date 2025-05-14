@@ -397,13 +397,13 @@
                                  @endif
                              </section>
 
-                            <section id="location-section" class="tab-content hidden">
+                            <section id="location-section" class="tab-content">
                                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sr-only">Localisation de l'équipement</h2>
                                 <div class="flex items-center text-gray-700 dark:text-gray-300 mb-5 text-base bg-white dark:bg-gray-800/50 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
                                     <i class="fas fa-map-marker-alt fa-fw mr-3 text-forest dark:text-meadow"></i>
                                     Disponible dans la zone de <span class="font-semibold ml-1">{{ $listing->city?->name ?? 'Ville non spécifiée' }}</span>.
                                 </div>
-                                <div id="listing-map-container" class="z-0 mt-4 h-64 sm:h-80 bg-gray-50 dark:bg-gray-700 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 shadow-sm overflow-hidden"></div>
+                                <div id="listing-map-container" class="z-0 mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600"></div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-4 italic bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                                     <i class="fas fa-info-circle mr-2 text-amber-500"></i>L'adresse exacte ou le point de rencontre précis vous sera communiqué par le partenaire après la confirmation de votre réservation.
                                 </p>
