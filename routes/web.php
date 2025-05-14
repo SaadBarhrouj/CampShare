@@ -228,6 +228,16 @@ Route::middleware(['auth', 'active.account'])->group(function () {
          ->name('notifications.client.markAllAsRead');
 
 
-
-
 });
+
+  Route::post('/notifications/client/mark-all-visible-as-read', [NotificationController::class, 'markAllClientVisibleAsRead'])
+             ->name('notifications.client.markAllVisibleAsRead');
+
+        Route::post('/notifications/client/delete-selected', [NotificationController::class, 'deleteSelectedClientNotifications'])
+             ->name('notifications.client.deleteSelected');
+
+Route::post('/notifications/partner/mark-all-visible-as-read', [NotificationController::class, 'markAllPartnerVisibleAsRead'])
+             ->name('notifications.partner.markAllVisibleAsRead'); 
+
+        Route::post('/notifications/partner/delete-selected', [NotificationController::class, 'deleteSelectedPartnerNotifications'])
+             ->name('notifications.partner.deleteSelected');

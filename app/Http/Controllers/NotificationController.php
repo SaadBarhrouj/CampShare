@@ -156,6 +156,32 @@ public static $clientNotificationTypes = [
         return response()->json(['message' => 'Notification marquée comme lue.']);
     }
 
+
+      public function markAllClientVisibleAsRead(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
+        }
+
+        if (empty(self::$clientNotificationTypes)) {
+            Log::error("Le tableau clientNotificationTypes est vide dans NotificationController.");
+            return response()->json(['message' => 'Erreur de configuration interne du serveur.'], 500);
+        }
+
+        $updatedCount = Notification::where('user_id', $user->id)
+            ->whereIn('type', self::$clientNotificationTypes)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        Log::info("{$updatedCount} notifications CLIENT marquées comme lues pour l'utilisateur ID {$user->id}.");
+        return response()->json([
+            'message' => "{$updatedCount} notifications client marquée(s) comme lue(s).",
+            'updated_count' => $updatedCount
+        ]);
+    }
+
+
     public function deleteNotification(Notification $notification, User $user)
     {
          if ($notification->user_id !== Auth::id() || $user->id !== Auth::id()) {
@@ -201,5 +227,87 @@ public static $clientNotificationTypes = [
         $notification->delete();
         Log::info("(Original Method) Notification ID {$notificationId} deleted for User ID {$userId}");
         return response()->noContent();
+    }
+
+
+     public function markAllPartnerVisibleAsRead(Request $request) // Nom de méthode cohérent
+    {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'partner') { // S'assurer que l'utilisateur est un partenaire
+            return response()->json(['message' => 'Non autorisé ou non authentifié.'], 403);
+        }
+
+        if (empty($this->partnerNotificationTypes)) {
+            Log::error("La liste partnerNotificationTypes est vide dans NotificationController pour markAllPartnerVisibleAsRead.");
+            return response()->json(['message' => 'Erreur de configuration interne.'], 500);
+        }
+
+        $updatedCount = Notification::where('user_id', $user->id)
+            ->whereIn('type', $this->partnerNotificationTypes) // Filtre par types partenaire
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        Log::info("{$updatedCount} notifications PARTENAIRE marquées comme lues pour l'utilisateur ID {$user->id}.");
+        return response()->json([
+            'message' => "{$updatedCount} notifications partenaire marquées comme lues.",
+            'updated_count' => $updatedCount
+        ]);
+    }
+
+    /**
+     * Supprime les notifications CLIENT sélectionnées.
+     */
+    public function deleteSelectedClientNotifications(Request $request) // Nom de méthode cohérent
+    {
+        $user = Auth::user();
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:notifications,id', // Valide que les IDs existent dans la table notifications
+        ]);
+
+        if (!$user) {
+            return response()->json(['message' => 'Non authentifié.'], 401);
+        }
+        // Optionnel: vérifier le rôle client
+        // if ($user->role !== 'client') { ... }
+
+        // S'assurer que l'utilisateur ne supprime que SES propres notifications
+        // et uniquement celles du type CLIENT pour plus de sécurité.
+        $deletedCount = Notification::where('user_id', $user->id)
+            ->whereIn('id', $validated['ids'])
+            ->whereIn('type', self::$clientNotificationTypes) // Sécurité: ne supprime que les types client
+            ->delete();
+
+        Log::info("{$deletedCount} notifications CLIENT supprimées pour l'utilisateur ID {$user->id}. IDs: " . implode(',', $validated['ids']));
+        return response()->json(['message' => "{$deletedCount} notifications client sélectionnées ont été supprimées.", 'deleted_count' => $deletedCount]);
+    }
+
+    /**
+     * Supprime les notifications PARTENAIRE sélectionnées.
+     */
+    public function deleteSelectedPartnerNotifications(Request $request) // Nom de méthode cohérent
+    {
+        $user = Auth::user();
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:notifications,id',
+        ]);
+
+        if (!$user || $user->role !== 'partner') {
+            return response()->json(['message' => 'Non autorisé ou non authentifié.'], 403);
+        }
+
+        if (empty($this->partnerNotificationTypes)) {
+            Log::error("La liste partnerNotificationTypes est vide dans NotificationController pour deleteSelectedPartnerNotifications.");
+            return response()->json(['message' => 'Erreur de configuration interne.'], 500);
+        }
+        
+        $deletedCount = Notification::where('user_id', $user->id)
+            ->whereIn('id', $validated['ids'])
+            ->whereIn('type', $this->partnerNotificationTypes) // Sécurité: ne supprime que les types partenaire
+            ->delete();
+
+        Log::info("{$deletedCount} notifications PARTENAIRE supprimées pour l'utilisateur ID {$user->id}. IDs: " . implode(',', $validated['ids']));
+        return response()->json(['message' => "{$deletedCount} notifications partenaire sélectionnées ont été supprimées.", 'deleted_count' => $deletedCount]);
     }
 }

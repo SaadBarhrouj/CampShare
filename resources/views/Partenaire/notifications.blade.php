@@ -266,209 +266,299 @@
     {{-- Inclusion de ton footer --}}
     {{-- @include('partials.footer') --}}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            const notificationsListContainer = document.getElementById('notifications-list');
-            const selectAllCheckbox = document.getElementById('select-all');
-            const markAllReadButton = document.getElementById('mark-all-read');
-            const deleteSelectedButton = document.getElementById('delete-selected');
-            const filterSelect = document.getElementById('filter-select');
-            const sortSelect = document.getElementById('sort-select');
-            const notificationCounterElement = document.getElementById('notification-counter');
-            const headerBadge = document.querySelector('#notifications-button .notification-badge'); // Ajuste si besoin
+   {{-- ... Tout votre HTML pour la page Partenaire/notifications.blade.php ... --}}
+{{-- Assurez-vous d'avoir la meta CSRF dans votre <head> ou dans votre layout principal --}}
+{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-            // --- Fonction pour mettre à jour le compteur ---
-            function updateNotificationCounter() {
-                if (!notificationsListContainer) return; // Quitte si la liste n'existe pas
-                const unreadCount = notificationsListContainer.querySelectorAll('.notification-item:not([data-read="true"])').length;
-                if (notificationCounterElement) {
-                    notificationCounterElement.textContent = `${unreadCount} non lue${unreadCount !== 1 ? 's' : ''}`;
-                }
-                if (headerBadge) {
-                    headerBadge.textContent = unreadCount;
-                    headerBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) {
+        console.error('Token CSRF introuvable. Assurez-vous que la balise meta csrf-token est présente.');
+    }
+
+    const notificationsListContainer = document.getElementById('notifications-list');
+    const selectAllCheckbox = document.getElementById('select-all');
+    const markAllReadButton = document.getElementById('mark-all-read'); // ID de votre bouton
+    const deleteSelectedButton = document.getElementById('delete-selected'); // ID de votre bouton
+    const filterSelect = document.getElementById('filter-select');
+    const sortSelect = document.getElementById('sort-select');
+    const notificationCounterElement = document.getElementById('notification-counter');
+    // **MODIFICATION POTENTIELLE ICI** : Vérifiez ce sélecteur pour le header PARTENAIRE
+    // Si l'ID de l'élément qui contient la cloche est '#notifications-partner-icon-link' (par exemple) :
+    // const headerBadge = document.querySelector('#notifications-partner-icon-link .notification-badge');
+    // Si la structure est la même que pour le client (ID "notifications-button" sur le bouton/lien parent de la cloche) :
+    const headerBadge = document.querySelector('#notifications-button .notification-badge');
+
+
+    // --- Fonction pour mettre à jour les compteurs ET l'état des boutons ---
+    function updateUIStates() {
+        if (!notificationsListContainer) return;
+        const allItems = Array.from(notificationsListContainer.querySelectorAll('.notification-item'));
+        const unreadItems = allItems.filter(item => item.getAttribute('data-read') === 'false');
+        const unreadCount = unreadItems.length;
+        const totalVisibleCount = allItems.filter(item => item.style.display !== 'none').length;
+
+        if (notificationCounterElement) {
+            notificationCounterElement.textContent = `${unreadCount} non lue${unreadCount !== 1 ? 's' : ''} sur ${totalVisibleCount} affichée${totalVisibleCount !== 1 ? 's' : ''}`;
+        }
+        if (headerBadge) {
+            headerBadge.textContent = unreadCount;
+            headerBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
+        }
+        if (markAllReadButton) {
+            markAllReadButton.disabled = (unreadCount === 0);
+        }
+        if (deleteSelectedButton) {
+            const anyChecked = Array.from(notificationsListContainer.querySelectorAll('.notification-checkbox:checked')).length > 0;
+            deleteSelectedButton.disabled = !anyChecked;
+        }
+        if (selectAllCheckbox && allItems.length > 0) {
+            const allVisibleCheckboxes = allItems.filter(item => item.style.display !== 'none')
+                                             .map(item => item.querySelector('.notification-checkbox'))
+                                             .filter(cb => cb);
+            const allVisibleChecked = allVisibleCheckboxes.length > 0 && allVisibleCheckboxes.every(cb => cb.checked);
+            selectAllCheckbox.checked = allVisibleChecked;
+        } else if (selectAllCheckbox) {
+            selectAllCheckbox.checked = false;
+        }
+        if (allItems.filter(item => item.style.display !== 'none').length === 0 && totalVisibleCount === 0 && notificationsListContainer.children.length > 0 && notificationsListContainer.firstChild?.nodeName !== 'DIV') {
+            notificationsListContainer.innerHTML = '<div class="p-6 text-center text-gray-500 dark:text-gray-400">Aucune notification ne correspond à vos filtres.</div>';
+        } else if (allItems.length === 0 && notificationsListContainer.firstChild?.nodeName !== 'DIV') {
+            notificationsListContainer.innerHTML = '<div class="p-6 text-center text-gray-500 dark:text-gray-400">Vous n\'avez plus de notifications.</div>';
+        }
+    }
+
+    // --- Fonction générique pour les requêtes AJAX (identique à celle du client) ---
+    async function sendRequest(url, method, data = null) {
+        const options = {
+            method: method.toUpperCase(),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        };
+        if (data && (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'PATCH')) {
+            options.body = JSON.stringify(data);
+        }
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok && response.status !== 204) {
+                const errorData = await response.json().catch(() => ({ message: `Erreur HTTP ${response.status}` }));
+                console.error(`Failed request to ${url}:`, response.status, errorData.message);
+                throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
+            }
+            if (response.status !== 204) {
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return await response.json();
                 }
             }
+            return { message: 'Opération réussie.' };
+        } catch (error) {
+            console.error(`Error during request to ${url}:`, error);
+            throw error;
+        }
+    }
 
-            // --- Fonction générique pour les requêtes AJAX ---
-            async function sendRequest(url, method, data = null) {
-                const options = {
-                    method: method.toUpperCase(),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    }
-                };
-                if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
-                    options.body = JSON.stringify(data);
-                }
+    // --- Gestion des actions sur les notifications individuelles (identique, les data-url sur les boutons HTML doivent être corrects) ---
+    notificationsListContainer?.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.getAttribute('data-action');
+        const notificationId = button.getAttribute('data-id');
+        const userId = button.getAttribute('data-user-id');
+        const notificationItem = button.closest('.notification-item');
 
-                try {
-                    const response = await fetch(url, options);
-                     // Même si la réponse est vide (204 No Content), la considérer comme ok
-                    if (!response.ok && response.status !== 204) { 
-                        const errorData = await response.json().catch(() => ({ message: `Erreur HTTP ${response.status}` }));
-                        console.error(`Failed request to ${url}:`, response.status, errorData.message);
-                        throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
-                    }
-                     // Tenter de lire le JSON seulement si ce n'est pas une réponse 204
-                     if (response.status !== 204) {
-                        const contentType = response.headers.get("content-type");
-                         if (contentType && contentType.indexOf("application/json") !== -1) {
-                            return await response.json();
-                        }
-                    }
-                    return { message: 'Opération réussie' }; // Succès même si pas de contenu JSON
-                } catch (error) {
-                    console.error(`Error during request to ${url}:`, error);
-                    throw error;
-                }
+        if (!notificationId || !userId) {
+            console.error("ID de notification ou d'utilisateur manquant sur le bouton.");
+            alert("Une erreur s'est produite (ID manquant).");
+            return;
+        }
+        const originalButtonContent = button.innerHTML;
+        button.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        button.disabled = true;
+
+        if (action === 'mark-read') {
+            try {
+                // Les routes /notifications/{id}/mark-read/{user} sont génériques
+                const data = await sendRequest(`/notifications/${notificationId}/mark-read/${userId}`, 'POST');
+                console.log(data.message);
+                if (data.message.toLowerCase().includes('marquée comme lue') || data.message.toLowerCase().includes('déjà marquée')) {
+                    notificationItem.setAttribute('data-read', 'true');
+                    notificationItem.classList.remove('bg-blue-50', 'dark:bg-blue-900/20');
+                    notificationItem.querySelector('.unread-indicator')?.remove();
+                    button.remove();
+                    updateUIStates();
+                } else { throw new Error(data.message || "Réponse inattendue."); }
+            } catch (error) {
+                alert(`Erreur marquage: ${error.message}`);
+                button.innerHTML = originalButtonContent; button.disabled = false;
             }
-
-            // --- Gestion des actions sur les notifications individuelles ---
-            notificationsListContainer?.addEventListener('click', async (event) => {
-                const button = event.target.closest('button[data-action]');
-                if (!button) return;
-
-                const action = button.getAttribute('data-action');
-                const notificationId = button.getAttribute('data-id');
-                const userId = button.getAttribute('data-user-id'); // Récupère l'ID utilisateur depuis le bouton
-                const notificationItem = button.closest('.notification-item');
-
-                if (!notificationId || !userId) {
-                    console.error("ID de notification ou d'utilisateur manquant.");
-                    return;
-                }
-
-                button.disabled = true;
-
-                if (action === 'mark-read') {
-                    try {
-                         // *** IMPORTANT: Assure-toi que cette route existe et attend POST ***
-                        const data = await sendRequest(`/notifications/${notificationId}/mark-read/${userId}`, 'POST');
-                        console.log(data.message);
-                        notificationItem.setAttribute('data-read', 'true');
-                        notificationItem.classList.remove('bg-blue-50', 'dark:bg-blue-900/20');
-                        notificationItem.querySelector('.unread-indicator')?.remove();
-                        button.remove(); // Enlève le bouton "Marquer comme lu" lui-même
-                        updateNotificationCounter();
-                    } catch (error) {
-                        alert(`Erreur lors du marquage comme lu: ${error.message}`);
-                        button.disabled = false;
-                    }
-
-                } else if (action === 'delete') {
-                    if (!confirm('Voulez-vous vraiment supprimer cette notification ?')) {
-                         button.disabled = false;
-                         return;
-                    }
-                    try {
-                        // *** IMPORTANT: Assure-toi que cette route existe et attend DELETE ***
-                        const data = await sendRequest(`/notifications/${notificationId}/delete/${userId}`, 'DELETE');
-                        console.log(data.message || 'Notification supprimée');
-                        notificationItem.classList.add('removing');
-                         setTimeout(() => {
-                            notificationItem.remove();
-                            updateNotificationCounter();
-                        }, 300);
-                    } catch (error) {
-                         alert(`Erreur lors de la suppression: ${error.message}`);
-                        button.disabled = false;
-                    }
-                } else {
-                    button.disabled = false;
-                }
-            });
-
-            // --- Gestion de "Tout sélectionner" ---
-            selectAllCheckbox?.addEventListener('change', (event) => {
-                 if (!notificationsListContainer) return;
-                notificationsListContainer.querySelectorAll('.notification-checkbox').forEach(checkbox => {
-                    checkbox.checked = event.target.checked;
-                });
-            });
-
-            // --- TODO: Implémenter AJAX pour "Marquer tout comme lu" ---
-             markAllReadButton?.addEventListener('click', async () => {
-                 console.warn('TODO: Implémenter appel AJAX vers /notifications/mark-all-read');
-                 alert('Fonctionnalité "Marquer tout comme lu" à implémenter côté serveur.');
-                 // Après succès AJAX, mettre à jour l'UI pour tous les éléments non lus.
-            });
-
-            // --- TODO: Implémenter AJAX pour "Supprimer sélection" ---
-             deleteSelectedButton?.addEventListener('click', async () => {
-                 if (!notificationsListContainer) return;
-                const selectedIds = Array.from(notificationsListContainer.querySelectorAll('.notification-checkbox:checked'))
-                                       .map(cb => cb.value);
-
-                if (selectedIds.length === 0) {
-                    alert('Veuillez sélectionner des notifications à supprimer.');
-                    return;
-                }
-                if (!confirm(`Voulez-vous vraiment supprimer les ${selectedIds.length} notifications sélectionnées ?`)) {
-                    return;
-                }
-                 console.warn('TODO: Implémenter appel AJAX vers /notifications/delete-selected avec les IDs:', selectedIds);
-                alert('Fonctionnalité "Supprimer sélection" à implémenter côté serveur.');
-                 // Après succès AJAX, supprimer les éléments correspondants de l'UI.
-            });
-
-            // --- Filtrage et Tri (côté client) ---
-             filterSelect?.addEventListener('change', applyFiltersAndSort);
-             sortSelect?.addEventListener('change', applyFiltersAndSort);
-
-            function applyFiltersAndSort() {
-                if (!notificationsListContainer) return;
-                const filterValue = filterSelect?.value || 'all';
-                const sortValue = sortSelect?.value || 'newest';
-                const notificationItems = Array.from(notificationsListContainer.querySelectorAll('.notification-item'));
-
-                // 1. Filtrage
-                notificationItems.forEach(item => {
-                    const type = item.getAttribute('data-type');
-                    const isRead = item.getAttribute('data-read') === 'true';
-                    let show = false;
-
-                    if (filterValue === 'all') {
-                        show = true;
-                    } else if (filterValue === 'unread') {
-                        show = !isRead;
-                    } else {
-                        show = (type === filterValue);
-                    }
-                    item.style.display = show ? 'flex' : 'none';
-                });
-
-                // 2. Tri (sur les éléments actuellement visibles après filtrage)
-                const visibleItems = Array.from(notificationsListContainer.querySelectorAll('.notification-item')).filter(item => item.style.display !== 'none');
-
-                visibleItems.sort((a, b) => {
-                    const dateA = new Date(a.getAttribute('data-date'));
-                    const dateB = new Date(b.getAttribute('data-date'));
-                    const readA = a.getAttribute('data-read') === 'true';
-                    const readB = b.getAttribute('data-read') === 'true';
-
-                    if (sortValue === 'oldest') return dateA - dateB;
-                    if (sortValue === 'important') {
-                        if (readA !== readB) return readA ? 1 : -1; // Non lues en premier
-                        return dateB - dateA; // Puis par date récente
-                    }
-                    // Défaut: newest
-                    return dateB - dateA;
-                });
-
-                // 3. Réordonner dans le DOM
-                visibleItems.forEach(item => notificationsListContainer.appendChild(item));
+        } else if (action === 'delete') {
+            if (!confirm('Supprimer cette notification ?')) {
+                button.innerHTML = originalButtonContent; button.disabled = false; return;
             }
+            try {
+                const data = await sendRequest(`/notifications/${notificationId}/delete/${userId}`, 'DELETE');
+                console.log(data.message || 'Notification supprimée.');
+                notificationItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, border 0.3s ease';
+                notificationItem.style.opacity = '0';
+                notificationItem.style.transform = 'scale(0.95)';
+                notificationItem.style.maxHeight = '0px';
+                notificationItem.style.paddingTop = '0px';
+                notificationItem.style.paddingBottom = '0px';
+                notificationItem.style.marginTop = '0px';
+                notificationItem.style.marginBottom = '0px';
+                notificationItem.style.borderWidth = '0px';
+                setTimeout(() => { notificationItem.remove(); updateUIStates(); }, 300);
+            } catch (error) {
+                alert(`Erreur suppression: ${error.message}`);
+                button.innerHTML = originalButtonContent; button.disabled = false;
+            }
+        } else {
+            button.innerHTML = originalButtonContent; button.disabled = false;
+        }
+    });
 
-            // Initialiser au chargement
-            updateNotificationCounter();
-            applyFiltersAndSort(); // Applique les filtres/tris par défaut
+    // --- Gestion de "Tout sélectionner" (identique) ---
+    selectAllCheckbox?.addEventListener('change', (event) => {
+        if (!notificationsListContainer) return;
+        notificationsListContainer.querySelectorAll('.notification-item').forEach(item => {
+            if (item.style.display !== 'none') {
+                const cb = item.querySelector('.notification-checkbox');
+                if (cb) cb.checked = event.target.checked;
+            }
+        });
+        updateUIStates();
+    });
+    notificationsListContainer?.addEventListener('change', (event) => {
+        if (event.target.classList.contains('notification-checkbox')) {
+            updateUIStates();
+        }
+    });
 
-        }); // Fin de DOMContentLoaded
-    </script>
+    // --- "Marquer tout comme lu" (PARTENAIRE) ---
+    markAllReadButton?.addEventListener('click', async function() {
+        if (!notificationsListContainer) return;
+        const unreadVisibleItems = Array.from(notificationsListContainer.querySelectorAll('.notification-item:not([data-read="true"])'))
+                                      .filter(item => item.style.display !== 'none');
+        if (unreadVisibleItems.length === 0) {
+            alert('Toutes les notifications visibles sont déjà lues.'); return;
+        }
+        const originalButtonText = this.innerHTML;
+        this.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Traitement...`;
+        this.disabled = true;
+        try {
+            // **MODIFICATION ICI**: Utilisation de la route PARTENAIRE
+            const data = await sendRequest('{{ route("notifications.partner.markAllVisibleAsRead") }}', 'POST');
+            console.log(data.message, `Serveur maj: ${data.updated_count}`);
+            if (data.message.toLowerCase().includes('marquées comme lues')) { // Ou vérifier data.updated_count
+                notificationsListContainer.querySelectorAll('.notification-item:not([data-read="true"])').forEach(item => {
+                    item.setAttribute('data-read', 'true');
+                    item.classList.remove('bg-blue-50', 'dark:bg-blue-900/20');
+                    item.querySelector('.unread-indicator')?.remove();
+                    item.querySelector('button[data-action="mark-read"]')?.remove();
+                });
+                updateUIStates();
+                alert(data.message || `${data.updated_count || 0} notification(s) marquée(s) comme lue(s).`);
+            } else { throw new Error(data.message || "Réponse inattendue."); }
+        } catch (error) {
+            alert(`Erreur: ${error.message}`);
+        } finally {
+            this.innerHTML = originalButtonText;
+            updateUIStates();
+        }
+    });
+
+    // --- "Supprimer la sélection" (PARTENAIRE) ---
+    deleteSelectedButton?.addEventListener('click', async function() {
+        if (!notificationsListContainer) return;
+        const selectedCheckboxes = notificationsListContainer.querySelectorAll('.notification-checkbox:checked');
+        const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value).filter(id => id);
+        if (selectedIds.length === 0) {
+            alert('Sélectionnez des notifications à supprimer.'); return;
+        }
+        if (!confirm(`Supprimer les ${selectedIds.length} notification(s) sélectionnée(s) ?`)) return;
+        const originalButtonText = this.innerHTML;
+        this.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Suppression...`;
+        this.disabled = true;
+        try {
+            // **MODIFICATION ICI**: Utilisation de la route PARTENAIRE
+            const data = await sendRequest('{{ route("notifications.partner.deleteSelected") }}', 'POST', { ids: selectedIds });
+            console.log(data.message, `Serveur suppr: ${data.deleted_count}`);
+             if (data.message.toLowerCase().includes('supprimées')) { // Ou vérifier data.deleted_count
+                selectedCheckboxes.forEach(cb => {
+                    const item = cb.closest('.notification-item');
+                    if (item) {
+                        item.style.transition = 'opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, border 0.3s ease';
+                        item.style.opacity = '0'; item.style.transform = 'scale(0.95)'; item.style.maxHeight = '0px';
+                        item.style.paddingTop = '0px'; item.style.paddingBottom = '0px'; item.style.marginTop = '0px';
+                        item.style.marginBottom = '0px'; item.style.borderWidth = '0px';
+                        setTimeout(() => item.remove(), 300);
+                    }
+                });
+                setTimeout(() => {
+                    updateUIStates();
+                    alert(data.message || `${data.deleted_count || 0} notification(s) supprimée(s).`);
+                }, 350);
+            } else { throw new Error(data.message || "Réponse inattendue."); }
+        } catch (error) {
+            alert(`Erreur: ${error.message}`);
+        } finally {
+            this.innerHTML = originalButtonText;
+            if (selectAllCheckbox) selectAllCheckbox.checked = false;
+            updateUIStates();
+        }
+    });
+
+    // --- Filtrage et Tri (identique) ---
+    filterSelect?.addEventListener('change', applyFiltersAndSort);
+    sortSelect?.addEventListener('change', applyFiltersAndSort);
+
+    function applyFiltersAndSort() {
+        if (!notificationsListContainer) return;
+        const filterValue = filterSelect?.value || 'all';
+        const sortValue = sortSelect?.value || 'newest';
+        const allItems = Array.from(notificationsListContainer.querySelectorAll('.notification-item'));
+        const noNotifMessage = notificationsListContainer.querySelector('div.text-center');
+        if (noNotifMessage && noNotifMessage.textContent.includes("Aucune notification")) noNotifMessage.style.display = 'none';
+
+        allItems.forEach(item => {
+            const type = item.getAttribute('data-type');
+            const isRead = item.getAttribute('data-read') === 'true';
+            let show = false;
+            if (filterValue === 'all') show = true;
+            else if (filterValue === 'unread') show = !isRead;
+            else show = (type === filterValue);
+            item.style.display = show ? 'flex' : 'none';
+        });
+        const visibleItems = allItems.filter(item => item.style.display !== 'none');
+        visibleItems.sort((a, b) => {
+            const dateA = new Date(a.getAttribute('data-date'));
+            const dateB = new Date(b.getAttribute('data-date'));
+            const readA = a.getAttribute('data-read') === 'true';
+            const readB = b.getAttribute('data-read') === 'true';
+            if (sortValue === 'oldest') return dateA - dateB;
+            if (sortValue === 'important') {
+                if (readA !== readB) return readA ? 1 : -1;
+                return dateB - dateA;
+            }
+            return dateB - dateA;
+        });
+        visibleItems.forEach(item => notificationsListContainer.appendChild(item));
+        updateUIStates();
+    }
+
+    // Initialisation
+    if (notificationsListContainer?.children.length > 0 && notificationsListContainer.firstChild?.nodeName !== 'DIV') {
+        applyFiltersAndSort();
+    }
+    updateUIStates();
+    if (deleteSelectedButton) { deleteSelectedButton.disabled = true; }
+});
+</script>
 
 </body>
 </html>

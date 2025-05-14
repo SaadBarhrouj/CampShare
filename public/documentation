@@ -16,3 +16,12 @@ php artisan reservations:send-review-notifications
 php artisan reservations:update-status
 
 lister les commandes :php artisan list
+
+
+tests Commands :
+php artisan make:test AuthenticationTest
+
+executer toute les testes :
+php artisan test
+test par test:
+php artisan test tests/Feature/AuthenticationTest.php

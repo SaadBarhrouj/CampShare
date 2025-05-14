@@ -80,18 +80,143 @@
         .dark .tab-active { color: #9ae6b4; border-bottom-color: #FFAA33; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Améliorations stylistiques supplémentaires */
+        /* Animations douces */
+        .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        
+        /* Effets visuels pour carte de réservation */
+        .card-highlight {
+            background: linear-gradient(to bottom, #ffffff, #f9fafb);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .card-highlight {
+            background: linear-gradient(to bottom, #1f2937, #111827);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.4);
+        }
+        
+        /* Améliorations des images produit */
+        .product-img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .product-img-container:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+        
+        /* Amélioration des boutons */
+        .btn-enhanced {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-enhanced::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 0;
+            padding-bottom: 120%;
+            border-radius: 50%;
+            transform: translate3d(-50%, -50%, 0) scale(0);
+            opacity: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: transform 0.4s ease-out, opacity 0.2s ease-out;
+        }
+        
+        .btn-enhanced:active::after {
+            transform: translate3d(-50%, -50%, 0) scale(1);
+            opacity: 1;
+            transition: transform 0s;
+        }
+        
+        /* Améliorations des onglets */
+        .tab-button {
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: #FFAA33;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .tab-button:hover::after {
+            width: 40%;
+        }
+        
+        .tab-active::after {
+            width: 100%;
+        }
+        
+        /* Amélioration des cartes d'avis */
+        .review-card {
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .review-card:hover {
+            background-color: rgba(249, 250, 251, 0.8);
+            border-color: #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .dark .review-card:hover {
+            background-color: rgba(31, 41, 55, 0.8);
+            border-color: #374151;
+        }
+        
+        /* Améliorations des badges et labels */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+        }
+        
+        .badge-subtle {
+            background-color: rgba(45, 95, 43, 0.1);
+            color: #2D5F2B;
+        }
+        
+        .dark .badge-subtle {
+            background-color: rgba(154, 230, 180, 0.1);
+            color: #9ae6b4;
+        }
     </style>
 
 </head>
 
 
-<body class="font-sans antialiased text-gray-800 bg-gray-50 dark:text-gray-200 dark:bg-gray-900">
+<body class="font-sans antialiased text-gray-800 bg-gray-100 dark:text-gray-200 dark:bg-gray-900">
 
     @include('partials.header')
 
     <main class="pt-16">
         <!-- SECTION: Breadcrumb -->
-        <div class="bg-white dark:bg-gray-800 py-2 border-b border-gray-200 dark:border-gray-700 text-xs sm:text-sm">
+        <div class="bg-white dark:bg-gray-800 py-3 border-b border-gray-200 dark:border-gray-700 text-xs sm:text-sm shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <nav class="flex" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -125,28 +250,28 @@
         </div>
 
         <!-- SECTION: Détail Équipement -->
-        <section class="py-8 md:py-12">
+        <section class="py-10 md:py-14">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                  <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
                     <div class="w-full lg:w-7/12">
-                        <div class="mb-6 sm:mb-8">
-                             <div class="relative aspect-[4/3] mb-3 sm:mb-4 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="mb-8 sm:mb-10">
+                             <div class="relative aspect-[4/3] mb-4 sm:mb-6 bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden shadow-md product-img-container">
                                 <img id="mainImage"
                                      src="{{ $listing->item?->images?->first() ? asset($listing->item->images->first()->url) : asset('images/item-default.jpg') }}"
                                      alt="Image principale de {{ $listing->item?->title ?? 'équipement' }}"
                                      class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ease-in-out p-1"/>
                             </div>
                             @if($listing->item?->images?->count() > 1)
-                                <div class="grid grid-cols-5 gap-2">
+                                <div class="grid grid-cols-5 gap-2 sm:gap-3">
                                     @foreach($listing->item->images->take(5) as $image)
-                                    <div class="thumbnail aspect-square {{ $loop->first ? 'active border-sunlight' : 'border-transparent' }} bg-gray-100 dark:bg-gray-700 rounded overflow-hidden cursor-pointer border-2 transition-all duration-200"
+                                    <div class="thumbnail aspect-square {{ $loop->first ? 'active border-sunlight' : 'border-transparent' }} bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:opacity-90"
                                          onclick="changeImage(this, '{{ asset($image->url) ?? asset('images/item-default.jpg') }}')">
                                         <img src="{{ asset($image->url) ?? asset('images/item-default.jpg') }}" alt="Miniature {{ $loop->iteration }}" class="w-full h-full object-cover" loading="lazy"/>
                                     </div>
                                     @endforeach
                                     @for ($i = ($listing->item?->images?->count() ?? 0); $i < 5; $i++)
-                                        <div class="aspect-square bg-gray-100 dark:bg-gray-800 rounded"></div>
+                                        <div class="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
                                     @endfor
                                 </div>
                             @elseif(!$listing->item?->images || $listing->item?->images?->isEmpty())
@@ -155,15 +280,15 @@
                         </div>
 
                         <!-- SOUS-SECTION: Navigation par Onglets -->
-                        <div class="border-b border-gray-200 dark:border-gray-700 sticky top-16 bg-gray-50 dark:bg-gray-900 z-30 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:relative lg:top-0 lg:bg-transparent dark:lg:bg-transparent mb-6">
-                            <div class="flex overflow-x-auto scrollbar-hide space-x-6 sm:space-x-8">
-                                <button class="tab-button py-3 font-medium text-sm sm:text-base whitespace-nowrap border-b-2" data-target="details-section">
+                        <div class="border-b border-gray-200 dark:border-gray-700 sticky top-16 bg-gray-50 dark:bg-gray-900 z-30 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:relative lg:top-0 lg:bg-transparent dark:lg:bg-transparent mb-8">
+                            <div class="flex overflow-x-auto scrollbar-hide space-x-8 sm:space-x-10">
+                                <button class="tab-button py-4 font-medium text-sm sm:text-base whitespace-nowrap border-b-2" data-target="details-section">
                                     Description
                                 </button>
-                                <button class="tab-button py-3 font-medium text-sm sm:text-base text-gray-500 dark:text-gray-400 whitespace-nowrap border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600" data-target="reviews-section">
+                                <button class="tab-button py-4 font-medium text-sm sm:text-base text-gray-500 dark:text-gray-400 whitespace-nowrap border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600" data-target="reviews-section">
                                     Avis ({{ $reviewCount ?? 0 }})
                                 </button>
-                                <button class="tab-button py-3 font-medium text-sm sm:text-base text-gray-500 dark:text-gray-400 whitespace-nowrap border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600" data-target="location-section">
+                                <button class="tab-button py-4 font-medium text-sm sm:text-base text-gray-500 dark:text-gray-400 whitespace-nowrap border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600" data-target="location-section">
                                     Localisation
                                 </button>
                             </div>
@@ -171,12 +296,11 @@
                         <!-- FIN SOUS-SECTION: Navigation par Onglets -->
 
                         <!-- SOUS-SECTION: Contenu des Onglets -->
-                        <div class="space-y-8">
+                        <div class="space-y-10">
                             <!-- Onglet: Description -->
                             <section id="details-section" class="tab-content">
-                                {{-- Description HTML (identique) --}}
                                  <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sr-only">Description</h2>
-                                <div class="prose prose-sm sm:prose-base max-w-none text-gray-700 dark:text-gray-300 dark:prose-invert prose-headings:font-semibold prose-a:text-forest dark:prose-a:text-meadow">
+                                <div class="prose prose-sm sm:prose-base max-w-none text-gray-700 dark:text-gray-300 dark:prose-invert prose-headings:font-semibold prose-a:text-forest dark:prose-a:text-meadow bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
                                     {!! nl2br(e($listing->item?->description ?? 'Aucune description fournie.')) !!}
                                 </div>
                             </section>
@@ -188,11 +312,11 @@
                                  <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sr-only">Avis des utilisateurs</h2>
                                  @if(($reviewCount ?? 0) > 0 && isset($reviews) && $reviews instanceof \Illuminate\Support\Collection && $reviews->isNotEmpty())
                                      {{-- Résumé des Notes --}}
-                                       <div class="bg-white dark:bg-gray-800/50 rounded-lg p-4 sm:p-6 mb-6 border border-gray-200 dark:border-gray-700">
-                                        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                                            <div class="w-full sm:w-auto sm:flex-shrink-0 flex flex-col items-center text-center">
+                                       <div class="bg-white dark:bg-gray-800/50 rounded-xl p-5 sm:p-7 mb-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                                        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-8">
+                                            <div class="w-full sm:w-auto sm:flex-shrink-0 flex flex-col items-center text-center bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
                                                 <div class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">{{ number_format($averageRating ?? 0, 1) }}</div>
-                                                <div class="flex text-sunlight text-lg sm:text-xl mt-1" title="Note moyenne de {{ number_format($averageRating ?? 0, 1) }} sur 5">
+                                                <div class="flex text-sunlight text-lg sm:text-xl mt-2" title="Note moyenne de {{ number_format($averageRating ?? 0, 1) }} sur 5">
                                                      @php $avg = round($averageRating ?? 0); $half = (($averageRating ?? 0) - $avg >= -0.5 && ($averageRating ?? 0) - $avg < 0); @endphp
                                                      @for ($i = 1; $i <= 5; $i++)
                                                         @if ($i <= $avg) <i class="fas fa-star"></i>
@@ -201,14 +325,14 @@
                                                         @endif
                                                     @endfor
                                                 </div>
-                                                <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Basé sur {{ $reviewCount }} avis</div>
+                                                <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2"><span class="badge badge-subtle">{{ $reviewCount }} avis</span></div>
                                             </div>
                                             <div class="flex-1 w-full">
-                                                <div class="space-y-1.5">
+                                                <div class="space-y-2.5">
                                                      @foreach(collect($ratingPercentages ?? [])->sortKeysDesc() as $stars => $percentage)
                                                     <div class="flex items-center" title="{{ round($percentage) }}% des avis ont donné {{ $stars }} étoile(s)">
                                                         <div class="w-16 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">{{ $stars }} étoile{{ $stars > 1 ? 's' : '' }}</div>
-                                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mx-2">
+                                                        <div class="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mx-2">
                                                             <div class="h-full bg-sunlight rounded-full" style="width: {{ $percentage }}%"></div>
                                                         </div>
                                                         <div class="w-10 text-right text-xs sm:text-sm text-gray-500 dark:text-gray-400">{{ round($percentage) }}%</div>
@@ -220,27 +344,27 @@
                                     </div>
 
                                 
-                                     <div class="space-y-6">
+                                     <div class="space-y-4">
                                          @foreach ($reviews as $review)
-                                         <div class="review-item border-b border-gray-200 dark:border-gray-700 pb-5 last:border-b-0 {{ $loop->index >= 3 ? 'hidden' : '' }}">
-                                              <div class="flex items-start space-x-3">
-                                                <a href="{{ route('client.profile.index', $review->reviewer?->id) }}">
+                                         <div class="review-item review-card bg-white dark:bg-gray-800/50 p-4 border-b dark:border-gray-700 last:border-b-0 {{ $loop->index >= 3 ? 'hidden' : '' }}">
+                                              <div class="flex items-start space-x-4">
+                                                <a href="{{ route('client.profile.index', $review->reviewer?->id) }}" class="flex-shrink-0">
                                                     <img src="{{ asset($review->reviewer?->avatar_url) ?? asset('images/default-avatar.jpg') }}"
                                                         alt="Avatar de {{ $review->reviewer?->username ?? 'Utilisateur' }}"
-                                                        class="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1 border border-gray-200 dark:border-gray-600">
+                                                        class="w-12 h-12 rounded-full object-cover flex-shrink-0 mt-1 border-2 border-white dark:border-gray-600 shadow-sm">
                                                 </a>
                                                 <div class="flex-1">
-                                                    <div class="flex justify-between items-center mb-1">
-                                                        <a href="{{ route('client.profile.index', $review->reviewer?->id) }}">
-                                                            <span class="font-semibold text-sm text-gray-800 dark:text-white">{{ $review->reviewer?->username ?? 'Utilisateur anonyme' }}</span>
+                                                    <div class="flex justify-between items-center mb-2">
+                                                        <a href="{{ route('client.profile.index', $review->reviewer?->id) }}" class="hover:underline">
+                                                            <span class="font-semibold text-gray-800 dark:text-white">{{ $review->reviewer?->username ?? 'Utilisateur anonyme' }}</span>
                                                         </a>
-                                                        <span class="text-xs text-gray-500 dark:text-gray-400" title="{{ $review->created_at?->isoFormat('LLLL') }}">
+                                                        <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 py-1 px-2 rounded-full" title="{{ $review->created_at?->isoFormat('LLLL') }}">
                                                             {{ $review->created_at?->diffForHumans() ?? 'Date inconnue' }}
                                                         </span>
                                                     </div>
-                                                    <div class="flex text-sunlight mb-1.5" title="{{ $review->rating }} sur 5 étoiles">
+                                                    <div class="flex text-sunlight mb-2" title="{{ $review->rating }} sur 5 étoiles">
                                                         @for ($i = 1; $i <= 5; $i++)
-                                                            <i class="{{ $i <= $review->rating ? 'fas' : 'far' }} fa-star text-xs"></i>
+                                                            <i class="{{ $i <= $review->rating ? 'fas' : 'far' }} fa-star text-sm"></i>
                                                         @endfor
                                                     </div>
                                                     <p class="text-sm text-gray-600 dark:text-gray-300 prose prose-sm max-w-none dark:prose-invert">
@@ -253,40 +377,37 @@
 
                                          {{-- Boutons Voir plus/moins --}}
                                          @if($reviewCount > 3)
-                                         <div class="flex justify-center pt-4 space-x-3">
-                                             <button id="loadMoreBtn" class="px-4 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                                                 Voir plus d'avis
+                                         <div class="flex justify-center pt-6 space-x-4">
+                                             <button id="loadMoreBtn" class="px-4 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors btn-enhanced">
+                                                 <i class="fas fa-chevron-down mr-2"></i> Voir plus d'avis
                                              </button>
-                                             <button id="loadLessBtn" class="hidden px-4 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                                                 Voir moins
+                                             <button id="loadLessBtn" class="hidden px-4 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors btn-enhanced">
+                                                 <i class="fas fa-chevron-up mr-2"></i> Voir moins
                                              </button>
                                          </div>
                                          @endif
                                      </div>
                                  @else
                                      {{-- Message si aucun avis --}}
-                                     <div class="text-center py-10 px-6 bg-white dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
-                                         <i class="far fa-comment-dots fa-3x text-gray-400 dark:text-gray-500 mb-3"></i>
-                                         <p class="text-gray-600 dark:text-gray-400 font-medium">Cet équipement n'a pas encore reçu d'avis.</p>
-                                         <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">Soyez le premier à partager votre expérience après l'avoir loué !</p>
+                                     <div class="text-center py-12 px-6 bg-white dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 shadow-sm">
+                                         <i class="far fa-comment-dots fa-4x text-gray-400 dark:text-gray-500 mb-4"></i>
+                                         <p class="text-lg text-gray-600 dark:text-gray-400 font-medium">Cet équipement n'a pas encore reçu d'avis.</p>
+                                         <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">Soyez le premier à partager votre expérience après l'avoir loué !</p>
                                      </div>
                                  @endif
                              </section>
 
-                            <section id="location-section" class="">
+                            <section id="location-section" class="tab-content hidden">
                                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sr-only">Localisation de l'équipement</h2>
-                                <div class="flex items-center text-gray-700 dark:text-gray-300 mb-4 text-base">
-                                    <i class="fas fa-map-marker-alt fa-fw mr-2.5 text-gray-400 dark:text-gray-500"></i>
+                                <div class="flex items-center text-gray-700 dark:text-gray-300 mb-5 text-base bg-white dark:bg-gray-800/50 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                                    <i class="fas fa-map-marker-alt fa-fw mr-3 text-forest dark:text-meadow"></i>
                                     Disponible dans la zone de <span class="font-semibold ml-1">{{ $listing->city?->name ?? 'Ville non spécifiée' }}</span>.
                                 </div>
-                                <div id="listing-map-container" class="z-0 mt-4 h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600"></div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
-                                    <i class="fas fa-info-circle mr-1"></i>L'adresse exacte ou le point de rencontre précis vous sera communiqué par le partenaire après la confirmation de votre réservation.
+                                <div id="listing-map-container" class="z-0 mt-4 h-64 sm:h-80 bg-gray-50 dark:bg-gray-700 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 shadow-sm overflow-hidden"></div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-4 italic bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <i class="fas fa-info-circle mr-2 text-amber-500"></i>L'adresse exacte ou le point de rencontre précis vous sera communiqué par le partenaire après la confirmation de votre réservation.
                                 </p>
                             </section>
-
-                            
-         
                         </div>
                        
                     </div>
@@ -295,26 +416,25 @@
                     <!-- === COLONNE DROITE : Réservation === -->
                     <div class="w-full lg:w-5/12">
                          <!-- SOUS-SECTION: Carte de Réservation -->
-                         <div class="lg:sticky top-20 bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                         <div class="lg:sticky top-20 bg-white dark:bg-gray-800 p-6 sm:p-7 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 card-highlight">
                              <!-- Bloc Titre, Prix, Note -->
-                             <div class="pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
+                             <div class="pb-5 mb-5 border-b border-gray-200 dark:border-gray-700">
                                  {{-- Titre, Prix, Note HTML (identique) --}}
-                                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">{{ $listing->item?->title ?? 'Équipement à louer' }}</h2>
-                                <div class="flex items-baseline mb-2">
-                                    <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($listing->item?->price_per_day ?? 0, 2) }} MAD</span>
-                                    <span class="text-gray-600 dark:text-gray-300 ml-1.5 text-sm">/ jour</span>
+                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ $listing->item?->title ?? 'Équipement à louer' }}</h2>
+                                <div class="flex items-baseline mb-3">
+                                    <span class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($listing->item?->price_per_day ?? 0, 2) }} <span class="text-forest dark:text-meadow">MAD</span></span>
+                                    <span class="text-gray-600 dark:text-gray-300 ml-2 text-sm">/ jour</span>
                                 </div>
-                                <div class="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex-wrap gap-x-3 gap-y-1">
+                                <div class="flex flex-wrap gap-3 mt-3">
                                     @if($reviewCount > 0)
-                                    <span class="inline-flex items-center">
-                                        <i class="fas fa-star text-sunlight mr-1"></i>
+                                    <span class="inline-flex items-center badge bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 py-1.5 px-2.5">
+                                        <i class="fas fa-star text-sunlight mr-1.5"></i>
                                         <span class="font-medium mr-1">{{ number_format($averageRating, 1) }}</span>
                                         <span>({{ $reviewCount }} avis)</span>
                                     </span>
-                                    <span class="hidden sm:inline">·</span>
                                     @endif
-                                    <span class="inline-flex items-center">
-                                        <i class="fas fa-map-marker-alt fa-fw mr-1"></i>
+                                    <span class="inline-flex items-center badge bg-forest/10 text-forest dark:bg-meadow/10 dark:text-meadow py-1.5 px-2.5">
+                                        <i class="fas fa-map-marker-alt fa-fw mr-1.5"></i>
                                         <span>{{ $listing->city?->name ?? 'Non spécifié' }}</span>
                                     </span>
                                 </div>
@@ -328,37 +448,36 @@
                                 <input type="hidden" name="end_date" id="end_date">
 
                                 <!-- Sélecteur de dates -->
-                                <div class="mb-4">
-                                     <label for="date-range-picker" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Choisissez vos dates</label>
+                                <div class="mb-5">
+                                     <label for="date-range-picker" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Choisissez vos dates</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                                            <i class="far fa-calendar-alt text-gray-400"></i>
+                                            <i class="far fa-calendar-alt text-forest dark:text-meadow"></i>
                                         </div>
                                         <input type="text" id="date-range-picker" placeholder="Date de début - Date de fin" readonly="readonly"
-                                               class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-1 focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-2 cursor-pointer appearance-none">
+                                               class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-1 focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 cursor-pointer appearance-none">
                                     </div>
-                                    <div id="flatpickr-error" class="text-xs text-red-600 dark:text-red-400 mt-1"></div>
+                                    <div id="flatpickr-error" class="text-xs text-red-600 dark:text-red-400 mt-2"></div>
                                 </div>
 
                                 <!-- Option livraison -->
                                 @if($listing->delivery_option)
-                                <div class="mb-4">
+                                <div class="mb-5">
                                     @php
                                         $fixedDeliveryCost = 50.00;
                                     @endphp
-                                      <label for="delivery_option_checkbox" class="flex items-center cursor-pointer select-none p-2 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                        <input type="checkbox" id="delivery_option_checkbox" name="delivery_option" value="1" class="h-4 w-4 rounded border-gray-300 text-forest focus:ring-forest dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-forest flex-shrink-0">
-                                        <span class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Ajouter l'option de livraison
-                                            {{-- Affiche le coût fixe défini en PHP --}}
-                                            <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">(+{{ number_format($fixedDeliveryCost, 2) }} MAD)</span>
-                                        </span>
+                                      <label for="delivery_option_checkbox" class="flex items-center cursor-pointer select-none p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                        <input type="checkbox" id="delivery_option_checkbox" name="delivery_option" value="1" class="h-5 w-5 rounded-md border-gray-300 text-forest focus:ring-forest dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-forest flex-shrink-0">
+                                        <div class="ml-3 flex flex-col">
+                                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Ajouter l'option de livraison</span>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">(+{{ number_format($fixedDeliveryCost, 2) }} MAD)</span>
+                                        </div>
                                     </label>
                                 </div>
                                 @endif
 
                                 <!-- Section Calcul du Prix (sans frais de service) -->
-                                <div id="price-calculation" class="hidden mt-4 mb-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md border border-gray-200 dark:border-gray-700 space-y-2 text-sm">
+                                <div id="price-calculation" class="hidden mt-5 mb-5 p-5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3 text-sm">
                                     <div class="flex justify-between">
                                         <span id="price-breakdown" class="text-gray-600 dark:text-gray-400">Calcul du prix...</span>
                                         <span class="text-gray-700 dark:text-gray-200 font-medium" id="subtotal">0.00 MAD</span>
@@ -367,35 +486,36 @@
                                         <span class="text-gray-600 dark:text-gray-400">Frais de livraison</span>
                                         <span class="text-gray-700 dark:text-gray-200 font-medium" id="delivery-fee">0.00 MAD</span>
                                     </div>
-                                    <div class="flex justify-between pt-2 border-t border-gray-300 dark:border-gray-600 text-base font-semibold">
+                                    <div class="flex justify-between pt-3 border-t border-gray-300 dark:border-gray-600 text-base font-semibold">
                                         <span class="text-gray-900 dark:text-white">Total</span>
                                         <span class="text-gray-900 dark:text-white" id="total-price">0.00 MAD</span>
                                     </div>
                                 </div>
 
                                 <button type="submit" id="reservation-button" disabled
-                                        class="w-full mt-2 py-3 px-4 bg-sunlight hover:bg-amber-600 text-white font-semibold rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-base">
-                                    <i class="far fa-calendar-check mr-2"></i>
+                                        class="w-full mt-3 py-4 px-6 bg-sunlight hover:bg-amber-600 text-white font-semibold rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-base btn-enhanced">
+                                    <i class="far fa-calendar-check mr-3 text-lg"></i>
                                     <span id="reservation-button-text">Sélectionner les dates</span>
                                 </button>
-                                <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">Vous ne serez pas débité avant la confirmation du partenaire.</p>
+                                <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-3 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-md">Vous ne serez pas débité avant la confirmation du partenaire.</p>
                             </form>
 
                             @if($listing->item?->partner)
-                            <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4 text-sm">
+                            <div class="mt-7 border-t border-gray-200 dark:border-gray-700 pt-5">
                                  {{-- Infos Partenaire HTML (identique) --}}
-                                  <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Proposé par :</p>
-                                 <div class="flex items-center">
-                                    <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}">
+                                  <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Proposé par :</p>
+                                 <div class="flex items-center bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg hover-lift">
+                                    <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}" class="flex-shrink-0">
                                         <img src="{{ asset($listing->item->partner->avatar_url) ?? asset('images/avatar-default.jpg') }}"
                                             alt="Avatar de {{ $listing->item->partner->username ?? 'Partenaire' }}"
-                                            class="w-9 h-9 rounded-full object-cover mr-2.5 border border-gray-200 dark:border-gray-600">
+                                            class="w-12 h-12 rounded-full object-cover mr-3 border-2 border-white dark:border-gray-600 shadow-sm">
                                     </a>
                                     <div class="leading-tight">
-                                        <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}">
-                                            <span class="font-medium text-gray-800 dark:text-gray-100">{{ $listing->item->partner->username ?? 'Partenaire CampShare' }}</span>
+                                        <a href="{{ route('partner.profile.index', $listing->item->partner->id) }}" class="hover:underline">
+                                            <span class="font-medium text-gray-800 dark:text-gray-100 text-base">{{ $listing->item->partner->username ?? 'Partenaire CampShare' }}</span>
                                         </a>
-                                         <p class="text-xs text-gray-500 dark:text-gray-400">
+                                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center">
+                                            <i class="fas fa-user-clock mr-1.5 text-forest/70 dark:text-meadow/70"></i>
                                              Membre depuis {{ $listing->item->partner->created_at?->translatedFormat('F Y') ?? 'date inconnue' }}
                                          </p>
                                     </div>
@@ -411,6 +531,117 @@
         </section>
         <!-- FIN SECTION: Détail Équipement -->
     </main>
+
+        </main>
+
+    <!-- Début: Modal de Paiement -->
+    <div id="payment-simulation-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-[1000] hidden transition-opacity duration-300 ease-in-out" aria-labelledby="modal-title-text" role="dialog" aria-modal="true">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md transform transition-all duration-300 ease-in-out scale-95 opacity-0" id="payment-modal-content">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center" id="modal-title-text">
+                    <i class="fas fa-credit-card text-forest dark:text-meadow mr-2"></i>
+                    Paiement sécurisé
+                </h3>
+                <button type="button" id="close-payment-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <i class="fas fa-times fa-lg"></i>
+                    <span class="sr-only">Fermer</span>
+                </button>
+            </div>
+
+            <div class="mt-4">
+                <div class="space-y-4">
+                    <div class="relative">
+                        <label for="card-number-fake" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Numéro de carte</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="far fa-credit-card text-gray-400"></i>
+                            </div>
+                            <input type="text" id="card-number-fake" name="card_number_fake" placeholder="XXXX XXXX XXXX XXXX" 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white sm:text-sm p-2.5">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <div class="flex gap-1">
+                                    <i class="fab fa-cc-visa text-blue-600 dark:text-blue-400"></i>
+                                    <i class="fab fa-cc-mastercard text-red-600 dark:text-red-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="relative">
+                            <label for="expiry-month-fake" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mois Exp.</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="text" id="expiry-month-fake" name="expiry_month_fake" placeholder="MM" 
+                                    class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white sm:text-sm p-2.5">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label for="expiry-year-fake" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Année Exp.</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-check text-gray-400"></i>
+                                </div>
+                                <input type="text" id="expiry-year-fake" name="expiry_year_fake" placeholder="AA" 
+                                    class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white sm:text-sm p-2.5">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label for="cvv-fake" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVV</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="text" id="cvv-fake" name="cvv_fake" placeholder="XXX" 
+                                    class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white sm:text-sm p-2.5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <label for="card-name-fake" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom sur la carte</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="far fa-user text-gray-400"></i>
+                            </div>
+                            <input type="text" id="card-name-fake" name="card_name_fake" placeholder="Prénom NOM" 
+                                class="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white sm:text-sm p-2.5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-shield-alt text-forest dark:text-meadow"></i>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Paiement sécurisé</span>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Montant total :</span>
+                        <strong id="modal-payment-amount" class="text-xl font-bold text-gray-900 dark:text-white">0.00 MAD</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex flex-col sm:flex-row-reverse gap-3">
+                <button type="button" id="confirm-simulated-payment-btn" class="w-full sm:w-auto inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-forest text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-forest sm:text-sm">
+                    <i class="fas fa-check-circle mr-1.5"></i>
+                    Confirmer et payer
+                </button>
+                <button type="button" id="cancel-simulated-payment-btn" class="w-full sm:w-auto mt-3 sm:mt-0 inline-flex justify-center items-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                    <i class="fas fa-times-circle mr-1.5"></i>
+                    Annuler
+                </button>
+            </div>
+            <div id="payment-success-message" class="hidden mt-4 p-3 bg-green-100 dark:bg-green-800 border border-green-400 dark:border-green-600 rounded-md flex items-start">
+                <i class="fas fa-check-circle text-green-600 dark:text-green-300 mr-2 mt-0.5"></i>
+                <span class="text-sm text-green-700 dark:text-green-200">
+                    Paiement effectué avec succès ! Redirection vers la confirmation de réservation...
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Fin: Modal de Paiement -->
+
 
     @include('partials.footer')
 
@@ -470,9 +701,6 @@
     </script>
     
     
-
-
-
 
     <!-- === SCRIPTS JAVASCRIPT === -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -581,6 +809,7 @@
             const reservationButtonText = document.getElementById('reservation-button-text');
             const deliveryCheckbox = document.getElementById('delivery_option_checkbox');
             const flatpickrErrorDiv = document.getElementById('flatpickr-error');
+        const reservationForm = document.getElementById('reservation-form'); // AJOUTER CECI
 
             const listingId = {{ $listing->id ?? 0 }};
             const pricePerDay = {{ (float)($listing->item?->price_per_day ?? 0) }};
@@ -733,7 +962,116 @@
                 }
             });
 
-        }); // Fin DOMContentLoaded
+               const paymentModal = document.getElementById('payment-simulation-modal');
+        const paymentModalContent = document.getElementById('payment-modal-content');
+        const closeModalButton = document.getElementById('close-payment-modal-btn');
+        const confirmSimulatedPaymentButton = document.getElementById('confirm-simulated-payment-btn');
+        const cancelSimulatedPaymentButton = document.getElementById('cancel-simulated-payment-btn');
+        const modalPaymentAmountSpan = document.getElementById('modal-payment-amount');
+        const paymentSuccessMessageDiv = document.getElementById('payment-success-message');
+        // reservationButton est déjà défini plus haut dans votre code existant
+        // totalPriceSpan est déjà défini plus haut dans votre code existant (c'est l'ID du span qui affiche le total dans la carte de réservation)
+
+        function openPaymentModal() {
+            if (!paymentModal || !totalPriceSpan || !modalPaymentAmountSpan) {
+                console.error("Éléments du modal ou totalPriceSpan introuvables.");
+                return;
+            }
+
+            const totalAmountText = totalPriceSpan.textContent; // Récupère le total calculé
+            modalPaymentAmountSpan.textContent = totalAmountText; // Affiche dans le modal
+
+            paymentModal.classList.remove('hidden');
+            setTimeout(() => { // Pour l'animation d'apparition
+                paymentModal.classList.remove('opacity-0');
+                if(paymentModalContent) {
+                    paymentModalContent.classList.remove('scale-95', 'opacity-0');
+                    paymentModalContent.classList.add('scale-100', 'opacity-100');
+                }
+            }, 10);
+
+            // Vider les champs de la carte pour une nouvelle simulation (optionnel)
+            const cardNumberFakeEl = document.getElementById('card-number-fake');
+            const expiryMonthFakeEl = document.getElementById('expiry-month-fake');
+            // ... récupérer les autres champs ...
+            if(cardNumberFakeEl) cardNumberFakeEl.value = '';
+            if(expiryMonthFakeEl) expiryMonthFakeEl.value = '';
+            // ... vider les autres champs ...
+            if(paymentSuccessMessageDiv) paymentSuccessMessageDiv.classList.add('hidden');
+        }
+
+        function closePaymentModal() {
+            if (!paymentModal || !paymentModalContent) return;
+            paymentModalContent.classList.remove('scale-100', 'opacity-100');
+            paymentModalContent.classList.add('scale-95', 'opacity-0');
+            paymentModal.classList.add('opacity-0');
+            setTimeout(() => {
+                paymentModal.classList.add('hidden');
+            }, 300); // Attend la fin de la transition
+        }
+
+        if (reservationButton && reservationForm) { // reservationButton est votre bouton "Demander à réserver"
+            reservationButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Très important: Empêche la soumission du formulaire
+
+                if (this.disabled) { // Si le bouton est désactivé (ex: dates non sélectionnées)
+                    // Optionnel: informer l'utilisateur qu'il doit sélectionner les dates
+                    if (flatpickrErrorDiv && !flatpickrErrorDiv.textContent.trim() && (!startDateInput.value || !endDateInput.value) ) {
+                       if(flatpickrErrorDiv) flatpickrErrorDiv.textContent = 'Veuillez sélectionner une date de début ET une date de fin.';
+                       if(flatpickrInstance && dateRangePickerEl) flatpickrInstance.open(); // Ouvre le calendrier
+                    }
+                    return;
+                }
+                 // S'assurer que les dates sont bien là avant d'ouvrir le modal
+                if (!startDateInput.value || !endDateInput.value) {
+                    if(flatpickrErrorDiv) flatpickrErrorDiv.textContent = 'Veuillez sélectionner une date de début ET une date de fin.';
+                    if(flatpickrInstance && dateRangePickerEl) flatpickrInstance.open(); // Ouvre le calendrier
+                    return;
+                }
+                if(flatpickrErrorDiv) flatpickrErrorDiv.textContent = ''; // Nettoyer message d'erreur s'il y en avait un
+
+                openPaymentModal(); // Ouvrir le modal de paiement
+            });
+        }
+
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', closePaymentModal);
+        }
+        if (cancelSimulatedPaymentButton) {
+            cancelSimulatedPaymentButton.addEventListener('click', closePaymentModal);
+        }
+
+        if (confirmSimulatedPaymentButton && reservationForm) {
+            confirmSimulatedPaymentButton.addEventListener('click', function() {
+                this.textContent = 'Traitement en cours...';
+                this.disabled = true;
+                if(cancelSimulatedPaymentButton) cancelSimulatedPaymentButton.disabled = true;
+
+                // Simuler un délai de traitement du paiement
+                setTimeout(() => {
+                    if(paymentSuccessMessageDiv) paymentSuccessMessageDiv.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-check-circle mr-1.5"></i>Confirmer et payer'; // Réinitialiser le texte avec l'icône
+                    this.disabled = false;
+                    if(cancelSimulatedPaymentButton) cancelSimulatedPaymentButton.disabled = false;
+
+                    // Après un court délai pour lire le message, soumettre le formulaire original
+                    setTimeout(() => {
+                        closePaymentModal();
+                        reservationForm.submit(); // Soumission réelle du formulaire de réservation
+                    }, 2500); // Laisse 2.5s pour lire le message de succès
+                }, 1500); // Simule 1.5s de traitement
+            });
+        }
+
+        // Fermer le modal si on clique en dehors de son contenu
+        if (paymentModal) {
+            paymentModal.addEventListener('click', function(event) {
+                if (event.target === paymentModal) {
+                    closePaymentModal();
+                }
+            });
+        }
+     }); // Fin DOMContentLoaded
     </script>
 
 </body>

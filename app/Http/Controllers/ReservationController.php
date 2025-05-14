@@ -54,7 +54,7 @@ class ReservationController extends Controller
         }
         $partner = $listing->item->partner;
 
-        // Ajout : Vérifier que le client ne réserve pas son propre équipement
+      /*  // Ajout : Vérifier que le client ne réserve pas son propre équipement
         if ($client->id === $partner->id) {
              return redirect()->back()
                          ->with('error', 'Vous ne pouvez pas réserver votre propre équipement.')
@@ -62,7 +62,7 @@ class ReservationController extends Controller
                          ->with('notificationType', 'error')
                          ->withInput();
         }
-
+*/
 
 
 
