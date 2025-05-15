@@ -31,7 +31,82 @@
 
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900">
 
-    @include('partials.header')
+    <!-- Map Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('toggleMapBtn');
+            const mapContainer = document.getElementById('listing-map-container');
+            const locations = @json($locations);
+            let map = null;
+            let mapInitialized = false;
+    
+            toggleBtn.addEventListener('click', function () {
+                mapContainer.classList.toggle('hidden');
+    
+                if (!mapInitialized && !mapContainer.classList.contains('hidden')) {
+                    if (!locations.length) return;
+    
+                    map = L.map('listing-map-container').setView([locations[0].lat, locations[0].lng], 10);
+    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors',
+                        maxZoom: 19
+                    }).addTo(map);
+    
+                    const bounds = [];
+    
+                    locations.forEach(loc => {
+                        if (loc.lat && loc.lng) {
+                            // Small offset to hide the exact location (±0.01 degrees ≈ ±1km)
+                            const offsetLat = loc.lat + (Math.random() - 0.5) * 0.02;
+                            const offsetLng = loc.lng + (Math.random() - 0.5) * 0.02;
+    
+                            const circle = L.circle([offsetLat, offsetLng], {
+                                color: '#3b82f6',
+                                fillColor: '#93c5fd',
+                                fillOpacity: 0.3,
+                                radius: 1500 
+                            }).addTo(map);
+    
+                            circle.bindPopup(`
+                                <div class="flex gap-2 items-center" style="min-width: 250px;">
+                                    <img src="${loc.image}" alt="Image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <div>
+                                        <strong>${loc.title}</strong><br>
+                                        <small>Catégorie: ${loc.category}</small><br>
+                                        <small>Partenaire: ${loc.username}</small><br>
+                                        <em>Zone approximative</em>
+                                    </div>
+                                </div>
+                            `);
+    
+                            circle.on('click', function () {
+                                window.location.href = loc.url;
+                            });
+
+                            circle.on('mouseover', function () {
+                                this.openPopup();
+                            });
+                            circle.on('mouseout', function () {
+                                this.closePopup();
+                            });
+
+                            bounds.push([loc.offsetLat, loc.offsetLng]);
+
+                        }
+                    });
+    
+                    if (bounds.length) map.fitBounds(bounds);
+    
+                    mapInitialized = true;
+                }
+    
+                // Change button text
+                const span = toggleBtn.querySelector('span');
+                span.textContent = mapContainer.classList.contains('hidden') ? 'Voir la carte' : 'Cacher la carte';
+            });
+        });
+    </script>
 
     <!-- Page Header -->
     <header class="pt-24 pb-10 bg-gray-50 dark:bg-gray-800 transition-all duration-300">
