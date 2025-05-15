@@ -10,13 +10,20 @@ class PartenaireModel extends Model
 {
     public static function sumPaymentThisMonth($email)
     {
-        return DB::table('reservations as r')
+        $total = DB::table('reservations as r')
             ->join('listings as l', 'l.id', '=', 'r.listing_id')
             ->join('items as i', 'i.id', '=', 'l.item_id')
             ->join('users as u', 'u.id', '=', 'r.partner_id')
-            ->where('U.email', $email)
+            ->where('u.email', $email)
             ->select(DB::raw('COALESCE(SUM((DATEDIFF(r.end_date, r.start_date) + 1 ) * i.price_per_day), 0) as total'))
             ->value('total');
+
+        // Format the number if it's 1000 or more
+        if ($total >= 1000) {
+            return round($total / 1000, 1) . 'k';
+        }
+
+        return $total;
     }
     
         public static function sumPayment($email)

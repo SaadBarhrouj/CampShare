@@ -119,9 +119,67 @@
                 </div>
             </div>
         </section>
+
+        <!-- Premium Listings on Landing Page -->
+        <section class="py-16 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-800 border-y border-amber-100 dark:border-gray-700 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-crown text-sunlight mr-2"></i>
+                        Annonces Premium
+                    </h2>
+                    <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">
+                        Mettez la main sur les articles les plus recherchés par nos partenaires de confiance.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach ($premiumListings->take(4) as $premiumListing)
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-300 relative">
+                            <div class="absolute top-4 left-4 z-10 bg-sunlight text-white rounded-full px-3 py-1 text-xs font-medium flex items-center">
+                                <i class="fas fa-crown mr-1"></i> PREMIUM
+                            </div>
+                            <a href="{{ route('client.listings.show', $premiumListing->id) }}">
+                                <div class="relative h-44">
+                                    <img src="{{ $premiumListing->item?->images?->first() ? asset($premiumListing->item->images->first()->url) : asset('images/item-default.jpg') }}"
+                                        alt="{{ $premiumListing->item->title }}"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">{{ $premiumListing->item->title }}</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        {{ $premiumListing->item->category->name }} - {{ $premiumListing->city->name }}
+                                    </p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                        Par <a href="{{ route('partner.profile.index', $premiumListing->item->partner->id) }}" class="hover:text-forest dark:hover:text-sunlight">{{ $premiumListing->item->partner->username }}</a>
+                                    </p>
+                                    <div class="flex items-center justify-between mt-3">
+                                        <div>
+                                            <span class="font-bold text-gray-900 dark:text-white">{{ $premiumListing->item->price_per_day }} MAD</span>
+                                            <span class="text-sm text-gray-600 dark:text-gray-300">/jour</span>
+                                        </div>
+                                        <a href="{{ route('client.listings.show', $premiumListing->id) }}" class="inline-block">
+                                            <button class="px-3 py-1.5 text-sm bg-sunlight hover:bg-sunlight text-white rounded-md shadow-sm">
+                                                Voir détails
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="text-center mt-12">
+                    <a href="{{ route('client.listings.indexPremium') }}" class="inline-block px-6 py-3 bg-sunlight hover:bg-sunlight text-white font-medium rounded-md shadow-md transition duration-300">
+                        Voir toutes les équipements premium
+                    </a>
+                </div>
+            </div>
+        </section>
+
         
         <!-- Popular Categories Section -->
-        <section id="explorer" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-all duration-300">
+        <section id="explorer" class="py-16 md:py-24 bg-white dark:bg-gray-800 transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Catégories Populaires</h2>
@@ -182,14 +240,14 @@
                 
                 <div class="text-center mt-12">
                     <a href="{{ route('client.listings.index') }}" class="inline-block px-6 py-3 bg-forest hover:bg-green-700 text-white font-medium rounded-md shadow-md transition duration-300">
-                        Voir toutes les catégories
+                        Voir toutes les équipements
                     </a>
                 </div>
             </div>
         </section>
         
         <!-- Value Proposition Section -->
-        <section class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-all duration-300">
+        <section class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900 transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Pourquoi choisir CampShare ?</h2>

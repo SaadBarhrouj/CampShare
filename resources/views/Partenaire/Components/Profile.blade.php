@@ -60,7 +60,7 @@
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
     <!-- Navigation -->
 @include('Partenaire.side-bar');
-<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900">
     <div class="py-8 px-4 md:px-8">
         <div class="mb-8">
             <section class="bg-gray-50 dark:bg-gray-800 py-10 border-b border-gray-200 dark:border-gray-700">
@@ -89,7 +89,7 @@
                                         </h1>
                                         <div class="mt-2 flex items-center text-gray-600 dark:text-gray-300">
                                             <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                                            <span id="viewAddress">{{ $profile->address }}</span>
+                                            <span id="viewAddress">{{ $profile->city_name}}, {{ $profile->address }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -157,11 +157,6 @@
                         <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Nº téléphone</h2>
                         <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
                             {{$profile->phone_number}}
-                        </p>
-                        <br>
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">ville</h2>
-                        <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
-                            {{ $profile->city_name}}
                         </p>
                     </div>
 

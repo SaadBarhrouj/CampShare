@@ -28,9 +28,7 @@ use App\Http\Controllers\AdminDetailsEquipmentController;
 // Routes publiques //
 
 // Index Page
-Route::get('/', function () {
-    return view('index-welcome');
-})->name('index');
+Route::get('/', [ListingController::class, 'indexPremiumLandingPage'])->name('index');
 
 
 

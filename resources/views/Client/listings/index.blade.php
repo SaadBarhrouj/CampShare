@@ -294,7 +294,7 @@
                                             <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                                         </div>
                                         <a href="{{ route('client.listings.show', $premiumListing->id) }}" class="inline-block">
-                                            <button class="px-4 py-2 bg-forest hover:bg-green-700 text-white rounded-md transition-colors shadow-sm">
+                                            <button class="px-4 py-2 bg-sunlight hover:bg-sunlight text-white rounded-md transition-colors shadow-sm">
                                                 Voir détails
                                             </button>
                                         </a>

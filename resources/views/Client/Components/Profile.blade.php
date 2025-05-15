@@ -58,7 +58,7 @@
 </head>
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
 @include('Client.side-bar')
-<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+<main class="flex-1 md:ml-64 bg-gray-50 dark:bg-gray-900">
     <div class="py-8 px-4 md:px-8">
         <div class="mb-8">
             <section class="bg-gray-50 dark:bg-gray-800 py-10 border-b border-gray-200 dark:border-gray-700">

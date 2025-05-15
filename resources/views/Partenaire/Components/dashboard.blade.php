@@ -280,11 +280,11 @@
                                 
                                 <div class="flex items-center justify-between">                      
                                     <div class="flex items-center space-x-2">
-                                         <button class="view-details-btn px-3 py-2 text-forest dark:border-meadow dark:text-meadow hover:bg-forest dark:hover:text-white dark:hover:bg-meadow rounded-md text-sm font-medium flex items-center justify-center" 
+                                         <button class="view-details-btn p-2 bg-white dark:bg-gray-700 rounded-full shadow-md text-forest dark:text-meadow hover:bg-forest hover:text-white dark:hover:bg-gray-600 transition-colors" 
                                             data-id="{{ $Listing->id }}">
-                                            <i class="fas fa-eye mr-2"></i>
+                                            <i class="fas fa-eye"></i>
                                         </button>
-                                         <button class="edit-equipment-btn p-2 bg-white dark:bg-gray-700 rounded-full shadow-md text-forest dark:text-meadow hover:bg-forest hover:text-white dark:hover:bg-meadow transition-colors" 
+                                         <button class="edit-equipment-btn p-2 bg-white dark:bg-gray-700 rounded-full shadow-md text-forest dark:text-meadow hover:bg-forest hover:text-white dark:hover:bg-gray-600 transition-colors" 
                                             data-id="{{ $Listing->id }}" 
                                             data-title="{{ $Listing->title }}" 
                                             data-description="{{ $Listing->description }}" 

@@ -418,6 +418,107 @@ class ListingController extends Controller
         ));
     }
 
+    public function indexPremiumLandingPage(Request $request)
+    {
+        $sort = $request->query('sort', 'latest'); // default sort
+
+        $query = Listing::where('is_premium', true)
+            ->where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->with('item.category');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+        
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('item', function ($q2) use ($search) {
+                    $q2->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('city', function ($q2) use ($search) {
+                    $q2->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
+        // Apply category filter if present
+        if ($request->has('category')) {
+            $query->whereHas('item.category', function ($q) use ($request) {
+                $q->where('name', $request->category);
+            });
+        }
+
+        // Apply price filter if min or max price is set
+        if ($request->has('min_price') || $request->has('max_price')) {
+            $query->whereHas('item', function($q) use ($request) {
+                if ($request->has('min_price')) {
+                    $q->where('price_per_day', '>=', $request->min_price);
+                }
+                if ($request->has('max_price')) {
+                    $q->where('price_per_day', '<=', $request->max_price);
+                }
+            });
+        }
+
+        if ($request->has('price_range')) {
+            $range = $request->price_range;
+        
+            $query->whereHas('item', function ($q) use ($range) {
+                if ($range === '200+') {
+                    $q->where('price_per_day', '>=', 200);
+                } elseif (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                    $min = (int)$matches[1];
+                    $max = (int)$matches[2];
+                    $q->whereBetween('price_per_day', [$min, $max]);
+                }
+            });
+        }
+
+
+        // Apply sorting
+        switch ($sort) {
+            case 'price_asc':
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'asc')
+                    ->select('listings.*');
+                break;
+            case 'price_desc':
+                $query->join('items', 'listings.item_id', '=', 'items.id')
+                    ->orderBy('items.price_per_day', 'desc')
+                    ->select('listings.*');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        
+        if ($request->has('city')) {
+            $query->whereHas('city', function ($q) use ($request) {
+                $q->where('name', $request->city);
+            });
+        }
+
+        $premiumListingsCount = $query->count();
+        $premiumListings = $query->paginate(15)->appends($request->query());
+
+        $categories = Category::all();
+        $cities = City::orderBy('name')->get();
+
+        return view('index-welcome', compact(
+            'premiumListings',
+            'premiumListingsCount',
+            'sort',
+            'categories',
+            'cities',
+        ));
+    }
+
 
     /**
      * Show the form for creating a new resource.
