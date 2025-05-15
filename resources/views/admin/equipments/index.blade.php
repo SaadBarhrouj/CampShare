@@ -11,7 +11,7 @@
                 <div class="flex-shrink-0 flex items-center">
                     <!-- Logo -->
                     <a href="{{ route('index') }}" class="flex items-center">
-                        <span class="text-admin-primary dark:text-admin-secondary text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-[#1E40AF] dark:text-[#3B82F6] text-3xl font-extrabold">Camp<span class="text-[#FFAA33]">Share</span></span>
                         <span class="text-xs ml-2 text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">ADMIN</span>
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                                         <div class="flex flex-col items-start">
                                             <span class="font-medium text-gray-800 dark:text-gray-200 text-sm"> {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} </span>
                                             <span
-                                                class="text-xs text-admin-primary dark:text-admin-secondary font-medium">
+                                                class="text-xs text-[#1E40AF] dark:text-[#3B82F6] font-medium">
                                                 {{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}
                                             </span>
                                         </div>
@@ -77,7 +77,7 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-[#1E40AF] dark:hover:text-[#3B82F6] focus:outline-none">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -92,7 +92,7 @@
                 <!-- Mobile search -->
                 <div class="relative mb-3">
                     <input type="text" placeholder="Recherche rapide..."
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-admin-primary dark:focus:ring-admin-secondary text-sm">
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1E40AF] dark:focus:ring-[#3B82F6] text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
                     </div>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="ml-3">
                         <div class="text-base font-medium text-gray-800 dark:text-white">Mohamed Alami</div>
-                        <div class="text-sm font-medium text-admin-primary dark:text-admin-secondary">Super Admin</div>
+                        <div class="text-sm font-medium text-[#1E40AF] dark:text-[#3B82F6]">Super Admin</div>
                     </div>
                     <div class="ml-auto flex items-center space-x-4">
                         <button
@@ -173,14 +173,14 @@
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-[#1E40AF] dark:text-[#3B82F6] text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
                         <a href="{{ route('admin.clients') }}"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Clients
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-[#1E40AF] dark:text-[#3B82F6] text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
 
                     </nav>
@@ -224,7 +224,7 @@
 
         <div class="md:hidden fixed bottom-4 right-4 z-50">
             <button id="mobile-sidebar-toggle"
-                class="w-14 h-14 rounded-full bg-admin-primary dark:bg-admin-secondary text-white shadow-lg flex items-center justify-center">
+                class="w-14 h-14 rounded-full bg-[#1E40AF] dark:bg-[#3B82F6] text-white shadow-lg flex items-center justify-center">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
@@ -245,7 +245,7 @@
                     <nav class="space-y-1">
                         <a href="#dashboard"
                             class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
-                            <i class="fas fa-tachometer-alt w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
+                            <i class="fas fa-tachometer-alt w-5 mr-3 text-[#1E40AF] dark:text-[#3B82F6]"></i>
                             Tableau de bord
                         </a>
                         <!-- Dans la section MENU PRINCIPAL -->
@@ -260,7 +260,7 @@
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-[#1E40AF] dark:text-[#3B82F6] text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
                         <a href="{{ route('admin.clients') }}" id="partners-link"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -268,14 +268,14 @@
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             hhhhhhh
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-[#1E40AF] dark:text-[#3B82F6] text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
                         <a href="#reservations"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Réservations
                             <span
-                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-[#1E40AF] dark:text-[#3B82F6] text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
                         </a>
                         <a href="{{ route('admin.reviews') }}"
                         class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -350,7 +350,7 @@
                         </button>
 
                         <button
-                            class="px-3 py-1.5 bg-admin-primary text-white rounded-lg text-sm font-medium hover:bg-admin-primary/90 transition-colors">
+                            class="px-3 py-1.5 bg-[#1E40AF] text-white rounded-lg text-sm font-medium hover:bg-[#1E40AF]/90 transition-colors">
                             <i class="fas fa-sync-alt mr-1"></i> Actualiser
                         </button>
                     </div>
