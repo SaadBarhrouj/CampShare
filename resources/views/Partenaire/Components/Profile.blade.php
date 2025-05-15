@@ -158,6 +158,11 @@
                         <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
                             {{$profile->phone_number}}
                         </p>
+                        <br>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">ville</h2>
+                        <p class="text-gray-600 dark:text-gray-300 max-w-3xl" id="viewPhone">
+                            {{ $profile->city_name}}
+                        </p>
                     </div>
 
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-right">
@@ -180,11 +185,11 @@
                             <div class="flex flex-col md:flex-row items-start md:items-center mb-8">
                                 <div class="relative mb-6 md:mb-0 md:mr-8">
                                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-md">
-                                        <img id="avatarPreview" src="{{ $profile->avatar_url ?? 'https://via.placeholder.com/150' }}" 
+                                        <img id="avatarPreview" src="{{ asset($profile->avatar_url) ?? 'https://via.placeholder.com/150' }}" 
                                              alt="{{ $profile->username }}" 
                                              class="w-full h-full object-cover" />
                                     </div>
-                                    <label for="avatarUpload" class="absolute -bottom-2 -right-2 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700 cursor-pointer hover:bg-blue-600 transition-colors">
+                                    <label for="avatarUpload" class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white dark:border-gray-700 cursor-pointer hover:bg-green-600 transition-colors">
                                         <i class="fas fa-camera"></i>
                                         <input type="file" id="avatarUpload" name="avatar" accept="image/*" class="hidden">
                                     </label>
@@ -225,53 +230,59 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
-                                    <input type="text" id="phone_number" name="phone_number" value="{{ $profile->phone_number }}"
+                                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
+                                    <input type="password" id="password" name="password" 
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
 
+                                <div>
+                                    <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
+                                    <input type="password" id="confirm_password" name="confirm_password" 
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                
+                                <div>
+                                    <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
+                                    <select id="city" name="city_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                        <option value="">Sélectionnez votre ville</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}" {{ $profile->city_name == $city->name ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div>
                                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Adresse</label>
                                     <input type="text" id="address" name="address" value="{{ $profile->address }}"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                 </div>
-                                    <div>
-                                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
-                                        <input type="password" id="password" name="password" 
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-
-                                    <div>
-                                        <label for="verify_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifie mote de passe</label>
-                                        <input type="password" id="confirm_password" name="confirm_password" 
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
+                                <div>
+                                    <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
+                                    <input type="text" id="phone_number" name="phone_number" value="{{ $profile->phone_number }}"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                                </div>
                                     
-                                    <div>
-                                        <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ville</label>
-                                        <select id="city" name="city_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option value="">Sélectionnez votre ville</option>
-                                            @foreach($cities as $city)
-                                                <option value="{{ $city->id }}" {{ $profile->city_name == $city->name ? 'selected' : '' }}>
-                                                    {{ $city->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                    </div>
-                                    <div>
-                                        <label class="flex items-center">
-                                            <span class="text-gray-700 dark:text-gray-300 mr-3">Statut du compte:</span>
-                                                <label class="switch">
-                                                <input type="checkbox" id="user-active-toggle" 
-                                                    {{ $profile->is_subscriber == 1 ? 'checked' : '' }}
-                                                    onchange="document.getElementById('is_subscriber_field').value = this.checked ? '1' : '0'">
-                                                <input type="hidden" id="is_subscriber_field" name="is_subscriber" value="{{ $profile->is_subscriber }}">
-                                                <span class="slider"></span>
-                                            </label>
+                                    
+                                    
+                                    <div class="flex flex-col items-start space-y-2">
+                                        <span class=" text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recevoir notifications</span>
+                                        
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="user-active-toggle"
+                                                class="sr-only peer"
+                                                {{ $profile->is_subscriber == 1 ? 'checked' : '' }}
+                                                onchange="document.getElementById('is_subscriber_field').value = this.checked ? '1' : '0'">
+                                            
+                                            <div class="w-11 h-6 bg-gray-300 peer-checked:bg-green-500 rounded-full peer -ransition-all duration-300 ease-in-out">
+                                            </div>
+                                            
+                                            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-full"></div>
                                         </label>
-                                    </div> 
+                                        
+                                        <input type="hidden" id="is_subscriber_field" name="is_subscriber" value="{{ $profile->is_subscriber }}">
+                                    </div>
+                                     
                                 </div>
                             <div class="flex justify-end space-x-4">
                                 <button type="button" onclick="toggleEditMode(false)" 
@@ -279,7 +290,7 @@
                                     Annuler
                                 </button>
                                 <button type="submit" 
-                                        class="px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                        class="px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                                     Enregistrer les modifications
                                 </button>
                             </div>
@@ -352,7 +363,9 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Une erreur est survenue: ' + error.message);
+        //alert('Une erreur est survenue: ' + error.message);
+        toggleEditMode(false);
+
     });
 });
 </script>

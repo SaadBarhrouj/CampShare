@@ -106,7 +106,7 @@
                                 <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                             </div>
                             <div class="flex items-center text-sm">
-                                @if($item1->review_count)
+                                @if($item1->review_count !=0)
                                     @php
                                         $rating = $item1->avg_rating;
                                         $fullStars = floor($rating);

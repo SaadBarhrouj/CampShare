@@ -16,6 +16,8 @@ use App\Models\Reservation;
 use App\Models\ClientModel;
 use Illuminate\Support\Facades\File;
 use App\Models\PartenaireModel;
+use Illuminate\Support\Facades\Hash;
+
 
 
 

@@ -283,7 +283,7 @@
                                 <span class="text-gray-600 dark:text-gray-300 text-sm">/jour</span>
                             </div>
                             <div class="flex items-center text-sm">
-                                @if($lis->item->averageRating())
+                                @if($lis->item->averageRating() !=0)
                                     @php
                                         $rating = $lis->item->averageRating();
                                         $fullStars = floor($rating);

@@ -166,6 +166,18 @@
         .dark .chat-message.outgoing .chat-bubble {
             background-color: #4F7942;
         }
+
+         .sidebar-link2.active {
+            background-color: rgba(45, 95, 43, 0.1);
+            color: #2D5F2B;
+            border-left: 4px solid #2D5F2B;
+        }
+        
+        .dark .sidebar-link2.active {
+            background-color: rgba(79, 121, 66, 0.2);
+            color: #4F7942;
+            border-left: 4px solid #4F7942;
+        }
     </style>
         <!-- Navigation -->
 <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
@@ -348,7 +360,7 @@
                                 <a href="/Client/profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
                                     <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                 </a>
-                                <a href="{{ route('HomeClient') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                                <a href="{{ route('HomeClient') }}" class=" block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
                                     <i class="fas fa-user-circle mr-2 opacity-70"></i> Espace Client
                                 </a>
                                 @if($user->role == 'partner')
@@ -419,19 +431,19 @@
                     </div>
                 </div>
                 <nav class="mt-6 space-y-1">
-                    <a href="/Client" data-target="dashboard" class="sidebar-link active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
+                    <a href="/Client" data-target="dashboard" class="sidebar-link2 active flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors">
                         <i class="fas fa-tachometer-alt w-5 mr-3"></i>
                         Tableau de bord
                     </a>
-                    <a href="/MesReservation" data-target="allRes" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/MesReservation" data-target="allRes" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-shopping-cart w-5 mr-3"></i>
                         Mes réservations
                     </a>
-                    <a href="/EquipementRecommende" data-target="allSim" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/EquipementRecommende" data-target="allSim" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-heart w-5 mr-3"></i>
                         Équi. recommandés
                     </a>
-                    <a href="/AvisRecus" data-target="mes-avis" class="sidebar-link flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <a href="/AvisRecus" data-target="mes-avis" class="sidebar-link2 flex items-center px-4 py-3 text-base font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-star w-5 mr-3"></i>
                         Avis reçus
                     </a>
@@ -478,8 +490,24 @@
 
     <script>
    
+    function setActiveSidebarLink() {
+        const currentPath = window.location.pathname;
+        const sidebarLinks = document.querySelectorAll('.sidebar-link2');
+        
+        sidebarLinks.forEach(link => {
+            // Remove 'active' class from all links first
+            link.classList.remove('active');
+            
+            // Check if the link's href matches the current path
+            const linkPath = link.getAttribute('href');
+            if (currentPath === linkPath || 
+                (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+                link.classList.add('active');
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', setActiveSidebarLink);
 
-    
 // Mobile menu toggle
 const mobileMenuButton = document.getElementById('mobile-menu-button');
 const mobileMenu = document.getElementById('mobile-menu');
