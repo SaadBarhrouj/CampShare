@@ -124,7 +124,7 @@
                     <ul class="list-disc ml-6">
                         <li><strong>"Annonce"</strong> : offre de location de Matériel publiée par un Partenaire sur la Plateforme.</li>
                         <li><strong>"Client"</strong> : tout utilisateur inscrit sur la Plateforme souhaitant louer du Matériel proposé par un Partenaire.</li>
-                        <li><strong>"Commission"</strong> : rémunération perçue par CampShare sur chaque transaction réalisée via la Plateforme.</li>
+                        <li><strong>"Commission"</strong> : rémunération de 15% perçue par CampShare sur chaque transaction réalisée via la Plateforme.</li>
                         <li><strong>"Contenu"</strong> : tout élément (texte, image, vidéo, etc.) publié par un Partenaire sur la Plateforme.</li>
                         <li><strong>"Matériel"</strong> : équipement de camping proposé à la location par un Partenaire sur la Plateforme.</li>
                         <li><strong>"Réservation"</strong> : action par laquelle un Client réserve du Matériel auprès d'un Partenaire via la Plateforme.</li>
@@ -163,7 +163,7 @@
                     <ul class="list-disc ml-6">
                         <li>Une description précise et fidèle du Matériel ;</li>
                         <li>Des photographies de qualité représentant fidèlement le Matériel ;</li>
-                        <li>Les conditions de location (prix, durée minimale/maximale, etc.) ;</li>
+                        <li>Les conditions de location (prix, durée de disponibilité, etc.) ;</li>
                         <li>Les conditions de mise à disposition et de restitution ;</li>
                         <li>Tout autre élément pertinent permettant au Client de prendre sa décision.</li>
                     </ul>
@@ -183,7 +183,6 @@
                     <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">5.1 Processus de Réservation</h3>
                     <p>Lorsqu'un Client effectue une demande de Réservation :</p>
                     <ol class="list-decimal ml-6">
-                        <li>Le Partenaire reçoit une notification et dispose de 24 heures pour accepter ou refuser la demande ;</li>
                         <li>En cas d'acceptation, la Réservation est confirmée et le paiement est sécurisé ;</li>
                         <li>Les coordonnées du Client sont alors transmises au Partenaire pour organiser la mise à disposition du Matériel.</li>
                     </ol>
@@ -213,7 +212,7 @@
                     <p>Tous les paiements sont traités par CampShare via son prestataire de services de paiement sécurisé. Le Partenaire ne doit en aucun cas demander ou accepter de paiement direct de la part des Clients.</p>
 
                     <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">6.2 Commission de CampShare</h3>
-                    <p>Pour chaque Réservation réalisée via la Plateforme, CampShare perçoit une Commission calculée sur le montant total de la transaction. Le montant de cette Commission est précisé dans l'espace Partenaire. CampShare se réserve le droit de modifier le taux de Commission moyennant un préavis de 30 jours.</p>
+                    <p>Pour chaque Réservation réalisée via la Plateforme, CampShare perçoit une Commission calculée sur le montant total de la transaction. Le montant de cette Commission est précisé dans l'espace Partenaire.</p>
 
                     <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">6.3 Versement des Revenus</h3>
                     <p>Les sommes dues au Partenaire (montant de la location moins la Commission) sont versées sur son compte bancaire dans un délai maximum de 7 jours après la fin de la location, sous réserve qu'aucun litige ne soit en cours.</p>
@@ -295,7 +294,7 @@
                     <h2 class="text-2xl font-bold text-forest dark:text-meadow" id="contact">13. Contact</h2>
                     <p>Pour toute question relative aux présentes CGP ou au fonctionnement de la Plateforme, le Partenaire peut contacter CampShare :</p>
                     <ul class="list-disc ml-6">
-                        <li>Par email : partenaires@campshare.fr</li>
+                        <li>Par email : partenaires@campshare.ma</li>
                         <li>Par courrier : CampShare - Service Partenaires, 123 Avenue du Camping, Tétouan, Maroc</li>
                         <li>Via le formulaire de contact disponible sur la Plateforme</li>
                     </ul>

@@ -147,7 +147,6 @@ Route::middleware(['auth', 'active.account'])->group(function () {
         Route::put('/partenaire/annonces/{listing}/archive', [PartenaireController::class, 'archiveAnnonce'])->name('partenaire.annonces.archive');
         Route::delete('/partenaire/annonces/{listing}/delete', [PartenaireController::class, 'deleteAnnonce'])->name('partenaire.annonces.delete');
         Route::post('/reservation/action', [PartenaireController::class, 'handleAction'])->name('reservation.action');
-
         // Notifications
         Route::get('/partenaire/notifications', [NotificationController::class, 'showPartnerNotifications'])->name('notifications.partner.index'); 
 
@@ -220,18 +219,6 @@ Route::middleware(['auth', 'active.account'])->group(function () {
         ->name('notifications.delete.ajax') // Nom différent
         ->where(['notification' => '[0-9]+', 'user' => '[0-9]+']);
 
-
-    // Routes pour les Avis 
-    Route::get('/reservations/{reservation}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-
-
-    Route::post('/notifications/client/mark-all-as-read', [NotificationController::class, 'markAllClientNotificationsAsRead'])
-         ->name('notifications.client.markAllAsRead');
-
-
-});
-
   Route::post('/notifications/client/mark-all-visible-as-read', [NotificationController::class, 'markAllClientVisibleAsRead'])
              ->name('notifications.client.markAllVisibleAsRead');
 
@@ -243,3 +230,15 @@ Route::post('/notifications/partner/mark-all-visible-as-read', [NotificationCont
 
         Route::post('/notifications/partner/delete-selected', [NotificationController::class, 'deleteSelectedPartnerNotifications'])
              ->name('notifications.partner.deleteSelected');
+    // Routes pour les Avis 
+    Route::get('/reservations/{reservation}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+
+    Route::post('/notifications/client/mark-all-as-read', [NotificationController::class, 'markAllClientNotificationsAsRead'])
+         ->name('notifications.client.markAllAsRead');
+
+
+});
+
+        Route::get('/listings/{listing}', [EquipmentDetailController::class, 'show'])->name('client.listings.show');
