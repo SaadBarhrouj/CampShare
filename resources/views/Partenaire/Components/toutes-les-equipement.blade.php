@@ -293,15 +293,17 @@
                     <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md px-6 pt-5 pb-6 cursor-pointer" id="image-drop-area">
                         <div class="space-y-1 text-center">
                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-3"></i>
-                            <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                            <div class="flex text-sm text-gray-600 dark:text-gray-400 justify-center">
                                 <label for="images" class="relative cursor-pointer rounded-md font-medium text-forest dark:text-meadow hover:text-meadow focus-within:outline-none">
-                                    <span>Télécharger des fichiers</span>
-                                    <input id="images" name="images[]" type="file" class="sr-only" multiple accept="image/*" required>
+                                    <span>Ajouter des images</span>
+                                    <input id="images" name="temp_images" type="file" class="sr-only" accept="image/*" multiple>
                                 </label>
-                                <p class="pl-1">ou glisser-déposer</p>
                             </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                PNG, JPG, GIF jusqu'à 2MB (1-5 images)
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                PNG, JPG, GIF jusqu'à 2MB
+                            </p>
+                            <p class="text-sm font-medium mt-2">
+                                <span id="image-count">0</span>/5 images ajoutées
                             </p>
                         </div>
                     </div>
@@ -374,15 +376,17 @@
                     <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md px-6 pt-5 pb-6 cursor-pointer" id="edit-image-drop-area">
                         <div class="space-y-1 text-center">
                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-3"></i>
-                            <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                            <div class="flex text-sm text-gray-600 dark:text-gray-400 justify-center">
                                 <label for="edit-images" class="relative cursor-pointer rounded-md font-medium text-forest dark:text-meadow hover:text-meadow focus-within:outline-none">
-                                    <span>Télécharger des fichiers</span>
-                                    <input id="edit-images" name="images[]" type="file" class="sr-only" multiple accept="image/*">
+                                    <span>Ajouter des images</span>
+                                    <input id="edit-images" name="temp_images" type="file" class="sr-only" accept="image/*" multiple>
                                 </label>
-                                <p class="pl-1">ou glisser-déposer</p>
                             </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                PNG, JPG, GIF jusqu'à 2MB (1-5 images)
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                PNG, JPG, GIF jusqu'à 2MB
+                            </p>
+                            <p class="text-sm font-medium mt-2">
+                                <span id="edit-image-count">0</span>/5 images au total
                             </p>
                         </div>
                     </div>
@@ -771,12 +775,21 @@ editButtons.forEach(button => {
                                 this.innerHTML = '<i class="fas fa-times text-xs"></i>';
                                 this.classList.remove('bg-green-500');
                                 this.classList.add('bg-red-500');
+                                
+                                // Mettre à jour le compteur d'images
+                                updateEditImageCount();
                             }, { once: true });
+                            
+                            // Mettre à jour le compteur d'images
+                            updateEditImageCount();
                         });
                         
                         imgContainer.appendChild(removeBtn);
                         currentImagesContainer.appendChild(imgContainer);
                     });
+                    
+                    // Mettre à jour le compteur d'images après le chargement
+                    updateEditImageCount();
                 } else {
                     currentImagesContainer.innerHTML = '<div class="col-span-4 text-center py-4 text-gray-500 dark:text-gray-400">Aucune image existante</div>';
                 }
@@ -1216,9 +1229,6 @@ if (editImageInput) {
 }
 
 function handleFileSelect(files, previewContainer) {
-    // Ne pas vider le conteneur pour permettre l'ajout de plusieurs lots d'images
-    // previewContainer.innerHTML = '';
-    
     // Limiter à maximum 5 images au total
     const maxFiles = 5;
     const currentImages = previewContainer.querySelectorAll('.relative').length;
@@ -1238,6 +1248,12 @@ function handleFileSelect(files, previewContainer) {
     
     const filesToProcess = files.length > maxNewImages ? Array.from(files).slice(0, maxNewImages) : files;
     
+    // Déterminer le formulaire parent
+    const formId = previewContainer.id === 'image-preview-container' 
+        ? 'add-equipment-form' 
+        : 'edit-equipment-form';
+    const form = document.getElementById(formId);
+    
     for (let i = 0; i < filesToProcess.length; i++) {
         const file = filesToProcess[i];
         
@@ -1250,16 +1266,43 @@ function handleFileSelect(files, previewContainer) {
         reader.onload = function(e) {
             const imgContainer = document.createElement('div');
             imgContainer.className = 'relative';
+            imgContainer.dataset.fileIndex = Date.now() + '_' + i; // Identifiant unique
             
             const img = document.createElement('img');
             img.src = e.target.result;
             img.className = 'w-full h-32 object-cover rounded-md';
             imgContainer.appendChild(img);
             
+            // Créer un champ de fichier caché pour cette image spécifique
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'file';
+            hiddenInput.name = 'images[]';
+            hiddenInput.classList.add('hidden-file-input');
+            hiddenInput.style.display = 'none';
+            
+            // Créer un objet DataTransfer pour y mettre le fichier
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            hiddenInput.files = dataTransfer.files;
+            
+            // Ajouter l'input au formulaire
+            form.appendChild(hiddenInput);
+            
+            // Stocker la référence à l'input dans le conteneur d'image
+            imgContainer.dataset.inputId = hiddenInput.id = 'file-input-' + imgContainer.dataset.fileIndex;
+            
             const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
             removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
             removeBtn.innerHTML = '<i class="fas fa-times text-xs"></i>';
             removeBtn.addEventListener('click', function() {
+                // Supprimer l'input de fichier associé
+                const inputToRemove = document.getElementById(imgContainer.dataset.inputId);
+                if (inputToRemove) {
+                    inputToRemove.remove();
+                }
+                
+                // Supprimer la prévisualisation
                 imgContainer.remove();
                 
                 // Masquer le message d'erreur après la suppression
@@ -1270,10 +1313,16 @@ function handleFileSelect(files, previewContainer) {
                 if (errorDiv) {
                     errorDiv.classList.add('hidden');
                 }
+                
+                // Mettre à jour le compteur d'images
+                updateImageCount(previewContainer);
             });
             imgContainer.appendChild(removeBtn);
             
             previewContainer.appendChild(imgContainer);
+            
+            // Mettre à jour le compteur d'images
+            updateImageCount(previewContainer);
         };
         
         reader.readAsDataURL(file);
@@ -1289,6 +1338,37 @@ function handleFileSelect(files, previewContainer) {
         errorDiv.classList.remove('hidden');
     } else if (errorDiv) {
         errorDiv.classList.add('hidden');
+    }
+    
+    // Réinitialiser l'input de fichier principal pour permettre de sélectionner à nouveau le même fichier
+    const mainFileInput = previewContainer.id === 'image-preview-container' 
+        ? document.getElementById('images') 
+        : document.getElementById('edit-images');
+    
+    mainFileInput.value = '';
+}
+
+// Fonction pour mettre à jour le compteur d'images
+function updateImageCount(previewContainer) {
+    const isEdit = previewContainer.id === 'edit-image-preview-container';
+    const imageCount = previewContainer.querySelectorAll('.relative').length;
+    
+    // Pour l'édition, on compte aussi les images existantes
+    if (isEdit) {
+        const currentImagesContainer = document.getElementById('current-images-container');
+        const keptImagesCount = currentImagesContainer ? currentImagesContainer.querySelectorAll('input[name="keep_images[]"]').length : 0;
+        const totalCount = imageCount + keptImagesCount;
+        
+        const countElement = document.getElementById('edit-image-count');
+        if (countElement) {
+            countElement.textContent = totalCount;
+        }
+    } else {
+        // Pour l'ajout simple
+        const countElement = document.getElementById('image-count');
+        if (countElement) {
+            countElement.textContent = imageCount;
+        }
     }
 }
 
@@ -1333,36 +1413,17 @@ function setupDragDrop(dropArea, fileInput, previewContainer) {
         const dt = e.dataTransfer;
         const files = dt.files;
         
-        // Au lieu de simplement remplacer les fichiers, créons un FileList personnalisé 
-        // qui inclut à la fois les fichiers existants et les nouveaux fichiers
-        if (fileInput.files && fileInput.files.length > 0) {
-            // Créer un nouvel objet FormData pour combiner les fichiers
-            const formData = new FormData();
-            
-            // Ajouter les fichiers existants
-            Array.from(fileInput.files).forEach(file => {
-                formData.append('images[]', file);
-            });
-            
-            // Ajouter les nouveaux fichiers
-            Array.from(files).forEach(file => {
-                formData.append('images[]', file);
-            });
-            
-            // Note: Nous ne pouvons pas directement modifier fileInput.files
-            // mais nous pouvons traiter les fichiers sélectionnés individuellement
-            handleFileSelect(files, previewContainer);
-        } else {
-            // S'il n'y a pas de fichiers existants, utilisez simplement les nouveaux
-            fileInput.files = files;
-            handleFileSelect(files, previewContainer);
-        }
+        // Traiter directement les fichiers déposés avec handleFileSelect
+        // qui créera les inputs cachés pour chaque fichier
+        handleFileSelect(files, previewContainer);
     }
 }
 
 if (addEquipmentForm) {
     addEquipmentForm.addEventListener('submit', function(e) {
-        const imageCount = imagePreviewContainer.querySelectorAll('.relative').length;
+        // Compter le nombre d'inputs de fichier cachés (qui contiennent les images réelles)
+        const hiddenInputs = addEquipmentForm.querySelectorAll('input[type="file"].hidden-file-input');
+        const imageCount = hiddenInputs.length;
         const errorDiv = document.getElementById('image-count-error');
         
         if (imageCount < 1 || imageCount > 5) {
@@ -1374,16 +1435,6 @@ if (addEquipmentForm) {
             return false;
         } else {
             errorDiv.classList.add('hidden');
-        }
-        
-        // Créer un DataTransfer pour stocker les images à envoyer
-        if (imageCount > 0) {
-            // Nous devons préparer les images à envoyer via le formulaire
-            // Cette étape est gérée automatiquement par le navigateur
-            // car les prévisualisations sont simplement des représentations visuelles
-            // Les fichiers originaux sont toujours attachés à l'élément input
-            
-            // Si la validation passe, nous pouvons soumettre le formulaire
             return true;
         }
     });
@@ -1392,13 +1443,13 @@ if (addEquipmentForm) {
 if (editEquipmentForm) {
     editEquipmentForm.addEventListener('submit', function(e) {
         const currentImagesContainer = document.getElementById('current-images-container');
-        const newImagesPreviewContainer = document.getElementById('edit-image-preview-container');
         
         // Compter les images conservées (non marquées pour suppression)
         const keptImagesCount = currentImagesContainer.querySelectorAll('input[name="keep_images[]"]').length;
         
-        // Compter les nouvelles images
-        const newImagesCount = newImagesPreviewContainer.querySelectorAll('.relative').length;
+        // Compter les nouvelles images (inputs cachés)
+        const hiddenInputs = editEquipmentForm.querySelectorAll('input[type="file"].hidden-file-input');
+        const newImagesCount = hiddenInputs.length;
         
         // Nombre total d'images
         const totalImagesCount = keptImagesCount + newImagesCount;
@@ -1415,11 +1466,24 @@ if (editEquipmentForm) {
             return false;
         } else {
             errorDiv.classList.add('hidden');
+            return true;
         }
-        
-        // Si la validation passe, nous pouvons soumettre le formulaire
-        return true;
     });
+}
+
+// Fonction pour mettre à jour le compteur d'images lors de l'édition
+function updateEditImageCount() {
+    const currentImagesContainer = document.getElementById('current-images-container');
+    const editImagePreviewContainer = document.getElementById('edit-image-preview-container');
+    
+    const keptImagesCount = currentImagesContainer ? currentImagesContainer.querySelectorAll('input[name="keep_images[]"]').length : 0;
+    const newImagesCount = editImagePreviewContainer ? editImagePreviewContainer.querySelectorAll('.relative').length : 0;
+    const totalCount = keptImagesCount + newImagesCount;
+    
+    const countElement = document.getElementById('edit-image-count');
+    if (countElement) {
+        countElement.textContent = totalCount;
+    }
 }
 </script>
 
