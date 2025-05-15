@@ -6,6 +6,8 @@ DELETE FROM notifications WHERE reservation_id = 2003;
 
 Planifier taches (commande pour executer manuelement pour tester ): 
 
+-php artisan reservations:update-status
+-php artisan :listings:update-premium-status
 -php artisan reservations:send-review-notifications
 -php artisan reviews:update-visibility-after-delay
 
@@ -15,8 +17,10 @@ php artisan listings:update-premium-status
 php artisan reservations:send-review-notifications
 php artisan reservations:update-status
 
-lister les commandes :php artisan list
-php artisan reservations:send-review-notifications
+
+
+lister les commandes :
+php artisan list
 
 
 
