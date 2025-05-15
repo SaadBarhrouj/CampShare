@@ -215,7 +215,7 @@
                 
                 <!-- Map -->
                 <div id="listing-map-container" class="hidden mt-4 mb-8 h-80 sm:h-120 bg-gray-200 dark:bg-gray-700 rounded-lg items-center justify-center text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 z-0"></div>
-
+                @if($premiumListingsCount != 0 )
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
@@ -229,10 +229,11 @@
                         Tout voir <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
+                @endif
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Premium Listings -->
-                    @forelse ($premiumListings as $premiumListing)
+                    @foreach ($premiumListings as $premiumListing)
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1 relative">
                             <div class="absolute top-4 left-4 z-10 bg-sunlight text-white rounded-full px-3 py-1 font-medium text-xs flex items-center">
                                 <i class="fas fa-crown mr-1"></i> 
@@ -301,9 +302,7 @@
                                 </div>
                             </a>
                         </div>
-                    @empty
-                        <p class="text-gray-500">Aucun annonce prémium encore.</p>
-                    @endforelse
+                    @endforeach
 
                     
                 </div>

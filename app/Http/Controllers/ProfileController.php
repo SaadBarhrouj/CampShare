@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Listing;
 use Illuminate\Http\Request;
@@ -33,7 +34,14 @@ class ProfileController extends Controller
         $itemIds = $user->items->pluck('id');
 
         // Get all listings that belong to the partner's items
-        $listings = Listing::whereIn('item_id', $itemIds)->where('status', 'active')->latest()->get();
+        $listings = Listing::whereIn('item_id', $itemIds)
+            ->where('status', 'active')
+            ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                    $query->where('is_active', true);
+                })
+            ->latest()
+            ->get();
 
         $listingsCount = $listings->count();
 
