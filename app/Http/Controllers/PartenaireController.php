@@ -659,6 +659,9 @@ public function createEquipement(Request $request)
 
     $user = Auth::user();
     
+    // Log pour déboguer le nombre d'images reçues
+    Log::info('Nombre d\'images reçues : ' . count($request->file('images')));
+    
     $item = new Item();
     $item->partner_id = $user->id;
     $item->title = $request->title;
@@ -669,7 +672,7 @@ public function createEquipement(Request $request)
 
     // Handle image uploads
     if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $imageFile) {
+        foreach ($request->file('images') as $index => $imageFile) {
             try {
                 // Générer un nom de fichier unique
                 $fileName = time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
@@ -684,11 +687,13 @@ public function createEquipement(Request $request)
                 $image->save();
                 
                 // Log pour débogage
-                Log::info('Image ajoutée : ' . $image->url . ' pour l\'équipement ID: ' . $item->id);
+                Log::info('Image ' . ($index + 1) . ' ajoutée : ' . $image->url . ' pour l\'équipement ID: ' . $item->id);
             } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'ajout de l\'image : ' . $e->getMessage());
+                Log::error('Erreur lors de l\'ajout de l\'image ' . ($index + 1) . ' : ' . $e->getMessage());
             }
         }
+    } else {
+        Log::warning('Aucune image n\'a été trouvée dans la requête.');
     }
 
     return redirect()->route('HomePartenaie')->with('success', 'Équipement ajouté avec succès.');
@@ -712,15 +717,39 @@ public function updateEquipement(Request $request, $item)
         return redirect()->route('HomePartenaie')->with('error', 'Vous n\'êtes pas autorisé à modifier cet équipement.');
     }
 
+    // Log pour déboguer
+    if ($request->hasFile('images')) {
+        Log::info('Nombre d\'images reçues pour la mise à jour : ' . count($request->file('images')));
+    } else {
+        Log::info('Aucune nouvelle image reçue pour la mise à jour.');
+    }
+
     $item->title = $request->title;
     $item->description = $request->description;
     $item->price_per_day = $request->price_per_day;
     $item->category_id = $request->category_id;
     $item->save();
 
+    // Gérer la suppression des images si demandé
+    if ($request->has('delete_images')) {
+        foreach ($request->input('delete_images') as $imageId) {
+            try {
+                $image = Image::find($imageId);
+                if ($image && $image->item_id == $item->id) {
+                    // Supprimer le fichier du stockage si nécessaire
+                    // Storage::delete(str_replace('storage/', 'public/', $image->url));
+                    $image->delete();
+                    Log::info('Image ID ' . $imageId . ' supprimée pour l\'équipement ID: ' . $item->id);
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de la suppression de l\'image ID ' . $imageId . ' : ' . $e->getMessage());
+            }
+        }
+    }
+
     // Handle image uploads
     if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $imageFile) {
+        foreach ($request->file('images') as $index => $imageFile) {
             try {
                 // Générer un nom de fichier unique
                 $fileName = time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
@@ -735,9 +764,9 @@ public function updateEquipement(Request $request, $item)
                 $image->save();
                 
                 // Log pour débogage
-                Log::info('Image ajoutée : ' . $image->url . ' pour l\'équipement ID: ' . $item->id);
+                Log::info('Image ' . ($index + 1) . ' ajoutée : ' . $image->url . ' pour l\'équipement ID: ' . $item->id);
             } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'ajout de l\'image : ' . $e->getMessage());
+                Log::error('Erreur lors de l\'ajout de l\'image ' . ($index + 1) . ' : ' . $e->getMessage());
             }
         }
     }
@@ -1068,7 +1097,7 @@ public function deleteAllEquipements()
         
         $startDate = \Carbon\Carbon::parse($listing->start_date);
         $endDate = \Carbon\Carbon::parse($listing->end_date);
-        $availableDays = $endDate->diffInDays($startDate);
+        $availableDays = $startDate->diffInDays($endDate);
         $potentialRevenue = $availableDays * $item->price_per_day;
         
         $viewCount = 0;
