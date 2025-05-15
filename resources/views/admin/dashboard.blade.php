@@ -433,26 +433,26 @@
                         Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
                     <a href="{{ route('equipements.index') }}"
-   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-   <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-   Équipements
-</a>
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                    Équipements
+                    </a>
 
-<a href="{{ route('admin.reservations.index') }}" 
-   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-    <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-    Réservations
-</a>
+                    <a href="{{ route('admin.reservations.index') }}" 
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Réservations
+                    </a>
 
-                    
-         <a href="{{ route('admin.reviews') }}"
-   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-    <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-    Avis
-    <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
-        {{ \App\Models\Review::count() }}
-    </span>
-</a>
+                                        
+                            <a href="{{ route('admin.reviews') }}"
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Avis
+                        <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+                            {{ \App\Models\Review::count() }}
+                        </span>
+                    </a>
 
 
                     </nav>
@@ -519,14 +519,14 @@
                             <span
                                 class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
                         </a>
-                 <a href="{{ route('admin.reviews') }}"
-   class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-    <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
-    Avis
-    <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
-        {{ \App\Models\Review::count() }}
-    </span>
-</a>
+                        <a href="{{ route('admin.reviews') }}"
+                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Avis
+                            <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+                                {{ \App\Models\Review::count() }}
+                            </span>
+                        </a>
                     </nav>
                 </div>
                 

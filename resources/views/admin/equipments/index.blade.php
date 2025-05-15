@@ -4,87 +4,86 @@
 
 
 @section('content')
-    <!-- Navigation avec style amélioré -->
-    <nav
-        class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <!-- Logo stylisé -->
+            <div class="flex justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="flex items-center">
-                        <span class="text-3xl font-extrabold leading-none">
-                            <span class="text-[#173BCA]">Camp</span><span class="text-[#FDAA2A]">Share</span>
-                        </span>
-
-                        <span class="text-xs ml-2 text-[#6B7280] bg-[#F1F2F6] px-2 py-1 rounded-full font-medium">
-                            ADMIN
-                        </span>
+                    <!-- Logo -->
+                    <a href="{{ route('index') }}" class="flex items-center">
+                        <span class="text-admin-primary dark:text-admin-secondary text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                        <span class="text-xs ml-2 text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">ADMIN</span>
                     </a>
                 </div>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <!-- Notifications -->
-                    <div class="relative">
-                        <button id="notifications-button"
-                            class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                            <i class="fas fa-bell"></i>
-                            <span
-                                class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">5</span>
-                        </button>
-                    </div>
+                <div class="hidden md:flex items-center space-x-8">
+
 
                     <!-- User menu -->
-                    @auth
-                        <div class="relative">
-                            <button id="user-menu-button" class="flex items-center space-x-3 focus:outline-none group">
-                                <div class="flex flex-col items-start">
-                                    <span class="font-medium text-gray-800 dark:text-gray-200 text-sm">
-                                        {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
-                                    </span>
-                                    <span class="text-xs text-admin-primary dark:text-admin-secondary font-medium">
-                                        {{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}
-                                    </span>
-                                </div>
-                                <i
-                                    class="fas fa-chevron-down text-xs text-gray-500 group-hover:text-admin-primary transition-colors"></i>
-                            </button>
+                    <div class="relative ml-4">
+                        <div class="flex items-center space-x-4">
+                            
 
-                            <!-- Dropdown -->
-                            <div id="user-dropdown"
-                                class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 overflow-hidden border border-gray-100 dark:border-gray-700">
-                                <div class="py-2">
-                                    <a href="#"
-                                        class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                        <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+
+                            @auth
+                                @php
+                                    $user = $user ?? Auth::user();
+                                @endphp
+                                @if($user)
+
+                                
+                            <!-- User profile menu -->
+                                <div class="relative">
+                                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                        <img src="{{ asset(auth()->user()->avatar_url) }}"
+                                         alt="Admin User" 
+                                         class="h-8 w-8 rounded-full object-cover" />
+                                        <div class="flex flex-col items-start">
+                                            <span class="font-medium text-gray-800 dark:text-gray-200 text-sm"> {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} </span>
+                                            <span
+                                                class="text-xs text-admin-primary dark:text-admin-secondary font-medium">
+                                                {{ ucfirst(auth()->user()->role) ?? 'Utilisateur' }}
+                                            </span>
+                                        </div>
+                                        <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                                    </button>
+
+                                    <!-- User dropdown menu -->
+                                    <div id="user-dropdown"
+                                    class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-600 py-1">
+                                    <a href="{{ route('admin.profile.edit') }}"
+                                        class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                                            </a>
+                                    <div class="border-t border-gray-200 dark:border-gray-700"></div>
+
+                                    <a href="{{ route('logout') }}" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                     </a>
-                                    <form action="#" method="POST"
-                                        class="border-t border-gray-100 dark:border-gray-700 mt-1 pt-1">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                         @csrf
-                                        <button type="submit"
-                                            class="block w-full text-left px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                            <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
-                                        </button>
                                     </form>
                                 </div>
                             </div>
+
+
+                            @endif
+                            @endauth
+                      
                         </div>
-                    @endauth
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Mobile menu button -->
-        <div class="md:hidden flex items-center">
-            <button id="mobile-menu-button"
-                class="text-gray-600 dark:text-gray-300 hover:text-admin-primary dark:hover:text-admin-secondary focus:outline-none">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
-        </div>
         </div>
 
         <!-- Mobile menu -->
@@ -104,10 +103,7 @@
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
                 <div class="flex items-center px-4">
                     <div class="flex-shrink-0">
-                        <div
-                            class="h-10 w-10 rounded-full bg-admin-primary/20 flex items-center justify-center text-admin-primary">
-                            <i class="fas fa-user"></i>
-                        </div>
+                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Admin User" class="h-10 w-10 rounded-full" />
                     </div>
                     <div class="ml-3">
                         <div class="text-base font-medium text-gray-800 dark:text-white">Mohamed Alami</div>
@@ -115,10 +111,10 @@
                     </div>
                     <div class="ml-auto flex items-center space-x-4">
                         <button
-                            class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 relative">
+                            class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
                             <i class="fas fa-bell text-lg"></i>
                             <span
-                                class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">5</span>
+                                class="absolute -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">5</span>
                         </button>
                         <button
                             class="flex-shrink-0 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
@@ -128,49 +124,45 @@
                 </div>
                 <div class="mt-3 space-y-1 px-2">
                     <a href="#profile"
-                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                     </a>
                     <a href="#account-settings"
-                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-cog mr-2 opacity-70"></i> Paramètres
                     </a>
                     <a href="#admin-logs"
-                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-history mr-2 opacity-70"></i> Historique d'actions
                     </a>
-
-                    <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
                     <a href="#logout"
-                        class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                     </a>
                 </div>
             </div>
         </div>
     </nav>
-
     <!-- Main Content with Sidebar -->
     <div class="flex pt-16">
         <!-- Sidebar amélioré -->
-        <aside
-            class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto border-r border-gray-100 dark:border-gray-700">
+        <!-- Sidebar (hidden on mobile) -->
+        <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
             <div class="p-5">
-                <div class="mb-6 px-2">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 pl-3">
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Menu Principal</h5>
                     <nav class="space-y-1">
-
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                         </a>
-
+                        
+                        
+                        
                     </nav>
                 </div>
-
 
                 <div class="mb-6 px-3">
                     <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
@@ -180,46 +172,168 @@
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Partenaires
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
-
                         <a href="{{ route('admin.clients') }}"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-users w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Clients
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
                         </a>
 
                     </nav>
                 </div>
 
-
-
-                <div class="mb-6 px-2">
-                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 pl-3">
+                <div class="mb-6 px-3">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                         Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
-                        <a href="#"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-admin-primary dark:text-admin-secondary rounded-lg bg-blue-50 dark:bg-blue-900/20 font-semibold transition-colors">
-                            <i class="fas fa-campground w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
-                            Équipements
+                    <a href="{{ route('equipements.index') }}"
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                    Équipements
+                    </a>
+
+                    <a href="{{ route('admin.reservations.index') }}" 
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Réservations
+                    </a>
+
+                                        
+                            <a href="{{ route('admin.reviews') }}"
+                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                        Avis
+                        <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+                            {{ \App\Models\Review::count() }}
+                        </span>
+                    </a>
+
+
+                    </nav>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Mobile sidebar toggle -->
+        <div id="mobile-sidebar-overlay" class="md:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 hidden"></div>
+
+        <div class="md:hidden fixed bottom-4 right-4 z-50">
+            <button id="mobile-sidebar-toggle"
+                class="w-14 h-14 rounded-full bg-admin-primary dark:bg-admin-secondary text-white shadow-lg flex items-center justify-center">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <div id="mobile-sidebar"
+            class="md:hidden fixed inset-y-0 left-0 transform -translate-x-full w-64 bg-white dark:bg-gray-800 shadow-xl z-50 transition-transform duration-300">
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Menu Admin</h2>
+                    <button id="close-mobile-sidebar" class="text-gray-600 dark:text-gray-400 focus:outline-none">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="mb-6">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Menu Principal</h5>
+                    <nav class="space-y-1">
+                        <a href="#dashboard"
+                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors">
+                            <i class="fas fa-tachometer-alt w-5 mr-3 text-admin-primary dark:text-admin-secondary"></i>
+                            Tableau de bord
                         </a>
-                        <a href="{{ route('admin.reservations.index') }}"
+                        <!-- Dans la section MENU PRINCIPAL -->
+                        <div class="sidebar-link flex items-center px-3 py-2.5" id="clients-link">
+                            <i class="fas fa-users w-5 mr-3"></i>
+                            <span>Clients</span>
+                            <span class="ml-auto bg-blue-100 text-blue-800 rounded-full px-2"></span>
+                        </div>
+                        <a href="{{ route('admin.partners') }}" id="partners-link"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            id="partners-link">
+                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Partenaires
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                        </a>
+                        <a href="{{ route('admin.clients') }}" id="partners-link"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            id="partners-link">
+                            <i class="fas fa-handshake w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            hhhhhhh
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center"></span>
+                        </a>
+                        <a href="#reservations"
                             class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-calendar-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Réservations
+                            <span
+                                class="ml-auto bg-admin-light dark:bg-admin-dark text-admin-primary dark:text-admin-secondary text-xs rounded-full h-5 px-1.5 flex items-center justify-center">278</span>
                         </a>
                         <a href="{{ route('admin.reviews') }}"
-                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-star w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Avis
-                            <span
-                                class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
+                            <span class="ml-auto bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full h-5 px-1.5 flex items-center justify-center">
                                 {{ \App\Models\Review::count() }}
                             </span>
                         </a>
                     </nav>
                 </div>
+                
+                <div class="mb-6">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Utilisateurs</h5>
+                    <nav class="space-y-1">
+                        <a href="#analytics"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-chart-line w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Statistiques
+                        </a>
+                        <a href="#financial"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Finances
+                        </a>
+                        <a href="#reports-gen"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Rapports
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="mb-6">
+                    <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Equi. Réserv. & Avis</h5>
+                    <nav class="space-y-1">
+                        <a href="#analytics"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-chart-line w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Statistiques
+                        </a>
+                        <a href="#financial"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-money-bill-wave w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Finances
+                        </a>
+                        <a href="#reports-gen"
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-file-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
+                            Rapports
+                        </a>
+                    </nav>
+                </div>
+
             </div>
-        </aside>
+        </div>
 
 
         <div class="w-full md:pl-64">
@@ -275,7 +389,7 @@
 
                                 <div
                                     class="absolute bottom-0 right-0 bg-yellow-500 text-white px-3 py-1 text-sm font-bold rounded-tl-lg">
-                                    {{ $item->price_per_day }} DH <span class="text-xs font-normal">/ jour</span>
+                                    {{ $item->price_per_day }} MAD <span class="text-xs font-normal">/ jour</span>
                                 </div>
 
 
