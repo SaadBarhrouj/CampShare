@@ -183,10 +183,9 @@
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Équipement</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Disponibilité</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Localisation</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Statut</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Premium</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Prix</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Lieu</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
@@ -202,7 +201,7 @@
                                                 @endphp
                                                 
                                                 @if($firstImage)
-                                                    <img class="h-10 w-10 rounded-md object-cover" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $annonce->title }}">
+                                                    <img class="h-10 w-10 rounded-md object-cover" src="{{ asset($firstImage) }}" alt="{{ $annonce->title }}">
                                                 @else
                                                     <div class="h-10 w-10 rounded-md bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                                                         <i class="fas fa-campground text-gray-400 dark:text-gray-500"></i>
@@ -211,30 +210,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $annonce->title }}</div>
-                                                <div class="text-sm text-gray-900 dark:text-white">{{ $annonce->price_per_day }} MAD / jour</div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-white">
-                                            Du {{ \Carbon\Carbon::parse($annonce->start_date)->format('d/m/Y') }}
-                                        </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">
-                                            Au {{ \Carbon\Carbon::parse($annonce->end_date)->format('d/m/Y') }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-white">{{ $annonce->city_name }}</div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">
-                                            @if($annonce->delivery_option)
-                                                <span class="inline-flex items-center">
-                                                    <i class="fas fa-truck text-xs mr-1"></i> Livraison disponible
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center">
-                                                    <i class="fas fa-store text-xs mr-1"></i> Récupération sur place
-                                                </span>
-                                            @endif
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -242,89 +218,48 @@
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">
                                                 Active
                                             </span>
-                                        @else
+                                        @elseif($annonce->status == 'archived')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300">
                                                 Archivée
                                             </span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($annonce->is_premium)
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
-                                                {{ $annonce->premium_type }}
-                                            </span>
-                                        @else
-                                            <span class="text-sm text-gray-500 dark:text-gray-400">Non</span>
-                                        @endif
+                                        <div class="text-sm text-gray-900 dark:text-white">{{ $annonce->price_per_day }} MAD / jour</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex flex-col space-y-2">
-                                            <div class="flex space-x-2">
-                                                <a href="{{ route('partenaire.annonces.details', $annonce->id) }}" class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50" title="Voir les détails">
-                                                    <i class="fas fa-eye mr-1"></i> Voir
-                                                </a>
-                                                
-                                                <a href="{{ route('partenaire.annonces.edit', $annonce->id) }}" class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded hover:bg-indigo-200 dark:hover:bg-indigo-800/50" title="Modifier l'annonce">
-                                                    <i class="fas fa-edit mr-1"></i> Modifier
-                                                </a>
-                                            </div>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-white">{{ $annonce->city_name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex space-x-2 justify-end">
+                                            <a href="{{ route('partenaire.annonces.details', $annonce->id) }}" class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50" title="Voir les détails">
+                                                <i class="fas fa-eye mr-1"></i> Voir
+                                            </a>
                                             
-                                            <div class="flex space-x-2">
-                                                @if($annonce->status == 'active')
-                                                    <form action="{{ route('partenaire.annonces.update', $annonce->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="status" value="inactive">
-                                                        <button type="submit" class="px-2 py-1 bg-gray-100 dark:bg-gray-900/30 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-800/50" title="Désactiver l'annonce">
-                                                            <i class="fas fa-toggle-off mr-1"></i> Désactiver
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <form action="{{ route('partenaire.annonces.archive', $annonce->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800/50" title="Archiver l'annonce">
-                                                            <i class="fas fa-archive mr-1"></i> Archiver
-                                                        </button>
-                                                    </form>
-                                                @elseif($annonce->status == 'inactive')
-                                                    <form action="{{ route('partenaire.annonces.update', $annonce->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="status" value="active">
-                                                        <button type="submit" class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded hover:bg-green-200 dark:hover:bg-green-800/50" title="Activer l'annonce">
-                                                            <i class="fas fa-toggle-on mr-1"></i> Activer
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <form action="{{ route('partenaire.annonces.archive', $annonce->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800/50" title="Archiver l'annonce">
-                                                            <i class="fas fa-archive mr-1"></i> Archiver
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <form action="{{ route('partenaire.annonces.update', $annonce->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="status" value="active">
-                                                        <button type="submit" class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded hover:bg-green-200 dark:hover:bg-green-800/50" title="Réactiver l'annonce">
-                                                            <i class="fas fa-redo mr-1"></i> Réactiver
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </div>
+                                            <a href="{{ route('partenaire.annonces.edit', $annonce->id) }}" class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded hover:bg-indigo-200 dark:hover:bg-indigo-800/50" title="Modifier l'annonce">
+                                                <i class="fas fa-edit mr-1"></i> Modifier
+                                            </a>
                                             
-                                            <div>
-                                                <form action="{{ route('partenaire.annonces.delete', $annonce->id) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-800/50" title="Supprimer l'annonce">
-                                                        <i class="fas fa-trash-alt mr-1"></i> Supprimer
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            <form action="{{ route('partenaire.annonces.update', $annonce) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="status" value="{{ $annonce->status === 'active' ? 'archived' : 'active' }}">
+                                                <button type="submit" class="{{ $annonce->status === 'active' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-800/50' : 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50' }} px-2 py-1 rounded" title="{{ $annonce->status === 'active' ? 'Désactiver l\'annonce' : 'Activer l\'annonce' }}">
+                                                    @if($annonce->status === 'active')
+                                                        <i class="fas fa-toggle-off mr-1"></i> Archiver
+                                                    @else
+                                                        <i class="fas fa-toggle-on mr-1"></i> Activer
+                                                    @endif
+                                                </button>
+                                            </form>
+                                            
+                                            <form action="{{ route('partenaire.annonces.delete', $annonce) }}" method="POST" class="inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-800/50" title="Supprimer l'annonce">
+                                                    <i class="fas fa-trash mr-1"></i> Supprimer
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

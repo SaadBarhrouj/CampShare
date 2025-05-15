@@ -904,7 +904,7 @@ public function deleteAllEquipements()
         }
         
         // Paginer les résultats
-        $annonces = $query->paginate(10);
+        $annonces = $query->paginate(5);
         
         // Charger les images pour chaque annonce
         foreach ($annonces as $annonce) {

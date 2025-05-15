@@ -174,7 +174,7 @@
                         <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-forest dark:focus:ring-meadow">
                             <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tous les statuts</option>
                             <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actives</option>
-                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactives</option>
+                            <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archivée</option>
                         </select>
                     </div>
                     
