@@ -31,3 +31,18 @@ executer toute les testes :
 php artisan test
 test par test:
 php artisan test tests/Feature/AuthenticationTest.php
+
+
+
+titre :
+Tente de Camping 
+
+description:
+Partez à l'aventure en toute sérénité avec notre tente spacieuse, facile à monter, parfaite pour 2 à 4 personnes.
+
+email partner :
+elabida.rajae@etu.uae.ac.ma
+
+email client:
+maroun.ilias@etu.uae.ac.ma
+
