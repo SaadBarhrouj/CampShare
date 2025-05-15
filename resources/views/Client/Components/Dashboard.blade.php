@@ -50,7 +50,7 @@
                         @if(isset($note_moyenne) && $note_moyenne != 0)
                             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$note_moyenne}}</h3>
                         @else
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Not Rated</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Non noté</h3>
                         @endif
                       
                     </div>

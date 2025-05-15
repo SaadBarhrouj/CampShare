@@ -452,7 +452,7 @@
                         </div>
                         <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">{{ $AverageRating }}</span>
                     @else
-                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">Not Rated</span>
+                        <span class="ml-1 text-gray-600 dark:text-gray-400 text-sm">Non noté</span>
                     @endif
                     </div>
                 </div>

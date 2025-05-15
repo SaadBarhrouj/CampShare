@@ -109,6 +109,7 @@ class PartenaireModel extends Model
             ->join('users as C', 'C.id', '=', 'R.client_id')
             ->select(
                 'C.username',
+                'C.avatar_url',
                 'i.title',
                 'R.start_date',
                 'R.end_date',

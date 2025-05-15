@@ -71,7 +71,7 @@
                                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{$AverageRating}} / 5</h3>
                                     <p class="text-amber-600 dark:text-amber-400 text-sm flex items-center mt-1"></p>
                                 @else
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Not Rated</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Non noté</h3>
 
                                 @endif
 
@@ -160,7 +160,7 @@
                         <div class="divide-y divide-gray-200 dark:divide-gray-700">
                             <div class="px-6 py-4">
                                 <div class="flex items-start">
-                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                    <img src="{{ asset($Reservation->avatar_url) }}" 
                                          alt="Mehdi Idrissi" 
                                          class="w-10 h-10 rounded-full object-cover mr-4" />
                                     

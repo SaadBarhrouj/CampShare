@@ -114,7 +114,7 @@
                                                         {{ number_format($rating, 1) }}
                                                     </span>
                                                 @else
-                                                    <span class="text-gray-400 text-sm">Not rated</span>
+                                                    <span class="text-gray-400 text-sm">Non noté</span>
                                                 @endif
                                             </div>
                                         </div>
