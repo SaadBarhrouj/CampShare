@@ -33,6 +33,13 @@ class PartenaireModel extends Model
             ->where('R.status', 'completed')
             ->count('R.id');
     }
+
+    public static function getNumberReservation($email){
+        return DB::table('users as U')
+            ->join('reservations as R', 'R.partner_id', '=', 'U.id')
+            ->where('U.email', $email)
+            ->count('R.id');
+    }
     public static function getAverageRatingPartner($email)
     {
         $avgRating = DB::table('users as U')
@@ -270,7 +277,7 @@ class PartenaireModel extends Model
             ->where('u.email', $email)
             ->whereIn('r.type', ['forObject', 'forPartner'])
             ->leftJoin('items as i', function($join) {
-                $join->on('i.id', '=', 'r.reviewee_id')
+                $join->on('i.id', '=', 'r.item_id')
                      ->where('r.type', '=', 'forObject');  
             })
             

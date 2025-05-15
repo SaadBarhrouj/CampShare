@@ -255,9 +255,15 @@ class ClientModel extends Model
             ->get();
     }
     
-   public static function getAllSimilarListingsByCategory($email)
+    public static function getAllSimilarListingsByCategory($email)
     {
-        return DB::table('users as u')
+        $hasReservations = DB::table('users as u')
+            ->join('reservations as r', 'u.id', '=', 'r.client_id')
+            ->where('u.email', $email)
+            ->exists();
+
+        if ($hasReservations) {
+            return DB::table('users as u')
             ->join('reservations as r', 'u.id', '=', 'r.client_id')
             ->join('listings as l', 'r.listing_id', '=', 'l.id')
             ->join('items as li', 'l.item_id', '=', 'li.id')
@@ -312,6 +318,59 @@ class ClientModel extends Model
             ->orderBy('ls.start_date', 'asc')    // Then by availability
             ->take(41)
             ->get();
+        } else {
+            // New query - get listings from user's city
+            return DB::table('users as u')
+                ->join('cities as uc', 'u.city_id', '=', 'uc.id')
+                ->join('listings as ls', 'uc.id', '=', 'ls.city_id')
+                ->join('items as similar_items', 'ls.item_id', '=', 'similar_items.id')
+                ->join('categories as c', 'similar_items.category_id', '=', 'c.id')
+                ->leftJoin(DB::raw('(
+                    SELECT item_id, url 
+                    FROM images 
+                    WHERE id IN (
+                        SELECT MIN(id) 
+                        FROM images 
+                        GROUP BY item_id
+                    )
+                ) as images'), 'similar_items.id', '=', 'images.item_id')
+                ->leftJoin('reviews as item_reviews', function($join) {
+                    $join->on('item_reviews.item_id', '=', 'similar_items.id')
+                        ->where('item_reviews.type', 'forObject');
+                })
+                ->where('u.email', $email)
+                ->where('ls.status', 'active')
+                ->select(
+                    'images.url AS image_url',
+                    'similar_items.price_per_day',
+                    'c.name as category_name',
+                    'similar_items.title as listing_title',
+                    'uc.name as city_name',
+                    'ls.start_date',
+                    'ls.id as lis_id',
+                    'ls.end_date',
+                    'ls.is_premium',
+                    DB::raw('ROUND(AVG(item_reviews.rating), 1) as avg_rating'),
+                    DB::raw('COUNT(item_reviews.id) as review_count')
+                )
+                ->groupBy(
+                    'ls.id',
+                    'similar_items.price_per_day',
+                    'c.name',
+                    'similar_items.title',
+                    'uc.name',
+                    'ls.start_date',
+                    'ls.end_date',
+                    'ls.is_premium',
+                    'images.url'
+                )
+                ->orderBy('ls.is_premium', 'desc')
+                ->orderBy('avg_rating', 'desc')
+                ->orderBy('ls.start_date', 'asc')
+                ->take(41)
+                ->get();
+
+            }
     }
 
     public static function getClientProfile($email)

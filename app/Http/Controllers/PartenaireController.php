@@ -100,7 +100,7 @@ class PartenaireController extends Controller
         $user = Auth::user();
 
 
-        $NumberReservationCompleted = PartenaireModel::getNumberCompletedReservation($user->email);
+        $NumberReservationCompleted = PartenaireModel::getNumberReservation($user->email);
         $AverageRating = number_format(PartenaireModel::getAverageRatingPartner($user->email), 1);
         $pendingReservation = PartenaireModel::getPendingReservationsWithMontantTotal($user->email);
         $AllReservationForPartner = PartenaireModel::getPartenerDemandeReservation($user->email);
