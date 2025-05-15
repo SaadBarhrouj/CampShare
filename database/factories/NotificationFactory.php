@@ -17,9 +17,12 @@ class NotificationFactory extends Factory
      */
     public function definition(): array
     {
+
+        $user = User::inRandomOrder()->first();
+
         return [
-            'user_id' => User::factory(),
-            'type' => $this->faker->randomElement(['reservation', 'review', 'reminder', 'system']),
+            'user_id' => $user,
+            'type' => $this->faker->randomElement(['review_object', 'review_client', 'review_partner', 'updated_listing', 'added_listing']),
             'message' => $this->faker->sentence,
             'is_read' => $this->faker->boolean,
         ];

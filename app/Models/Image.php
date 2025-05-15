@@ -11,10 +11,10 @@ class Image extends Model
 
     use HasFactory;
 
-    protected $fillable = ['listing_id', 'url'];
+    protected $fillable = ['item_id', 'url'];
 
-    public function listing()
+    public function item()
     {
-        return $this->belongsTo(Listing::class);
+        return $this->belongsTo(Item::class);
     }
 }

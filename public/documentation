@@ -1,0 +1,48 @@
+DELETE FROM reviews WHERE reservation_id = 2003;
+DELETE FROM notifications WHERE reservation_id = 2003;
+
+
+
+
+Planifier taches (commande pour executer manuelement pour tester ): 
+
+-php artisan reservations:update-status
+-php artisan :listings:update-premium-status
+-php artisan reservations:send-review-notifications
+-php artisan reviews:update-visibility-after-delay
+
+create commande:
+php artisan make:command UpdateReviewVisibility
+php artisan listings:update-premium-status
+php artisan reservations:send-review-notifications
+php artisan reservations:update-status
+
+
+
+lister les commandes :
+php artisan list
+
+
+
+tests Commands :
+php artisan make:test AuthenticationTest
+
+executer toute les testes :
+php artisan test
+test par test:
+php artisan test tests/Feature/AuthenticationTest.php
+
+
+
+titre :
+Tente de Camping 
+
+description:
+Partez à l'aventure en toute sérénité avec notre tente spacieuse, facile à monter, parfaite pour 2 à 4 personnes.
+
+email partner :
+elabida.rajae@etu.uae.ac.ma
+
+email client:
+maroun.ilias@etu.uae.ac.ma
+

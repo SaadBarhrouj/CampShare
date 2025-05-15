@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Listing;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +17,30 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
+
+        $item = Item::inRandomOrder()->first();
+        
         return [
-            'listing_id' => Listing::factory(),
-            'url' => $this->faker->imageUrl(),
+            'item_id' => $item,
+            'url' => collect([
+                'images/item-15.jpg',
+                'images/item-14.jpg',
+                'images/item-13.jpg',
+                'images/item-12.jpg',
+                'images/item-11.jpg',
+                'images/item-10.jpg',
+                'images/item-9.jpg',
+                'images/item-8.jpg',
+                'images/item-7.jpg',
+                'images/item-6.jpg',
+                'images/item-5.jpg',
+                'images/item-4.jpg',
+                'images/item-3.jpg',
+                'images/item-2.jpg',
+                'images/item-1.jpg',
+                ])
+            ->random(),
+
         ];
     }
 }

@@ -15,9 +15,6 @@ class UserSeeder extends Seeder
     {
         //
 
-        // Ensure cities are already seeded
-        User::factory()
-            ->count(20)
-            ->create(); // city_id is filled in factory
+        User::factory()->count(50)->create();
     }
 }

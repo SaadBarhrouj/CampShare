@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->enum('type', ['reservation', 'review', 'reminder', 'system']);
+            $table->foreignId('user_id')->constrained()->nullable();
+            $table->enum('type', ['review_object', 'review_client', 'review_partner', 'updated_listing', 'added_listing','accepted_reservation', 'rejected_reservation']);
             $table->text('message');
             $table->boolean('is_read')->default(false);
             $table->timestamps();

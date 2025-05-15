@@ -17,21 +17,24 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
+        $city = City::inRandomOrder()->first();
+
         return [
-            'username' => $this->faker->userName,
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
+            'username' => $this->faker->unique()->userName,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('password'), // or use Hash::make()
+            'password' => bcrypt('password'), 
             'phone_number' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
             'role' => $this->faker->randomElement(['client', 'partner', 'admin']),
-            'avatar_url' => $this->faker->imageUrl(),
-            'cin_recto' => $this->faker->imageUrl(),
-            'cin_verso' => $this->faker->imageUrl(),
-            'avg_rating' => $this->faker->randomFloat(1, 1, 5),
-            'review_count' => $this->faker->numberBetween(0, 100),
-            'longitude' => $this->faker->longitude,
-            'latitude' => $this->faker->latitude,
-            'city_id' => City::factory(),
+            'avatar_url' => 'images/avatar-default.jpg',
+            'cin_recto' => 'images/cin-recto.jpg',
+            'cin_verso' => 'images/cin-verso.jpg',
+            'is_subscriber' => $this->faker->boolean,
+            'is_active' => $this->faker->numberBetween(1, 100) <= 90,
+            'city_id' => $city,
         ];
     }
 }

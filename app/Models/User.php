@@ -3,18 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    //
+    use HasFactory, Notifiable;
 
-    use HasFactory;
 
     protected $fillable = [
-        'username', 'email', 'password', 'phone_number', 'address', 'role',
-        'avatar_url', 'cin_recto', 'cin_verso', 'avg_rating', 'review_count',
-        'longitude', 'latitude', 'city_id'
+        'first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'role',
+        'avatar_url', 'cin_recto', 'cin_verso', 'is_subscriber', 'is_active', 'city_id'
     ];
 
     public function city()
@@ -27,14 +26,9 @@ class User extends Model
         return $this->hasMany(Notification::class);
     }
 
-    public function listings()
+    public function items()
     {
-        return $this->hasMany(Listing::class, 'partner_id');
-    }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class, 'partner_id');
+        return $this->hasMany(Item::class, 'partner_id');
     }
 
     public function clientReservations()
@@ -56,4 +50,91 @@ class User extends Model
     {
         return $this->hasMany(Review::class, 'reviewee_id');
     }
+
+    public function averageRatingClient()
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forClient');
+
+        return number_format($visibleReviews->avg('rating'), 1);
+    }
+
+    public function fiveStarPercentageClient($number)
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forClient');
+
+        $total = $visibleReviews->count();
+
+        if ($total === 0) return 0;
+
+        $fiveStars = $visibleReviews->where('rating', $number)->count();
+
+        return round(($fiveStars / $total) * 100, 1);
+    }
+
+    public function averageRatingPartner()
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forPartner');
+
+        return number_format($visibleReviews->avg('rating'), 1);
+    }
+
+    public function fiveStarPercentagePartner($number)
+    {
+        $visibleReviews = $this->receivedReviews
+            ->where('is_visible', true)
+            ->where('type', 'forPartner');
+
+        $total = $visibleReviews->count();
+
+        if ($total === 0) return 0;
+
+        $fiveStars = $visibleReviews->where('rating', $number)->count();
+
+        return round(($fiveStars / $total) * 100, 1);
+    }
+
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class, 'partner_id');
+    }
+
+    
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'partner_id');
+    }
+
+    public function reservations()
+    {
+        return $this->clientReservations();
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Listing::class, 'partner_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function reviewsGiven()
+{
+    return $this->hasMany(Review::class, 'reviewer_id');
+}
+
+public function reviewsReceived()
+{
+    return $this->hasMany(Review::class, 'reviewee_id');
+}
+
+   
 }
