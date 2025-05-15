@@ -29,7 +29,7 @@ use App\Http\Controllers\AdminDetailsEquipmentController;
 
 // Index Page
 Route::get('/', function () {
-    return view('index');
+    return view('index-welcome');
 })->name('index');
 
 

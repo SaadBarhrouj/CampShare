@@ -1575,7 +1575,7 @@ searchInput.addEventListener('input', function(e) {
         <!-- Contenu de l'image -->
         <div class="p-4">
             <img id="modal-image-content" src="" alt="CIN Image" class="max-w-full max-h-[80vh] mx-auto rounded-md">
-            <div class="text-center mt-2 text-gray-600 text-sm">Document CIN</div>
+            <div class="text-center mt-2 text-gray-600 text-sm">CIN (Carte d'Identité Nationale)</div>
         </div>
     </div>
 </div>

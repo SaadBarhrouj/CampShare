@@ -304,13 +304,14 @@
                             
                             <form class="space-y-4">
                                 <div>
-                                    <label for="equipment-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type de matériel</label>
+                                    <label for="equipment-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catégorie de matériel</label>
                                     <select id="equipment-type" name="equipment-type" class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-forest focus:ring-forest dark:bg-gray-700 dark:text-white text-base py-3 px-4">
-                                        <option>Tente</option>
-                                        <option>Sac de couchage</option>
-                                        <option>Matelas gonflable</option>
-                                        <option>Réchaud</option>
-                                        <option>Autre</option>
+                                        <option>Tentes et Abris</option>
+                                        <option>Sacs de couchage</option>
+                                        <option>Équipement de cuisine</option>
+                                        <option>Mobilier camping</option>
+                                        <option>Éclairage</option>
+                                        <option>Accessoires outdoor</option>
                                     </select>
                                 </div>
                                 

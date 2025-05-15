@@ -100,8 +100,8 @@ class RegistrationController extends Controller
                 'email'         => $request->email,
                 'password'      => Hash::make($request->password),
                 'avatar_url'    => $imagePath,
-                'cin_recto'     => $cinRectoPath,
-                'cin_verso'     => $cinVersoPath,
+                'cin_recto'     => 'storage/' . $cinRectoPath,
+                'cin_verso'     => 'storage/' . $cinVersoPath,
                 'role'          => ($request->has('role') && $request->input('role') === 'partner') ? 'partner' : 'client',
                  // =============================
                 'is_subscriber' => $request->boolean('is_subscribed'), 

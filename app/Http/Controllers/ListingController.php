@@ -22,11 +22,17 @@ class ListingController extends Controller
     
         $query = Listing::where('status', 'active')
             ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                $query->where('is_active', true);
+            })
             ->with('item.category'); 
 
         $premiumQuery = Listing::where('is_premium', true)
             ->where('status', 'active')
             ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                $query->where('is_active', true);
+            })
             ->with('item.category');
     
         if ($request->filled('search')) {
@@ -218,6 +224,9 @@ class ListingController extends Controller
         $query = Listing::where('is_premium', true)
             ->where('status', 'active')
             ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                $query->where('is_active', true);
+            })
             ->with('item.category');
 
         if ($request->filled('search')) {
@@ -316,6 +325,9 @@ class ListingController extends Controller
         
         $query = Listing::where('status', 'active')
             ->where('end_date', '>', Carbon::now())
+            ->whereHas('item.partner', function ($query) {
+                $query->where('is_active', true);
+            })
             ->with('item.category');
 
         if ($request->filled('search')) {

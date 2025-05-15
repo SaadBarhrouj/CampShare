@@ -66,11 +66,18 @@
                         <!-- Statistics -->
                         <div class="flex gap-6 flex-nowrap">
                             <div class="flex flex-col items-center">
-                                <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->averageRatingClient() }}</div>
-                                <div class="flex text-amber-400 mt-1">
-                                    <x-star-rating :rating="$user->averageRatingClient()" />
-                                </div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $user->receivedReviews->where('is_visible', true)->where('type', 'forClient')->count() }} avis)</div>
+                                @if($user->receivedReviews->where('is_visible', true)->where('type', 'forClient')->count() != 0 )
+                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->averageRatingClient() }}</div>
+                                    <div class="flex text-amber-400 mt-1">
+                                        <x-star-rating :rating="$user->averageRatingClient()" />
+                                    </div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">({{ $user->receivedReviews->where('is_visible', true)->where('type', 'forClient')->count() }} avis)</div>
+                                @else
+                                    <div class="flex text-amber-400 mt-2">
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-2.5">Non noté</div>
+                                @endif
                             </div>
                             
                             <div class="flex flex-col items-center">
