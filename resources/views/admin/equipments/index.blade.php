@@ -2,6 +2,20 @@
 <!-- Version gratuite via CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<style>
+    /* Sidebar active */
+    .sidebar-link.active {
+        background-color: rgba(30, 64, 175, 0.1);
+        color: #1E40AF;
+        border-left: 4px solid #1E40AF;
+    }
+    
+    .dark .sidebar-link.active {
+        background-color: rgba(59, 130, 246, 0.2);
+        color: #3B82F6;
+        border-left: 4px solid #3B82F6;
+    }
+</style>
 
 @section('content')
     <!-- Navigation -->
@@ -154,7 +168,7 @@
                         Menu Principal</h5>
                     <nav class="space-y-1">
                         <a href="{{ route('admin.dashboard') }}"
-                            class="sidebar-link active flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i class="fas fa-tachometer-alt w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                             Tableau de bord
                         </a>
@@ -191,7 +205,7 @@
                         Equi. Réserv. & Avis</h5>
                     <nav class="space-y-1">
                     <a href="{{ route('equipements.index') }}"
-                    class="sidebar-link flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    class="sidebar-link  active  flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <i class="fas fa-campground w-5 mr-3 text-gray-500 dark:text-gray-400"></i>
                     Équipements
                     </a>
