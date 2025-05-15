@@ -227,7 +227,7 @@
                                             </a>
                                         {{-- Sinon, afficher un lien vers l'annonce si disponible et si ce n'est pas une notif d'évaluation --}}
                                         @elseif (!$isReviewNotification && $notification->listing_id)
-                                             <a href="{{-- route('client.listings.show', ['listing' => $notification->listing_id]) --}}#" class="text-sm text-forest dark:text-meadow hover:underline">
+                                                  <a href="{{ route('client.listings.show', ['listing' => $notification->listing_id]) }}" class="text-sm text-forest dark:text-meadow hover:underline">
                                                 <i class="fas fa-eye mr-1"></i> Voir l'annonce
                                             </a>
                                         @endif

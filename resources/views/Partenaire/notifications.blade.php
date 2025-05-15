@@ -56,7 +56,145 @@
 <body class="font-sans antialiased text-gray-800 dark:text-gray-200 dark:bg-gray-900 min-h-screen flex flex-col">
     
 
-    @include('partials.header', ['user' => Auth::user()])
+<nav class="bg-white bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95 shadow-md fixed w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex-shrink-0 flex items-center">
+                <!-- Logo -->
+                <a href="{{ route('index') }}" class="flex items-center">
+                    <span class="text-forest dark:text-meadow text-3xl font-extrabold">Camp<span class="text-sunlight">Share</span></span>
+                    <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">by ParentCo</span>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="{{ route('client.listings.index') }}" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300">Explorer le matériel</a>
+
+                @auth
+                    @php
+                        $user = Auth::user();
+                    @endphp
+                    @if($user)
+                        @if($user->role == 'client')
+                            <button type="button" id="openPartnerModalBtn" class="nav-link text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight font-medium transition duration-300 cursor-pointer">
+                                Devenir Partenaire
+                            </button>
+                        @endif
+                        <div class="relative ml-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <a id="notifications-partner-icon-link"
+                                       href="{{ route('notifications.partner.index') }}"
+                                       class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+                                        <i class="fas fa-bell"></i>
+                                        @if(isset($unreadPartnerNotificationsCountGlobal) && $unreadPartnerNotificationsCountGlobal > 0)
+                                            <span id="notification-badge-count" class="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full">
+                                                {{ $unreadPartnerNotificationsCountGlobal }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </div>
+                                <div class="relative">
+                                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                        <img src="{{ asset($user->avatar_url ?? 'images/default-avatar.png') }}"
+                                           alt="Avatar de {{ $user->username }}"
+                                           class="h-8 w-8 rounded-full object-cover" />
+                                        <span class="font-medium text-gray-800 dark:text-gray-200">{{ $user->username }}</span>
+                                        <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                                    </button>
+                                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-[51] border border-gray-200 dark:border-gray-600">
+                                        <div class="py-1">
+                                            <a href="/profile_partenaire" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                                            </a>
+                                            <a href="{{ route('HomeClient') }}" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <i class="fas fa-user-circle mr-2 opacity-70"></i> Espace Client
+                                            </a>
+                                            <a href="{{ route('HomePartenaie') }}" class="sidebar-link block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <i class="fas fa-tachometer-alt mr-2 opacity-70"></i> Espace Partenaire
+                                            </a>
+                                            <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                                            <a href="{{ route('logout') }}"
+                                            class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                                @csrf
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <div class="flex items-center space-x-4 ml-4">
+                        <a href="{{ route('login.form') }}" class="px-4 py-2 font-medium rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Connexion</a>
+                        <a href="{{ route('register') }}" class="px-4 py-2 font-medium rounded-md bg-sunlight hover:bg-amber-600 text-white shadow-md transition duration-300">Inscription</a>
+                    </div>
+                @endauth
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-forest dark:hover:text-sunlight focus:outline-none">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-4 shadow-lg">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="{{ route('client.listings.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Explorer le matériel</a>
+            @auth
+                @php
+                    $user = $user ?? Auth::user();
+                @endphp
+                @if($user)
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
+                        <div class="flex items-center px-5">
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset($user->avatar_url ?? 'images/default-avatar.png') }}"
+                                    alt="Avatar de {{ $user->username }}"
+                                    class="h-8 w-8 rounded-full object-cover" />
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-base font-medium text-gray-800 dark:text-white">{{ $user->username }}</div>
+                                <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $user->email }}</div>
+                            </div>
+                        </div>
+                        <div class="mt-3 space-y-1 px-2">
+                            <a href="/profile_partenaire" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                                <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
+                            </a>
+                            <a href="{{ route('HomePartenaie') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                                <i class="fas fa-tachometer-alt mr-2 opacity-70"></i> Espace Partenaire
+                            </a>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
+                               class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">
+                                <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+                            </a>
+                            <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
+                        </div>
+                    </div>
+                @endif
+            @else
+                <div class="mt-4 flex flex-col space-y-3 px-3">
+                    <a href="{{ route('login.form') }}" class="px-4 py-2 font-medium rounded-md text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition duration-300">Connexion</a>
+                    <a href="{{ route('register') }}" class="px-4 py-2 font-medium rounded-md text-center bg-sunlight hover:bg-amber-600 text-white transition duration-300">Inscription</a>
+                </div>
+            @endauth
+        </div>
+    </div>
+</nav>
+
     <!-- Main content -->
     <main class="flex-1 pt-16 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -557,6 +695,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     updateUIStates();
     if (deleteSelectedButton) { deleteSelectedButton.disabled = true; }
+
+    // User dropdown toggle
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userMenuButton?.addEventListener('click', () => {
+        userDropdown.classList.toggle('hidden');
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (userMenuButton && !userMenuButton.contains(e.target) && userDropdown && !userDropdown.contains(e.target)) {
+            userDropdown.classList.add('hidden');
+        }
+    });
 });
 </script>
 

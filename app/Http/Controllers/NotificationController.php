@@ -50,6 +50,21 @@ public static $clientNotificationTypes = [
                            ->count();
     }
 
+    public static function getUnreadPartnerNotificationCount(User $user = null): int
+    {
+        if (!$user) {
+            $user = Auth::user();
+        }
+
+        if (!$user || $user->role !== 'partner') {
+            return 0;
+        }
+
+        return Notification::where('user_id', $user->id)
+                           ->whereIn('type', (new self)->partnerNotificationTypes)
+                           ->where('is_read', false)
+                           ->count();
+    }
 
      public function getUnreadNotificationCountForHeader(User $user): int
     {
@@ -135,7 +150,9 @@ public static $clientNotificationTypes = [
                                     ->orderBy('created_at', 'desc')
                                     ->paginate(10);
 
-        return view('Partenaire.notifications', compact('notifications', 'user'));
+        $unreadPartnerNotificationsCountGlobal = $this->getUnreadPartnerNotificationCount($user);
+
+        return view('Partenaire.notifications', compact('notifications', 'user', 'unreadPartnerNotificationsCountGlobal'));
     }
 
     public function markNotificationAsRead(Notification $notification, User $user)

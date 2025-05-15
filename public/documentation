@@ -16,6 +16,8 @@ php artisan reservations:send-review-notifications
 php artisan reservations:update-status
 
 lister les commandes :php artisan list
+php artisan reservations:send-review-notifications
+
 
 
 tests Commands :

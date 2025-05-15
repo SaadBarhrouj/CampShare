@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use App\Models\Reservation;
+use App\Models\Notification;
 use App\Models\User;
 use App\Mail\clientAccept;
 use App\Mail\partnerAccept; 
@@ -54,15 +55,13 @@ class ReservationController extends Controller
         }
         $partner = $listing->item->partner;
 
-      /*  // Ajout : Vérifier que le client ne réserve pas son propre équipement
+   
         if ($client->id === $partner->id) {
              return redirect()->back()
                          ->with('error', 'Vous ne pouvez pas réserver votre propre équipement.')
-                         ->with('notificationTimeout', 5000) // durée en millisecondes
-                         ->with('notificationType', 'error')
+
                          ->withInput();
         }
-*/
 
 
 
@@ -165,103 +164,187 @@ class ReservationController extends Controller
     }
 
 
-    public function accept(Reservation $reservation)
-    {
-        // Vérifications initiales
-        if (Auth::id() !== $reservation->partner_id) { abort(403); }
-        if ($reservation->status !== 'pending') { 
-            return redirect()->back()
-                             ->with('error', 'Déjà traitée.')
-                             ; 
-        }
-
-        // Vérification conflit
-        $startDate = Carbon::parse($reservation->start_date);
-        $endDate = Carbon::parse($reservation->end_date);
-        $conflicting = Reservation::where('listing_id', $reservation->listing_id)
-             ->where('id', '!=', $reservation->id)->whereIn('status', ['confirmed', 'ongoing'])
-             ->where(fn($q) => $q->where('start_date', '<', $endDate)->where('end_date', '>', $startDate))->exists();
-        if ($conflicting) { 
-            return redirect()->back()
-                             ->with('error', 'Conflit de dates.')
-                             ; 
-        }
-
-        // Mise à jour statut
-        try {
-            $reservation->status = 'confirmed';
-            $reservation->save();
-        } catch (\Exception $e) {
-            Log::error("Erreur sauvegarde accept Résa ID: {$reservation->id}: " . $e->getMessage());
-            return redirect()->back()
-                             ->with('error', 'Erreur sauvegarde statut.')
-                             ;
-        }
-
-        // Récupération données pour emails
-        $client = $reservation->client;
-        $partner = $reservation->partner; 
-
-        if ($client && $partner) {
-            try {
-                Log::info("Préparation de l'email pour le client: {$client->email}");
-                Mail::to($client->email)->send(new clientAccept($partner, $reservation));
-                Log::info("Email envoyé avec succès au client: {$client->email}");
-            } catch (\Exception $e) {
-                Log::error("Échec email CLIENT accept Résa ID: {$reservation->id}: " . $e->getMessage());
-            }
-
-            try {
-                Log::info("Préparation de l'email pour le partenaire: {$partner->email}");
-                Mail::to($partner->email)->send(new partnerAccept($client, $reservation));
-                Log::info("Email envoyé avec succès au partenaire: {$partner->email}");
-            } catch (\Exception $e) {
-                Log::error("Échec email PARTENAIRE accept Résa ID: {$reservation->id}: " . $e->getMessage());
-            }
-        } else {
-            Log::error("Infos client/partenaire manquantes pour emails Résa ID: {$reservation->id}");
-        }
-
+   public function accept(Reservation $reservation)
+{
+    // Étape 1 : Vérifications initiales (votre code existant - inchangé)
+    if (Auth::id() !== $reservation->partner_id) { abort(403); }
+    if ($reservation->status !== 'pending') {
         return redirect()->back()
-                         ->with('success', 'Réservation acceptée ! Notifications envoyées.')
-                         ->with('notificationType', 'success');
+                         ->with('error', 'Déjà traitée.');
     }
 
-  
-    public function reject(Reservation $reservation)
-    {
-        // Vérifications initiales
-        if (Auth::id() !== $reservation->partner_id) { abort(403); }
-        if ($reservation->status !== 'pending') { 
-            return redirect()->back()
-                             ->with('error', 'Déjà traitée.')
-                             ; 
-        }
-
-        // Mise à jour statut
-        try {
-            $reservation->status = 'canceled'; 
-            $reservation->save();
-        } catch (\Exception $e) {
-            Log::error("Erreur sauvegarde refus Résa ID: {$reservation->id}: " . $e->getMessage());
-            return redirect()->back()
-                             ->with('error', 'Erreur sauvegarde statut.')
-                             ;
-        }
-
-        // Récupération client pour email
-        $client = $reservation->client;
-
-        // Envoi email au client 
-        if ($client?->email) { 
-            try { Mail::to($client->email)->send(new clientRefuse($reservation)); }
-            catch (\Exception $e) { Log::error("Échec email CLIENT refus Résa ID: {$reservation->id}: " . $e->getMessage()); }
-        } else {
-            Log::error("Infos client manquantes pour email refus Résa ID: {$reservation->id}");
-        }
-
+    // Étape 2 : Vérification de conflit de dates (votre code existant - inchangé)
+    $startDate = Carbon::parse($reservation->start_date);
+    $endDate = Carbon::parse($reservation->end_date);
+    $conflicting = Reservation::where('listing_id', $reservation->listing_id)
+         ->where('id', '!=', $reservation->id)->whereIn('status', ['confirmed', 'ongoing'])
+         ->where(fn($q) => $q->where('start_date', '<', $endDate)->where('end_date', '>', $startDate))->exists();
+    if ($conflicting) {
         return redirect()->back()
-                         ->with('success', 'Réservation refusée. Le client a été notifié.')
-                         ->with('notificationType', 'success');
+                         ->with('error', 'Conflit de dates.');
     }
+
+    // Étape 3 : Mise à jour du statut de la réservation (votre code existant - inchangé)
+    try {
+        $reservation->status = 'confirmed';
+        $reservation->save();
+    } catch (\Exception $e) {
+        Log::error("Erreur sauvegarde accept Résa ID: {$reservation->id}: " . $e->getMessage());
+        return redirect()->back()
+                         ->with('error', 'Erreur sauvegarde statut.');
+    }
+
+    // Étape 4 : Récupération des données nécessaires
+    $client = $reservation->client;
+    $partner = $reservation->partner;
+    // --- MODIFICATION 1 : Charger la relation listing et son item ---
+    $reservation->loadMissing('listing.item');
+    $listing = $reservation->listing;
+
+    // Étape 5 : Vérifier si toutes les données sont présentes avant d'envoyer emails et notifications
+    // --- MODIFICATION 2 : Mettre à jour la condition IF ---
+    if ($client && $partner && $listing && $listing->item) {
+        // Envoi des emails (votre code existant - inchangé)
+        try {
+            Log::info("Préparation de l'email pour le client: {$client->email}");
+            Mail::to($client->email)->send(new clientAccept($partner, $reservation));
+            Log::info("Email envoyé avec succès au client: {$client->email}");
+        } catch (\Exception $e) {
+            Log::error("Échec email CLIENT accept Résa ID: {$reservation->id}: " . $e->getMessage());
+        }
+
+        try {
+            Log::info("Préparation de l'email pour le partenaire: {$partner->email}");
+            Mail::to($partner->email)->send(new partnerAccept($client, $reservation));
+            Log::info("Email envoyé avec succès au partenaire: {$partner->email}");
+        } catch (\Exception $e) {
+            Log::error("Échec email PARTENAIRE accept Résa ID: {$reservation->id}: " . $e->getMessage());
+        }
+
+        // --- MODIFICATION 3 : Création de la notification pour le client (votre code existant pour cela) ---
+        try {
+            $partnerName = trim(($partner->first_name ?? '') . ' ' . ($partner->last_name ?? ''));
+            if (empty($partnerName)) {
+                $partnerName = $partner->username; // Fallback au nom d'utilisateur
+            }
+
+            $contactInfo = " Contactez le partenaire ({$partnerName}) :";
+            $contactInfo .= " Email: {$partner->email}";
+            if ($partner->phone_number) {
+                $contactInfo .= ", Tél: {$partner->phone_number}";
+            }
+            $contactInfo .= ".";
+
+            // $listing et $listing->item sont maintenant disponibles
+            Notification::create([
+                'user_id' => $client->id,
+                'type' => 'accepted_reservation',
+                'message' => "Bonne nouvelle ! Votre réservation pour '{$listing->item->title}' du " .
+                             Carbon::parse($reservation->start_date)->format('d/m/Y') . " au " .
+                             Carbon::parse($reservation->end_date)->format('d/m/Y') .
+                             " a été acceptée." . $contactInfo,
+                'listing_id' => $listing->id, // Utilisation de $listing->id
+                'reservation_id' => $reservation->id,
+                'is_read' => false,
+            ]);
+            Log::info("Notification 'accepted_reservation' avec infos partenaire créée pour le client ID: {$client->id} pour la réservation ID: {$reservation->id}");
+        } catch (\Exception $e) {
+            Log::error("Échec création notification CLIENT accept Résa ID: {$reservation->id}: " . $e->getMessage(), ['exception' => $e]);
+        }
+
+    } else {
+        // Log amélioré si des informations sont manquantes (recommandé de garder ceci)
+        $missingInfo = [];
+        if (!$client) $missingInfo[] = 'client';
+        if (!$partner) $missingInfo[] = 'partner';
+        if (!$listing) $missingInfo[] = 'listing';
+        elseif (!$listing->item) $missingInfo[] = 'listing->item (l\'item de l\'annonce est manquant)';
+        Log::error("Infos manquantes pour emails/notifications (accept) Résa ID: {$reservation->id}. Manquant: " . implode(', ', $missingInfo));
+    }
+
+    // Étape 6 : Redirection (votre code existant - inchangé)
+    // Le message flash a été mis à jour pour inclure "Le client a été notifié."
+    return redirect()->back()
+                     ->with('success', 'Réservation acceptée ! Le client a été notifié.')
+                     ->with('notificationType', 'success');
+}
+
+
+public function reject(Reservation $reservation)
+{
+    // Étape 1 : Vérifications initiales (votre code existant - inchangé)
+    if (Auth::id() !== $reservation->partner_id) { abort(403); }
+    if ($reservation->status !== 'pending') {
+        return redirect()->back()
+                         ->with('error', 'Déjà traitée.');
+    }
+
+    // Étape 2 : Mise à jour du statut de la réservation (votre code existant - inchangé)
+    try {
+        $reservation->status = 'canceled';
+        $reservation->save();
+    } catch (\Exception $e) {
+        Log::error("Erreur sauvegarde refus Résa ID: {$reservation->id}: " . $e->getMessage());
+        return redirect()->back()
+                         ->with('error', 'Erreur sauvegarde statut.');
+    }
+
+    // Étape 3 : Récupération des données nécessaires
+    $client = $reservation->client;
+    // --- MODIFICATION 1 (reject) : Charger la relation listing et son item ---
+    $reservation->loadMissing('listing.item');
+    $listing = $reservation->listing;
+
+    // Étape 4 : Vérifier si toutes les données sont présentes avant d'envoyer email et notification
+    // --- MODIFICATION 2 (reject) : Mettre à jour la condition IF ---
+    if ($client && $listing && $listing->item) { // Note: $partner n'est pas requis pour le message de refus au client
+        // Envoi email au client (votre code existant - inchangé)
+        if ($client->email) { // Vérification ajoutée pour $client->email pour plus de robustesse
+            try {
+                Mail::to($client->email)->send(new clientRefuse($reservation));
+                Log::info("Email de refus envoyé au client: {$client->email} pour Résa ID: {$reservation->id}");
+            }
+            catch (\Exception $e) {
+                Log::error("Échec email CLIENT refus Résa ID: {$reservation->id}: " . $e->getMessage());
+            }
+        } else {
+            Log::error("Email du client manquant pour la notification de refus. Résa ID: {$reservation->id}");
+        }
+
+        // --- MODIFICATION 3 (reject) : Création de la notification de refus pour le client ---
+        try {
+            // $listing et $listing->item sont maintenant disponibles
+            Notification::create([
+                'user_id' => $client->id,
+                'type' => 'rejected_reservation',
+                'message' => "Malheureusement, votre réservation pour '{$listing->item->title}' du " .
+                             Carbon::parse($reservation->start_date)->format('d/m/Y') . " au " .
+                             Carbon::parse($reservation->end_date)->format('d/m/Y') .
+                             " n'a pas pu être acceptée.",
+                'listing_id' => $listing->id,
+                'reservation_id' => $reservation->id,
+                'is_read' => false,
+            ]);
+            Log::info("Notification 'rejected_reservation' créée pour le client ID: {$client->id} pour la réservation ID: {$reservation->id}");
+        } catch (\Exception $e) {
+            Log::error("Échec création notification CLIENT refus Résa ID: {$reservation->id}: " . $e->getMessage(), ['exception' => $e]);
+        }
+
+    } else {
+        // Log amélioré si des informations sont manquantes
+        $missingInfo = [];
+        if (!$client) $missingInfo[] = 'client';
+        if (!$listing) $missingInfo[] = 'listing';
+        elseif (!$listing->item) $missingInfo[] = 'listing->item (l\'item de l\'annonce est manquant)';
+        Log::error("Infos manquantes pour email/notification (reject) Résa ID: {$reservation->id}. Manquant: " . implode(', ', $missingInfo));
+    }
+
+    // Étape 5 : Redirection (votre code existant - inchangé)
+    // Le message flash a été mis à jour pour inclure "Le client a été notifié."
+    return redirect()->back()
+                     ->with('success', 'Réservation refusée. Le client a été notifié.')
+                     ->with('notificationType', 'success');
+}
+
+
 }

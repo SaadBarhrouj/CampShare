@@ -237,16 +237,17 @@
                         <div class="relative ml-4">
                             <div class="flex items-center space-x-4">
                                 <div class="relative">
-                                    <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                      <a  href="{{ route('notifications.partner.index') }}"> <i class="fas fa-bell"></i></a> 
+                                    <a id="notifications-partner-icon-link" href="{{ route('notifications.partner.index') }}" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+                                        <i class="fas fa-bell"></i>
                                         @php
-                                            $notifications = $notifications ?? collect();
-                                            $unreadNotificationsCount = $notifications->whereNull('read_at')->count();
+                                            $unreadPartnerNotificationsCount = $unreadPartnerNotificationsCount ?? \App\Http\Controllers\NotificationController::getUnreadPartnerNotificationCount();
                                         @endphp
-                                        @if($unreadNotificationsCount > 0)
-                                            <span class="notification-badge">{{ $unreadNotificationsCount }}</span>
+                                        @if($unreadPartnerNotificationsCount > 0)
+                                            <span id="notification-badge-count" class="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full">
+                                                {{ $unreadPartnerNotificationsCount }}
+                                            </span>
                                         @endif
-                                    </button>
+                                    </a>
                                 </div>
                                 <div class="relative">
                                     <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
