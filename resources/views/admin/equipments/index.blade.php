@@ -223,7 +223,7 @@
 
 
         <div class="w-full md:pl-64">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="container mx-auto text-gray-800 dark:text-gray-200 dark:bg-gray-900 px-4 sm:px-6 lg:px-8 py-8">
                 <div class="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
                     <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
                         Les Équipements Disponibles
@@ -257,7 +257,7 @@
 
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    @forelse($equipments as $item)
+                    @forelse($equipments->reverse() as $item)
                         <div
                             class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl border border-gray-100 dark:border-gray-700 transition duration-300 overflow-hidden group">
 

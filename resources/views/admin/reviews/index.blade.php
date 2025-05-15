@@ -128,7 +128,7 @@
 <!-- Main Content with Sidebar -->
 <div class="flex pt-16">
     <!-- Sidebar -->
-    <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto">
+    <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen fixed overflow-y-auto z-50">
         <div class="p-5">
             <div class="mb-6 px-3">
                 <h5 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
@@ -190,7 +190,7 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="md:ml-64 flex-1 p-6 mt-4">
+    <div class="md:ml-64 flex-1 p-6 text-gray-800 dark:text-gray-200 dark:bg-gray-900">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden mb-8">
             <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
                 <div class="flex justify-between items-center">

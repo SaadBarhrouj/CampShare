@@ -265,14 +265,7 @@
                     <!-- User menu -->
                     <div class="relative ml-4">
                         <div class="flex items-center space-x-4">
-                            <!-- Notifications -->
-                            <div class="relative">
-                                <button id="notifications-button" class="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                    <i class="fas fa-bell"></i>
-                                    <span
-                                        class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">5</span>
-                                </button>
-                            </div>
+                            
 
 
                             @auth
@@ -285,7 +278,7 @@
                             <!-- User profile menu -->
                                 <div class="relative">
                                     <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
+                                        <img src="{{ asset(auth()->user()->avatar_url) }}"
                                          alt="Admin User" 
                                          class="h-8 w-8 rounded-full object-cover" />
                                         <div class="flex flex-col items-start">
@@ -306,11 +299,13 @@
                                                 <i class="fas fa-user-circle mr-2 opacity-70"></i> Mon profil
                                             </a>
                                     <div class="border-t border-gray-200 dark:border-gray-700"></div>
-                                    <a href="{{ route('logout') }}" 
-                                        class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                    <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
+
+                                    <a href="{{ route('logout') }}" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt mr-2 opacity-70"></i> Se déconnecter
                                     </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
 
@@ -623,13 +618,13 @@
                                 <i class="fas fa-campground text-indigo-600 dark:text-indigo-400"></i>
                             </div>
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Équipements</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Annonces</p>
                                 <div class="flex items-center">
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">432</h3>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $annonces->count() }}</h3>
                                     
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                                    386 actifs, 46 inactifs
+                                    {{ $annonces->where('status', 'active')->count() }} actifs, {{ $annonces->where('status', 'archived')->count() }} inactifs
                                 </p>
                             </div>
                         </div>

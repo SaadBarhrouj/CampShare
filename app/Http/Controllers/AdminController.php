@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\User;
+use App\Models\Review;
+use App\Models\Listing;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Item;
-use App\Models\Reservation;
-use App\Models\Review;
 
 class AdminController extends Controller
 {
@@ -16,6 +17,8 @@ class AdminController extends Controller
         // Compter directement sans charger tous les modèles (plus efficace)
         $clientsCount = User::where('role', 'client')->count();
         $partnersCount = User::where('role', 'partner')->count();
+
+        $annonces = Listing::all();
 
         // Compter les équipements (items) et catégories
         $itemsCount = DB::table('items')->count();
@@ -30,6 +33,7 @@ class AdminController extends Controller
         $reservations = Reservation::all();
 
         return view('admin.dashboard', [
+            'annonces' => $annonces,
             'clientsCount' => $clientsCount,
             'partnersCount' => $partnersCount,
             'itemsCount' => $itemsCount,

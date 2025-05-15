@@ -220,7 +220,7 @@
         </aside>
 
         <div class="md:ml-64 w-full">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-7xl mx-auto px-4 text-gray-800 dark:text-gray-200 dark:bg-gray-900 sm:px-6 lg:px-8 py-8">
              
                 <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Statistiques des Réservations</h2>
 
@@ -240,7 +240,7 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-7xl mx-auto px-4 text-gray-800 dark:text-gray-200 dark:bg-gray-900 sm:px-6 lg:px-8 py-8">
                 <form method="GET" action="{{ route('admin.reservations.index') }}" class="mb-6">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <div class="relative w-full sm:w-1/2">
