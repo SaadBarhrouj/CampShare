@@ -628,7 +628,8 @@
                              </div>
 
 
-                             <form id="reservation-form" method="POST" action="{{ route('reservations.store') }}">
+                            @auth
+                            <form id="reservation-form" method="POST" action="{{ route('reservations.store') }}">
                                 @csrf
                                 <input type="hidden" name="listing_id" value="{{ $listing->id }}">
                                 <input type="hidden" name="start_date" id="start_date">
@@ -686,6 +687,63 @@
                                 </button>
                                 <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-3 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-md">Vous ne serez pas débité avant la confirmation du partenaire.</p>
                             </form>
+                            @else
+                                <form>
+                                    <input type="hidden" name="listing_id" value="{{ $listing->id }}">
+                                    <input type="hidden" name="start_date" id="start_date" disabled>
+                                    <input type="hidden" name="end_date" id="end_date" disabled>
+
+                                    <!-- Sélecteur de dates -->
+                                    <div class="mb-5">
+                                        <label for="date-range-picker" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Choisissez vos dates</label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                                                <i class="far fa-calendar-alt text-forest dark:text-meadow"></i>
+                                            </div>
+                                            <input type="text" id="date-range-picker" placeholder="Date de début - Date de fin" readonly="readonly" disabled
+                                                   class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm bg-gray-100 dark:bg-gray-800 text-base py-3 cursor-not-allowed appearance-none">
+                                        </div>
+                                    </div>
+
+                                    <!-- Option livraison -->
+                                    @if($listing->delivery_option)
+                                    <div class="mb-5">
+                                        @php
+                                            $fixedDeliveryCost = 50.00;
+                                        @endphp
+                                        <label class="flex items-center select-none p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 transition-colors opacity-60 cursor-not-allowed">
+                                            <input type="checkbox" disabled class="h-5 w-5 rounded-md border-gray-300 text-forest dark:bg-gray-600 dark:border-gray-500 flex-shrink-0">
+                                            <div class="ml-3 flex flex-col">
+                                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Ajouter l'option de livraison</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">(+{{ number_format($fixedDeliveryCost, 2) }} MAD)</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    @endif
+
+                                    <!-- Section Calcul du Prix (désactivée) -->
+                                    <div class="mt-5 mb-5 p-5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3 text-sm opacity-60">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600 dark:text-gray-400">Calcul du prix...</span>
+                                            <span class="text-gray-700 dark:text-gray-200 font-medium">0.00 MAD</span>
+                                        </div>
+                                        <div class="flex justify-between pt-3 border-t border-gray-300 dark:border-gray-600 text-base font-semibold">
+                                            <span class="text-gray-900 dark:text-white">Total</span>
+                                            <span class="text-gray-900 dark:text-white">0.00 MAD</span>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" disabled
+                                            class="w-full mt-3 py-4 px-6 bg-sunlight text-white font-semibold rounded-lg shadow-md transition duration-300 opacity-50 cursor-not-allowed flex items-center justify-center text-base btn-enhanced">
+                                        <i class="far fa-calendar-check mr-3 text-lg"></i>
+                                        <span>Connectez-vous pour réserver</span>
+                                    </button>
+                                    <p class="text-xs text-center text-red-600 dark:text-red-400 mt-3 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-md">
+                                        Vous devez être connecté pour effectuer une réservation.
+                                        <a href="{{ route('login.form') }}" class="underline text-forest dark:text-meadow ml-1">Se connecter</a>
+                                    </p>
+                                </form>
+                            @endauth
 
                             @if($listing->item?->partner)
                             <div class="mt-7 border-t border-gray-200 dark:border-gray-700 pt-5">
