@@ -76,8 +76,8 @@ Route::get('/devenir_partenaire', [PartenaireController::class, 'devenir_partena
 
 
 // Profile Routes
-Route::get('/profile/client/{user}', [ProfileController::class, 'indexClientProfile'])->name('client.profile.index');
-Route::get('/profile/partner/{user}', [ProfileController::class, 'indexPartnerProfile'])->name('partner.profile.index');
+Route::get('/profile/client/{userC}', [ProfileController::class, 'indexClientProfile'])->name('client.profile.index');
+Route::get('/profile/partner/{userP}', [ProfileController::class, 'indexPartnerProfile'])->name('partner.profile.index');
 
 
 

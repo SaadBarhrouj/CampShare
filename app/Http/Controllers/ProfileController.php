@@ -12,26 +12,29 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexClientProfile(User $user)
+    public function indexClientProfile(User $userC)
     {
+        if ($userC->role == 'admin') {
+            abort(403, 'Unauthorized. Ce n\'est pas un client.');
+        }
 
-        $reservationsCount = $user->clientReservations()->count();
+        $reservationsCount = $userC->clientReservations()->count();
 
-        return view('client.profiles.clientProfile', compact('user', 'reservationsCount'));
+        return view('client.profiles.clientProfile', compact('userC', 'reservationsCount'));
     }
 
 
     /**
      * Display a listing of the resource.
      */
-    public function indexPartnerProfile(User $user)
+    public function indexPartnerProfile(User $userP)
     {
-        if ($user->role !== 'partner') {
+        if ($userP->role !== 'partner' || $userP->role == 'admin') {
             abort(403, 'Unauthorized. Ce n\'est pas un partenaire.');
         }
 
         // Get all item IDs that belong to the partner
-        $itemIds = $user->items->pluck('id');
+        $itemIds = $userP->items->pluck('id');
 
         // Get all listings that belong to the partner's items
         $listings = Listing::whereIn('item_id', $itemIds)
@@ -45,7 +48,7 @@ class ProfileController extends Controller
 
         $listingsCount = $listings->count();
 
-        return view('client.profiles.partnerProfile', compact('user', 'listings', 'listingsCount'));
+        return view('client.profiles.partnerProfile', compact('userP', 'listings', 'listingsCount'));
     }
 
     /**
